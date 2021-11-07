@@ -13,7 +13,7 @@
     "devDependencies": {
         "@rollup/plugin-beep": "^0.2.0",
         "@rollup/plugin-commonjs": "^20.0.0",
-        "@rollup/plugin-node-resolve": "^13.0.5",
+        "@rollup/plugin-node-resolve": "^13.0.6",
         "@rollup/plugin-strip": "^2.1.0",
         "@types/jest": "^27.0.2",
         "@types/node": "^16.11.6",
