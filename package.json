@@ -4,7 +4,7 @@
     "license": "MIT",
     "private": "true",
     "scripts": {
-        "test-compiler": "yarn workspace @rapide-structs/compiler actionTest"
+        "test": "yarn workspace @OhMyMarkdown/compiler actionTest"
     },
     "workspaces": [
         "packages/*"
