@@ -1,0 +1,13 @@
+{
+    "name": "OhMyMarkdown",
+    "version": "1.0.0",
+    "license": "MIT",
+    "private": "true",
+    "scripts": {
+        "test-compiler": "yarn workspace @rapide-structs/compiler actionTest"
+    },
+    "workspaces": [
+        "packages/*"
+    ],
+    "devDependencies": {}
+}

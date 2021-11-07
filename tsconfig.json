@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES5",
+    "outDir": "dist",
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "@OhMyMarkdown/compiler": ["packages/compiler/src/*"],
+    }
+  },
+  "exclude": ["node_modules"]
+}
