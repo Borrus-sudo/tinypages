@@ -17,7 +17,7 @@
         "@rollup/plugin-strip": "^2.1.0",
         "@types/jest": "^27.0.2",
         "@types/marked": "^4.0.0",
-        "@types/node": "^16.11.6",
+        "@types/node": "^16.11.7",
         "jest": "^27.3.1",
         "rollup": "^2.60.0",
         "rollup-plugin-filesize": "^9.1.1",
