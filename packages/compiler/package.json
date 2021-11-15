@@ -27,6 +27,6 @@
         "typescript": "^4.4.4"
     },
     "dependencies": {
-        "marked": "^4.0.1"
+        "marked": "^4.0.3"
     }
 }
