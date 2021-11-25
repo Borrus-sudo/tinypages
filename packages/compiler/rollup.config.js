@@ -8,10 +8,10 @@ import typescript from "rollup-plugin-ts";
 
 const build = () => [
     entry("./src/index.ts", [
-        out("./dist/compiler.cjs.js", { format: "cjs" }),
-        out("./dist/compiler.cjs.min.js", { format: "cjs", minify: true }),
-        out("./dist/compiler.esm.js", { format: "esm" }),
-        out("./dist/compiler.esm.min.js", { format: "esm", minify: true }),
+        out("./out/compiler.cjs.js", { format: "cjs" }),
+        out("./out/compiler.cjs.min.js", { format: "cjs", minify: true }),
+        out("./out/compiler.esm.js", { format: "esm" }),
+        out("./out/compiler.esm.min.js", { format: "esm", minify: true }),
     ]),
 ];
 
