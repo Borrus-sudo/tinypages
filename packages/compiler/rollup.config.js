@@ -34,19 +34,17 @@ const entry = (input, output) => ({
 export const out = (file, { format, minify }) => ({
     file,
     format,
-    name: "Million",
+    name: "@OhMyMarkdown/compiler",
     strict: true,
-    plugins: minify ?
-        [
-            terser(),
-            filesize({
-                showBrotliSize: true,
-                showMinifiedSize: false,
-                showBeforeSizes: "release",
-                showGzippedSize: false,
-            }),
-        ] :
-        [],
+    plugins: minify ? [
+        terser(),
+        filesize({
+            showBrotliSize: true,
+            showMinifiedSize: false,
+            showBeforeSizes: "release",
+            showGzippedSize: false,
+        }),
+    ] : [],
 });
 
 export default build();

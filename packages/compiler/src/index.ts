@@ -1,25 +1,25 @@
-import { promises as fs } from "fs";
-import * as marked from "marked";
-import * as path from "path";
-import Renderer from "./markedRenderer";
+import { marked } from "marked";
+import iconsCompiler from "./iconCompiler";
+import Renderer from "./renderer/markedRenderer";
 import { appendPrelude } from "./utils";
-export default async function (config: {
-  basePath: string;
-  outputPath: string;
-}) {
+import windicssCompiler from "./windicssCompiler";
+export default async function compile(
+  input: string,
+  config: {}
+): Promise<string> {
   marked.use({
-    renderer: new Renderer(config),
+    renderer: new Renderer(config, iconsCompiler, windicssCompiler),
   });
-  const dirents = await fs.readdir(config.basePath);
-  for (const dirent of dirents) {
-    const pageContent = await fs.readFile(
-      path.join(config.basePath, dirent),
-      "utf-8"
-    );
-    const transformedContent = marked.parse(pageContent);
-    await fs.writeFile(
-      path.join(config.outputPath, dirent),
-      appendPrelude(transformedContent)
-    );
-  }
+  marked.setOptions(config);
+  return appendPrelude(marked.parse(input));
 }
+(async () => {
+  const output = await compile(
+    ` ## Rocket 
+  this is just text :mdi-cool:
+  ### Heading
+  `,
+    {}
+  );
+  console.log(output);
+})();

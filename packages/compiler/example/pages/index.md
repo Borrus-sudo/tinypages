@@ -1,2 +1,0 @@
-# Rocket :rocket:
-Moar :rocket:
