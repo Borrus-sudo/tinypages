@@ -302,10 +302,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@iconify/json@^1.1.431":
-  version "1.1.431"
-  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-1.1.431.tgz#feb3e91c8269ae5d0e10683fafcbb764d0f63e0a"
-  integrity sha512-1MUc0zUBqMKgUiBokGLq0SAsv0IdqUjlqLU90dHzqo8HNhkz2xPwyAx/jguQdm4Ap98KE5tApAic6h3yQUzrRw==
+"@iconify/json@^1.1.434":
+  version "1.1.434"
+  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-1.1.434.tgz#f9fa1f92ee387bc139b9a51cbb7ba5544100c2c0"
+  integrity sha512-GfVRF5QwPQ7IGVgWbD3bqLu/4NSBiNKJbm7yuhDj5q9gkxUuapWLhkcq3EiMRGfGshO3MP+i7r0S5llzXUlPCw==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
