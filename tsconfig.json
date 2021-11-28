@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "ES5",
-    "outDir": "dist",
+    "target": "es2017",
+    "module": "esnext",
+    "outDir": "./out",
+    "moduleResolution": "node",
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
-      "@OhMyMarkdown/compiler": ["packages/compiler/src/*"],
+      "@OhMyMarkdown/compiler": ["packages/compiler/lib/*"]
     }
   },
   "exclude": ["node_modules"]

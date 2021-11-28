@@ -4,12 +4,15 @@
     "version": "1.0.0",
     "license": "MIT",
     "scripts": {
-        "start": "tsc&&node dist/index.js",
-        "watch": "tsc -w",
-        "compile": "tsc",
-        "test": "jest --watchAll --verbose --coverage",
-        "actionTest": "jest --verbose --coverage"
+        "build": "tsup",
+        "dev": "tsup --watch src"
     },
+    "main": "out/index.js",
+    "module": "out/index.mjs",
+    "types": "out/index.d.ts",
+    "files": [
+        "out"
+    ],
     "devDependencies": {
         "@iconify/json": "^1.1.431",
         "@types/marked": "^4.0.1"

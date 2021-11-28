@@ -1,8 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    "downlevelIteration":true
+    "downlevelIteration": true
   },
-  "include": ["./src/**/*"]
+  "include": ["lib/**/*", "./test/**/*"]
 }

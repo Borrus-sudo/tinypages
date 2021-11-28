@@ -1,14 +1,13 @@
 import { marked } from "marked";
-import iconsCompiler from "./iconCompiler";
-import Renderer from "./renderer/markedRenderer";
+import _iconsCompiler from "./compilers/icons";
 import { appendPrelude } from "./utils";
-import windicssCompiler from "./windicssCompiler";
+import _windicssCompiler from "./compilers/windicss";
 export default async function compile(
   input: string,
   config: {}
 ): Promise<string> {
   marked.use({
-    renderer: new Renderer(config, iconsCompiler, windicssCompiler),
+    renderer: new marked.Renderer(config),
   });
   marked.setOptions(config);
   return appendPrelude(marked.parse(input));
