@@ -1,20 +1,21 @@
 {
-    "name": "OhMyMarkdown",
-    "version": "1.0.0",
-    "license": "MIT",
-    "private": "true",
-    "scripts": {
-        "test": "jest"
-    },
-    "workspaces": [
-        "packages/*"
-    ],
-    "devDependencies": {
-        "@types/jest": "^27.0.3",
-        "@types/node": "^16.11.7",
-        "jest": "^27.3.1",
-        "ts-jest": "^27.0.7",
-        "tsup": "^5.10.0",
-        "typescript": "^4.5.2"
-    }
+  "name": "OhMyMarkdown",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": "true",
+  "scripts": {
+    "test": "jest"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@types/jest": "^27.0.3",
+    "@types/node": "^16.11.7",
+    "jest": "^27.3.1",
+    "prettier": "^2.5.0",
+    "ts-jest": "^27.0.7",
+    "tsup": "^5.10.0",
+    "typescript": "^4.5.2"
+  }
 }
