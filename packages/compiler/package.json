@@ -5,7 +5,7 @@
     "license": "MIT",
     "scripts": {
         "build": "tsup",
-        "dev": "tsup --watch src"
+        "dev": "tsup --watch lib"
     },
     "main": "out/index.js",
     "module": "out/index.mjs",
