@@ -20,7 +20,7 @@
     "@commitlint/config-conventional": "^15.0.0",
     "@types/jest": "^27.0.3",
     "@types/node": "^16.11.11",
-    "chalk": "4.1.0",
+    "chalk": "5.0.0",
     "husky": "^7.0.0",
     "jest": "^27.4.2",
     "lint-staged": "^12.1.2",
