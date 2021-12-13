@@ -14,7 +14,7 @@
         "out"
     ],
     "devDependencies": {
-        "@iconify/json": "^1.1.441",
+        "@iconify/json": "^1.1.442",
         "@types/marked": "^4.0.1"
     },
     "dependencies": {
