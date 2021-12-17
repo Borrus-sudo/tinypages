@@ -1,20 +1,21 @@
 import { marked } from "marked";
-import _iconsCompiler from "./compilers/icons";
 import { appendPrelude } from "./utils";
-import _windicssCompiler from "./compilers/windicss";
 export default async function compile(
   input: string,
-  config: {}
+  config: {
+    marked?: {};
+  }
 ): Promise<string> {
+  const markedConfig = config.marked || {};
   marked.use({
-    renderer: new marked.Renderer(config),
+    renderer: new marked.Renderer(markedConfig),
   });
-  marked.setOptions(config);
+  marked.setOptions(markedConfig);
   return appendPrelude(marked.parse(input));
 }
 (async () => {
   const output = await compile(
-    ` ## Rocket 
+    ` ## :Rocket: 
   this is just text :mdi-cool:
   ### Heading
   `,

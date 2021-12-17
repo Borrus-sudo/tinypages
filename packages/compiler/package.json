@@ -1,23 +1,24 @@
 {
-    "name": "@OhMyMarkdown/compiler",
-    "private": "true",
-    "version": "1.0.0",
-    "license": "MIT",
-    "scripts": {
-        "build": "tsup",
-        "dev": "tsup --watch lib"
-    },
-    "main": "out/index.js",
-    "module": "out/index.mjs",
-    "types": "out/index.d.ts",
-    "files": [
-        "out"
-    ],
-    "devDependencies": {
-        "@iconify/json": "^1.1.435",
-        "@types/marked": "^4.0.1"
-    },
-    "dependencies": {
-        "marked": "^4.0.5"
-    }
+  "name": "@OhMyMarkdown/compiler",
+  "private": "true",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch lib",
+    "start": "tsup --no-dts&&node out/index.js"
+  },
+  "main": "out/index.js",
+  "module": "out/index.mjs",
+  "types": "out/index.d.ts",
+  "files": [
+    "out"
+  ],
+  "devDependencies": {
+    "@iconify/json": "^1.1.435",
+    "@types/marked": "^4.0.1"
+  },
+  "dependencies": {
+    "marked": "^4.0.5"
+  }
 }
