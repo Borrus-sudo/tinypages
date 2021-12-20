@@ -19,7 +19,7 @@
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
     "@types/jest": "^27.0.3",
-    "@types/node": "^16.11.12",
+    "@types/node": "^17.0.1",
     "chalk": "4.1.0",
     "husky": "^7.0.0",
     "jest": "^27.4.4",
