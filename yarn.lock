@@ -452,10 +452,10 @@
     ts-node "^9"
     tslib "^2"
 
-"@iconify/json@^1.1.441":
-  version "1.1.441"
-  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-1.1.441.tgz#4e880e7df8860fc1427bedb69b4512955af58063"
-  integrity sha512-5tSDYjvCrpLET9cDvja/CK4YtrjfSQR05LHQaNCNPhRtth8j/h9b4ly1/kgEHTGGCGCi2qG/FjMWArDxi8uRDw==
+"@iconify/json@^1.1.447":
+  version "1.1.447"
+  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-1.1.447.tgz#cd1b47cb03883b3d1a9e9b218407e8194613e3b0"
+  integrity sha512-m7HsDy0+ZHEDh1LWFf7k3qIkRpGJ7ktPffT647qeJXysqGZo0ToBn14arhoIsDIn50M/F83iLt0CeZiyFmxrHA==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -2784,10 +2784,10 @@ map-obj@^4.0.0:
   resolved "https://registry.yarnpkg.com/map-obj/-/map-obj-4.3.0.tgz#9304f906e93faae70880da102a9f1df0ea8bb05a"
   integrity sha512-hdN1wVrZbb29eBGiGjJbeP8JbKjq1urkHJ/LIP/NY48MZ1QVXUsQBV1G1zvYFHn1XE06cwjBsOI2K3Ulnj1YXQ==
 
-marked@^4.0.7:
-  version "4.0.7"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-4.0.7.tgz#596a0826e7a8c6b4119eacd00b0220ddaee7fc71"
-  integrity sha512-mQrRvV2vRk7DHZsWsYJfAjmBo+lSYPhTJPThaaGpkEfmC+4oefeug2txZniQTieDS0CFpokfVhd7JuS5GtnHhA==
+marked@^4.0.5:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-4.0.8.tgz#ef127626ac65786460f9420d57cc8d5ffdcacbed"
+  integrity sha512-dkpJMIlJpc833hbjjg8jraw1t51e/eKDoG8TFOgc5O0Z77zaYKigYekTDop5AplRoKFGIaoazhYEhGkMtU3IeA==
 
 meow@^8.0.0:
   version "8.1.2"
