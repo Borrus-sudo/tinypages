@@ -19,6 +19,7 @@
     "@types/marked": "^4.0.1"
   },
   "dependencies": {
-    "marked": "^4.0.5"
+    "marked": "^4.0.5",
+    "proxy-hookified": "^1.1.3"
   }
 }

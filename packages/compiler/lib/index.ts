@@ -1,4 +1,6 @@
 import { marked } from "marked";
+import Spy from "proxy-hookified";
+import Handler from "./proxy";
 import { appendPrelude } from "./utils";
 export default async function compile(
   input: string,
@@ -7,8 +9,12 @@ export default async function compile(
   }
 ): Promise<string> {
   const markedConfig = config.marked || {};
+  let renderer = new marked.Renderer(
+    Object.keys(markedConfig).length > 0 ? markedConfig : null
+  );
+  const [spiedRenderer, revoke] = Spy(renderer, Handler);
   marked.use({
-    renderer: new marked.Renderer(markedConfig),
+    renderer: spiedRenderer,
   });
   marked.setOptions(markedConfig);
   return appendPrelude(marked.parse(input));
