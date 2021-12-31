@@ -1,29 +1,33 @@
 import { marked } from "marked";
 import Spy from "proxy-hookified";
-import Handler from "./proxy";
+import configStore from "./config";
+import useHandler from "./handler";
+import type { Config } from "./types";
 import { appendPrelude } from "./utils";
+
 export default async function compile(
   input: string,
-  config: {
-    marked?: {};
-  }
+  config: Config
 ): Promise<string> {
-  const markedConfig = config.marked || {};
-  let renderer = new marked.Renderer(
-    Object.keys(markedConfig).length > 0 ? markedConfig : null
-  );
-  const [spiedRenderer, revoke] = Spy(renderer, Handler);
+  const Renderer = new marked.Renderer();
+  const Handler = useHandler();
+  const [spiedRenderer] = Spy(Renderer, Handler);
+  marked.setOptions(config.marked || {});
   marked.use({
     renderer: spiedRenderer,
+    ...(config.marked || {}),
   });
-  marked.setOptions(markedConfig);
+  configStore.mutateConfig(config);
   return appendPrelude(marked.parse(input));
 }
 (async () => {
   const output = await compile(
-    ` ## :Rocket: 
-  this is just text :mdi-cool:
+    ` ## :rocket: 
+  this is just text ::lucide:activity::
   ### Heading
+  \`\`\`ts
+  console.log("Halleluah");
+  \`\`\`
   `,
     {}
   );
