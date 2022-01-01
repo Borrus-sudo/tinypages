@@ -1,5 +1,6 @@
 import { marked } from "marked";
 import Spy from "proxy-hookified";
+import * as shiki from "shiki";
 import configStore from "./config";
 import useHandler from "./handler";
 import type { Config } from "./types";
@@ -11,6 +12,7 @@ export default async function compile(
 ): Promise<string> {
   const Renderer = new marked.Renderer();
   const Handler = useHandler();
+  const highlighter = await shiki.getHighlighter(config.shiki);
   const [spiedRenderer] = Spy(Renderer, Handler);
   marked.setOptions(config.marked || {});
   marked.use({
@@ -22,14 +24,15 @@ export default async function compile(
 }
 (async () => {
   const output = await compile(
-    ` ## :rocket: 
-  this is just text ::lucide:activity::
-  ### Heading
-  \`\`\`ts
-  console.log("Halleluah");
-  \`\`\`
-  `,
-    {}
+    `## Header
+
+    guguguffdfffffffffffffffffffffffffffffffffffffff
+    Hi this :rocket: ::lucide:activity::   
+    ## HEader
+
+    fdfdf
+    `,
+    { marked: { gfm: true } }
   );
   console.log(output);
 })();

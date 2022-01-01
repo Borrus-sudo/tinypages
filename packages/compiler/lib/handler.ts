@@ -1,4 +1,4 @@
-import textTransformer from "./resolvers/expandablesResolver";
+import textTransformer from "./resolvers/expandables";
 import componentTransformer from "./resolvers/component";
 
 const metaConstruct = {
@@ -8,14 +8,13 @@ const metaConstruct = {
 export default function createHandler() {
   return {
     methodReturn(info, payload) {
-      if (info.propName === "text") {
-        return textTransformer(payload);
-      } else if (info.propName === "html") {
+      if (info.propName === "html") {
         metaConstruct.components.push(...componentTransformer(payload));
       } else if (info.propName === "code") {
-        console.log(payload);
+      } else if (info.propName === "text") {
+        return payload;
       }
-      return payload;
+      return textTransformer(payload);
     },
   };
 }
