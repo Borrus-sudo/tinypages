@@ -225,12 +225,19 @@ type Lang =
   | "xsl"
   | "yaml";
 
+type TrustContext = {
+  command: string;
+  url: string;
+  protocol: string;
+};
+
 type IconsConfig = {
   installPkg: boolean;
   alias: Map<string, string>;
   prefix: string;
   separator: string;
 };
+
 type MarkedConfig = {
   baseUrl?: string;
   breaks?: boolean;
@@ -241,7 +248,6 @@ type MarkedConfig = {
   mangle?: boolean;
   pedantic?: boolean;
   sanitize?: boolean;
-  sanitizer?(html: string): string;
   silent?: boolean;
   smartLists?: boolean;
   smartypants?: boolean;
@@ -255,9 +261,31 @@ type ShikiConfig = {
   paths?: IHighlighterPaths;
 };
 
+type KatexConfig = {
+  displayMode?: boolean | undefined;
+  output?: "html" | "mathml" | "htmlAndMathml" | undefined;
+  leqno?: boolean | undefined;
+  fleqn?: boolean | undefined;
+  throwOnError?: boolean | undefined;
+  errorColor?: string | undefined;
+  macros?: any;
+  minRuleThickness?: number | undefined;
+  colorIsTextColor?: boolean | undefined;
+  maxSize?: number | undefined;
+  maxExpand?: number | undefined;
+  strict?: boolean | string | Function | undefined;
+  trust?: boolean | ((context: TrustContext) => boolean) | undefined;
+  globalGroup?: boolean | undefined;
+};
+
 type Config = {
   marked?: MarkedConfig;
   icons?: IconsConfig;
   shiki?: ShikiConfig;
+  katex?: KatexConfig;
+  format?: boolean;
+  resolveWindiCss?: boolean;
+  resolveUnoCSS?: boolean;
+  renderMermaid?: boolean;
 };
 export { Config };
