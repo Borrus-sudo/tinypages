@@ -38,6 +38,8 @@ export default async function compile(
           "\\f": "#1f(#2)",
         },
       },
+      renderKatex: true,
+      renderMermaid: true,
     }
   );
   writeFileSync(

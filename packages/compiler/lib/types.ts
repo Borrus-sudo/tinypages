@@ -286,6 +286,9 @@ type Config = {
   resolveWindiCss?: boolean;
   resolveUnoCSS?: boolean;
   renderMermaid?: boolean;
+  renderKatex?: boolean;
   defaultIconsStyles?: Record<string, string>;
+  defaultBase64IconsStyles?: Record<string, string>;
 };
+
 export { Config };

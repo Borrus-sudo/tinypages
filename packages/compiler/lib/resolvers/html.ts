@@ -7,7 +7,7 @@ export default function (html: string) {
   const nodes = dom.querySelectorAll("*");
   for (let node of nodes) {
     if (!tags.includes(node.rawTagName.toLowerCase())) {
-      const iconsSvg = iconsTransformer(node.toString());
+      const iconsSvg = iconsTransformer(node.toString(), { attrs: node.attrs });
       if (!!iconsSvg) {
         node.textContent = iconsSvg;
       }

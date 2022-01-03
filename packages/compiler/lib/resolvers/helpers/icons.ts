@@ -1,4 +1,3 @@
-import { parse } from "node-html-parser";
 import Icons from "node-icons";
 import { paramCase } from "param-case";
 import store from "../../store";
@@ -6,9 +5,10 @@ import store from "../../store";
 const config = store.returnConfig();
 const icons = Icons(config.icons);
 
-export default function (rawStr: string): string {
-  const parsedComponent = parse(rawStr);
-  const isComponent = parsedComponent.childNodes[0].nodeType == 1;
+export default function (
+  rawStr: string,
+  options?: { attrs: Record<string, string> }
+): string {
   const seperator = config?.icons?.separator ?? ":";
   let base64: boolean = false;
   let iconName = rawStr;
@@ -17,26 +17,22 @@ export default function (rawStr: string): string {
     height: `"1em"`,
     viewBox: `"0 0 24 24"`,
   };
-  if (isComponent) {
-    //@ts-ignore
-    const rawTagName = parsedComponent.childNodes[0].rawTagName;
-    //@ts-ignore
-    const rawAttrs = parsedComponent.childNodes[0].rawAttrs;
-    iconName = paramCase(rawTagName).replace(/\-/g, seperator);
-    if (rawAttrs) {
-      base64 = rawAttrs.includes("base64");
-      if (base64) {
-        //@ts-ignore
-        delete parsedComponent.childNodes[0].attrs["base64"];
-      }
-      //@ts-ignore
-      styles = parsedComponent.childNodes[0].attrs;
+  if (options) {
+    iconName = paramCase(rawStr).replace(/\-/g, seperator);
+    base64 = typeof options.attrs["base64"] !== "undefined";
+    if (base64) {
+      delete options.attrs["base64"];
     }
+    styles = options.attrs;
   } else {
     if (rawStr.startsWith("base64" + seperator)) {
       iconName = rawStr.split(seperator).slice(1).join(seperator);
       base64 = true;
     }
   }
-  return icons.getIconsSync(iconName, styles, base64);
+  return icons.getIconsSync(
+    iconName,
+    base64 ? config.defaultBase64IconsStyles || {} : styles,
+    base64
+  );
 }
