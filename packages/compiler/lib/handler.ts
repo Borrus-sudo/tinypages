@@ -6,15 +6,17 @@ let cache: string = "";
 export default function createHandler() {
   return {
     methodReturn(info, payload) {
+      payload = textTransformer(payload);
       if (info.propName === "html") {
-        payload = htmlTransformer(payload);
+        return htmlTransformer(payload);
       } else if (info.propName.startsWith("code")) {
         if (!!cache) {
           payload = cache;
           cache = "";
+          return payload;
         }
       }
-      return textTransformer(payload);
+      return payload;
     },
     methodArguments(info, args) {
       if (info.propName === "link") {

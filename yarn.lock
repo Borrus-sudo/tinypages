@@ -3193,6 +3193,11 @@ parse-json@^5.0.0:
     json-parse-even-better-errors "^2.3.0"
     lines-and-columns "^1.1.6"
 
+parse-key-value@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/parse-key-value/-/parse-key-value-1.0.0.tgz#2873484e2b961669b8cb668b9d9af6b00613e651"
+  integrity sha1-KHNITiuWFmm4y2aLnZr2sAYT5lE=
+
 parse5@6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-6.0.1.tgz#e1a1c085c569b3dc08321184f19a39cc27f7c30b"

@@ -38,6 +38,7 @@ export default async function compile(
           "\\f": "#1f(#2)",
         },
       },
+      shiki: { themes: ["vitesse-dark", "nord"] },
       renderKatex: true,
       renderMermaid: true,
     }
