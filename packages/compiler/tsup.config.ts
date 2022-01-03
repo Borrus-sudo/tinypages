@@ -7,7 +7,7 @@ const config: Options = {
   clean: true,
   dts: true,
   outDir: "./out",
-  minify: false,
+  minify: true,
 };
 
 export default config;
