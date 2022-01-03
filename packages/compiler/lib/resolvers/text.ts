@@ -1,6 +1,6 @@
 import * as emoticon from "node-emoji";
 import iconsTransformer from "./helpers/icons";
-import katexRenderer from "./helpers/katex";
+import codeTransformer from "./code";
 import store from "../store";
 
 const config = store.returnConfig();
@@ -17,7 +17,7 @@ export default function (payload: string) {
   if (!!config.renderKatex)
     return iconsTransformedText.replace(/`(.*?)`/g, (_fullText, payload) => {
       let [type, ...code] = payload.split(" ");
-      return katexRenderer(code.join(" "), { type, inlineRender: true });
+      return codeTransformer(code.join(" "), type, { inlineRender: true });
     });
   else return iconsTransformedText;
 }
