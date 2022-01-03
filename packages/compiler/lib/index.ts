@@ -11,19 +11,19 @@ export default async function compile(
   input: string,
   config: Config
 ): Promise<string> {
-  store.assignConfig(config);
   const Renderer = new marked.Renderer();
   const Handler = useHandler();
   const highlighter = await shiki.getHighlighter(
     config.shiki || { theme: "nord" }
   );
-  store.assignShikiInstance(highlighter);
   const [spiedRenderer] = Spy(Renderer, Handler);
   marked.setOptions(sanitizeMarkedConfig(config.marked || {}));
   marked.use({
     renderer: spiedRenderer,
     ...(config.marked || {}),
   });
+  store.assignShikiInstance(highlighter);
+  store.assignConfig(config);
   return appendPrelude(marked.parse(input));
 }
 (async () => {

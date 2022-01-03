@@ -1,15 +1,13 @@
-import textTransformer from "./resolvers/expandables";
-import componentTransformer from "./resolvers/component";
+import textTransformer from "./resolvers/text";
 import codeTransformer from "./resolvers/code";
-const metaConstruct = {
-  components: [],
-};
+import htmlTransformer from "./resolvers/html";
+
 let cache: string = "";
 export default function createHandler() {
   return {
     methodReturn(info, payload) {
       if (info.propName === "html") {
-        metaConstruct.components.push(...componentTransformer(payload));
+        payload = htmlTransformer(payload);
       } else if (info.propName.startsWith("code")) {
         if (!!cache) {
           payload = cache;

@@ -1,4 +1,5 @@
 import katexRenderer from "./helpers/katex";
+import highlighter from "./helpers/highlight";
 export default function (
   code: string,
   lang: string,
@@ -18,6 +19,6 @@ export default function (
         inlineRender: !!options.inlineRender,
       });
     default:
-      break;
+      return highlighter(code, lang);
   }
 }
