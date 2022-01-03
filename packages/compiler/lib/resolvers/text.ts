@@ -9,7 +9,7 @@ export default function (payload: string) {
   const emojiTransformedText = emoticon.emojify(payload);
   const iconsTransformedText = emojiTransformedText.replace(
     /::([\s\S]*?)::/g,
-    (fullText, payload, ...args) => {
+    (fullText, payload) => {
       const iconSvg = iconsTransformer(payload);
       return iconSvg === "" ? fullText : iconSvg;
     }
