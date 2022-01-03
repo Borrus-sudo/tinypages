@@ -1,3 +1,4 @@
+import store from "./store";
 const validMarkedKeys = [
   "baseUrl",
   "breaks",
@@ -15,7 +16,22 @@ const validMarkedKeys = [
 ];
 
 export function appendPrelude(content: string) {
-  return String.raw`<head></head>\n<body>${content}</body>`;
+  return String.raw`<!DOCTYPE html>
+  <html lang="en">
+  
+  <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       ${store.returnHead().join("\n")} 
+      <title>Document</title>
+  </head>
+  
+  <body>
+      ${content} 
+  </body>
+  
+  </html>`;
 }
 
 export function sanitizeMarkedConfig(markedConfig) {

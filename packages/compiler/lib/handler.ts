@@ -10,7 +10,7 @@ export default function createHandler() {
     methodReturn(info, payload) {
       if (info.propName === "html") {
         metaConstruct.components.push(...componentTransformer(payload));
-      } else if (info.propName === "code") {
+      } else if (info.propName.startsWith("code")) {
         if (!!cache) {
           payload = cache;
           cache = "";
@@ -25,7 +25,11 @@ export default function createHandler() {
       } else if (info.propName === "code") {
         const code = args[0];
         const lang = args[1];
-        cache = codeTransformer(code, lang);
+        cache = codeTransformer(code, lang, {});
+      } else if (info.propName === "codespan") {
+        let [lang, ...code] = args[0].split` `;
+        code = code.join` `;
+        cache = codeTransformer(code, lang.trim(), { inlineRender: true });
       }
       return args;
     },

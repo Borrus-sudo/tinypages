@@ -262,7 +262,6 @@ type ShikiConfig = {
 };
 
 type KatexConfig = {
-  displayMode?: boolean | undefined;
   output?: "html" | "mathml" | "htmlAndMathml" | undefined;
   leqno?: boolean | undefined;
   fleqn?: boolean | undefined;
