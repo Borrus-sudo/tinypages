@@ -1,6 +1,6 @@
-import textTransformer from "./resolvers/text";
 import codeTransformer from "./resolvers/code";
 import htmlTransformer from "./resolvers/html";
+import textTransformer from "./resolvers/text";
 
 let cache: string = "";
 export default function createHandler() {
@@ -13,8 +13,6 @@ export default function createHandler() {
           payload = cache;
           cache = "";
         }
-      } else if (info.propName === "text") {
-        return payload;
       }
       return textTransformer(payload);
     },

@@ -33,12 +33,8 @@ export default function (rawStr: string): string {
       styles = parsedComponent.childNodes[0].attrs;
     }
   } else {
-    console.log(rawStr);
-
     if (rawStr.startsWith("base64" + seperator)) {
       iconName = rawStr.split(seperator).slice(1).join(seperator);
-      console.log(iconName);
-
       base64 = true;
     }
   }
