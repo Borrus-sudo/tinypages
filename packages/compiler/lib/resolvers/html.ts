@@ -5,9 +5,7 @@ const tags = require("html-tags");
 export default function (html: string) {
   const dom = parse(html);
   const loop = (dom) => {
-    const nodes = dom.childNodes;
-    for (let i = 0; i < nodes.length; i++) {
-      const node = nodes[i];
+    for (let node of dom.childNodes) {
       if (node && node.rawTagName) {
         const tagName = node.rawTagName.toLowerCase();
         if (
@@ -25,9 +23,6 @@ export default function (html: string) {
             node.textContent = iconsSvg;
             continue;
           }
-        }
-        if (node.childNodes.length > 0) {
-          loop(node);
         }
       }
     }

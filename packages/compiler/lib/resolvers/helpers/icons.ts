@@ -37,7 +37,7 @@ export default function (
   }
   return icons.getIconsSync(
     iconName,
-    base64 ? styles : wrapObject(styles),
+    base64 ? styles : wrapObject({ ...styles }),
     base64
   );
 }
