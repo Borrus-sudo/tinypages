@@ -1,4 +1,6 @@
 import codeTransformer from "./resolvers/code";
+import htmlTransformer from "./resolvers/html";
+import textTransformer from "./resolvers/text";
 
 let cache: string = "";
 export default function createHandler() {
@@ -10,8 +12,10 @@ export default function createHandler() {
           cache = "";
           return payload;
         }
+      } else if (info.propName === "html") {
+        return htmlTransformer(textTransformer(payload));
       }
-      return payload;
+      return textTransformer(payload);
     },
     methodArguments(info, args) {
       if (info.propName === "link") {
