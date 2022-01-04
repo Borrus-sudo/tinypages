@@ -159,3 +159,10 @@ export function sanitizeMarkedConfig(markedConfig) {
   });
   return subsetConfig;
 }
+
+export function wrapObject(styles: Record<string, string>) {
+  Object.keys(styles).forEach((key) => {
+    styles[key] = `"${styles[key]}"`;
+  });
+  return styles;
+}

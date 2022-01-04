@@ -12,7 +12,7 @@ export default function (html: string) {
   });
   const loop = (dom) => {
     const nodes = dom.childNodes;
-    for (let i = 0; i++ < nodes.length; ) {
+    for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
       if (node && node.rawTagName) {
         const tagName = node.rawTagName.toLowerCase();
