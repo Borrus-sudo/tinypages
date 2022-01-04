@@ -3,13 +3,7 @@ import iconsTransformer from "./helpers/icons";
 const tags = require("html-tags");
 
 export default function (html: string) {
-  const dom = parse(html, {
-    lowerCaseTagName: false,
-    comment: false,
-    blockTextElements: {
-      SVGElement: false,
-    },
-  });
+  const dom = parse(html);
   const loop = (dom) => {
     const nodes = dom.childNodes;
     for (let i = 0; i < nodes.length; i++) {
