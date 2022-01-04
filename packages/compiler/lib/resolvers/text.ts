@@ -3,8 +3,6 @@ import iconsTransformer from "./helpers/icons";
 import codeTransformer from "./code";
 
 export default function (payload: string) {
-  console.log(payload);
-
   return payload.replace(/(::(.*?)::)|(`(.*?)`)|(:(.*?):)/g, (payload) => {
     if (
       (payload.includes("<") || payload.includes(">")) &&

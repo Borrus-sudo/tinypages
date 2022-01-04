@@ -1,13 +1,26 @@
 import { parse } from "node-html-parser";
 
-export default function (payload) {
-  const dom = parse(payload);
-  const classes: string[] =
-    payload
-      .match(/\[(.*?)\]/)?.[0]
-      ?.slice(1, -1)
-      ?.replace(/ +/g, " ")
-      ?.split(" ") ?? [];
-  if (classes.length > 0) classes.forEach((_) => dom.classList.add(_));
-  return dom.toString();
+export default function () {
+  let classes: string[] = [];
+  return {
+    load(text: string) {
+      return text.replace(/\[(.*?)\]/g, (_, full) => {
+        classes.push(...full.replace(/ +/g, " ").split(" "));
+        return "";
+      });
+    },
+    flush() {
+      classes = [];
+    },
+    transform(html: string) {
+      console.log(classes);
+      if (classes.length > 0) {
+        const dom = parse(html);
+        //@ts-ignore
+        classes.forEach((c) => dom.childNodes?.[0]?.classList.add(c));
+        return dom.toString();
+      }
+      return html;
+    },
+  };
 }

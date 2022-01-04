@@ -20,7 +20,7 @@ export default function (html: string) {
             attrs: node.attrs,
           });
           if (!!iconsSvg) {
-            node.textContent = iconsSvg;
+            node.replaceWith(iconsSvg);
             continue;
           }
         }

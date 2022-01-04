@@ -4,9 +4,16 @@ import textTransformer from "./resolvers/text";
 import cssTransformer from "./resolvers/css";
 
 let cache: string = "";
+let cssTransform = cssTransformer();
+let lastText = false;
 export default function createHandler() {
   return {
     methodReturn(info, payload) {
+      if (lastText) {
+        lastText = false;
+        payload = cssTransform.transform(payload);
+        cssTransform.flush();
+      }
       if (info.propName.startsWith("code")) {
         if (!!cache) {
           payload = cache;
@@ -16,9 +23,12 @@ export default function createHandler() {
       } else if (info.propName === "html") {
         return textTransformer(htmlTransformer(payload));
       } else if (info.propName === "text") {
+        //cache css
+        payload = cssTransform.load(payload);
+        lastText = true;
         return textTransformer(payload);
       }
-      return cssTransformer(payload);
+      return payload;
     },
     methodArguments(info, args) {
       if (info.propName === "link") {
