@@ -30,6 +30,7 @@
     "param-case": "^3.0.4",
     "parse-key-value": "^1.0.0",
     "proxy-hookified": "^1.1.4",
-    "shiki": "^0.10.0"
+    "shiki": "^0.10.0",
+    "windicss": "^3.4.2"
   }
 }

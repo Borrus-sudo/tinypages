@@ -14,11 +14,11 @@ export default function createHandler() {
           return payload;
         }
       } else if (info.propName === "html") {
-        return htmlTransformer(textTransformer(payload));
+        return textTransformer(htmlTransformer(payload));
       } else if (info.propName === "text") {
         return textTransformer(payload);
       }
-      return payload;
+      return cssTransformer(payload);
     },
     methodArguments(info, args) {
       if (info.propName === "link") {
