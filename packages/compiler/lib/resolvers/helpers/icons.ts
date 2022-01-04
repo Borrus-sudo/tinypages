@@ -22,11 +22,7 @@ export default function (
       delete options.attrs["base64"];
       defaultStyles = config.defaultBase64IconsStyles || {};
     } else {
-      defaultStyles = config.defaultIconsStyles || {
-        width: `1em`,
-        height: `1em`,
-        viewBox: `0 0 24 24`,
-      };
+      defaultStyles = config.defaultIconsStyles || {};
     }
     styles = { ...options.attrs, ...defaultStyles };
   } else {
@@ -35,11 +31,7 @@ export default function (
       base64 = true;
       defaultStyles = config.defaultBase64IconsStyles || {};
     } else {
-      defaultStyles = config.defaultIconsStyles || {
-        width: `1em`,
-        height: `1em`,
-        viewBox: `0 0 24 24`,
-      };
+      defaultStyles = config.defaultIconsStyles || {};
     }
     styles = defaultStyles;
   }
