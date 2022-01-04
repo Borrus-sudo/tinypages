@@ -1,15 +1,10 @@
 import codeTransformer from "./resolvers/code";
-import htmlTransformer from "./resolvers/html";
-import textTransformer from "./resolvers/text";
 
 let cache: string = "";
 export default function createHandler() {
   return {
     methodReturn(info, payload) {
-      payload = textTransformer(payload);
-      if (info.propName === "html") {
-        return htmlTransformer(payload);
-      } else if (info.propName.startsWith("code")) {
+      if (info.propName.startsWith("code")) {
         if (!!cache) {
           payload = cache;
           cache = "";

@@ -3,6 +3,8 @@ import { marked } from "marked";
 import Spy from "proxy-hookified";
 import * as shiki from "shiki";
 import useHandler from "./handler";
+import htmlTransformer from "./resolvers/html";
+import textTransformer from "./resolvers/text";
 import store from "./store";
 import type { Config } from "./types";
 import { appendPrelude, sanitizeMarkedConfig } from "./utils";
@@ -24,7 +26,8 @@ export default async function compile(
   });
   store.assignShikiInstance(highlighter);
   store.assignConfig(config);
-  return appendPrelude(marked.parse(input));
+  const output = marked.parse(input);
+  return appendPrelude(htmlTransformer(textTransformer(output)));
 }
 (async () => {
   const output = await compile(

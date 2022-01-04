@@ -29,5 +29,5 @@ export default function (
     default:
       return highlighter(code, lang);
   }
-  return "";
+  return ``;
 }
