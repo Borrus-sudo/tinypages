@@ -9,6 +9,7 @@ export default {
   },
   assignConfig(newConfig: Config) {
     Object.assign(config, newConfig);
+    if (config.headTags) head.push(...config.headTags);
   },
   returnShikiInstance() {
     return shikiInstance;
@@ -17,7 +18,7 @@ export default {
     Object.assign(shikiInstance, newInstance);
   },
   addToHead(newHead) {
-    head = [...newHead];
+    head.push(newHead);
   },
   returnHead() {
     return head;

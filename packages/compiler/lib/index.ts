@@ -5,7 +5,7 @@ import * as shiki from "shiki";
 import useHandler from "./handler";
 import store from "./store";
 import type { Config } from "./types";
-import { appendPrelude, sanitizeMarkedConfig } from "./utils";
+import { appendPrelude } from "./utils";
 
 export default async function compile(
   input: string,
@@ -17,7 +17,7 @@ export default async function compile(
     config.shiki || { theme: "nord" }
   );
   const [spiedRenderer] = Spy(Renderer, Handler);
-  marked.setOptions(sanitizeMarkedConfig(config.marked || {}));
+  marked.setOptions(config.marked || {});
   marked.use({
     renderer: spiedRenderer,
     ...(config.marked || {}),
@@ -42,6 +42,10 @@ export default async function compile(
       shiki: { themes: ["vitesse-dark", "nord"] },
       renderKatex: true,
       renderMermaid: true,
+      headTags: [
+        `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" integrity="sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs" crossorigin="anonymous">`,
+        `<link rel="stylesheet" href="style.css">`,
+      ],
     }
   );
   writeFileSync(

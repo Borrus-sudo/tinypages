@@ -282,6 +282,7 @@ type Config = {
   icons?: IconsConfig;
   shiki?: ShikiConfig;
   katex?: KatexConfig;
+  headTags?: string[];
   format?: boolean;
   resolveWindiCss?: boolean;
   resolveUnoCSS?: boolean;
