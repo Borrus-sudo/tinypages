@@ -24,6 +24,7 @@ export default function (html: string) {
             continue;
           }
         }
+        loop(node);
       }
     }
   };

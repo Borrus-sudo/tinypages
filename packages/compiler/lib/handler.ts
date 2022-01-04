@@ -1,6 +1,7 @@
 import codeTransformer from "./resolvers/code";
 import htmlTransformer from "./resolvers/html";
 import textTransformer from "./resolvers/text";
+import cssTransformer from "./resolvers/css";
 
 let cache: string = "";
 export default function createHandler() {
@@ -14,8 +15,10 @@ export default function createHandler() {
         }
       } else if (info.propName === "html") {
         return htmlTransformer(textTransformer(payload));
+      } else if (info.propName === "text") {
+        return textTransformer(payload);
       }
-      return textTransformer(payload);
+      return payload;
     },
     methodArguments(info, args) {
       if (info.propName === "link") {

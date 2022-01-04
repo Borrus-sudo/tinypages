@@ -4,7 +4,10 @@ import codeTransformer from "./code";
 
 export default function (payload: string) {
   return payload.replace(/(::(.*?)::)|(`(.*?)`)|(:(.*?):)/g, (payload) => {
-    if (payload.includes("<") || payload.includes(">")) {
+    if (
+      (payload.includes("<") || payload.includes(">")) &&
+      !payload.startsWith("`")
+    ) {
       return payload;
     }
     if (payload.startsWith("::")) {
