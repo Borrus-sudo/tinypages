@@ -29,7 +29,7 @@ export default async function compile(
 }
 (async () => {
   const [html, styles] = await compile(
-    readFileSync("E:/JDev/OhMyMarkdown/packages/compiler/lib/index.md", {
+    readFileSync("E:/JDev/OhMyMarkdown/packages/compiler/demo/index.md", {
       encoding: "utf-8",
     }),
     {
@@ -49,9 +49,9 @@ export default async function compile(
       defaultIconsStyles: { width: "1em", height: "1em", viewBox: "0 0 24 24" },
     }
   );
-  writeFileSync("E:/JDev/OhMyMarkdown/packages/compiler/lib/index.html", html);
+  writeFileSync("E:/JDev/OhMyMarkdown/packages/compiler/demo/index.html", html);
   writeFileSync(
-    "E:/JDev/OhMyMarkdown/packages/compiler/lib/index.css",
+    "E:/JDev/OhMyMarkdown/packages/compiler/demo/index.css",
     `\n ${styles}`
   );
 })();
