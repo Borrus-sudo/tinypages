@@ -1,4 +1,5 @@
 import { parse } from "node-html-parser";
+import generateStyles from "./helpers/windicss";
 
 export default function () {
   let classes: string[] = [];
@@ -13,14 +14,13 @@ export default function () {
       classes = [];
     },
     transform(html: string) {
-      console.log(classes);
       if (classes.length > 0) {
         const dom = parse(html);
         //@ts-ignore
         classes.forEach((c) => dom.childNodes?.[0]?.classList.add(c));
-        return dom.toString();
+        html = dom.toString();
       }
-      return html;
+      return [html, generateStyles(html)];
     },
   };
 }

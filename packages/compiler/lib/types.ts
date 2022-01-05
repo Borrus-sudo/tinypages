@@ -283,6 +283,7 @@ type Config = {
   shiki?: ShikiConfig;
   katex?: KatexConfig;
   headTags?: string[];
+  minify?: boolean;
   format?: boolean;
   resolveWindiCss?: boolean;
   resolveUnoCSS?: boolean;

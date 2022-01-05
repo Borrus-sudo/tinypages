@@ -3,15 +3,18 @@ import htmlTransformer from "./resolvers/html";
 import textTransformer from "./resolvers/text";
 import cssTransformer from "./resolvers/css";
 
-let cache: string = "";
-let cssTransform = cssTransformer();
-let lastText = false;
+export let styles = ``;
 export default function createHandler() {
+  let cache: string = "";
+  let cssTransform = cssTransformer();
+  let lastText = false;
   return {
     methodReturn(info, payload) {
       if (lastText) {
+        let newStyles;
         lastText = false;
-        payload = cssTransform.transform(payload);
+        [payload, newStyles] = cssTransform.transform(payload);
+        styles += ` ${newStyles}`;
         cssTransform.flush();
       }
       if (info.propName.startsWith("code")) {
