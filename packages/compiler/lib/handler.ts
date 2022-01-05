@@ -1,7 +1,7 @@
-import codeTransformer from "./resolvers/code";
-import htmlTransformer from "./resolvers/html";
-import textTransformer from "./resolvers/text";
-import cssTransformer from "./resolvers/css";
+import codeTransformer from "./plugins/code";
+import htmlTransformer from "./plugins/html";
+import textTransformer from "./plugins/text";
+import cssTransformer from "./plugins/css";
 
 export let styles = ``;
 export default function createHandler() {

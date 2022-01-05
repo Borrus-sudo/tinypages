@@ -1,4 +1,4 @@
-import { appendFileSync, readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { marked } from "marked";
 import Spy from "proxy-hookified";
 import * as shiki from "shiki";
