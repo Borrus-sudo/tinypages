@@ -1,4 +1,3 @@
-import { readFileSync, writeFileSync } from "fs";
 import { marked } from "marked";
 import Spy from "proxy-hookified";
 import useHandler from "./handler";
@@ -29,27 +28,3 @@ export default async function compile(
   const output = marked.parse(input);
   return appendPrelude(output, config.headTags || []);
 }
-(async () => {
-  const html = await compile(
-    readFileSync("E:/JDev/OhMyMarkdown/packages/compiler/demo/index.md", {
-      encoding: "utf-8",
-    }),
-    {
-      marked: { gfm: true },
-      katex: {
-        macros: {
-          "\\f": "#1f(#2)",
-        },
-      },
-      shiki: { themes: ["vitesse-dark", "nord"] },
-      renderKatex: true,
-      renderMermaid: true,
-      headTags: [
-        `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" integrity="sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs" crossorigin="anonymous">`,
-        `<link rel="stylesheet" href="index.css">`,
-      ],
-      defaultIconsStyles: { width: "1em", height: "1em", viewBox: "0 0 24 24" },
-    }
-  );
-  writeFileSync("E:/JDev/OhMyMarkdown/packages/compiler/demo/index.html", html);
-})();
