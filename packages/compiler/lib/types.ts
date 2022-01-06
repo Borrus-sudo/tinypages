@@ -293,4 +293,10 @@ type Config = {
   defaultBase64IconsStyles?: Record<string, string>;
 };
 
-export { Config };
+type Plugin = {
+  transform: (id: string, payload: string) => string;
+  getReady?: () => Promise<void>;
+  tapArgs?: (id: string, args: any[]) => void;
+};
+
+export { Config, Plugin };

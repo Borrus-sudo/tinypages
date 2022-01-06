@@ -1,34 +1,36 @@
 import { readFileSync, writeFileSync } from "fs";
 import { marked } from "marked";
 import Spy from "proxy-hookified";
-import * as shiki from "shiki";
-import useHandler, { styles } from "./handler";
-import store from "./store";
+import useHandler from "./handler";
+import { PluginCode } from "./plugins/code";
+import { PluginCSS } from "./plugins/css";
+import { PluginHTML } from "./plugins/html";
+import { PluginText } from "./plugins/text";
 import type { Config } from "./types";
 import { appendPrelude } from "./utils";
 
 export default async function compile(
   input: string,
   config: Config
-): Promise<string | [string, string]> {
+): Promise<string> {
   const Renderer = new marked.Renderer();
-  const Handler = useHandler();
-  const highlighter = await shiki.getHighlighter(
-    config.shiki || { theme: "nord" }
-  );
+  const Handler = await useHandler([
+    PluginHTML(config),
+    PluginCode(config),
+    PluginCSS(config),
+    PluginText(config),
+  ]);
   const [spiedRenderer] = Spy(Renderer, Handler);
   marked.setOptions(config.marked || {});
   marked.use({
     renderer: spiedRenderer,
     ...(config.marked || {}),
   });
-  store.assignShikiInstance(highlighter);
-  store.assignConfig(config);
   const output = marked.parse(input);
-  return [appendPrelude(output), styles];
+  return appendPrelude(output, config.headTags || []);
 }
 (async () => {
-  const [html, styles] = await compile(
+  const html = await compile(
     readFileSync("E:/JDev/OhMyMarkdown/packages/compiler/demo/index.md", {
       encoding: "utf-8",
     }),
@@ -50,8 +52,4 @@ export default async function compile(
     }
   );
   writeFileSync("E:/JDev/OhMyMarkdown/packages/compiler/demo/index.html", html);
-  writeFileSync(
-    "E:/JDev/OhMyMarkdown/packages/compiler/demo/index.css",
-    `\n ${styles}`
-  );
 })();

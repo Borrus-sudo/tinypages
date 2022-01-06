@@ -1,37 +1,39 @@
 import Icons from "node-icons";
 import { paramCase } from "param-case";
-import store from "../../store";
+import type { Config } from "../../types";
 import { wrapObject } from "../../utils";
 
-const config = store.returnConfig();
-const icons = Icons(config.icons);
+let icons;
 export default function (
   rawStr: string,
-  options?: { attrs: Record<string, string> }
+  ctx: { attrs?: Record<string, string>; config: Config }
 ): string {
-  const seperator = config?.icons?.separator ?? ":";
+  if (!icons) {
+    icons = Icons(ctx.config.icons);
+  }
+  const seperator = ctx.config?.icons?.separator ?? ":";
   let base64: boolean = false;
   let iconName = rawStr;
   let defaultStyles = {};
   let styles = {};
-  if (options) {
+  if (ctx.attrs) {
     //iconName passed as a component
     iconName = paramCase(rawStr).replace(/\-/g, seperator);
-    base64 = typeof options.attrs["base64"] !== "undefined";
+    base64 = typeof ctx.attrs["base64"] !== "undefined";
     if (base64) {
-      delete options.attrs["base64"];
-      defaultStyles = config.defaultBase64IconsStyles || {};
+      delete ctx.attrs["base64"];
+      defaultStyles = ctx.config.defaultBase64IconsStyles || {};
     } else {
-      defaultStyles = config.defaultIconsStyles || {};
+      defaultStyles = ctx.config.defaultIconsStyles || {};
     }
-    styles = { ...options.attrs, ...defaultStyles };
+    styles = { ...ctx.attrs, ...defaultStyles };
   } else {
     if (rawStr.startsWith("base64" + seperator)) {
       iconName = rawStr.split(seperator).slice(1).join(seperator);
       base64 = true;
-      defaultStyles = config.defaultBase64IconsStyles || {};
+      defaultStyles = ctx.config.defaultBase64IconsStyles || {};
     } else {
-      defaultStyles = config.defaultIconsStyles || {};
+      defaultStyles = ctx.config.defaultIconsStyles || {};
     }
     styles = defaultStyles;
   }

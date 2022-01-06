@@ -1,9 +1,7 @@
-import store from "./store";
-
-export function appendPrelude(content: string) {
-  return String.raw`<!DOCTYPE html><html><head>${store
-    .returnHead()
-    .join("\n")}</head><body>${content}</body></html>`;
+export function appendPrelude(content: string, headTags) {
+  return String.raw`<!DOCTYPE html><html><head>${headTags.join(
+    "\n"
+  )}</head><body>${content}</body></html>`;
 }
 
 export function wrapObject(styles: Record<string, string>) {

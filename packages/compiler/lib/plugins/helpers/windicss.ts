@@ -1,9 +1,8 @@
 import { Processor } from "windicss/lib";
 import { HTMLParser } from "windicss/utils/parser";
-import store from "../../store";
+import type { Config } from "../../types";
 
-const config = store.returnConfig();
-export default function (html) {
+export default function (html, config: Config) {
   const processor = new Processor();
   const parser = new HTMLParser(html);
   const preflightSheet = processor.preflight(html);

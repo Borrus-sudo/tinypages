@@ -1,26 +1,28 @@
 import { parse } from "node-html-parser";
-import generateStyles from "./helpers/windicss";
+import type { Config, Plugin } from "../types";
 
-export default function () {
+export function PluginCSS(config: Config): Plugin {
   let classes: string[] = [];
+  let lastText = false;
   return {
-    load(text: string) {
-      return text.replace(/\[(.*?)\]/g, (_, full) => {
-        classes.push(...full.replace(/ +/g, " ").split(" "));
-        return "";
-      });
-    },
-    flush() {
-      classes = [];
-    },
-    transform(html: string) {
-      if (classes.length > 0) {
-        const dom = parse(html);
-        //@ts-ignore
-        classes.forEach((c) => dom.childNodes?.[0]?.classList.add(c));
-        html = dom.toString();
+    transform(id: string, payload: string) {
+      if (id === "text") {
+        lastText = true;
+        return payload.replace(/\[(.*?)\]/g, (_, full) => {
+          classes.push(...full.replace(/ +/g, " ").split(" "));
+          return "";
+        });
+      } else if (lastText) {
+        if (classes.length > 0) {
+          const dom = parse(payload);
+          //@ts-ignore
+          classes.forEach((c) => dom.childNodes?.[0]?.classList.add(c));
+          classes = [];
+          return dom.toString();
+        }
+        lastText = false;
       }
-      return [html, generateStyles(html)];
+      return payload;
     },
   };
 }

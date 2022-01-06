@@ -1,33 +1,49 @@
+import * as shiki from "shiki";
+import type { Config, Plugin } from "../types";
 import katexRenderer from "./helpers/katex";
-import highlighter from "./helpers/highlight";
-import store from "../store";
+const parse = require("parse-key-value");
 
-const config = store.returnConfig();
-export default function (
-  code: string,
-  lang: string,
-  options: { inlineRender?: boolean }
-) {
-  switch (lang) {
-    case "mermaid":
-      if (!!config.renderMermaid) return "";
-      break;
-    case "katex":
-      if (!!config.renderKatex)
-        return katexRenderer(code, {
-          type: "default",
-          inlineRender: !!options.inlineRender,
-        });
-      break;
-    case "katex-mhcem":
-      if (!!config.renderKatex)
-        return katexRenderer(code, {
-          type: "mhcem",
-          inlineRender: !!options.inlineRender,
-        });
-      break;
-    default:
-      return highlighter(code, lang);
-  }
-  return ``;
+let highlighter;
+export function PluginCode(config: Config): Plugin {
+  let code, lang;
+  return {
+    async getReady() {
+      highlighter = await shiki.getHighlighter(
+        config.shiki || { theme: "nord" }
+      );
+    },
+    transform(id: string, payload: string) {
+      if (lang) {
+        if (lang === "mermaid" && config.renderMermaid) payload = "";
+        else if (lang.startsWith("katex") && config.renderKatex)
+          payload = katexRenderer(code, {
+            type: lang,
+            inlineRender: id === "codespan",
+            config,
+          });
+        else {
+          let keyValue: string | string[] = [];
+          let options: Record<string, string> = { lang };
+          if (lang.includes(" ")) {
+            [lang, ...keyValue] = lang.split(" ");
+            keyValue = keyValue.join(" ").slice(1, -1);
+            options = { lang, ...parse(keyValue) };
+          }
+          payload = highlighter.codeToHtml(code, options);
+        }
+        code = lang = "";
+        return payload;
+      }
+      return payload;
+    },
+    tapArgs(id: string, args: any[]) {
+      if (id === "code") {
+        code = args[0];
+        lang = args[1];
+      } else if (id === "codespan") {
+        [lang, ...code] = args[0].split(" ");
+        code = code.join(" ");
+      }
+    },
+  };
 }

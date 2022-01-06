@@ -1,16 +1,17 @@
+import type { Config } from "../../types";
 import * as katex from "katex";
-import store from "../../store";
-
-const config = store.returnConfig();
 
 export default function (
   content: string,
-  options: { type: "default" | "mhcem"; inlineRender: boolean }
+  ctx: { type: string; inlineRender: boolean; config: Config }
 ): string {
-  if (options.type === "mhcem") {
+  if (ctx.type === "katex-mhcem") {
     require("katex/contrib/mhchem");
   }
   //@ts-ignore
-  config.katex.displayMode = !options.inlineRender;
-  return katex.renderToString(content, config.katex || { throwOnError: false });
+  ctx.config.katex.displayMode = !ctx.inlineRender;
+  return katex.renderToString(
+    content,
+    ctx.config.katex || { throwOnError: false }
+  );
 }
