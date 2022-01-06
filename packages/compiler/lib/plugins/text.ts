@@ -18,17 +18,18 @@ export function PluginText(config: Config): Plugin {
               return payload;
             }
             if (payload.startsWith("::")) {
-              const iconSvg = iconsRenderer(payload.slice(2, -2), {
-                config,
-              });
-              return iconSvg ? iconSvg : payload;
+              payload =
+                iconsRenderer(payload.slice(2, -2), {
+                  config,
+                }) || payload;
             } else if (payload.startsWith("`")) {
               let [lang, ...code] = payload.slice(1, -1).split(" ");
               codeTransformer.tapArgs("code", [code.join(" "), lang]);
-              return codeTransformer.transform("codespan", payload);
+              payload = codeTransformer.transform("codespan", payload);
             } else {
-              return emoji.get(payload);
+              payload = emoji.get(payload);
             }
+            return payload;
           }
         );
       return payload;

@@ -32,7 +32,6 @@ export function PluginCode(config: Config): Plugin {
           payload = highlighter.codeToHtml(code, options);
         }
         code = lang = "";
-        return payload;
       }
       return payload;
     },

@@ -13,6 +13,7 @@ export function PluginCSS(config: Config): Plugin {
           return "";
         });
       } else if (lastText) {
+        lastText = false;
         if (classes.length > 0) {
           const dom = parse(payload);
           //@ts-ignore
@@ -20,7 +21,6 @@ export function PluginCSS(config: Config): Plugin {
           classes = [];
           return dom.toString();
         }
-        lastText = false;
       }
       return payload;
     },
