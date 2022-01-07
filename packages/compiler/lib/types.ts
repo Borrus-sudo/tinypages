@@ -277,7 +277,7 @@ type KatexConfig = {
   globalGroup?: boolean | undefined;
 };
 
-type Config = {
+type UserConfig = {
   marked?: MarkedConfig;
   icons?: IconsConfig;
   shiki?: ShikiConfig;
@@ -294,6 +294,10 @@ type Config = {
   plugins?: Plugin[];
 };
 
+type Config = {
+  metaConstruct: Record<string, string | object>;
+} & UserConfig;
+
 type Plugin = {
   enforce?: "pre" | "post";
   defineConfig?: (config: Config) => void;
@@ -302,4 +306,4 @@ type Plugin = {
   tapArgs?: (id: string, args: any[]) => void;
 };
 
-export { Config, Plugin };
+export { Config, Plugin, UserConfig };

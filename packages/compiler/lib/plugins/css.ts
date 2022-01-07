@@ -10,13 +10,14 @@ export function PluginCSS(): Plugin {
       config = _config;
     },
     transform(id: string, payload: string) {
-      if (id === "text") {
+      if (id === "text" && config.resolveWindiCss) {
         lastText = true;
         return payload.replace(/\[(.*?)\]/g, (_, full) => {
           classes.push(...full.replace(/ +/g, " ").split(" "));
           return "";
         });
       } else if (lastText) {
+        console.log(classes);
         lastText = false;
         if (classes.length > 0) {
           const dom = parse(payload);
