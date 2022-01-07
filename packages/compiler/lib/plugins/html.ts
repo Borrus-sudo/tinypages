@@ -3,8 +3,12 @@ import type { Config, Plugin } from "../types";
 import iconsRenderer from "./helpers/icons";
 const tags = require("html-tags");
 
-export function PluginHTML(config: Config): Plugin {
+export function PluginHTML(): Plugin {
+  let config: Config;
   return {
+    defineConfig(_config) {
+      config = _config;
+    },
     transform(id: string, payload: string) {
       if (id === "html") {
         const dom = parse(payload);

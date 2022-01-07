@@ -1,24 +1,26 @@
 import { marked } from "marked";
 import Spy from "proxy-hookified";
-import useHandler from "./handler";
+import useHandler from "./plugin";
 import { PluginCode } from "./plugins/code";
 import { PluginCSS } from "./plugins/css";
 import { PluginHTML } from "./plugins/html";
 import { PluginText } from "./plugins/text";
 import type { Config } from "./types";
-import { appendPrelude } from "./utils";
+import { appendPrelude, orderPlugins } from "./utils";
 
 export default async function compile(
   input: string,
   config: Config
 ): Promise<string> {
   const Renderer = new marked.Renderer();
-  const Handler = await useHandler([
-    PluginHTML(config),
-    PluginCode(config),
-    PluginCSS(config),
-    PluginText(config),
-  ]);
+  const Plugins = orderPlugins(
+    [PluginHTML(), PluginCode(), PluginCSS(), PluginText()],
+    config.plugins || []
+  );
+  Plugins.forEach((plugin) =>
+    plugin.defineConfig ? plugin.defineConfig(config) : 0
+  );
+  const Handler = await useHandler(Plugins);
   const [spiedRenderer] = Spy(Renderer, Handler);
   marked.setOptions(config.marked || {});
   marked.use({

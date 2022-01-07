@@ -3,9 +3,15 @@ import type { Config, Plugin } from "../types";
 import { PluginCode } from "./code";
 import iconsRenderer from "./helpers/icons";
 
-export function PluginText(config: Config): Plugin {
-  const codeTransformer = PluginCode(config);
+export function PluginText(): Plugin {
+  let codeTransformer = PluginCode();
+  let config: Config;
   return {
+    defineConfig(_config) {
+      config = _config;
+      codeTransformer = PluginCode();
+      codeTransformer.defineConfig(config);
+    },
     transform(id: string, payload: string) {
       if (id === "text" || id === "html")
         return payload.replace(

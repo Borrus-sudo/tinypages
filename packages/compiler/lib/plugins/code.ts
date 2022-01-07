@@ -4,13 +4,16 @@ import katexRenderer from "./helpers/katex";
 const parse = require("parse-key-value");
 
 let highlighter;
-export function PluginCode(config: Config): Plugin {
-  let code, lang;
+export function PluginCode(): Plugin {
+  let code, lang, config: Config;
   return {
     async getReady() {
       highlighter = await shiki.getHighlighter(
         config.shiki || { theme: "nord" }
       );
+    },
+    defineConfig(_config) {
+      config = _config;
     },
     transform(id: string, payload: string) {
       if (lang) {

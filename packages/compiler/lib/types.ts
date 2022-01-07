@@ -291,9 +291,12 @@ type Config = {
   renderKatex?: boolean;
   defaultIconsStyles?: Record<string, string>;
   defaultBase64IconsStyles?: Record<string, string>;
+  plugins?: Plugin[];
 };
 
 type Plugin = {
+  enforce?: "pre" | "post";
+  defineConfig?: (config: Config) => void;
   transform: (id: string, payload: string) => string;
   getReady?: () => Promise<void>;
   tapArgs?: (id: string, args: any[]) => void;

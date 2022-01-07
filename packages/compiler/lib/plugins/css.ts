@@ -1,10 +1,14 @@
 import { parse } from "node-html-parser";
 import type { Config, Plugin } from "../types";
 
-export function PluginCSS(config: Config): Plugin {
-  let classes: string[] = [];
-  let lastText = false;
+export function PluginCSS(): Plugin {
+  let lastText = false,
+    classes: string[] = [],
+    config: Config;
   return {
+    defineConfig(_config) {
+      config = _config;
+    },
     transform(id: string, payload: string) {
       if (id === "text") {
         lastText = true;

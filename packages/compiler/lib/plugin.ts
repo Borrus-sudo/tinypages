@@ -1,4 +1,5 @@
 import { Plugin } from "./types";
+
 export default async function createHandler(plugins: Plugin[]) {
   await Promise.all(
     [...plugins].map((p) => (p.getReady ? p.getReady() : null))
