@@ -30,6 +30,7 @@ export function PluginCSS(): Plugin {
       return payload;
     },
     postTransform(payload) {
+      if (!config.resolveWindiCss) return payload;
       const [html, css] = generateCSS(payload, config);
       config.metaConstruct.styles = css;
       return html;

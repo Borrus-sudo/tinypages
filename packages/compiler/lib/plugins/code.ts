@@ -5,7 +5,10 @@ const parse = require("parse-key-value");
 
 let highlighter;
 export function PluginCode(): Plugin {
-  let code, lang, config: Config;
+  let code,
+    lang,
+    config: Config,
+    mermaidGraphs: Record<string, string>[] = [];
   return {
     async getReady() {
       highlighter = await shiki.getHighlighter(
@@ -17,8 +20,10 @@ export function PluginCode(): Plugin {
     },
     transform(id: string, payload: string) {
       if (lang) {
-        if (lang === "mermaid" && config.renderMermaid) payload = "";
-        else if (lang.startsWith("katex") && config.renderKatex)
+        if (lang === "mermaid" && config.renderMermaid) {
+          mermaidGraphs.push({ code, lang });
+          payload = "<GRAPH></GRAPH>";
+        } else if (lang.startsWith("katex") && config.renderKatex)
           payload = katexRenderer(code, {
             type: lang,
             inlineRender: id === "codespan",
@@ -46,6 +51,34 @@ export function PluginCode(): Plugin {
         [lang, ...code] = args[0].split(" ");
         code = code.join(" ");
       }
+    },
+    async postTransform(payload: string) {
+      if (mermaidGraphs.length > 0) {
+        const mermaid = require("headless-mermaid");
+        const promisesArr = [];
+        for (let graph of mermaidGraphs) {
+          let keyValue: string | string[] = [];
+          let options: Record<string, string | object> = {
+            theme: "forest",
+            sequence: {
+              showSequenceNumbers: true,
+            },
+          };
+          if (graph.lang.includes(" ")) {
+            [, ...keyValue] = graph.lang.split(" ");
+            keyValue = keyValue.join(" ").slice(1, -1);
+            options = { ...parse(keyValue) };
+          }
+          promisesArr.push(mermaid.execute(graph.code, options));
+        }
+        const strs: string[] = await Promise.all(promisesArr);
+        let idx = -1;
+        return payload.replace(/\<GRAPH\>\<\/GRAPH\>/g, () => {
+          idx++;
+          return strs[idx];
+        });
+      }
+      return payload;
     },
   };
 }

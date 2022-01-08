@@ -1,8 +1,8 @@
-import { Processor } from "windicss/lib";
-import { HTMLParser } from "windicss/utils/parser";
 import type { Config } from "../../types";
 
 export default function (html, config: Config) {
+  const { Processor } = require("windicss/lib");
+  const { HTMLParser } = require("windicss/utils/parser");
   const processor = new Processor();
   const parser = new HTMLParser(html);
   const preflightSheet = processor.preflight(html);
