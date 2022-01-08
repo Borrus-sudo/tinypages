@@ -40,7 +40,6 @@ export function PluginHTML(): Plugin {
         loop(dom);
         return dom.toString();
       }
-      return payload;
     },
   };
 }

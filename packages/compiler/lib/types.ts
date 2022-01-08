@@ -301,9 +301,10 @@ type Config = {
 type Plugin = {
   enforce?: "pre" | "post";
   defineConfig?: (config: Config) => void;
-  transform: (id: string, payload: string) => string;
-  getReady?: () => Promise<void>;
+  transform: (id: string, payload: string) => string | void;
+  getReady?: () => Promise<void> | void;
   tapArgs?: (id: string, args: any[]) => void;
+  postTransform?: (payload: string) => string | Promise<string>;
 };
 
 export { Config, Plugin, UserConfig };

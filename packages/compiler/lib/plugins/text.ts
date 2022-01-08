@@ -16,7 +16,7 @@ export function PluginText(): Plugin {
       if (id === "text" || id === "html")
         return payload.replace(
           /(::(.*?)::)|(`(.*?)`)|(:(.*?):)/g,
-          (payload) => {
+          (payload: string) => {
             if (
               (payload.includes("<") || payload.includes(">")) &&
               !payload.startsWith("`")
@@ -31,14 +31,14 @@ export function PluginText(): Plugin {
             } else if (payload.startsWith("`")) {
               let [lang, ...code] = payload.slice(1, -1).split(" ");
               codeTransformer.tapArgs("code", [code.join(" "), lang]);
-              payload = codeTransformer.transform("codespan", payload);
+              payload =
+                codeTransformer.transform("codespan", payload) || payload;
             } else {
               payload = emoji.get(payload);
             }
             return payload;
           }
         );
-      return payload;
     },
   };
 }

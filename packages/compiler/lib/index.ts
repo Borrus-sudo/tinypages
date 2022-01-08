@@ -3,11 +3,10 @@ import Spy from "proxy-hookified";
 import useHandler from "./plugin";
 import { PluginCode } from "./plugins/code";
 import { PluginCSS } from "./plugins/css";
-import generateCSS from "./plugins/helpers/windicss";
 import { PluginHTML } from "./plugins/html";
 import { PluginText } from "./plugins/text";
 import type { Config, Plugin, UserConfig } from "./types";
-import { appendPrelude, orderPlugins } from "./utils";
+import { appendPrelude, orderPlugins, postTransform } from "./utils";
 
 export default async function compile(
   input: string,
@@ -32,8 +31,7 @@ export default async function compile(
     ...(config.marked || {}),
   });
   let output = marked.parse(input);
-  //@ts-ignore
-  [output, config.metaConstruct.styles] = generateCSS(output, config);
+  output = await postTransform(output, Plugins);
   return [
     appendPrelude(output, config.headTags || []),
     //@ts-ignore

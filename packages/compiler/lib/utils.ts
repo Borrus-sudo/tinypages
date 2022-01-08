@@ -26,3 +26,12 @@ export function orderPlugins(corePlugins: Plugin[], userPlugins: Plugin[]) {
   });
   return [...corePlugins, ...postPlugins];
 }
+
+export async function postTransform(payload: string, plugins: Plugin[]) {
+  for (let plugin of plugins) {
+    if (plugin.postTransform) {
+      payload = await plugin.postTransform(payload);
+    }
+  }
+  return payload;
+}

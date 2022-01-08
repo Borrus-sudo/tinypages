@@ -1,5 +1,6 @@
 import { parse } from "node-html-parser";
 import type { Config, Plugin } from "../types";
+import generateCSS from "./helpers/windicss";
 
 export function PluginCSS(): Plugin {
   let lastText = false,
@@ -17,7 +18,6 @@ export function PluginCSS(): Plugin {
           return "";
         });
       } else if (lastText) {
-        console.log(classes);
         lastText = false;
         if (classes.length > 0) {
           const dom = parse(payload);
@@ -28,6 +28,11 @@ export function PluginCSS(): Plugin {
         }
       }
       return payload;
+    },
+    postTransform(payload) {
+      const [html, css] = generateCSS(payload, config);
+      config.metaConstruct.styles = css;
+      return html;
     },
   };
 }

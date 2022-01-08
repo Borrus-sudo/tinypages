@@ -35,8 +35,8 @@ export function PluginCode(): Plugin {
           payload = highlighter.codeToHtml(code, options);
         }
         code = lang = "";
+        return payload;
       }
-      return payload;
     },
     tapArgs(id: string, args: any[]) {
       if (id === "code") {
