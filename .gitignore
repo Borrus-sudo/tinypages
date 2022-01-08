@@ -76,3 +76,4 @@ typings/
 .serverless
 dist
 out
+demo
