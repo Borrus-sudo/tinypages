@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch lib",
-    "start": "tsup --no-dts&&node out/index.js"
+    "build": "tsup-node",
+    "dev": "tsup-node --watch lib",
+    "start": "tsup-node demo/index.ts --outDir ./demo/out --no-dts&&node demo/out/index.js"
   },
   "main": "out/index.js",
   "module": "out/index.mjs",

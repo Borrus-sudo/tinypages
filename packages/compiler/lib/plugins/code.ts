@@ -20,7 +20,7 @@ export function PluginCode(): Plugin {
     },
     transform(id: string, payload: string) {
       if (lang) {
-        if (lang === "mermaid" && config.renderMermaid) {
+        if (lang.startsWith("mermaid") && config.renderMermaid) {
           mermaidGraphs.push({ code, lang });
           payload = "<GRAPH></GRAPH>";
         } else if (lang.startsWith("katex") && config.renderKatex)
