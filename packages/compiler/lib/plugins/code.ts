@@ -73,10 +73,7 @@ export function PluginCode(): Plugin {
         }
         const strs: string[] = await Promise.all(promisesArr);
         let idx = -1;
-        return payload.replace(/\<GRAPH\>\<\/GRAPH\>/g, () => {
-          idx++;
-          return strs[idx];
-        });
+        return payload.replace(/\<GRAPH\>\<\/GRAPH\>/g, (_) => strs[++idx]);
       }
       return payload;
     },

@@ -6,12 +6,11 @@ function generateCSS(html, config: Config) {
   const { HTMLParser } = require("windicss/utils/parser");
   const processor = new Processor();
   const parser = new HTMLParser(html);
-  const preflightSheet = processor.preflight(html);
+  const baseStyle = processor.compile(``).styleSheet;
   const PREFIX = "windi-";
   const outputCSS = [];
   let outputHTML = "";
   let indexStart = 0;
-
   parser.parseClasses().forEach((p) => {
     outputHTML += html.substring(indexStart, p.start);
 
@@ -25,7 +24,7 @@ function generateCSS(html, config: Config) {
   // Build styles
   const styles = outputCSS
     // extend the preflight sheet with each sheet from the stack
-    .reduce((acc, curr) => acc.extend(curr), preflightSheet)
+    .reduce((acc, curr) => acc.extend(curr), baseStyle)
     .build(config.minify);
 
   return [outputHTML, styles];
