@@ -1,0 +1,30 @@
+{
+  "name": "@OhMyMarkdown/vite-plugin-ohmymarkdown",
+  "private": "true",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsup-node",
+    "dev": "tsup-node --watch lib"
+  },
+  "main": "out/index.js",
+  "module": "out/index.mjs",
+  "types": "out/index.d.ts",
+  "files": [
+    "out",
+    "bin"
+  ],
+  "exports": {
+    ".": {
+      "require": "./out/index.js",
+      "import": "./out/index.mjs",
+      "types": "./out/index.d.ts"
+    }
+  },
+  "dependencies": {
+    "@OhMyMarkdown/compiler": "^1.0.0",
+    "cac": "^6.7.12",
+    "chalk": "^5.0.0",
+    "vite": "^2.7.10"
+  }
+}

@@ -14,6 +14,13 @@
   "files": [
     "out"
   ],
+  "exports": {
+    ".": {
+      "require": "./out/index.js",
+      "import": "./out/index.mjs",
+      "types": "./out/index.d.ts"
+    }
+  },
   "devDependencies": {
     "@iconify/json": "^1.1.435",
     "@types/katex": "^0.11.1",
