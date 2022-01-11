@@ -56,7 +56,7 @@ export function PluginCode(): Plugin {
     },
     async postTransform(payload: string) {
       if (mermaidGraphs.length > 0) {
-        const mermaid = (await import("headless-mermaid")).default;
+        const mermaid = require("headless-mermaid");
         const promisesArr = [];
         for (let graph of mermaidGraphs) {
           let keyValue: string | string[] = [];
