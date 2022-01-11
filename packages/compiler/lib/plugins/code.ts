@@ -20,9 +20,11 @@ export function PluginCode(): Plugin {
     },
     transform(id: string, payload: string) {
       if (lang) {
-        if (lang.startsWith("mermaid") && config.renderMermaid) {
-          mermaidGraphs.push({ code, lang });
-          payload = "<GRAPH></GRAPH>";
+        if (lang.startsWith("mermaid")) {
+          if (config.renderMermaid) {
+            mermaidGraphs.push({ code, lang });
+            payload = "<GRAPH></GRAPH>";
+          }
         } else if (lang.startsWith("katex") && config.renderKatex)
           payload = katexRenderer(code, {
             type: lang,
