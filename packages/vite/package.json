@@ -1,5 +1,5 @@
 {
-  "name": "@tinypages/vite-plugin-ohmymarkdown",
+  "name": "tinypages",
   "private": "true",
   "version": "1.0.0",
   "license": "MIT",
