@@ -1,7 +1,7 @@
 import * as shiki from "shiki";
 import type { Config, Plugin } from "../types";
 import katexRenderer from "./helpers/katex";
-import * as parse from "parse-key-value";
+import parse from "parse-key-value";
 
 let highlighter;
 export function PluginCode(): Plugin {
@@ -56,7 +56,7 @@ export function PluginCode(): Plugin {
     },
     async postTransform(payload: string) {
       if (mermaidGraphs.length > 0) {
-        const mermaid = require("headless-mermaid");
+        const mermaid = (await import("headless-mermaid")).default;
         const promisesArr = [];
         for (let graph of mermaidGraphs) {
           let keyValue: string | string[] = [];

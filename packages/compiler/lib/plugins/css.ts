@@ -1,9 +1,9 @@
 import { parse } from "node-html-parser";
 import type { Config, Plugin } from "../types";
 
-function generateCSS(html, config: Config) {
-  const { Processor } = require("windicss/lib");
-  const { HTMLParser } = require("windicss/utils/parser");
+async function generateCSS(html, config: Config) {
+  const { Processor } = await import("windicss/lib");
+  const { HTMLParser } = await import("windicss/utils/parser");
   const processor = new Processor();
   const parser = new HTMLParser(html);
   const baseStyle = processor.compile(``).styleSheet;
@@ -56,9 +56,9 @@ export function PluginCSS(): Plugin {
       }
       return payload;
     },
-    postTransform(payload) {
+    async postTransform(payload) {
       if (!config.resolveWindiCss) return payload;
-      const [html, css] = generateCSS(payload, config);
+      const [html, css] = await generateCSS(payload, config);
       config.metaConstruct.styles = css;
       return html;
     },
