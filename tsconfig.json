@@ -7,7 +7,7 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
-      "@OhMyMarkdown/compiler": ["packages/compiler/lib/*"]
+      "@tinypages/compiler": ["packages/compiler/lib/*"]
     }
   },
   "exclude": ["node_modules"]

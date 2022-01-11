@@ -1,3 +1,3 @@
-# @OhMyMarkdown/compiler
+# @tinypages/compiler
 
-![test cases](https://github.com/Borrus-sudo/OhMyMarkdown/actions/workflows/test.yml/badge.svg)
+![test cases](https://github.com/Borrus-sudo/tinypages/actions/workflows/test.yml/badge.svg)

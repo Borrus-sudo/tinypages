@@ -1,1 +1,1 @@
-# OhMyMarkdown
+# TinyPages
