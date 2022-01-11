@@ -11,7 +11,7 @@ import { appendPrelude, orderPlugins, postTransform } from "./utils";
 export default async function compile(
   input: string,
   config: UserConfig
-): Promise<[string, Record<string, string | object>]> {
+): Promise<[string, { styles: string; components: string[] }]> {
   config = Object.assign({}, config, {
     metaConstruct: { styles: "", components: [] },
   });
@@ -33,7 +33,8 @@ export default async function compile(
   let output = marked.parse(input);
   output = await postTransform(output, Plugins);
   return [
-    appendPrelude(output, config.headTags || []),
+    //@ts-ignore
+    appendPrelude(output, config.headTags || [], config.metaConstruct.styles),
     //@ts-ignore
     config.metaConstruct,
   ];

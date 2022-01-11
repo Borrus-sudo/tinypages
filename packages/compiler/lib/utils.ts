@@ -1,9 +1,9 @@
 import { Plugin } from "./types";
 
-export function appendPrelude(content: string, headTags) {
+export function appendPrelude(content: string, headTags, styles: string) {
   return String.raw`<!DOCTYPE html><html><head>${headTags.join(
     "\n"
-  )}</head><body>${content}</body></html>`;
+  )}<style>${styles}</style></head><body>${content}</body></html>`;
 }
 
 export function wrapObject(styles: Record<string, string>) {

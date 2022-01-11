@@ -295,7 +295,7 @@ type UserConfig = {
 };
 
 type Config = {
-  metaConstruct: Record<string, string | object>;
+  metaConstruct: { styles: string; components: string[] };
 } & UserConfig;
 
 type Plugin = {

@@ -1,7 +1,7 @@
 import { parse } from "node-html-parser";
 import type { Config, Plugin } from "../types";
 import iconsRenderer from "./helpers/icons";
-const tags = require("html-tags");
+import * as tags from "html-tags";
 
 export function PluginHTML(): Plugin {
   let config: Config;
@@ -30,8 +30,13 @@ export function PluginHTML(): Plugin {
                 });
                 if (!!iconsSvg) {
                   node.replaceWith(iconsSvg);
-                  continue;
+                } else {
+                  config.metaConstruct.components.push(
+                    tagName + ":" + node.toString()
+                  );
+                  node.replaceWith(node.toString());
                 }
+                continue;
               }
               loop(node);
             }
