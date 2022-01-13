@@ -4,7 +4,7 @@ const config: Options = {
   target: "es2020",
   splitting: false,
   format: ["esm", "cjs"],
-  entryPoints: ["src/node/cli.ts"],
+  entry: ["src/node/cli.ts", "src/node/entry-server.ts"],
   clean: true,
   dts: true,
   outDir: "./out",

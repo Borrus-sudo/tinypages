@@ -5,10 +5,7 @@
     "outDir": "./out",
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "baseUrl": ".",
-    "paths": {
-      "@tinypages/compiler": ["packages/compiler/lib/*"]
-    }
+    "baseUrl": "."
   },
   "exclude": ["node_modules"]
 }
