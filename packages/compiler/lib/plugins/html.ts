@@ -33,7 +33,7 @@ export function PluginHTML(): Plugin {
                   node.replaceWith(iconsSvg);
                 } else {
                   config.metaConstruct.components.push(
-                    tagName + ":" + node.toString()
+                    node.rawTagName + ":" + node.toString()
                   );
                   node.replaceWith(node.toString());
                 }

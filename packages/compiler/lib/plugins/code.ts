@@ -25,13 +25,14 @@ export function PluginCode(): Plugin {
             mermaidGraphs.push({ code, lang });
             payload = "<GRAPH></GRAPH>";
           }
-        } else if (lang.startsWith("katex") && config.renderKatex)
-          payload = katexRenderer(code, {
-            type: lang,
-            inlineRender: id === "codespan",
-            config,
-          });
-        else {
+        } else if (lang.startsWith("katex")) {
+          if (config.renderKatex)
+            payload = katexRenderer(code, {
+              type: lang,
+              inlineRender: id === "codespan",
+              config,
+            });
+        } else {
           let keyValue: string | string[] = [];
           let options: Record<string, string> = { lang };
           if (lang.includes(" ")) {
@@ -39,7 +40,9 @@ export function PluginCode(): Plugin {
             keyValue = keyValue.join(" ").slice(1, -1);
             options = { lang, ...parse(keyValue) };
           }
-          payload = highlighter.codeToHtml(code, options);
+          try {
+            payload = highlighter.codeToHtml(code, options);
+          } catch {}
         }
         code = lang = "";
         return payload;
