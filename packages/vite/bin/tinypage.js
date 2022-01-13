@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-import("../out/node/cli.mjs");
+require("../out/node/cli.js");
