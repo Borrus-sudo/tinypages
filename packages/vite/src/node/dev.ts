@@ -5,7 +5,6 @@ import type { InlineConfig, ViteDevServer } from "vite";
 import { createServer, mergeConfig } from "vite";
 import { compileMarkdown } from "./compile";
 import { presetViteConfig } from "./constants";
-import type { cascadeContext } from "../types";
 
 export async function createDevServer(
   config: InlineConfig
