@@ -18,6 +18,8 @@ export async function createDevServer(
       console.log(req.originalUrl);
       if (!req.originalUrl.endsWith("/") && !req.originalUrl.endsWith(".md"))
         return;
+      console.log("Req");
+
       const url: string = await fsRouter(req.originalUrl, config.root);
       if (url === "404") {
         res.status(404).end("File not found");

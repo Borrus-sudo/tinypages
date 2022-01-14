@@ -1,3 +1,5 @@
+import { fetchIt } from "./vite-plugin-fetch";
+
 export const tinypagesCompilerConfig = {
   marked: { gfm: true, xhtml: false },
   katex: {
@@ -32,4 +34,5 @@ export const presetViteConfig = {
     jsxFactory: "h",
     jsxFragment: "Fragment",
   },
+  plugins: [fetchIt()],
 };

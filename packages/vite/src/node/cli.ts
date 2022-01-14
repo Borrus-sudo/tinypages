@@ -82,7 +82,6 @@ cli
           clearScreen: options.clearScreen,
           server: cleanOptions(options),
         });
-
         const info = server.config.logger.info;
         info(
           Colors.cyan(

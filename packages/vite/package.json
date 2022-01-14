@@ -37,12 +37,11 @@
     "@tinypages/compiler": "^1.0.0",
     "cac": "^6.7.12",
     "express": "^4.17.2",
+    "ohmyfetch": "^0.4.14",
     "picocolors": "^1.0.0",
-    "preact": "10.5.15",
+    "preact": "^10.5.15",
     "preact-render-to-string": "^5.1.19",
-    "vite": "2.7.2"
+    "vite": "^2.7.2"
   },
-  "devDependencies": {
-    "@types/express": "^4.17.13"
-  }
+  "devDependencies": {}
 }
