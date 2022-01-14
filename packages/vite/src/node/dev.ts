@@ -15,6 +15,9 @@ export async function createDevServer(
   app.use(vite.middlewares);
   app.get("*", async (req, res) => {
     try {
+      console.log(req.originalUrl);
+      if (!req.originalUrl.endsWith("/") && !req.originalUrl.endsWith(".md"))
+        return;
       const url: string = await fsRouter(req.originalUrl, config.root);
       if (url === "404") {
         res.status(404).end("File not found");
@@ -38,7 +41,7 @@ export async function createDevServer(
       res.status(500).end(e.stack);
     }
   });
-  app.listen(3000, () => {
+  app.listen(3003, () => {
     console.log("http://localhost:3000");
   });
   return vite;
