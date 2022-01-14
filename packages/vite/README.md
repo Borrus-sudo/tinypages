@@ -1,1 +1,1 @@
-## @tinypages/vite-plugin-ohmymarkdown
+## tinypages
