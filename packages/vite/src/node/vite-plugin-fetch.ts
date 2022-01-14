@@ -20,7 +20,7 @@ export function fetchIt(): Plugin {
         code,
         /\$fetch\(\"(.*?)\"\)/g,
         async (payload: string) => {
-          return JSON.stringify(await $fetch(payload.slice(8, -2)));
+          return await $fetch(payload.slice(8, -2));
         }
       );
     },
