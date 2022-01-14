@@ -1,51 +1,38 @@
-//@ts-ignore
-import express from "express";
-import * as fs from "fs";
+import * as express from "express";
+import { promises as fs } from "fs";
 import * as path from "path";
-import { join, dirname } from "path";
-import { createServer, type ViteDevServer } from "vite";
+import type { InlineConfig, ViteDevServer } from "vite";
+import { createServer, mergeConfig } from "vite";
 import { compileMarkdown } from "./compile";
+import { presetViteConfig } from "./constants";
+import type { cascadeContext } from "../types";
 
-const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
-export async function createDevServer(root: string) {
+export async function createDevServer(
+  config: InlineConfig
+): Promise<ViteDevServer> {
   const app = express();
-  const vite = await createServer({
-    root,
-    logLevel: isTest ? "error" : "info",
-    server: {
-      middlewareMode: "ssr",
-      watch: {
-        usePolling: true,
-        interval: 100,
-      },
-    },
-    esbuild: {
-      jsxInject: "import {h,Fragment} from 'preact';",
-      jsxFactory: "h",
-      jsxFragment: "Fragment",
-    },
-  });
-  const resolve = (p) => path.resolve(root, "pages", p);
+  const vite = await createServer(mergeConfig(config, presetViteConfig));
   app.use(vite.middlewares);
   app.get("*", async (req, res) => {
     try {
       const url = req.originalUrl;
-      const markdown = fs.readFileSync(resolve("index.md"), "utf-8");
-      //convert the tinypages flavoured  markdown to html
-      let [html, meta] = await compileMarkdown(markdown);
-      // vite transformed html
-      html = await vite.transformIndexHtml(url, html);
-      let pathToServer = new URL(
-        join(dirname(import.meta.url), "./entry-server.mjs")
-      ).pathname;
-      let render = (await vite.ssrLoadModule(pathToServer)).default;
-      const appHtml = await render(
-        html,
-        meta.components,
-        root,
-        vite as ViteDevServer
+      const markdown = await fs.readFile(
+        path.resolve(config.root, "pages", "index.md"),
+        "utf-8"
       );
-
+      let [html, meta] = await compileMarkdown(markdown, true); // convert tinypages styled markdown to html
+      html = await vite.transformIndexHtml(url, html); // vite transformed html
+      let pathToServer = new URL(
+        path.join(path.dirname(import.meta.url), "./entry-server.mjs")
+      ).pathname;
+      let render = (await vite.ssrLoadModule(pathToServer.slice(1))).default;
+      const appHtml = await render({
+        html,
+        meta,
+        root: config.root,
+        vite: vite as ViteDevServer,
+        compile: compileMarkdown,
+      });
       res.status(200).set({ "Content-type": "text/html" }).end(appHtml);
     } catch (e) {
       vite && vite.ssrFixStacktrace(e);
@@ -56,4 +43,5 @@ export async function createDevServer(root: string) {
   app.listen(3000, () => {
     console.log("http://localhost:3000");
   });
+  return vite;
 }

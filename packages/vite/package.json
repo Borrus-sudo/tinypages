@@ -27,13 +27,17 @@
     "./entry-server": {
       "require": "./out/entry-server.js",
       "import": "./out/entry-server.mjs"
+    },
+    "./package.json": {
+      "require": "./package.json",
+      "import": "./package.json"
     }
   },
   "dependencies": {
     "@tinypages/compiler": "^1.0.0",
     "cac": "^6.7.12",
-    "chalk": "^5.0.0",
     "express": "^4.17.2",
+    "picocolors": "^1.0.0",
     "preact": "10.5.15",
     "preact-render-to-string": "^5.1.19",
     "vite": "2.7.2"

@@ -10,7 +10,8 @@ import { appendPrelude, orderPlugins, postTransform } from "./utils";
 
 export default async function compile(
   input: string,
-  config: UserConfig
+  config: UserConfig,
+  shouldAppendPrelude: boolean = true
 ): Promise<[string, { styles: string; components: string[] }]> {
   config = Object.assign({}, config, {
     metaConstruct: { styles: "", components: [] },
@@ -33,8 +34,14 @@ export default async function compile(
   let output = marked.parse(input);
   output = await postTransform(output, Plugins);
   return [
-    //@ts-ignore
-    appendPrelude(output, config.headTags || [], config.metaConstruct.styles),
+    shouldAppendPrelude
+      ? appendPrelude(
+          output,
+          config.headTags || [],
+          //@ts-ignore
+          config.metaConstruct.styles
+        )
+      : output,
     //@ts-ignore
     config.metaConstruct,
   ];

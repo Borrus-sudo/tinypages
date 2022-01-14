@@ -4,11 +4,11 @@ const config: Options = {
   target: "es2020",
   splitting: false,
   format: ["esm", "cjs"],
-  entry: ["src/node/cli.ts", "src/node/entry-server.ts"],
+  entry: ["src/node/cli.ts", "src/node/entry-server.ts", "src/node/dev.ts"],
   clean: true,
-  dts: true,
+  dts: false,
   outDir: "./out",
-  minify: true,
+  minify: false,
 };
 
 export default config;
