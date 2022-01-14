@@ -10,13 +10,15 @@
 - Add proper CLI support (done)
 - Put the rendered app html through the compiler API (done)
 - Use HMR API for updating components and pages
-- Create a fs router
+- Create a fs router (done)
 - Add hydration support
   - Based on client visibility
   - Rehydrate when the app loads
   - Or don't ssr the app at all (CSR of the preact component)
 - Figure out the build process
 - Add PWA via the vite plugin
+- Make a vitejs plugin to replace fetch with output (simple static replacement in action) (done)
+- Resolve config
 
 ## Design Decisions
 
