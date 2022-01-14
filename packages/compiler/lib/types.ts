@@ -294,9 +294,17 @@ type UserConfig = {
   plugins?: Plugin[];
 };
 
-type Config = {
-  metaConstruct: { styles: string; components: string[] };
-} & UserConfig;
+type Meta = {
+  styles: string;
+  components: {
+    componentLiteral: string;
+    componentName: string;
+    props: string;
+    children: string;
+  }[];
+};
+
+type Config = { metaConstruct: Meta } & UserConfig;
 
 type Plugin = {
   enforce?: "pre" | "post";
@@ -307,4 +315,4 @@ type Plugin = {
   postTransform?: (payload: string) => string | Promise<string>;
 };
 
-export { Config, Plugin, UserConfig };
+export { Config, Plugin, UserConfig, Meta };

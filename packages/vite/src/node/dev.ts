@@ -1,10 +1,11 @@
-import * as express from "express";
+import express from "express";
 import { promises as fs } from "fs";
 import * as path from "path";
 import type { InlineConfig, ViteDevServer } from "vite";
 import { createServer, mergeConfig } from "vite";
 import { compileMarkdown } from "./compile";
 import { presetViteConfig } from "./constants";
+import { fsRouter } from "./router/fs";
 
 export async function createDevServer(
   config: InlineConfig
@@ -14,17 +15,15 @@ export async function createDevServer(
   app.use(vite.middlewares);
   app.get("*", async (req, res) => {
     try {
-      const url = req.originalUrl;
-      const markdown = await fs.readFile(
-        path.resolve(config.root, "pages", "index.md"),
-        "utf-8"
-      );
+      const url: string = await fsRouter(req.originalUrl, config.root);
+      if (url === "404") {
+        res.status(404).end("File not found");
+      }
+      const markdown = await fs.readFile(url, "utf-8");
       let [html, meta] = await compileMarkdown(markdown, true); // convert tinypages styled markdown to html
       html = await vite.transformIndexHtml(url, html); // vite transformed html
-      let pathToServer = new URL(
-        path.join(path.dirname(import.meta.url), "./entry-server.mjs")
-      ).pathname;
-      let render = (await vite.ssrLoadModule(pathToServer.slice(1))).default;
+      let pathToServer = path.join(__dirname, "./entry-server.mjs");
+      let render = (await vite.ssrLoadModule(pathToServer)).default;
       const appHtml = await render({
         html,
         meta,

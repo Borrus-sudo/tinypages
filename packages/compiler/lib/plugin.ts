@@ -1,4 +1,4 @@
-import { Plugin } from "./types";
+import type { Plugin } from "./types";
 
 export default async function createHandler(plugins: Plugin[]) {
   await Promise.all(

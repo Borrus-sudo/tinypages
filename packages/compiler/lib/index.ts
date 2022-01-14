@@ -5,14 +5,14 @@ import { PluginCode } from "./plugins/code";
 import { PluginCSS } from "./plugins/css";
 import { PluginHTML } from "./plugins/html";
 import { PluginText } from "./plugins/text";
-import type { Config, Plugin, UserConfig } from "./types";
+import type { Config, Meta, Plugin, UserConfig } from "./types";
 import { appendPrelude, orderPlugins, postTransform } from "./utils";
 
 export default async function compile(
   input: string,
   config: UserConfig,
   shouldAppendPrelude: boolean = true
-): Promise<[string, { styles: string; components: string[] }]> {
+): Promise<[string, Meta]> {
   config = Object.assign({}, config, {
     metaConstruct: { styles: "", components: [] },
   });

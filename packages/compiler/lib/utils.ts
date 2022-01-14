@@ -1,4 +1,4 @@
-import { Plugin } from "./types";
+import type { Plugin } from "./types";
 
 export function appendPrelude(content: string, headTags, styles: string) {
   return String.raw`<!DOCTYPE html><html><head>${headTags.join(

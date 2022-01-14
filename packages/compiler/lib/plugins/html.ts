@@ -32,10 +32,14 @@ export function PluginHTML(): Plugin {
                 if (!!iconsSvg) {
                   node.replaceWith(iconsSvg);
                 } else {
-                  config.metaConstruct.components.push(
-                    node.rawTagName + ":" + node.toString()
-                  );
-                  node.replaceWith(node.toString());
+                  const compStr = node.toString();
+                  config.metaConstruct.components.push({
+                    componentName: node.rawTagName,
+                    componentLiteral: compStr,
+                    props: node.attrs || {},
+                    children: node.innerHTML,
+                  });
+                  node.replaceWith(compStr);
                 }
                 continue;
               }
