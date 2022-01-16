@@ -1,7 +1,7 @@
 import * as shiki from "shiki";
 import type { Config, Plugin } from "../types";
 import katexRenderer from "./helpers/katex";
-import parse from "parse-key-value";
+const parse = require("parse-key-value");
 
 let highlighter;
 export function PluginCode(): Plugin {

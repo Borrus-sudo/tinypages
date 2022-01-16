@@ -1,8 +1,7 @@
 import { parse } from "node-html-parser";
 import type { Config, Plugin } from "../types";
 import iconsRenderer from "./helpers/icons";
-//@ts-ignore
-import tags from "html-tags";
+const tags = require("html-tags");
 
 export function PluginHTML(): Plugin {
   let config: Config;
