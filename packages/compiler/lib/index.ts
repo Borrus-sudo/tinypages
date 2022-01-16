@@ -6,15 +6,18 @@ import { PluginCSS } from "./plugins/css";
 import { PluginHTML } from "./plugins/html";
 import { PluginText } from "./plugins/text";
 import type { Config, Meta, Plugin, UserConfig } from "./types";
-import { appendPrelude, orderPlugins, postTransform } from "./utils";
+import { orderPlugins, postTransform } from "./utils";
 
 export default async function compile(
   input: string,
-  config: UserConfig,
-  shouldAppendPrelude: boolean = true
+  config: UserConfig
 ): Promise<[string, Meta]> {
   config = Object.assign({}, config, {
-    metaConstruct: { styles: "", components: [] },
+    metaConstruct: {
+      styles: "",
+      components: [],
+      headTags: config.headTags || [],
+    },
   });
   const Renderer = new marked.Renderer();
   const Plugins = orderPlugins(
@@ -34,14 +37,7 @@ export default async function compile(
   let output = marked.parse(input);
   output = await postTransform(output, Plugins);
   return [
-    shouldAppendPrelude
-      ? appendPrelude(
-          output,
-          config.headTags || [],
-          //@ts-ignore
-          config.metaConstruct.styles
-        )
-      : output,
+    output,
     //@ts-ignore
     config.metaConstruct,
   ];

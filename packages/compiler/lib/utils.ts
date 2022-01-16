@@ -1,11 +1,5 @@
 import type { Plugin } from "./types";
 
-export function appendPrelude(content: string, headTags, styles: string) {
-  return String.raw`<!DOCTYPE html><html><head>${headTags.join(
-    "\n"
-  )}<style>${styles}</style></head><body>${content}</body></html>`;
-}
-
 export function wrapObject(styles: Record<string, string>) {
   Object.keys(styles).forEach((key) => {
     styles[key] = `"${styles[key]}"`;

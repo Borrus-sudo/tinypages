@@ -299,9 +299,10 @@ type Meta = {
   components: {
     componentLiteral: string;
     componentName: string;
-    props: string;
+    props: Record<string, string>;
     children: string;
   }[];
+  headTags: string[];
 };
 
 type Config = { metaConstruct: Meta } & UserConfig;
