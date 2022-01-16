@@ -460,10 +460,10 @@
     ts-node "^9"
     tslib "^2"
 
-"@iconify/json@^1.1.435":
-  version "1.1.444"
-  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-1.1.444.tgz#31cb1e8c29dbe0886f21647c9bb3611b7e278030"
-  integrity sha512-jk392aWO1AKQ8OYnHzpOpaI2h3UZU9zNsc4FvQ7BhUGEeM4oSMUsR3VtsAtu/5eWmuSp273n0n81hA4a1aEBkA==
+"@iconify/json@^1.1.457":
+  version "1.1.457"
+  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-1.1.457.tgz#a2e6919a5e2a20f8a73bb7c5f7719a15892e5b8f"
+  integrity sha512-5KQALvjWwNnmU+JJTLKdLxmltPYDrsSE7rkSJDnuSRCQboN26MwQRW6bjip1P7aF4Z7pkIr+ZsDY/uEd+8wXaQ==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
