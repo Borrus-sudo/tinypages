@@ -1,4 +1,4 @@
-import { promises as fs, existsSync } from "fs";
+import { promises as fs } from "fs";
 import * as path from "path";
 export async function loadPaths(dir: string): Promise<string[]> {
   let result: string[] = [];

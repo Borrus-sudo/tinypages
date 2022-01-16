@@ -1,6 +1,7 @@
 import cac from "cac";
 import * as Colors from "picocolors";
 import * as Vite from "vite";
+import { join } from "path";
 
 console.log(Colors.cyan(`tinypages ${require("../../package.json").version}`));
 
@@ -72,7 +73,10 @@ cli
       options: Vite.ServerOptions & GlobalCLIOptions
     ) => {
       try {
-        const { createDevServer } = require("./dev.js");
+        const { createDevServer } = require("./server.js");
+        if (root.startsWith(".")) {
+          root = join(process.cwd(), root);
+        }
         const server = await createDevServer({
           root,
           base: options.base,

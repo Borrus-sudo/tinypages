@@ -1,4 +1,4 @@
-import { fetchIt } from "./vite-plugin-fetch";
+import { ssrFetch, injectClient } from "./plugins";
 
 export const tinypagesCompilerConfig = {
   marked: { gfm: true, xhtml: false },
@@ -34,5 +34,5 @@ export const presetViteConfig = {
     jsxFactory: "h",
     jsxFragment: "Fragment",
   },
-  plugins: [fetchIt()],
+  plugins: [injectClient(), ssrFetch()],
 };

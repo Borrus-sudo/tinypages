@@ -10,9 +10,9 @@ async function replaceAsync(str, regex, asyncFn) {
   const data = await Promise.all(promises);
   return str.replace(regex, () => data.shift());
 }
-export function fetchIt(): Plugin {
+export default function (): Plugin {
   return {
-    name: "vite-tinypages-fetchIt",
+    name: "vite-tinypages-ssrFetch",
     enforce: "pre",
     async transform(code: string, id: string) {
       if (!id.endsWith(".jsx") && !id.endsWith(".tsx")) return;
@@ -20,7 +20,7 @@ export function fetchIt(): Plugin {
         code,
         /\$fetch\(\"(.*?)\"\)/g,
         async (payload: string) => {
-          return await $fetch(payload.slice(8, -2));
+          return JSON.stringify(await $fetch(payload.slice(8, -2)));
         }
       );
     },

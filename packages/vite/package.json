@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsup-node",
     "dev": "tsup-node --watch src",
-    "dev-build": "tsup-node --outDir ./demo/out"
+    "dev-build": "tsup-node --outDir ./demo/out&&yarn build"
   },
   "main": "out/index.js",
   "module": "out/index.mjs",
@@ -20,17 +20,21 @@
   },
   "exports": {
     ".": {
-      "require": "./out/cli.js",
-      "import": "./out/cli.mjs",
+      "require": "./out/node/cli.js",
+      "import": "./out/node/cli.mjs",
       "types": "./out/cli.d.ts"
     },
     "./entry-server": {
-      "require": "./out/entry-server.js",
-      "import": "./out/entry-server.mjs"
+      "require": "./out/node/entry-server.js",
+      "import": "./out/node/entry-server.mjs"
     },
     "./package.json": {
       "require": "./package.json",
       "import": "./package.json"
+    },
+    "./client": {
+      "require": "./out/client/entry-client.js",
+      "import": "./out/client/entry-client.mjs"
     }
   },
   "dependencies": {
@@ -39,6 +43,7 @@
     "express": "^4.17.2",
     "ohmyfetch": "^0.4.14",
     "picocolors": "^1.0.0",
+    "node-html-parser": "^5.2.0",
     "preact": "^10.5.15",
     "preact-render-to-string": "^5.1.19",
     "vite": "^2.7.2"
