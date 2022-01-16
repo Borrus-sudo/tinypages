@@ -96,10 +96,6 @@ cli
           }
         );
       } catch (e) {
-        Vite.createLogger(options.logLevel).error(
-          Colors.red(`error when starting dev server:\n${e.stack}`),
-          { error: e }
-        );
         process.exit(1);
       }
     }

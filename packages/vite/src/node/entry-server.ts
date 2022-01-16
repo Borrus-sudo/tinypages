@@ -12,7 +12,10 @@ const mergeMetaConfig = (targetMeta: Meta, baseMeta: Meta): Meta => {
 };
 
 export default async function (ctx: cascadeContext) {
-  let componentRegistration: Record<string, string> = {};
+  let componentRegistration: Record<
+    string,
+    { path: string; props: Record<string, string> }
+  > = {};
   let idx = 0;
   for (let component of ctx.meta.components) {
     let componentPath = join(
@@ -20,7 +23,10 @@ export default async function (ctx: cascadeContext) {
       "./components",
       component.componentName + ".jsx"
     );
-    componentRegistration[idx] = componentPath;
+    componentRegistration[idx] = {
+      path: componentPath,
+      props: component.props,
+    };
     if (component.props["client:only"]) {
       delete component.props["client:only"];
       ctx.meta.headTags.push(
@@ -30,7 +36,7 @@ export default async function (ctx: cascadeContext) {
       continue;
     }
     const __comp__ = (await ctx.vite.ssrLoadModule(componentPath)).default;
-    const __comp__html = renderToString(
+    let __comp__html = renderToString(
       h(
         __comp__,
         component.props,
@@ -41,14 +47,14 @@ export default async function (ctx: cascadeContext) {
           : null
       )
     );
-    let [payload, meta] = await ctx.compile(__comp__html);
-    ctx.meta = mergeMetaConfig(ctx.meta, meta);
-    const dom = parse(ctx.html.replace(component.componentLiteral, payload));
+    const dom = parse(__comp__html);
     //@ts-ignore
     dom.childNodes[0].setAttribute("preact", "");
     //@ts-ignore
     dom.childNodes[0].setAttribute("id", `${idx}`);
-    ctx.html = dom.toString();
+    let [payload, meta] = await ctx.compile(dom.toString());
+    ctx.meta = mergeMetaConfig(ctx.meta, meta);
+    ctx.html = ctx.html.replace(component.componentLiteral, payload);
     idx++;
   }
   const scriptTag = `<script> let globals= ${JSON.stringify(
