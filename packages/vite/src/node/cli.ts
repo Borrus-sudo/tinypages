@@ -55,8 +55,9 @@ cli
 // dev
 cli
   .command("[root]")
-  .alias("start")
   .alias("dev")
+  .alias("serve")
+  .alias("start")
   .option("--host [host]", `[string] specify hostname`)
   .option("--port <port>", `[number] specify port`)
   .option("--https", `[boolean] use TLS + HTTP/2`)

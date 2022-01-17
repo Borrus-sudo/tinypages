@@ -1,7 +1,7 @@
 import { ssrFetch, injectClient } from "./plugins";
 
 export const tinypagesCompilerConfig = {
-  marked: { gfm: true, xhtml: false },
+  marked: { gfm: true, xhtml: true },
   katex: {
     macros: {
       "\\f": "#1f(#2)",

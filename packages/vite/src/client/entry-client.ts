@@ -1,25 +1,26 @@
 import { h, render } from "preact";
 
-export default async function hydrate() {
+declare const globals: Record<
+  string,
+  { path: string; props: Record<string, string> }
+>;
+export default async function () {
   console.log("Hello client");
   for (let element of document.querySelectorAll("[preact]")) {
-    console.log(element);
-    const id = element.getAttribute("id");
-    const __comp__ = //@ts-ignore
-    (await import(/* @vite-ignore */ `/HIJACK_IMPORT${globals[id].path}`))
-      .default;
-    const innerHTML = element.getElementsByTagName("div")?.[0]?.innerHTML;
-    render(
-      h(
-        __comp__,
-        //@ts-ignore
-        globals[id].props,
-        innerHTML
-          ? h("div", { dangerouslySetInnerHTML: { __html: innerHTML } })
-          : null
-      ),
-      document.body,
-      element
-    );
+    const uid = element.getAttribute("uid");
+    let component = globals[uid];
+    const __comp__ = (
+      await import(/* @vite-ignore */ `/HIJACK_IMPORT${component.path}`)
+    ).default;
+    let html = element.getElementsByTagName("div")?.[0]?.innerHTML;
+    const innerSlot = html
+      ? h("div", {
+          dangerourslySetInnerHTML: {
+            __html: html,
+          },
+        })
+      : null;
+    const parent = element.parentElement;
+    render(h(__comp__, component.props, innerSlot), parent, element);
   }
 }

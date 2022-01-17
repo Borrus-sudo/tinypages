@@ -6,8 +6,6 @@ import { parse } from "node-html-parser";
 
 const mergeMetaConfig = (targetMeta: Meta, baseMeta: Meta): Meta => {
   targetMeta.styles += "\n" + baseMeta.styles;
-  targetMeta.components = [...baseMeta.components];
-  targetMeta.headTags = [...baseMeta.headTags];
   return targetMeta;
 };
 
@@ -16,14 +14,14 @@ export default async function (ctx: cascadeContext) {
     string,
     { path: string; props: Record<string, string> }
   > = {};
-  let idx = 0;
+  let uid = 0;
   for (let component of ctx.meta.components) {
     let componentPath = join(
       ctx.root,
       "./components",
       component.componentName + ".jsx"
     );
-    componentRegistration[idx] = {
+    componentRegistration[uid] = {
       path: componentPath,
       props: component.props,
     };
@@ -32,7 +30,7 @@ export default async function (ctx: cascadeContext) {
       ctx.meta.headTags.push(
         `<script src="${componentPath.split(ctx.root)[1]}"></script>`
       );
-      idx++;
+      uid++;
       continue;
     }
     const __comp__ = (await ctx.vite.ssrLoadModule(componentPath)).default;
@@ -51,13 +49,13 @@ export default async function (ctx: cascadeContext) {
     //@ts-ignore
     dom.childNodes[0].setAttribute("preact", "");
     //@ts-ignore
-    dom.childNodes[0].setAttribute("id", `${idx}`);
+    dom.childNodes[0].setAttribute("uid", `${uid}`);
     let [payload, meta] = await ctx.compile(dom.toString());
     ctx.meta = mergeMetaConfig(ctx.meta, meta);
     ctx.html = ctx.html.replace(component.componentLiteral, payload);
-    idx++;
+    uid++;
   }
-  const scriptTag = `<script> let globals= ${JSON.stringify(
+  const scriptTag = `<script> window.globals= ${JSON.stringify(
     componentRegistration
   )} </script>`;
   ctx.meta.headTags.push(scriptTag);
