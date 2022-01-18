@@ -1,4 +1,5 @@
 import { $fetch } from "ohmyfetch";
+import ora from "ora";
 import type { Plugin } from "vite";
 
 const reqCache: Map<string, string> = new Map();
@@ -24,16 +25,20 @@ export default function (): Plugin {
         async (payload: string) => {
           let payloadFetch;
           const fetchUid = uid++ + id;
+          const url = payload.slice(9, -2);
+          const spinnner = ora(`Loading ${url}`);
+          spinnner.color = "yellow";
           if (options.ssr) {
-            payloadFetch = JSON.stringify(await $fetch(payload.slice(9, -2)));
+            spinnner.start();
+            payloadFetch = JSON.stringify(await $fetch(url));
             reqCache.set(fetchUid, payloadFetch);
+            spinnner.succeed("Done!");
           } else {
+            spinnner.start();
             reqCache.get(fetchUid) ||
-              reqCache.set(
-                fetchUid,
-                JSON.stringify(await $fetch(payload.slice(9, -2)))
-              );
+              reqCache.set(fetchUid, JSON.stringify(await $fetch(url)));
             payloadFetch = reqCache.get(fetchUid);
+            spinnner.succeed("Done!");
           }
           return payloadFetch;
         }

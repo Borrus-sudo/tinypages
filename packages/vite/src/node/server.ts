@@ -11,7 +11,7 @@ export async function createDevServer(
   const app = express();
   const vite = await createServer(config);
   app.use(vite.middlewares);
-  app.use(createMiddlewares(vite, config));
+  app.use(await createMiddlewares(vite, config));
   app.listen(3003, () => {
     console.log("http://localhost:3003");
   });

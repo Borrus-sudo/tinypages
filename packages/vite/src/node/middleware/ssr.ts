@@ -9,11 +9,12 @@ function appendPrelude(content: string, headTags, styles: string) {
   )}<style>${styles}</style></head><body>${content}</body></html>`;
 }
 
-export default function (vite: ViteDevServer, config: InlineConfig) {
+export default async function (vite: ViteDevServer, config: InlineConfig) {
+  const router = await fsRouter(config.root);
   return async (req, res, next) => {
     try {
       console.log(req.originalUrl);
-      const url: string = await fsRouter(req.originalUrl, config.root);
+      const url: string = router(req.originalUrl);
       if (url === "404") {
         next(new Error(`<h1> 404 ${req.originalUrl} not found </h1>`));
         return;

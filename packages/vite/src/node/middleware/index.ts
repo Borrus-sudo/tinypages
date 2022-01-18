@@ -4,10 +4,13 @@ import errorMiddleware from "./error";
 import resolveClientMiddleware from "./resolveClient";
 import ssrMiddleware from "./ssr";
 
-export function createMiddlewares(vite: ViteDevServer, config: InlineConfig) {
+export async function createMiddlewares(
+  vite: ViteDevServer,
+  config: InlineConfig
+) {
   const router = express.Router();
   router.use(resolveClientMiddleware(vite));
-  router.use(ssrMiddleware(vite, config));
+  router.use(await ssrMiddleware(vite, config));
   router.use(errorMiddleware(config));
   return router;
 }

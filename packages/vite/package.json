@@ -43,6 +43,7 @@
     "express": "^4.17.2",
     "node-html-parser": "^5.2.0",
     "ohmyfetch": "^0.4.14",
+    "ora": "5.4.1",
     "picocolors": "^1.0.0",
     "preact": "^10.5.15",
     "preact-render-to-string": "^5.1.19",
