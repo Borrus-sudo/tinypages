@@ -28,19 +28,23 @@ export default function (): Plugin {
           const url = payload.slice(9, -2);
           const spinnner = ora(`Loading ${url}`);
           spinnner.color = "yellow";
-          if (options.ssr) {
-            spinnner.start();
-            payloadFetch = JSON.stringify(await $fetch(url));
-            reqCache.set(fetchUid, payloadFetch);
-            spinnner.succeed("Done!");
-          } else {
-            spinnner.start();
-            reqCache.get(fetchUid) ||
-              reqCache.set(fetchUid, JSON.stringify(await $fetch(url)));
-            payloadFetch = reqCache.get(fetchUid);
-            spinnner.succeed("Done!");
+          try {
+            if (options.ssr) {
+              spinnner.start();
+              payloadFetch = JSON.stringify(await $fetch(url));
+              reqCache.set(fetchUid, payloadFetch);
+            } else {
+              spinnner.start();
+              reqCache.get(fetchUid) ||
+                reqCache.set(fetchUid, JSON.stringify(await $fetch(url)));
+              payloadFetch = reqCache.get(fetchUid);
+            }
+            spinnner.succeed(`Successfully fetched ${url}!`);
+            return payloadFetch;
+          } catch (e) {
+            spinnner.fail(`${e.stack}`);
+            return payload;
           }
-          return payloadFetch;
         }
       );
     },
