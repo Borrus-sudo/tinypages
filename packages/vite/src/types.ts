@@ -19,4 +19,9 @@ type cascadeContext = {
   compile: Function;
 };
 
-export { cascadeContext, Meta };
+type Bridge = {
+  currentUrl: string;
+  preservedScriptGlobal: string;
+};
+
+export { cascadeContext, Meta, Bridge };

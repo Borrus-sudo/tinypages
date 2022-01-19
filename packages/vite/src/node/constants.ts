@@ -1,5 +1,3 @@
-import { ssrFetch, injectClient } from "./plugins";
-
 export const tinypagesCompilerConfig = {
   marked: { gfm: true, xhtml: true },
   katex: {
@@ -34,5 +32,5 @@ export const presetViteConfig = {
     jsxFactory: "h",
     jsxFragment: "Fragment",
   },
-  plugins: [injectClient(), ssrFetch()],
+  plugins: [],
 };

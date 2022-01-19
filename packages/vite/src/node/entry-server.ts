@@ -39,7 +39,7 @@ export default async function (ctx: cascadeContext) {
         __comp__,
         component.props,
         component.children.trim() !== ""
-          ? h("div", {
+          ? h("tinypages-fragment", {
               dangerouslySetInnerHTML: { __html: component.children },
             })
           : null

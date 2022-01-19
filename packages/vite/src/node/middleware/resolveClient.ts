@@ -17,11 +17,6 @@ export default function (vite: ViteDevServer) {
         .status(200)
         .set({ "Content-type": "text/javascript" })
         .end(result.code);
-    } else if (
-      !req.originalUrl.endsWith("/") &&
-      !req.originalUrl.endsWith(".md")
-    ) {
-      next(new Error(`<h1> 404 ${req.originalUrl} not found </h1>`));
     } else {
       await next();
     }

@@ -8,7 +8,13 @@ export async function fsRouter(root: string) {
     const paths = await loadPaths(fsPath);
     return (url: string) => {
       const slicedUrl = path
-        .normalize(url.endsWith("/") ? url + "index.md" : url)
+        .normalize(
+          url.endsWith("/")
+            ? url + "index.md"
+            : !url.endsWith(".md")
+            ? url + ".md"
+            : url
+        )
         .split(path.sep);
       for (let possiblePath of paths) {
         let idx = 0;
