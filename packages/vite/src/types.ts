@@ -15,6 +15,7 @@ type cascadeContext = {
   html: string;
   meta: Meta;
   root: string;
+  pageCtx: Record<string, string>;
   vite: ViteDevServer;
   compile: Function;
 };
@@ -22,6 +23,7 @@ type cascadeContext = {
 type Bridge = {
   currentUrl: string;
   preservedScriptGlobal: string;
+  pageCtx: Record<string, string>;
 };
 
 export { cascadeContext, Meta, Bridge };

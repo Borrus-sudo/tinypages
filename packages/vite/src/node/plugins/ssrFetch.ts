@@ -1,6 +1,7 @@
 import { $fetch } from "ohmyfetch";
 import ora from "ora";
 import type { Plugin } from "vite";
+import type { Bridge } from "../../types";
 
 const reqCache: Map<string, string> = new Map();
 async function replaceAsync(str, regex, asyncFn) {
@@ -12,12 +13,24 @@ async function replaceAsync(str, regex, asyncFn) {
   const data = await Promise.all(promises);
   return str.replace(regex, () => data.shift());
 }
-export default function (): Plugin {
+export default function (bridge: Bridge): Plugin {
   return {
     name: "vite-tinypages-ssrFetch",
     enforce: "pre",
     async transform(code: string, id: string, options) {
       if (!id.endsWith(".jsx") && !id.endsWith(".tsx")) return;
+      //Simply inject the pageCtx in ssr since in client it will be available globally
+      if (options.ssr) {
+        code = `const pageCtx=${JSON.stringify(bridge.pageCtx)}; \n` + code;
+      } else {
+        //remove the pageProps since the output is injected in component.props
+        console.log("Replacing");
+        let toReplace = `export async function pageProps(ctx) {
+  console.log(ctx);
+  return { name: "Some stuff after the network req" };
+}`;
+        code = code.replace(toReplace, "");
+      }
       let uid = 0;
       return await replaceAsync(
         code,
@@ -30,6 +43,7 @@ export default function (): Plugin {
           spinnner.color = "yellow";
           try {
             if (options.ssr) {
+              console.log("SSR");
               spinnner.start();
               payloadFetch = JSON.stringify(await $fetch(url));
               reqCache.set(fetchUid, payloadFetch);

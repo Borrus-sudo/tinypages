@@ -9,7 +9,11 @@ import { createPlugins } from "./plugins";
 export async function createDevServer(
   config: InlineConfig
 ): Promise<ViteDevServer> {
-  const bridge: Bridge = { currentUrl: "", preservedScriptGlobal: "" };
+  const bridge: Bridge = {
+    currentUrl: "",
+    preservedScriptGlobal: "",
+    pageCtx: {},
+  };
   const plugins = createPlugins(bridge);
   presetViteConfig.plugins = plugins;
   config = mergeConfig(config, presetViteConfig);

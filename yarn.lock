@@ -3397,6 +3397,11 @@ micromatch@^4.0.4:
     braces "^3.0.1"
     picomatch "^2.2.3"
 
+million@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/million/-/million-1.2.2.tgz#f53256276e659c5dac290ed8634b6edddd5be520"
+  integrity sha512-LZR7P/mDeJ1I+Vqo+G39od+RGpUlDUfjiqOHyq+Ae9tO6cKz2BRCBYf8xZFJoA1gZOau81dCDg0gxlG1jebxHQ==
+
 mime-db@1.51.0:
   version "1.51.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.51.0.tgz#d9ff62451859b18342d960850dc3cfb77e63fb0c"

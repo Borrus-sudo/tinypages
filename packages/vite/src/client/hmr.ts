@@ -1,4 +1,5 @@
 import morphdom from "morphdom";
+// import * as million from "million";
 
 type ImportMeta = {
   readonly hot?: {
@@ -32,7 +33,11 @@ export default function () {
       (data: { head: string; body: string }) => {
         console.log(data);
         document.head.innerHTML = data.head;
-        morphdom(document.getElementsByTagName("body")[0], data.body, {});
+        // morphdom(document.getElementsByTagName("body")[0], data.body, {});
+        // const bodyElement = document.getElementsByTagName("body")[0];
+        // const body = million.toVNode(bodyElement);
+        // const newBody = million.toVNode(data.body);
+        // million.patch(bodyElement, body, newBody);
       }
     );
   }

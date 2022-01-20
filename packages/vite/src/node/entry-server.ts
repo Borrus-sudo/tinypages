@@ -33,7 +33,14 @@ export default async function (ctx: cascadeContext) {
       uid++;
       continue;
     }
-    const __comp__ = (await ctx.vite.ssrLoadModule(componentPath)).default;
+    const __module__ = await ctx.vite.ssrLoadModule(componentPath);
+    const __comp__ = __module__.default;
+    const pageProps = __module__.pageProps;
+    if (pageProps) {
+      // the client shall receive this as well because component.props is passed by reference to componentRegistration
+      console.log("Loggingg the crappy function");
+      component.props["ssrProps"] = await pageProps({ ...ctx.pageCtx });
+    }
     let __comp__html = renderToString(
       h(
         __comp__,
@@ -57,7 +64,7 @@ export default async function (ctx: cascadeContext) {
   }
   const scriptTag = `<script> window.globals= ${JSON.stringify(
     componentRegistration
-  )} </script>`;
+  )}; window.pageCtx=${JSON.stringify(ctx.pageCtx)}; </script>`;
   ctx.meta.headTags.push(scriptTag);
   return ctx.html;
 }
