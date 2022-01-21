@@ -21,42 +21,48 @@ export default async function (ctx: cascadeContext) {
       "./components",
       component.componentName + ".jsx"
     );
-    componentRegistration[uid] = {
-      path: componentPath,
-      props: component.props,
-    };
     if (component.props["client:only"]) {
       delete component.props["client:only"];
       ctx.meta.headTags.push(
         `<script src="${componentPath.split(ctx.root)[1]}"></script>`
       );
-      uid++;
       continue;
     }
+
     const __module__ = await ctx.vite.ssrLoadModule(componentPath);
     const __comp__ = __module__.default;
     const pageProps = __module__.pageProps;
+
     if (pageProps) {
       // the client shall receive this as well because component.props is passed by reference to componentRegistration
-      console.log("Loggingg the crappy function");
       component.props["ssrProps"] = await pageProps({ ...ctx.pageCtx });
     }
-    let __comp__html = renderToString(
-      h(
-        __comp__,
-        component.props,
-        component.children.trim() !== ""
-          ? h("tinypages-fragment", {
-              dangerouslySetInnerHTML: { __html: component.children },
-            })
-          : null
-      )
-    );
+    //children in the Vnode
+    let __comp__slot__vnode =
+      component.children.trim() !== ""
+        ? h("tinypages-fragment", {
+            dangerouslySetInnerHTML: { __html: component.children },
+          })
+        : null;
+    // the component in Vnode
+    let __comp__vnode = h(__comp__, component.props, __comp__slot__vnode);
+    // the component html
+    let __comp__html = renderToString(__comp__vnode);
+
     const dom = parse(__comp__html);
     //@ts-ignore
-    dom.childNodes[0].setAttribute("preact", "");
-    //@ts-ignore
-    dom.childNodes[0].setAttribute("uid", `${uid}`);
+    dom.childNodes[0].setAttribute("preact", ""); // Add a preact component prop
+    if (!component.props["no:hydrate"]) {
+      // hydrate and initalize the meta data needed for the client
+      //@ts-ignore
+      dom.childNodes[0].setAttribute("uid", `${uid}`);
+      componentRegistration[uid] = {
+        path: componentPath,
+        props: component.props,
+      };
+    } else {
+      delete component.props["no:hydrate"]; //else don't initialize the meta data
+    }
     let [payload, meta] = await ctx.compile(dom.toString());
     ctx.meta = mergeMetaConfig(ctx.meta, meta);
     ctx.html = ctx.html.replace(component.componentLiteral, payload);

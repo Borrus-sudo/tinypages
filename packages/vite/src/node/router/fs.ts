@@ -16,7 +16,6 @@ export async function fsRouter(root: string) {
             : url
         )
         .split(path.sep);
-      let pageCtx = {};
       for (let possiblePath of paths) {
         let idx = 0;
         let matchableString = possiblePath.split(fsPath)[1];
@@ -34,8 +33,7 @@ export async function fsRouter(root: string) {
           idx++;
         }
         if (score === slicedUrl.length) {
-          pageCtx = possiblePageCtx;
-          return pageCtx;
+          return possiblePageCtx;
         }
       }
       return { url: "404" };

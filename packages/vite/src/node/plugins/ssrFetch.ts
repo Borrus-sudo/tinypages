@@ -23,13 +23,8 @@ export default function (bridge: Bridge): Plugin {
       if (options.ssr) {
         code = `const pageCtx=${JSON.stringify(bridge.pageCtx)}; \n` + code;
       } else {
-        //remove the pageProps since the output is injected in component.props
-        console.log("Replacing");
-        let toReplace = `export async function pageProps(ctx) {
-  console.log(ctx);
-  return { name: "Some stuff after the network req" };
-}`;
-        code = code.replace(toReplace, "");
+        //remove the pageProps since the output is injected in component[id].props and to prevent size wastage
+        code = code.replace(/export pageProps/, "");
       }
       let uid = 0;
       return await replaceAsync(
@@ -43,17 +38,15 @@ export default function (bridge: Bridge): Plugin {
           spinnner.color = "yellow";
           try {
             if (options.ssr) {
-              console.log("SSR");
               spinnner.start();
-              payloadFetch = JSON.stringify(await $fetch(url));
+              payloadFetch = JSON.stringify(
+                reqCache.get(url) || (await $fetch(url))
+              );
               reqCache.set(fetchUid, payloadFetch);
+              spinnner.succeed(`Successfully fetched ${url}!`);
             } else {
-              spinnner.start();
-              reqCache.get(fetchUid) ||
-                reqCache.set(fetchUid, JSON.stringify(await $fetch(url)));
               payloadFetch = reqCache.get(fetchUid);
             }
-            spinnner.succeed(`Successfully fetched ${url}!`);
             return payloadFetch;
           } catch (e) {
             spinnner.fail(`${e.stack}`);

@@ -30,7 +30,6 @@ export default async function (
       bridge.currentUrl = pageCtx.url;
       bridge.pageCtx = pageCtx;
       if (!watchedUrls.includes(pageCtx.url)) {
-        console.log("Adding url", pageCtx.url);
         vite.watcher.add(pageCtx.url);
         watchedUrls.push(pageCtx.url);
       }
@@ -40,7 +39,7 @@ export default async function (
           require.resolve("tinypages/entry-server").replace(".js", ".mjs")
         )
       ).default;
-      // The meta object shall reflect changes in bridge as well cause it is pass by reference
+      // The meta object shall reflect changes as it is pass by reference
       let appHtml = await render({
         html,
         meta,
