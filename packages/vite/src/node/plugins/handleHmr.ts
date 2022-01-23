@@ -21,6 +21,7 @@ export default function (bridge: Bridge): Plugin {
             event: "reload:page",
           });
         } else if (recompileStuff) {
+          // it is fine to lose the hydration script injected by injectClient plugin because they are already loaded
           const markdown = await fs.readFile(bridge.currentUrl, "utf-8");
           let [html, meta] = await compileMarkdown(markdown);
           meta.headTags.push(bridge.preservedScriptGlobal);
@@ -31,7 +32,10 @@ export default function (bridge: Bridge): Plugin {
           server.ws.send({
             type: "custom",
             event: "new:document",
-            data: { head: meta.headTags.join("\n"), body: html },
+            data: {
+              head: meta.headTags.join("\n"),
+              body: `<div id="app">${html}</div>`,
+            },
           });
           console.log("sent!");
         }

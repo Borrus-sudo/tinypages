@@ -24,7 +24,9 @@ export default async function (ctx: cascadeContext) {
     if (component.props["client:only"]) {
       delete component.props["client:only"];
       ctx.meta.headTags.push(
-        `<script src="${componentPath.split(ctx.root)[1]}"></script>`
+        `<script src="/HIJACK_IMPORT${
+          componentPath.split(ctx.root)[1]
+        }"></script>`
       );
       continue;
     }
@@ -60,8 +62,6 @@ export default async function (ctx: cascadeContext) {
         path: componentPath,
         props: component.props,
       };
-    } else {
-      delete component.props["no:hydrate"]; //else don't initialize the meta data
     }
     let [payload, meta] = await ctx.compile(dom.toString());
     ctx.meta = mergeMetaConfig(ctx.meta, meta);

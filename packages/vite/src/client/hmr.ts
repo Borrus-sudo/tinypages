@@ -1,5 +1,4 @@
-import morphdom from "morphdom";
-// import * as million from "million";
+import * as million from "million";
 
 type ImportMeta = {
   readonly hot?: {
@@ -31,13 +30,11 @@ export default function () {
     import.meta.hot.on(
       "new:document",
       (data: { head: string; body: string }) => {
-        console.log(data);
         document.head.innerHTML = data.head;
-        // morphdom(document.getElementsByTagName("body")[0], data.body, {});
-        // const bodyElement = document.getElementsByTagName("body")[0];
-        // const body = million.toVNode(bodyElement);
-        // const newBody = million.toVNode(data.body);
-        // million.patch(bodyElement, body, newBody);
+        const appBody = document.getElementById("app");
+        const body = million.toVNode(appBody);
+        const newBody = million.toVNode(data.body);
+        million.patch(appBody, newBody, body);
       }
     );
   }

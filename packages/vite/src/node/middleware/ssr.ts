@@ -7,7 +7,7 @@ import { fsRouter } from "../router/fs";
 function appendPrelude(content: string, headTags, styles: string) {
   return String.raw`<!DOCTYPE html><html><head>${headTags.join(
     "\n"
-  )}<style>${styles}</style></head><body>${content}</body></html>`;
+  )}<style>${styles}</style></head><body><div id="app">${content}</div></body></html>`;
 }
 
 export default async function (
