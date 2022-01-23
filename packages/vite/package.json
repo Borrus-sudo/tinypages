@@ -40,15 +40,16 @@
   "dependencies": {
     "@tinypages/compiler": "^1.0.0",
     "cac": "^6.7.12",
+    "defu": "^5.0.1",
     "express": "^4.17.2",
-    "million": "^1.2.2",
-    "morphdom": "^2.6.1",
+    "million": "^1.2.4",
     "node-html-parser": "^5.2.0",
     "ohmyfetch": "^0.4.14",
     "ora": "5.4.1",
     "picocolors": "^1.0.0",
     "preact": "^10.5.15",
     "preact-render-to-string": "^5.1.19",
+    "unconfig": "^0.2.2",
     "vite": "^2.7.2"
   },
   "devDependencies": {}

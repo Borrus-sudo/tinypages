@@ -1,4 +1,4 @@
-export const tinypagesCompilerConfig = {
+export const presetCompilerConfig = {
   marked: { gfm: true, xhtml: true },
   katex: {
     macros: {

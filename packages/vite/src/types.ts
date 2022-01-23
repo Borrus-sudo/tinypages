@@ -1,15 +1,8 @@
-import { ViteDevServer } from "vite";
-
-type Meta = {
-  styles: string;
-  components: {
-    componentLiteral: string;
-    componentName: string;
-    props: Record<string, string>;
-    children: string;
-  }[];
-  headTags: string[];
-};
+import { ViteDevServer, UserConfig as ViteUserConfig } from "vite";
+import type {
+  Meta,
+  UserConfig as TinypagesUserConfig,
+} from "@tinypages/compiler";
 
 type cascadeContext = {
   html: string;
@@ -26,4 +19,9 @@ type Bridge = {
   pageCtx: Record<string, string>;
 };
 
-export { cascadeContext, Meta, Bridge };
+type TinyPagesConfig = {
+  compiler: TinypagesUserConfig;
+  vite: ViteUserConfig;
+};
+
+export { cascadeContext, Meta, Bridge, TinyPagesConfig };

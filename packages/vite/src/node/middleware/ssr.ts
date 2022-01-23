@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
-import { InlineConfig, ViteDevServer } from "vite";
-import type { Bridge, cascadeContext } from "../../types";
+import { ViteDevServer } from "vite";
+import type { Bridge, cascadeContext, TinyPagesConfig } from "../../types";
 import { compileMarkdown } from "../compile";
 import { fsRouter } from "../router/fs";
 
@@ -12,10 +12,10 @@ function appendPrelude(content: string, headTags, styles: string) {
 
 export default async function (
   vite: ViteDevServer,
-  config: InlineConfig,
+  config: TinyPagesConfig,
   bridge: Bridge
 ) {
-  const router = await fsRouter(config.root);
+  const router = await fsRouter(config.vite.root);
   const watchedUrls = [];
   return async (req, res, next) => {
     try {
@@ -43,7 +43,7 @@ export default async function (
       let appHtml = await render({
         html,
         meta,
-        root: config.root,
+        root: config.vite.root,
         pageCtx,
         vite: vite as ViteDevServer,
         compile: compileMarkdown,

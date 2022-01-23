@@ -18,8 +18,9 @@
 - Figure out the build process
 - Add PWA via the vite plugin
 - Make a vitejs plugin to replace fetch with output (simple static replacement in action) (done)
-- Resolve config (to:do use unconfig)
-- Figure out pageContext
+- Resolve config: (done)
+- Figure out pageContext (done)
+- Make html updates to the renderer html in case of components
 
 ## Design Decisions
 
