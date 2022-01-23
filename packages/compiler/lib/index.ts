@@ -42,3 +42,5 @@ export default async function compile(
     config.metaConstruct,
   ];
 }
+
+export type { UserConfig, Meta, Plugin };

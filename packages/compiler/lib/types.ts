@@ -1,4 +1,4 @@
-import { IRawGrammar, IRawTheme, IRawThemeSetting } from "vscode-textmate";
+import type { IRawGrammar, IRawTheme, IRawThemeSetting } from "vscode-textmate";
 
 type Theme =
   | "css-variables"

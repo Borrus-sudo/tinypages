@@ -6,7 +6,9 @@ const config: Options = {
   format: ["esm", "cjs"],
   entry: ["lib/index.ts"],
   clean: true,
-  dts: true,
+  dts: {
+    resolve: true,
+  },
   outDir: "./out",
   minify: true,
 };
