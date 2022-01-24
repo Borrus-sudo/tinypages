@@ -34,7 +34,13 @@ export default async function compile(
     renderer: spiedRenderer,
     ...(config.marked || {}),
   });
-  let output = marked.parse(input);
+  const grayMatter = input.match(/---[\s\S]*---/)?.[0] ?? "";
+  let output = marked.parse(grayMatter ? input.split(grayMatter)[1] : input);
+  if (grayMatter)
+    //@ts-ignore
+    config.metaConstruct.headTags.push(
+      `<script>${grayMatter.slice(4, -3)}</script>`
+    );
   output = await postTransform(output, Plugins);
   return [
     output,
