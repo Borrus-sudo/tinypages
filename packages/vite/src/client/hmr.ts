@@ -29,17 +29,20 @@ export const toVNode = (el: DOMNode | string): VNode | undefined => {
   if (el instanceof Text) return String(el.nodeValue);
   if (el instanceof Comment) return undefined;
 
-  let isComponent = false;
+  // @ts-ignore
+  const isComponent = el.hasAttribute('preact') || el.preact;
   const props = {};
   // We know children length, so we created a fixed array
   const children = new Array(el.children.length).fill(0);
-  for (let i = 0; i < el.attributes.length; i++) {
-    const { nodeName, nodeValue } = el.attributes[i];
-    if (nodeName === 'preact') isComponent = true;
-    props[nodeName] = nodeValue;
-  }
-  for (let i = 0; i < el.childNodes.length; i++) {
-    children[i] = toVNode(<DOMNode>el.childNodes[i]);
+
+  if (!isComponent) {
+    for (let i = 0; i < el.attributes.length; i++) {
+      const { nodeName, nodeValue } = el.attributes[i];
+      props[nodeName] = nodeValue;
+    }
+    for (let i = 0; i < el.childNodes.length; i++) {
+      children[i] = toVNode(<DOMNode>el.childNodes[i]);
+    }
   }
 
   const vnode = m(
