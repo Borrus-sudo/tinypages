@@ -52,6 +52,8 @@ export const toVNode = (el: DOMNode | string): VNode | undefined => {
   return vnode;
 };
 
+const hmrCache = new Map<string, VNode | undefined>();
+
 export default function () {
   //@ts-ignore
   if (import.meta.hot) {
@@ -66,7 +68,13 @@ export default function () {
       'new:document',
       (data: { head: string; body: string }) => {
         document.head.innerHTML = data.head;
-        render(document.body, toVNode(data.body));
+        if (hmrCache.has(data.body)) {
+          render(document.body, hmrCache.get(data.body));
+        } else {
+          const vnode = toVNode(data.body);
+          render(document.body, vnode);
+          hmrCache.set(data.body, vnode);
+        }
       }
     );
   }
