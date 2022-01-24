@@ -1,7 +1,7 @@
 import { $fetch } from "ohmyfetch";
 import ora from "ora";
 import type { Plugin } from "vite";
-import type { Bridge } from "../../types";
+import type { ResolvedConfig } from "../../types";
 
 const reqCache: Map<string, string> = new Map();
 async function replaceAsync(str, regex, asyncFn) {
@@ -13,7 +13,7 @@ async function replaceAsync(str, regex, asyncFn) {
   const data = await Promise.all(promises);
   return str.replace(regex, () => data.shift());
 }
-export default function (bridge: Bridge): Plugin {
+export default function ({ bridge }: ResolvedConfig): Plugin {
   return {
     name: "vite-tinypages-ssrFetch",
     enforce: "pre",

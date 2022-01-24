@@ -1,9 +1,13 @@
 import { type Plugin, normalizePath } from "vite";
-import { Bridge } from "../../types";
-import { compileMarkdown } from "../compile";
+import { ResolvedConfig } from "../../types";
+import { createCompiler } from "../compile";
 import { promises as fs } from "fs";
 
-export default function (bridge: Bridge): Plugin {
+export default async function ({
+  bridge,
+  config,
+}: ResolvedConfig): Promise<Plugin> {
+  const compileMarkdown = await createCompiler(config.compiler);
   return {
     name: "vite-tinypages-hmr",
     async configureServer(server) {
@@ -12,7 +16,7 @@ export default function (bridge: Bridge): Plugin {
         let recompileStuff = false;
         if (normalizePath(source) === normalizePath(bridge.currentUrl)) {
           recompileStuff = true;
-        } else if (source.endsWith("jsx") || source.endsWith("tsx")) {
+        } else if (bridge.sources.includes(source)) {
           fullReload = true;
         }
         if (fullReload) {

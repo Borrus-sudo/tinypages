@@ -1,8 +1,8 @@
 import ssrFetch from "./ssrFetch";
 import injectClient from "./injectClient";
 import hmr from "./handleHmr";
-import type { Bridge } from "../../types";
+import type { Bridge, ResolvedConfig } from "../../types";
 
-export function createPlugins(bridge: Bridge) {
-  return [injectClient(), ssrFetch(bridge), hmr(bridge)];
+export async function createPlugins(ctx: ResolvedConfig) {
+  return [injectClient(), ssrFetch(ctx), await hmr(ctx)];
 }

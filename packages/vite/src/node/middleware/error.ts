@@ -1,8 +1,8 @@
 import * as Colors from "picocolors";
 import { createLogger } from "vite";
-import { TinyPagesConfig } from "../../types";
+import { TinyPagesConfig, ResolvedConfig } from "../../types";
 
-export default function (config: TinyPagesConfig) {
+export default function ({ config }: ResolvedConfig) {
   const logger = createLogger(config.vite.logLevel);
   return (err: Error, req, res) => {
     if (err.message.includes("404")) {

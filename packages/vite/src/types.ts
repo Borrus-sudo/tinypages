@@ -3,6 +3,7 @@ import type {
   Meta,
   UserConfig as TinypagesUserConfig,
 } from "@tinypages/compiler";
+import { brotliCompress } from "zlib";
 
 type cascadeContext = {
   html: string;
@@ -17,6 +18,7 @@ type Bridge = {
   currentUrl: string;
   preservedScriptGlobal: string;
   pageCtx: Record<string, string>;
+  sources: string[];
 };
 
 type TinyPagesConfig = {
@@ -24,4 +26,6 @@ type TinyPagesConfig = {
   vite: ViteUserConfig;
 };
 
-export { cascadeContext, Meta, Bridge, TinyPagesConfig };
+type ResolvedConfig = { bridge: Bridge; config: TinyPagesConfig };
+
+export { cascadeContext, Meta, Bridge, TinyPagesConfig, ResolvedConfig };

@@ -96,8 +96,8 @@ export function cli() {
             clearScreen: options.clearScreen,
             server: cleanOptions(options),
           };
-          const config = await resolveConfig(cliViteOptions);
-          const server = await createDevServer(config);
+          const { config, filePath } = await resolveConfig(cliViteOptions);
+          const server = await createDevServer(config, filePath);
           const info = server.config.logger.info;
           info(
             Colors.cyan(

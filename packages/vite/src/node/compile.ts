@@ -1,8 +1,12 @@
+import type { UserConfig } from "@tinypages/compiler";
 import compile from "@tinypages/compiler";
 import type { Meta } from "../types";
-import { presetCompilerConfig } from "./constants";
 
-export async function compileMarkdown(input: string): Promise<[string, Meta]> {
-  const [html, meta] = await compile(input, presetCompilerConfig);
-  return [html, meta];
+export async function createCompiler(
+  config: UserConfig
+): Promise<(input: string) => Promise<[string, Meta]>> {
+  return async (input: string) => {
+    const [html, meta] = await compile(input, config);
+    return [html, meta];
+  };
 }
