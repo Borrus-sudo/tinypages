@@ -11,7 +11,6 @@ export default async function () {
   for (let element of document.querySelectorAll("[preact]")) {
     const uid = element.getAttribute("uid");
     let component = globals[uid];
-    //@ts-ignore
     if (import.meta.env.DEV) {
       component.path = "/HIJACK_IMPORT" + component.path;
     }
@@ -28,7 +27,6 @@ export default async function () {
     const parent = element.parentElement;
     const vnode = h(__comp__, component.props, innerSlot);
     render(vnode, parent, element);
-    //@ts-ignore
     if (import.meta.env.DEV) {
       element.setAttribute("preact", "");
     }
