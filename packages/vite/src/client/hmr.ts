@@ -1,4 +1,4 @@
-import { DOMNode, Flags, m, OLD_VNODE_FIELD, render, VNode } from 'million';
+import { DOMNode, Flags, m, OLD_VNODE_FIELD, render, VNode } from "million";
 
 type ImportMeta = {
   readonly hot?: {
@@ -19,8 +19,8 @@ type ImportMeta = {
 };
 
 export const toVNode = (el: DOMNode | string): VNode | undefined => {
-  if (typeof el === 'string') {
-    const temp = document.createElement('div');
+  if (typeof el === "string") {
+    const temp = document.createElement("div");
     temp.innerHTML = el;
     el = <DOMNode>temp.firstChild;
   }
@@ -35,7 +35,7 @@ export const toVNode = (el: DOMNode | string): VNode | undefined => {
   const children = new Array(el.children.length).fill(0);
   for (let i = 0; i < el.attributes.length; i++) {
     const { nodeName, nodeValue } = el.attributes[i];
-    if (nodeName === 'preact') isComponent = true;
+    if (nodeName.trim() === "preact") isComponent = true;
     props[nodeName] = nodeValue;
   }
   for (let i = 0; i < el.childNodes.length; i++) {
@@ -57,15 +57,15 @@ const hmrCache = new Map<string, VNode | undefined>();
 export default function () {
   //@ts-ignore
   if (import.meta.hot) {
-    console.log('hot');
+    console.log("hot");
     //@ts-ignore
-    import.meta.hot.on('reload:page', () => {
+    import.meta.hot.on("reload:page", () => {
       //@ts-ignore
       import.meta.hot.invalidate();
     });
     //@ts-ignore
     import.meta.hot.on(
-      'new:document',
+      "new:document",
       (data: { head: string; body: string }) => {
         document.head.innerHTML = data.head;
         if (hmrCache.has(data.body)) {

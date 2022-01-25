@@ -13,7 +13,7 @@ export async function createDevServer(
     currentUrl: "",
     preservedScriptGlobal: "",
     pageCtx: {},
-    sources: [source],
+    sources: [source || ""],
   };
   let ctx: ResolvedConfig = { config, bridge };
   const plugins = await createPlugins(ctx);

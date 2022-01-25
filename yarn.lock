@@ -1587,7 +1587,7 @@ defaults@^1.0.3:
   dependencies:
     clone "^1.0.2"
 
-defu@^5.0.0, defu@^5.0.1:
+defu@^5.0.0:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/defu/-/defu-5.0.1.tgz#a034278f9b032bf0845d261aa75e9ad98da878ac"
   integrity sha512-EPS1carKg+dkEVy3qNTqIdp2qV7mUP08nIsupfwQpz++slCVRw7qbQyWvSTig+kFPwz2XXp5/kIIkH+CwrJKkQ==

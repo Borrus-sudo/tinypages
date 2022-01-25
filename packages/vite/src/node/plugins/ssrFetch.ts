@@ -35,10 +35,10 @@ export default function ({ bridge }: ResolvedConfig): Plugin {
           const fetchUid = uid++ + id;
           const url = payload.slice(9, -2);
           const spinnner = ora(`Loading ${url}`);
-          spinnner.color = "yellow";
           try {
             if (options.ssr) {
               spinnner.start();
+              spinnner.color = "yellow";
               payloadFetch = JSON.stringify(
                 reqCache.get(url) || (await $fetch(url))
               );

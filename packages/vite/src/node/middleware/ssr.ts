@@ -1,5 +1,5 @@
 import { promises as fs } from "fs";
-import { ViteDevServer } from "vite";
+import { normalizePath, ViteDevServer } from "vite";
 import type { cascadeContext, ResolvedConfig } from "../../types";
 import { createCompiler } from "../compile";
 import { fsRouter } from "../router/fs";
@@ -17,6 +17,10 @@ export default async function (
   const router = await fsRouter(config.vite.root);
   const watchedUrls = [];
   const compileMarkdown = await createCompiler(config.compiler);
+  const entryPoint = require
+    .resolve("tinypages/entry-server")
+    .replace(".js", ".mjs");
+  const render = (await vite.ssrLoadModule(entryPoint)).default;
   return async (req, res, next) => {
     try {
       console.log(req.originalUrl);
@@ -34,11 +38,6 @@ export default async function (
         watchedUrls.push(pageCtx.url);
       }
       html = await vite.transformIndexHtml(pageCtx.url, html); // vite transformed html
-      let render = (
-        await vite.ssrLoadModule(
-          require.resolve("tinypages/entry-server").replace(".js", ".mjs")
-        )
-      ).default;
       // The meta object shall reflect changes as it is pass by reference
       let appHtml = await render({
         html,

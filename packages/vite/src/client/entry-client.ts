@@ -11,10 +11,13 @@ export default async function () {
   for (let element of document.querySelectorAll("[preact]")) {
     const uid = element.getAttribute("uid");
     let component = globals[uid];
-    const __comp__ = (
-      await import(/* @vite-ignore */ `/HIJACK_IMPORT${component.path}`)
-    ).default;
-    let html = element.getElementsByTagName("div")?.[0]?.innerHTML;
+    //@ts-ignore
+    if (import.meta.env.DEV) {
+      component.path = "/HIJACK_IMPORT" + component.path;
+    }
+    const __comp__ = (await import(/* @vite-ignore */ component.path)).default;
+    let html =
+      element.getElementsByTagName("tinypages-fragment")?.[0]?.innerHTML;
     const innerSlot = html
       ? h("tinypages-fragment", {
           dangerourslySetInnerHTML: {
@@ -23,6 +26,11 @@ export default async function () {
         })
       : null;
     const parent = element.parentElement;
-    render(h(__comp__, component.props, innerSlot), parent, element);
+    const vnode = h(__comp__, component.props, innerSlot);
+    render(vnode, parent, element);
+    //@ts-ignore
+    if (import.meta.env.DEV) {
+      element.setAttribute("preact", "");
+    }
   }
 }

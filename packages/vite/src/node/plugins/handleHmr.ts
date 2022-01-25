@@ -12,19 +12,7 @@ export default async function ({
     name: "vite-tinypages-hmr",
     async configureServer(server) {
       server.watcher.on("change", async (source) => {
-        let fullReload = false;
-        let recompileStuff = false;
         if (normalizePath(source) === normalizePath(bridge.currentUrl)) {
-          recompileStuff = true;
-        } else if (bridge.sources.includes(source)) {
-          fullReload = true;
-        }
-        if (fullReload) {
-          server.ws.send({
-            type: "custom",
-            event: "reload:page",
-          });
-        } else if (recompileStuff) {
           // it is fine to lose the hydration script injected by injectClient plugin because they are already loaded
           const markdown = await fs.readFile(bridge.currentUrl, "utf-8");
           let [html, meta] = await compileMarkdown(markdown);
