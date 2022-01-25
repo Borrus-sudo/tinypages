@@ -303,6 +303,7 @@ type Meta = {
     children: string;
   }[];
   headTags: string[];
+  grayMatter: string;
 };
 
 type Config = { metaConstruct: Meta } & UserConfig;

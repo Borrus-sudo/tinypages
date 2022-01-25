@@ -17,6 +17,7 @@ export default async function compile(
       styles: "",
       components: [],
       headTags: config.headTags || [],
+      grayMatter: "",
     },
   });
   const Renderer = new marked.Renderer();
@@ -38,9 +39,7 @@ export default async function compile(
   let output = marked.parse(grayMatter ? input.split(grayMatter)[1] : input);
   if (grayMatter)
     //@ts-ignore
-    config.metaConstruct.headTags.push(
-      `<script>${grayMatter.slice(4, -3)}</script>`
-    );
+    config.metaConstruct.grayMatter = grayMatter.slice(4, -3);
   output = await postTransform(output, Plugins);
   return [
     output,
