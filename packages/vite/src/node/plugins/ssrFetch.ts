@@ -3,7 +3,6 @@ import ora from "ora";
 import type { Plugin } from "vite";
 import type { ResolvedConfig } from "../../types";
 
-const reqCache: Map<string, string> = new Map();
 async function replaceAsync(str, regex, asyncFn) {
   const promises = [];
   str.replace(regex, (match, ...args) => {
@@ -14,6 +13,7 @@ async function replaceAsync(str, regex, asyncFn) {
   return str.replace(regex, () => data.shift());
 }
 export default function ({ bridge }: ResolvedConfig): Plugin {
+  const reqCache: Map<string, string> = new Map();
   return {
     name: "vite-tinypages-ssrFetch",
     enforce: "pre",
@@ -26,30 +26,32 @@ export default function ({ bridge }: ResolvedConfig): Plugin {
         //remove the pageProps since the output is injected in component[id].props and to prevent size wastage
         code = code.replace(/export pageProps/, "");
       }
-      let uid = 0;
       return await replaceAsync(
         code,
         /\$\$fetch\(\"(.*?)\"\)/g,
         async (payload: string) => {
           let payloadFetch;
-          const fetchUid = uid++ + id;
           const url = payload.slice(9, -2);
-          const spinnner = ora(`Loading ${url}`);
+          const spinner = ora(`Loading ${url}`);
+          spinner.color = "yellow";
+          const fetchNReturn = async () => {
+            spinner.start();
+            const value = await $fetch(url);
+            spinner.succeed(`Successfully fetched ${url}!`);
+            return value;
+          };
           try {
             if (options.ssr) {
-              spinnner.start();
-              spinnner.color = "yellow";
               payloadFetch = JSON.stringify(
-                reqCache.get(url) || (await $fetch(url))
+                reqCache.get(url) || (await fetchNReturn())
               );
-              reqCache.set(fetchUid, payloadFetch);
-              spinnner.succeed(`Successfully fetched ${url}!`);
+              reqCache.set(url, payloadFetch);
             } else {
-              payloadFetch = reqCache.get(fetchUid);
+              payloadFetch = reqCache.get(url);
             }
             return payloadFetch;
           } catch (e) {
-            spinnner.fail(`${e.stack}`);
+            spinner.fail(`${e.stack}`);
             return payload;
           }
         }

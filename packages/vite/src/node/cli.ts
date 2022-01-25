@@ -102,7 +102,7 @@ export function cli() {
           info(
             Colors.cyan(
               `\n  vite v${require("tinypages/package.json").version}`
-            ) + Colors.green(` dev server running at:\n`),
+            ) + Colors.green(` dev server running at: `),
             {
               clear: !server.config.logger.hasWarned,
             }

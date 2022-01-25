@@ -1,7 +1,6 @@
 import { promises as fs } from "fs";
-import { normalizePath, ViteDevServer } from "vite";
+import { ViteDevServer } from "vite";
 import type { cascadeContext, ResolvedConfig } from "../../types";
-import { createCompiler } from "../compile";
 import { fsRouter } from "../router/fs";
 
 function appendPrelude(content: string, headTags, styles: string) {
@@ -12,25 +11,26 @@ function appendPrelude(content: string, headTags, styles: string) {
 
 export default async function (
   vite: ViteDevServer,
-  { config, bridge }: ResolvedConfig
+  { config, bridge, utils }: ResolvedConfig
 ) {
   const router = await fsRouter(config.vite.root);
   const watchedUrls = [];
-  const compileMarkdown = await createCompiler(config.compiler);
   const entryPoint = require
     .resolve("tinypages/entry-server")
     .replace(".js", ".mjs");
   const render = (await vite.ssrLoadModule(entryPoint)).default;
   return async (req, res, next) => {
     try {
-      console.log(req.originalUrl);
+      if (req.originalUrl)
+        console.log(utils.logger.info(req.originalUrl, { timestamp: true }));
       const pageCtx = router(req.originalUrl);
       if (pageCtx.url === "404") {
-        next(new Error(`404 ${req.originalUrl} not found`));
+        if (req.originalUrl !== "/404.md") res.redirect("/404.md");
+        else res.send(`<h1> 404 url not found </h1>`);
         return;
       }
       const markdown = await fs.readFile(pageCtx.url, "utf-8");
-      let [html, meta] = await compileMarkdown(markdown); // convert tinypages styled markdown to html
+      let [html, meta] = await utils.compile(markdown); // convert tinypages styled markdown to html
       bridge.currentUrl = pageCtx.url;
       bridge.pageCtx = pageCtx;
       if (!watchedUrls.includes(pageCtx.url)) {
@@ -45,7 +45,7 @@ export default async function (
         root: config.vite.root,
         pageCtx,
         vite: vite as ViteDevServer,
-        compile: compileMarkdown,
+        compile: utils.compile,
       } as cascadeContext);
       bridge.preservedScriptGlobal = meta.headTags[meta.headTags.length - 1];
       appHtml = appendPrelude(appHtml, meta.headTags, meta.styles);

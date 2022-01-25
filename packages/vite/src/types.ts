@@ -1,9 +1,8 @@
-import { ViteDevServer, UserConfig as ViteUserConfig } from "vite";
+import { ViteDevServer, UserConfig as ViteUserConfig, Logger } from "vite";
 import type {
   Meta,
   UserConfig as TinypagesUserConfig,
 } from "@tinypages/compiler";
-import { brotliCompress } from "zlib";
 
 type cascadeContext = {
   html: string;
@@ -26,6 +25,13 @@ type TinyPagesConfig = {
   vite: ViteUserConfig;
 };
 
-type ResolvedConfig = { bridge: Bridge; config: TinyPagesConfig };
+type ResolvedConfig = {
+  bridge: Bridge;
+  config: TinyPagesConfig;
+  utils: {
+    compile: (input: string) => Promise<[string, Meta]>;
+    logger: Logger;
+  };
+};
 
 export { cascadeContext, Meta, Bridge, TinyPagesConfig, ResolvedConfig };
