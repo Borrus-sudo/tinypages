@@ -1,34 +1,6 @@
 import { parse } from "node-html-parser";
 import type { Config, Plugin } from "../types";
 
-function generateCSS(html, config: Config) {
-  const { Processor } = require("windicss/lib");
-  const { HTMLParser } = require("windicss/utils/parser");
-  const processor = new Processor();
-  const parser = new HTMLParser(html);
-  const baseStyle = processor.compile(``).styleSheet;
-  const PREFIX = "windi-";
-  const outputCSS = [];
-  let outputHTML = "";
-  let indexStart = 0;
-  parser.parseClasses().forEach((p) => {
-    outputHTML += html.substring(indexStart, p.start);
-
-    const style = processor.compile(p.result, PREFIX);
-    outputCSS.push(style.styleSheet);
-    outputHTML += [style.className, ...style.ignored].join(" ");
-    indexStart = p.end;
-  });
-  outputHTML += html.substring(indexStart);
-
-  // Build styles
-  const styles = outputCSS
-    // extend the preflight sheet with each sheet from the stack
-    .reduce((acc, curr) => acc.extend(curr), baseStyle)
-    .build(config.minify);
-
-  return [outputHTML, styles];
-}
 export function PluginCSS(): Plugin {
   let lastText = false,
     classes: string[] = [],
@@ -38,7 +10,7 @@ export function PluginCSS(): Plugin {
       config = _config;
     },
     transform(id: string, payload: string) {
-      if (id === "text" && config.resolveWindiCss) {
+      if (id === "text" && config.resolveUnoCSS) {
         lastText = true;
         return payload.replace(/\[(.*?)\]/g, (_, full) => {
           classes.push(...full.replace(/ +/g, " ").split(" "));
@@ -56,11 +28,13 @@ export function PluginCSS(): Plugin {
       }
       return payload;
     },
-    postTransform(payload) {
-      if (!config.resolveWindiCss) return payload;
-      const [html, css] = generateCSS(payload, config);
-      config.metaConstruct.styles = css;
-      return html;
+    async postTransform(payload) {
+      if (!config.resolveUnoCSS) return payload;
+      const { createGenerator } = require("@unocss/core");
+      const uno = createGenerator(config.unocss || {});
+      const css = await uno.generate(payload, { minify: !!config.minify });
+      config.metaConstruct.styles = css.css;
+      return payload;
     },
   };
 }
