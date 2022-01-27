@@ -467,10 +467,18 @@
     ts-node "^9"
     tslib "^2"
 
-"@iconify/json@^1.1.435":
-  version "1.1.444"
-  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-1.1.444.tgz#31cb1e8c29dbe0886f21647c9bb3611b7e278030"
-  integrity sha512-jk392aWO1AKQ8OYnHzpOpaI2h3UZU9zNsc4FvQ7BhUGEeM4oSMUsR3VtsAtu/5eWmuSp273n0n81hA4a1aEBkA==
+"@iconify/json@^2.0.29":
+  version "2.0.29"
+  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-2.0.29.tgz#4520a8894651e5dfd0cf5aa03ff7093d041aa164"
+  integrity sha512-9sxNQhWmPxzi+hu/IYxisdvORfMcEUCp9UTymAbOh1asQ19mOCkRZ+6FoBRuubJSzHUQwZZb4zhiZYJEoX6z1g==
+  dependencies:
+    "@iconify/types" "^1.0.9"
+    pathe "^0.0.2"
+
+"@iconify/types@^1.0.9":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@iconify/types/-/types-1.0.12.tgz#839f1f784b7030b94482d51996570f4dbd7d6796"
+  integrity sha512-6er6wSGF3hgc1JEZqiGpg21CTCjHBYOUwqLmb2Idzkjiw6ogalGP0ZMLVutCzah+0WB4yP+Zd2oVPN8jvJ+Ftg==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -843,6 +851,26 @@
   integrity sha512-8uALY5LTvSuHgloDVUvWP3pIauILm+8/0pDMokuDYIoNsOkSwd5AiHBTSEJjKTDcZr5z8UpgOWZkxBF4iJftoA==
   dependencies:
     "@types/node" "*"
+
+"@unocss/core@0.22.6":
+  version "0.22.6"
+  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.22.6.tgz#230a0a442afa2076b84d303b57c1c3690c488f15"
+  integrity sha512-k4qZTP1tSUFevAUT6dYm/SXGp8mixI1W2ASjlMESbI2jQSZHbcsrCZ6nVx/8CvkmZi2IB4VipuODvZ+O4aQYLQ==
+
+"@unocss/preset-mini@0.22.6":
+  version "0.22.6"
+  resolved "https://registry.yarnpkg.com/@unocss/preset-mini/-/preset-mini-0.22.6.tgz#76769c999cd99c84f89b589305cc311b607f362e"
+  integrity sha512-DymEgL7a/2a2kem/AN9kFs/qf/8RuI6INyete23n0mayy1pR88UyxdqXbzP9azByYnRBVA7658TdUEGFcTgtUA==
+  dependencies:
+    "@unocss/core" "0.22.6"
+
+"@unocss/preset-wind@^0.22.6":
+  version "0.22.6"
+  resolved "https://registry.yarnpkg.com/@unocss/preset-wind/-/preset-wind-0.22.6.tgz#8da24f946fe658101f2d71e662fae75d3daacee1"
+  integrity sha512-c9iU682005Gslm6czGNLKA7+LAo2jwCHu9r5ThO1R8BcVjg4aHY31DZv6CN1qdFehDfh7xK1PmG/st0ZfubtTw==
+  dependencies:
+    "@unocss/core" "0.22.6"
+    "@unocss/preset-mini" "0.22.6"
 
 JSONStream@^1.0.4:
   version "1.3.5"
@@ -3799,6 +3827,11 @@ path-type@^4.0.0:
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
+pathe@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/pathe/-/pathe-0.0.2.tgz#d690780e578a8127e1d65828387609c153afc309"
+  integrity sha512-mmK20YtPb4yXHlaPuOD/uPIpRu7iIK45GA/GiRSlNpIdfWDG5aEQmFT1HHtBmJB+t/6DvFOtOsEipsPA8Bx2cw==
+
 pend@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/pend/-/pend-1.2.0.tgz#7a57eb550a6783f9115331fcf4663d5c8e007a50"
@@ -4890,11 +4923,6 @@ which@^2.0.1:
   integrity sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==
   dependencies:
     isexe "^2.0.0"
-
-windicss@^3.4.2:
-  version "3.4.2"
-  resolved "https://registry.yarnpkg.com/windicss/-/windicss-3.4.2.tgz#257795c9be8b6e93117ffa3fb27874d225da6679"
-  integrity sha512-YieqWaXiwPu0JJoB7z03RXdjZjQQJtMZAeXUXu/j3JXSMhIgV/2rUXu4Q7QrworRlbaASZlFhxjnL/78aAty+Q==
 
 word-wrap@~1.2.3:
   version "1.2.3"
