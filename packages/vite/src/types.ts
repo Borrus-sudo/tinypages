@@ -13,6 +13,12 @@ type cascadeContext = {
   compile: Function;
 };
 
+type RenderFunction = (
+  html: string,
+  meta: Meta,
+  pageCtx: Record<string, string>
+) => Promise<[string, Meta]>;
+
 type Bridge = {
   currentUrl: string;
   preservedScriptGlobal: string;
@@ -31,7 +37,15 @@ type ResolvedConfig = {
   utils: {
     compile: (input: string) => Promise<[string, Meta]>;
     logger: Logger;
+    render: RenderFunction;
   };
 };
 
-export { cascadeContext, Meta, Bridge, TinyPagesConfig, ResolvedConfig };
+export {
+  cascadeContext,
+  Meta,
+  Bridge,
+  TinyPagesConfig,
+  ResolvedConfig,
+  RenderFunction,
+};

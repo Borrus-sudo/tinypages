@@ -1,35 +1,35 @@
-import { promises as fs } from "fs";
 import { normalizePath, type Plugin } from "vite";
 import { ResolvedConfig } from "../../types";
+import { promises as fs } from "fs";
+
+function appendPrelude(content: string, headTags, styles: string) {
+  return String.raw`<!DOCTYPE html><html><head>${headTags.join(
+    "\n"
+  )}<style>${styles}</style></head><body><div id="app">${content}</div></body></html>`;
+}
 
 export default async function ({
   bridge,
-  utils: { compile },
+  utils: { compile, render },
 }: ResolvedConfig): Promise<Plugin> {
   return {
     name: "vite-tinypages-hmr",
-    async configureServer(server) {
-      server.watcher.on("change", async (source) => {
-        if (normalizePath(source) === normalizePath(bridge.currentUrl)) {
-          // it is fine to lose the hydration script injected by injectClient plugin because they are already loaded
-          const markdown = await fs.readFile(bridge.currentUrl, "utf-8");
-          let [html, meta] = await compile(markdown);
-          meta.headTags.push(bridge.preservedScriptGlobal);
-          meta.headTags.push(`<style>${meta.styles}</style>`);
-          for (let component of meta.components) {
-            html = html.replace(component.componentLiteral, "");
-          }
-          server.ws.send({
+    async handleHotUpdate(ctx) {
+      for (let module of ctx.modules) {
+        if (module.file === normalizePath(bridge.currentUrl)) {
+          let [html, meta] = await compile(
+            await fs.readFile(bridge.currentUrl, { encoding: "utf-8" })
+          );
+          [html, meta] = await render(html, meta, bridge.pageCtx);
+          html = appendPrelude(html, meta.headTags, meta.styles);
+          ctx.server.ws.send({
             type: "custom",
             event: "new:document",
-            data: {
-              head: meta.headTags.join("\n"),
-              body: `<div id="app">${html}</div>`,
-            },
+            data: html,
           });
-          console.log("sent!");
         }
-      });
+      }
+      return [];
     },
   };
 }

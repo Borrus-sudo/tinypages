@@ -29,6 +29,7 @@ export default async function () {
     render(vnode, parent, element);
     if (import.meta.env.DEV) {
       element.setAttribute("preact", "");
+      element.setAttribute("uid", uid);
     }
   }
 }

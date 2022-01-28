@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import { ViteDevServer } from "vite";
-import type { cascadeContext, ResolvedConfig } from "../../types";
+import type { ResolvedConfig } from "../../types";
 import { fsRouter } from "../router/fs";
 
 function appendPrelude(content: string, headTags, styles: string) {
@@ -15,18 +15,25 @@ export default async function (
 ) {
   const router = await fsRouter(config.vite.root);
   const watchedUrls = [];
-  const entryPoint = require
-    .resolve("tinypages/entry-server")
-    .replace(".js", ".mjs");
-  const render = (await vite.ssrLoadModule(entryPoint)).default;
+  const history: string[] = [];
   return async (req, res, next) => {
     try {
-      if (req.originalUrl)
-        console.log(utils.logger.info(req.originalUrl, { timestamp: true }));
+      console.log(utils.logger.info(req.originalUrl, { timestamp: true }));
       const pageCtx = router(req.originalUrl);
       if (pageCtx.url === "404") {
         if (req.originalUrl !== "/404.md") res.redirect("/404.md");
         else res.send(`<h1> 404 url not found </h1>`);
+        return;
+      }
+      history.push(pageCtx.url);
+      if (!pageCtx.url.endsWith(".md")) {
+        res.send(await fs.readFile(pageCtx.url));
+        return;
+      }
+      if (
+        pageCtx.url.endsWith("404.md") &&
+        !history[history.length - 2].endsWith(".md")
+      ) {
         return;
       }
       const markdown = await fs.readFile(pageCtx.url, "utf-8");
@@ -38,18 +45,13 @@ export default async function (
         watchedUrls.push(pageCtx.url);
       }
       html = await vite.transformIndexHtml(pageCtx.url, html); // vite transformed html
-      // The meta object shall reflect changes as it is pass by reference
-      let appHtml = await render({
-        html,
-        meta,
-        root: config.vite.root,
-        pageCtx,
-        vite: vite as ViteDevServer,
-        compile: utils.compile,
-      } as cascadeContext);
+      if (!vite.moduleGraph.fileToModulesMap.has(pageCtx.url)) {
+        vite.moduleGraph.createFileOnlyEntry(pageCtx.url);
+      }
+      [html, meta] = await utils.render(html, meta, pageCtx);
       bridge.preservedScriptGlobal = meta.headTags[meta.headTags.length - 1];
-      appHtml = appendPrelude(appHtml, meta.headTags, meta.styles);
-      res.status(200).set({ "Content-type": "text/html" }).end(appHtml);
+      html = appendPrelude(html, meta.headTags, meta.styles);
+      res.status(200).set({ "Content-type": "text/html" }).end(html);
     } catch (err) {
       vite.ssrFixStacktrace(err);
       next(err);
