@@ -41,7 +41,8 @@ export function PluginCode(): Plugin {
             options = { lang, ...parse(keyValue) };
           }
           try {
-            payload = highlighter.codeToHtml(code, options);
+            let result = highlighter.codeToHtml(code, options);
+            payload = result;
           } catch {}
         }
         code = lang = "";

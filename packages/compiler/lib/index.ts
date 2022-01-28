@@ -28,7 +28,8 @@ export default async function compile(
   Plugins.forEach((plugin: Plugin) =>
     plugin.defineConfig ? plugin.defineConfig(config as Config) : 0
   );
-  const Handler = await useHandler(Plugins);
+  //@ts-ignore
+  const Handler = await useHandler(Plugins, config.metaConstruct);
   const [spiedRenderer] = Spy(Renderer, Handler);
   marked.setOptions(config.marked || {});
   marked.use({
@@ -40,7 +41,8 @@ export default async function compile(
   if (grayMatter)
     //@ts-ignore
     config.metaConstruct.grayMatter = grayMatter.slice(4, -3);
-  output = await postTransform(output, Plugins);
+  //@ts-ignore
+  output = await postTransform(output, Plugins, config.metaConstruct);
   return [
     output,
     //@ts-ignore

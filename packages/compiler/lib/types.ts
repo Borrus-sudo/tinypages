@@ -85,17 +85,17 @@ type Meta = {
   }[];
   headTags: string[];
   grayMatter: string;
-};
+} & Record<any, any>;
 
 type Config = { metaConstruct: Meta } & UserConfig;
 
 type Plugin = {
   enforce?: "pre" | "post";
   defineConfig?: (config: Config) => void;
-  transform: (id: string, payload: string) => string | void;
+  transform: (id: string, payload: string, meta?: Meta) => string | void;
   getReady?: () => Promise<void> | void;
   tapArgs?: (id: string, args: any[]) => void;
-  postTransform?: (payload: string) => string | Promise<string>;
+  postTransform?: (payload: string, meta?: Meta) => string | Promise<string>;
 };
 
 export { Config, Plugin, UserConfig, Meta };

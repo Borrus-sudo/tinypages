@@ -1,4 +1,4 @@
-import type { Plugin } from "./types";
+import type { Meta, Plugin } from "./types";
 
 export function wrapObject(styles: Record<string, string>) {
   Object.keys(styles).forEach((key) => {
@@ -21,10 +21,14 @@ export function orderPlugins(corePlugins: Plugin[], userPlugins: Plugin[]) {
   return [...corePlugins, ...postPlugins];
 }
 
-export async function postTransform(payload: string, plugins: Plugin[]) {
+export async function postTransform(
+  payload: string,
+  plugins: Plugin[],
+  meta: Meta
+) {
   for (let plugin of plugins) {
     if (plugin.postTransform) {
-      payload = await plugin.postTransform(payload);
+      payload = await plugin.postTransform(payload, meta);
     }
   }
   return payload;
