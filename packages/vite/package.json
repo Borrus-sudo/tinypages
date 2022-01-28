@@ -41,7 +41,7 @@
     "@tinypages/compiler": "^1.0.0",
     "cac": "^6.7.12",
     "express": "^4.17.2",
-    "million": "^1.4.1",
+    "million": "^1.4.3-1",
     "node-html-parser": "^5.2.0",
     "node-object-hash": "^2.3.10",
     "ohmyfetch": "^0.4.14",
