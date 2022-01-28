@@ -31,7 +31,7 @@ export function PluginHTML(): Plugin {
                 if (!!iconsSvg) {
                   node.replaceWith(iconsSvg);
                 } else {
-                  const compStr = node.toString();
+                  const compStr = node.toString().trim();
                   config.metaConstruct.components.push({
                     componentName: node.rawTagName,
                     componentLiteral: compStr,
