@@ -14,16 +14,17 @@ export async function fsRouter(root: string) {
         : url;
       url = path.join(fsPath, normalizedUrl);
       const slicedUrl = url.split(path.sep);
-
+      if (paths.includes(url)) {
+        return {
+          url,
+        };
+      }
       for (let possiblePath of paths) {
         let idx = 0;
         let score = 0;
         let possiblePageCtx = {
           url: possiblePath,
         };
-        if (url === possiblePath) {
-          return possiblePageCtx;
-        }
         for (let segment of possiblePath.split(path.sep)) {
           if (segment === slicedUrl[idx]) {
             score++;
