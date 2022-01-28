@@ -467,10 +467,18 @@
     ts-node "^9"
     tslib "^2"
 
-"@iconify/json@^1.1.435":
-  version "1.1.444"
-  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-1.1.444.tgz#31cb1e8c29dbe0886f21647c9bb3611b7e278030"
-  integrity sha512-jk392aWO1AKQ8OYnHzpOpaI2h3UZU9zNsc4FvQ7BhUGEeM4oSMUsR3VtsAtu/5eWmuSp273n0n81hA4a1aEBkA==
+"@iconify/json@^2.0.30":
+  version "2.0.30"
+  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-2.0.30.tgz#3d80185759f042804e4ea9c7dc724f4d6f8b0302"
+  integrity sha512-dOnM2fH813s9piLtafBGz5Oj0Z9bawexGC2McXilm/s9jyoHAt7UmX2Wp2P/b01XgCA0NCRVW8/irCwZgY8mcA==
+  dependencies:
+    "@iconify/types" "^1.0.9"
+    pathe "^0.0.2"
+
+"@iconify/types@^1.0.9":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@iconify/types/-/types-1.0.12.tgz#839f1f784b7030b94482d51996570f4dbd7d6796"
+  integrity sha512-6er6wSGF3hgc1JEZqiGpg21CTCjHBYOUwqLmb2Idzkjiw6ogalGP0ZMLVutCzah+0WB4yP+Zd2oVPN8jvJ+Ftg==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -3439,10 +3447,10 @@ micromatch@^4.0.4:
     braces "^3.0.1"
     picomatch "^2.2.3"
 
-million@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/million/-/million-1.4.1.tgz#e04db447b39673be851beaefe2945f2721743d5b"
-  integrity sha512-s44cQA6kKwX2ouB8aBj4yZng6k49i19FR+HD+LMkbvzU6ZJ6oUrjuKebVr6UaaowKL+IxJMSA0r8UBV6AC+cwg==
+million@^1.4.3-1:
+  version "1.4.3-1"
+  resolved "https://registry.yarnpkg.com/million/-/million-1.4.3-1.tgz#725125ef14bb967c9b565a61ca41222f02dd358c"
+  integrity sha512-qZE8UkeZ6VDBJwwwKsrF6eLvu1wYfPBQl+lbFllt6hlpbpVPhGxjNvFv9jtgpVkVNJ6PQZXGs2ZogMOkqQLcBg==
 
 mime-db@1.51.0:
   version "1.51.0"
@@ -3823,6 +3831,11 @@ path-type@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
+
+pathe@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/pathe/-/pathe-0.0.2.tgz#d690780e578a8127e1d65828387609c153afc309"
+  integrity sha512-mmK20YtPb4yXHlaPuOD/uPIpRu7iIK45GA/GiRSlNpIdfWDG5aEQmFT1HHtBmJB+t/6DvFOtOsEipsPA8Bx2cw==
 
 pend@~1.2.0:
   version "1.2.0"
