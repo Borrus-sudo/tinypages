@@ -3439,10 +3439,10 @@ micromatch@^4.0.4:
     braces "^3.0.1"
     picomatch "^2.2.3"
 
-million@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/million/-/million-1.4.1.tgz#e04db447b39673be851beaefe2945f2721743d5b"
-  integrity sha512-s44cQA6kKwX2ouB8aBj4yZng6k49i19FR+HD+LMkbvzU6ZJ6oUrjuKebVr6UaaowKL+IxJMSA0r8UBV6AC+cwg==
+million@^1.4.3-1:
+  version "1.4.3-1"
+  resolved "https://registry.yarnpkg.com/million/-/million-1.4.3-1.tgz#725125ef14bb967c9b565a61ca41222f02dd358c"
+  integrity sha512-qZE8UkeZ6VDBJwwwKsrF6eLvu1wYfPBQl+lbFllt6hlpbpVPhGxjNvFv9jtgpVkVNJ6PQZXGs2ZogMOkqQLcBg==
 
 mime-db@1.51.0:
   version "1.51.0"
