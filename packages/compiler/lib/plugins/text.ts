@@ -15,7 +15,7 @@ export function PluginText(): Plugin {
     transform(id: string, payload: string) {
       if (id === "text" || id === "html")
         return payload.replace(
-          /(::(.*?)::)|(`(.*?)`)|(:(.*?):)/g,
+          /(::(.*?)::)|(`[\s\S]*`)|(:(.*?):)/g,
           (payload: string) => {
             if (
               (payload.includes("<") || payload.includes(">")) &&
@@ -28,9 +28,12 @@ export function PluginText(): Plugin {
                 iconsRenderer(payload.slice(2, -2), {
                   config,
                 }) || payload;
+            } else if (payload.startsWith("```")) {
+              const [lang, ...code] = payload.slice(3, -3).split("\n");
+              codeTransformer.tapArgs("code", [code.join("\n"), lang]);
+              payload = codeTransformer.transform("code", payload) || payload;
             } else if (payload.startsWith("`")) {
-              let [lang, ...code] = payload.slice(1, -1).split(" ");
-              codeTransformer.tapArgs("code", [code.join(" "), lang]);
+              codeTransformer.tapArgs("codespan", [payload.slice(1, -1)]);
               payload =
                 codeTransformer.transform("codespan", payload) || payload;
             } else {
