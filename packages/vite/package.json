@@ -48,6 +48,7 @@
     "ora": "5.4.1",
     "picocolors": "^1.0.0",
     "preact": "^10.5.15",
+    "preact-helmet": "^4.0.0-alpha-3",
     "preact-render-to-string": "^5.1.19",
     "unconfig": "^0.2.2",
     "vite": "^2.7.2"

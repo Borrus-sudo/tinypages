@@ -83,7 +83,8 @@ export function cli() {
         options: Vite.ServerOptions & GlobalCLIOptions
       ) => {
         try {
-          const { createDevServer } = require("./server.js");
+          let entryPoint = "./server.js";
+          const { createDevServer } = require(entryPoint);
           if (root.startsWith(".")) {
             root = join(process.cwd(), root);
           }

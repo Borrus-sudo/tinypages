@@ -1,11 +1,28 @@
 import { normalizePath, type Plugin } from "vite";
 import { ResolvedConfig } from "../../types";
 import { promises as fs } from "fs";
+import Helmet from "preact-helmet";
 
 function appendPrelude(content: string, headTags, styles: string) {
-  return String.raw`<!DOCTYPE html><html><head>${headTags.join(
-    "\n"
-  )}<style>${styles}</style></head><body><div id="app">${content}</div></body></html>`;
+  const head = Helmet.rewind();
+  const html = String.raw`
+    <!doctype html>
+    <html ${head.htmlAttributes.toString()}>
+        <head>
+            ${head.title.toString()}
+            ${head.meta.toString()}
+            ${head.link.toString()}
+            ${headTags.join("\n")}
+        </head>
+        <style>${styles}</style>
+        <body>
+            <div id="app">
+                ${content}
+            </div>
+        </body>
+    </html>
+`;
+  return html;
 }
 
 export default async function ({
