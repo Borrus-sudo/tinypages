@@ -24,7 +24,7 @@ export const presetViteConfig = {
     middlewareMode: "ssr",
     watch: {
       usePolling: true,
-      interval: 100,
+      interval: 90,
     },
   },
   esbuild: {
@@ -33,4 +33,13 @@ export const presetViteConfig = {
     jsxFragment: "Fragment",
   },
   plugins: [],
+  optimizeDeps: {
+    include: [
+      "preact",
+      "preact-helmet",
+      "preact/hooks",
+      "million",
+      "million/refresh",
+    ],
+  },
 };

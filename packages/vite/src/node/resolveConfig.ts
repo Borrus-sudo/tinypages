@@ -16,9 +16,10 @@ export async function resolveConfig(
     ],
   });
   if (!config) {
-    config = { compiler: {}, vite: {} };
-    config.compiler = presetCompilerConfig;
-    config.vite = mergeConfig(presetViteConfig, cliViteConfig);
+    config = {
+      compiler: presetCompilerConfig,
+      vite: mergeConfig(presetViteConfig, cliViteConfig),
+    };
   } else {
     config.vite = mergeConfig(
       presetViteConfig,

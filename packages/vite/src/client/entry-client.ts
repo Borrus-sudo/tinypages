@@ -5,9 +5,12 @@ declare const globals: Record<
   string,
   { path: string; props: Record<string, string> }
 >;
-hmr();
+
+if (import.meta.env.DEV) {
+  hmr();
+}
+
 export default async function () {
-  console.log("Hello client");
   for (let element of document.querySelectorAll("[preact]")) {
     const uid = element.getAttribute("uid");
     let component = globals[uid];
