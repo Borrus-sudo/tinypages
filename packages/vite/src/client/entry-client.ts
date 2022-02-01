@@ -21,8 +21,8 @@ export default async function () {
     let html =
       element.getElementsByTagName("tinypages-fragment")?.[0]?.innerHTML;
     const innerSlot = html
-      ? h("tinypages-fragment", {
-          dangerourslySetInnerHTML: {
+      ? h("div", {
+          dangerouslySetInnerHTML: {
             __html: html,
           },
         })
