@@ -10,6 +10,7 @@ export function PluginCode(): Plugin {
     config: Config,
     mermaidGraphs: Record<string, string>[] = [];
   return {
+    name: "core:code",
     async getReady() {
       highlighter = await shiki.getHighlighter(
         config.shiki || { theme: "nord" }

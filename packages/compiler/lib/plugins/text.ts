@@ -1,16 +1,17 @@
 import * as emoji from "node-emoji";
 import type { Config, Plugin } from "../types";
-import { PluginCode } from "./code";
 import iconsRenderer from "./helpers/icons";
 
 export function PluginText(): Plugin {
-  let codeTransformer = PluginCode();
+  let codeTransformer;
   let config: Config;
   return {
+    name: "core:text",
     defineConfig(_config) {
       config = _config;
-      codeTransformer = PluginCode();
-      codeTransformer.defineConfig(config);
+      codeTransformer = config.plugins.find(
+        (plugin) => plugin.name === "core:code"
+      );
     },
     transform(id: string, payload: string) {
       if (id === "text" || id === "html")

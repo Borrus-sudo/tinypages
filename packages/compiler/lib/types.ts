@@ -87,9 +87,12 @@ type Meta = {
   grayMatter: string;
 } & Record<any, any>;
 
-type Config = { metaConstruct: Meta } & UserConfig;
+type Config = { metaConstruct: Meta } & Omit<UserConfig, "plugins"> & {
+    plugins: Plugin[];
+  };
 
 type Plugin = {
+  name: string;
   enforce?: "pre" | "post";
   defineConfig?: (config: Config) => void;
   transform: (id: string, payload: string, meta?: Meta) => string | void;

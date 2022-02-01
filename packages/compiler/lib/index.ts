@@ -21,15 +21,15 @@ export default async function compile(
     },
   });
   const Renderer = new marked.Renderer();
-  const Plugins = orderPlugins(
+  config.plugins = orderPlugins(
     [PluginCSS(), PluginHTML(), PluginCode(), PluginText()],
     config.plugins || []
   );
-  Plugins.forEach((plugin: Plugin) =>
+  config.plugins.forEach((plugin: Plugin) =>
     plugin.defineConfig ? plugin.defineConfig(config as Config) : 0
   );
   //@ts-ignore
-  const Handler = await useHandler(Plugins, config.metaConstruct);
+  const Handler = await useHandler(config.plugins, config.metaConstruct);
   const [spiedRenderer] = Spy(Renderer, Handler);
   marked.setOptions(config.marked || {});
   marked.use({
@@ -42,7 +42,7 @@ export default async function compile(
     //@ts-ignore
     config.metaConstruct.grayMatter = grayMatter.slice(4, -3);
   //@ts-ignore
-  output = await postTransform(output, Plugins, config.metaConstruct);
+  output = await postTransform(output, config.plugins, config.metaConstruct);
   return [
     output,
     //@ts-ignore

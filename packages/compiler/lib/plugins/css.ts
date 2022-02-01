@@ -6,6 +6,7 @@ export function PluginCSS(): Plugin {
     classes: string[] = [],
     config: Config;
   return {
+    name: "core:css",
     defineConfig(_config) {
       config = _config;
     },
