@@ -32,21 +32,25 @@ export default async function ({
   return {
     name: "vite-tinypages-hmr",
     async handleHotUpdate(ctx) {
+      let newModules = [];
       for (let module of ctx.modules) {
         if (module.file === normalizePath(bridge.currentUrl)) {
           let [html, meta] = await compile(
             await fs.readFile(bridge.currentUrl, { encoding: "utf-8" })
           );
           [html, meta] = await render(html, meta, bridge.pageCtx);
+          //TODO: invalidate the cache here by injecting into componentName
           html = appendPrelude(html, meta.headTags, meta.styles);
           ctx.server.ws.send({
             type: "custom",
             event: "new:document",
             data: html,
           });
+        } else {
+          newModules.push(module);
         }
       }
-      return [];
+      return newModules;
     },
   };
 }

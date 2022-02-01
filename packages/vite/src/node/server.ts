@@ -9,12 +9,16 @@ import {
 } from "../types";
 import { createMiddlewares } from "./middleware";
 import { createPlugins } from "./plugins";
+import crypto from "crypto";
 
 export async function createDevServer(
   config: TinyPagesConfig,
   source: string
 ): Promise<ViteDevServer> {
   let renderFunction: RenderFunction;
+  let invalidateFunction: (param: string) => void;
+  let cache: Map<string, [string, Meta]> = new Map();
+  let md5;
   let ctx: ResolvedConfig = {
     config,
     bridge: {
@@ -25,11 +29,23 @@ export async function createDevServer(
     },
     utils: {
       async compile(input: string) {
-        return await compileMarkdown(input, config.compiler);
+        md5 = crypto.createHash("md5");
+        md5.update(input);
+        const hash = md5.digest("hex");
+        if (cache.has(hash)) {
+          return cache.get(input);
+        }
+        const result = await compileMarkdown(input, config.compiler);
+        cache.set(hash, result);
+        md5.end();
+        return result;
       },
       logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
       async render(html: string, meta: Meta, pageCtx: Record<string, string>) {
         return await renderFunction(html, meta, pageCtx);
+      },
+      invalidate(componentPath: string) {
+        invalidateFunction(componentPath);
       },
     },
   };
@@ -37,7 +53,7 @@ export async function createDevServer(
   ctx.config.vite = mergeConfig(ctx.config.vite, { plugins });
   const app = express();
   const vite = await createServer(config.vite);
-  renderFunction = (
+  [renderFunction, invalidateFunction] = (
     await vite.ssrLoadModule(
       require.resolve("tinypages/entry-server").replace(".js", ".mjs")
     )

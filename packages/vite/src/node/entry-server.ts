@@ -11,6 +11,8 @@ type componentRegistration = Record<
 >;
 
 let map: Map<string, string> = new Map();
+let hashComp: Map<string, string[]> = new Map();
+
 const hashIt = hasher({ sort: false, coerce: true });
 
 async function render(ctx: cascadeContext) {
@@ -38,6 +40,11 @@ async function render(ctx: cascadeContext) {
       } else {
         __comp__str = `<div preact uid="${uid}"></div>`;
         map.set(hash, __comp__str);
+        if (hashComp.has(componentPath)) {
+          hashComp.set(componentPath, [hash, ...map.get(componentPath)]);
+        } else {
+          hashComp.set(componentPath, [hash]);
+        }
       }
       componentRegistration[uid] = {
         path: componentPath,
@@ -80,6 +87,11 @@ async function render(ctx: cascadeContext) {
         }
         __comp__str = dom.toString();
         map.set(hash, __comp__str);
+        if (hashComp.has(componentPath)) {
+          hashComp.set(componentPath, [hash, ...map.get(componentPath)]);
+        } else {
+          hashComp.set(componentPath, [hash]);
+        }
       }
 
       if (!component.props["no:hydrate"]) {
@@ -102,7 +114,15 @@ async function render(ctx: cascadeContext) {
 export const createRender = (
   ctx: Omit<cascadeContext, "html" | "meta" | "pageCtx">
 ) => {
-  return async (html: string, meta: Meta, pageCtx: Record<string, string>) => {
-    return await render({ ...ctx, html, meta, pageCtx });
-  };
+  return [
+    async (html: string, meta: Meta, pageCtx: Record<string, string>) => {
+      return await render({ ...ctx, html, meta, pageCtx });
+    },
+    (invalidateComponent: string) => {
+      if (hashComp.has(invalidateComponent)) {
+        const hashes = hashComp.get(invalidateComponent);
+        hashes.forEach((hash) => map.delete(hash));
+      }
+    },
+  ];
 };

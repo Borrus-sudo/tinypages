@@ -38,6 +38,7 @@ type ResolvedConfig = {
     compile: (input: string) => Promise<[string, Meta]>;
     logger: Logger;
     render: RenderFunction;
+    invalidate: (param: string) => void;
   };
 };
 

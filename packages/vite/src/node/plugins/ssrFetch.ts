@@ -22,13 +22,10 @@ export default function ({ bridge }: ResolvedConfig): Plugin {
       //Simply inject the pageCtx in ssr since in client it will be available globally
       if (options.ssr) {
         code = `const pageCtx=${JSON.stringify(bridge.pageCtx)}; \n` + code;
-      } else {
-        //remove the pageProps since the output is injected in component[id].props and to prevent size wastage
-        code = code.replace(/export pageProps/, "");
       }
       return await replaceAsync(
         code,
-        /\$\$fetch\(\"(.*?)\"\)/g,
+        /\$\$fetch\(\"[\s\S]*\"\)/g,
         async (payload: string) => {
           let payloadFetch;
           const url = payload.slice(9, -2);
