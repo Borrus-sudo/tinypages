@@ -33,7 +33,7 @@ export async function createDevServer(
         md5.update(input);
         const hash = md5.digest("hex");
         if (cache.has(hash)) {
-          return cache.get(input);
+          return cache.get(hash);
         }
         const result = await compileMarkdown(input, config.compiler);
         cache.set(hash, result);
