@@ -1,3 +1,5 @@
+import { InlineConfig } from "vite";
+
 export const presetCompilerConfig = {
   marked: { gfm: true, xhtml: true },
   katex: {
@@ -38,8 +40,18 @@ export const presetViteConfig = {
       "preact",
       "preact-helmet",
       "preact/hooks",
+      "preact/compat",
       "million",
       "million/refresh",
     ],
   },
-};
+  ssr: {
+    externals: ["preact-render-to-string"],
+  },
+  resolve: {
+    alias: {
+      react: "preact/compat",
+      "react-dom": "preact/compat",
+    },
+  },
+} as InlineConfig;
