@@ -27,7 +27,7 @@ function appendPrelude(content: string, headTags, styles: string) {
 
 export default async function ({
   bridge,
-  utils: { compile, render },
+  utils: { compile, render, invalidate },
 }: ResolvedConfig): Promise<Plugin> {
   return {
     name: "vite-tinypages-hmr",
@@ -39,7 +39,6 @@ export default async function ({
             await fs.readFile(bridge.currentUrl, { encoding: "utf-8" })
           );
           [html, meta] = await render(html, meta, bridge.pageCtx);
-          //TODO: invalidate the cache here by injecting into componentName
           html = appendPrelude(html, meta.headTags, meta.styles);
           ctx.server.ws.send({
             type: "custom",
@@ -47,6 +46,9 @@ export default async function ({
             data: html,
           });
         } else {
+          if (module.file.endsWith(".jsx") || module.file.endsWith(".tsx")) {
+            invalidate(module.file);
+          }
           newModules.push(module);
         }
       }
