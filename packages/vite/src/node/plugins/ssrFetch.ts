@@ -25,7 +25,7 @@ export default function ({ bridge }: ResolvedConfig): Plugin {
       }
       return await replaceAsync(
         code,
-        /\$\$fetch\(\"[\s\S]*\"\)/g,
+        /\$\$fetch\([\"\`\'][\s\S]*[\"\`\']\)/g,
         async (payload: string) => {
           let payloadFetch;
           const url = payload.slice(9, -2);
