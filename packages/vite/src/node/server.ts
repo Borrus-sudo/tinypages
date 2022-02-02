@@ -26,6 +26,7 @@ export async function createDevServer(
       preservedScriptGlobal: "",
       pageCtx: {},
       sources: [source || ""],
+      prevHash: "",
     },
     utils: {
       async compile(input: string) {
@@ -33,10 +34,10 @@ export async function createDevServer(
         md5.update(input);
         const hash = md5.digest("hex");
         if (cache.has(hash)) {
-          return cache.get(hash);
+          return JSON.parse(JSON.stringify(cache.get(hash)));
         }
         const result = await compileMarkdown(input, config.compiler);
-        cache.set(hash, result);
+        cache.set(hash, JSON.parse(JSON.stringify(result)));
         md5.end();
         return result;
       },

@@ -41,7 +41,7 @@ async function render(ctx: cascadeContext) {
         __comp__str = `<div preact uid="${uid}"></div>`;
         map.set(hash, __comp__str);
         if (hashComp.has(componentPath)) {
-          hashComp.set(componentPath, [hash, ...map.get(componentPath)]);
+          hashComp.set(componentPath, [hash, ...hashComp.get(componentPath)]);
         } else {
           hashComp.set(componentPath, [hash]);
         }
@@ -88,7 +88,7 @@ async function render(ctx: cascadeContext) {
         __comp__str = dom.toString();
         map.set(hash, __comp__str);
         if (hashComp.has(componentPath)) {
-          hashComp.set(componentPath, [hash, ...map.get(componentPath)]);
+          hashComp.set(componentPath, [hash, ...hashComp.get(componentPath)]);
         } else {
           hashComp.set(componentPath, [hash]);
         }

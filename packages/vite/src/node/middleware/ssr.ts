@@ -3,7 +3,9 @@ import { ViteDevServer } from "vite";
 import type { ResolvedConfig } from "../../types";
 import { fsRouter } from "../router/fs";
 import Helmet from "preact-helmet";
+import hasher from "node-object-hash";
 
+const hashIt = hasher({ sort: false, coerce: true });
 function appendPrelude(content: string, headTags, styles: string) {
   const head = Helmet.rewind();
   const html = String.raw`
@@ -55,6 +57,7 @@ export default async function (
       }
       const markdown = await fs.readFile(pageCtx.url, "utf-8");
       let [html, meta] = await utils.compile(markdown); // convert tinypages styled markdown to html
+      bridge.prevHash = hashIt.hash({ components: meta.components });
       bridge.currentUrl = pageCtx.url;
       bridge.pageCtx = pageCtx;
       if (!watchedUrls.includes(pageCtx.url)) {

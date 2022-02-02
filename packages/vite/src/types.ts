@@ -24,6 +24,7 @@ type Bridge = {
   preservedScriptGlobal: string;
   pageCtx: Record<string, string>;
   sources: string[];
+  prevHash: string;
 };
 
 type TinyPagesConfig = {
