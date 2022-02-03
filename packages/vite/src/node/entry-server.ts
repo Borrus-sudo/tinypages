@@ -40,7 +40,11 @@ const render = async (payload: cascadeContext, ctx: ResolvedConfig) => {
       delete component.props["client:only"];
 
       if (map.has(hash)) {
-        __comp__str = map.get(hash).replace(/uid=\"(.*)\"/, `uid="${uid}"`);
+        __comp__str = map
+          .get(hash)
+          .replace(/uid=\"(.*)\"/, (p) =>
+            p.startsWith('uid="') ? `uid="${uid}"` : p
+          );
       } else {
         __comp__str = `<div preact uid="${uid}"></div>`;
         map.set(hash, __comp__str);
@@ -61,7 +65,15 @@ const render = async (payload: cascadeContext, ctx: ResolvedConfig) => {
       }
     } else {
       if (map.has(hash)) {
-        __comp__str = map.get(hash).replace(/uid=\"(.*)\"/, `uid="${uid}"`);
+        __comp__str = map
+          .get(hash)
+          .replace(/uid=\"(.*)\"/, (p) =>
+            p.startsWith('uid="') ? `uid="${uid}"` : p
+          );
+
+        if (__comp__str.includes("preact-error")) {
+          error = true;
+        }
       } else {
         let __comp__html;
         try {
@@ -96,7 +108,7 @@ const render = async (payload: cascadeContext, ctx: ResolvedConfig) => {
           __comp__str = dom.toString();
         } catch (err) {
           error = true;
-          __comp__str = `<div preact uid="${uid}" style="color:red; background-color: lightpink;border: 2px dotted black;margin-bottom: 36px;">${err}</div>`;
+          __comp__str = `<div preact preact-error uid="${uid}" style="color:red; background-color: lightpink;border: 2px dotted black;margin-bottom: 36px;">${err}</div>`;
         }
 
         map.set(hash, __comp__str);
