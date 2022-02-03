@@ -7,28 +7,29 @@ import { PluginHTML } from "./plugins/html";
 import { PluginText } from "./plugins/text";
 import type { Config, Meta, Plugin, UserConfig } from "./types";
 import { orderPlugins, postTransform } from "./utils";
+import { analyze } from "./revealComponents";
 
 export default async function compile(
   input: string,
-  config: UserConfig
+  UserConfig: UserConfig
 ): Promise<[string, Meta]> {
-  config = Object.assign({}, config, {
+  //@ts-ignore
+  let config: Config = Object.assign({}, UserConfig, {
     metaConstruct: {
       styles: "",
       components: [],
-      headTags: config.headTags || [],
+      headTags: UserConfig.headTags || [],
       grayMatter: "",
     },
   });
   const Renderer = new marked.Renderer();
   config.plugins = orderPlugins(
-    [PluginCSS(), PluginHTML(), PluginCode(), PluginText()],
+    [PluginCSS(), PluginCode(), PluginText(), PluginHTML()],
     config.plugins || []
   );
   config.plugins.forEach((plugin: Plugin) =>
     plugin.defineConfig ? plugin.defineConfig(config as Config) : 0
   );
-  //@ts-ignore
   const Handler = await useHandler(config.plugins, config.metaConstruct);
   const [spiedRenderer] = Spy(Renderer, Handler);
   marked.setOptions(config.marked || {});
@@ -37,12 +38,10 @@ export default async function compile(
     ...(config.marked || {}),
   });
   const grayMatter = input.match(/---[\s\S]*---/)?.[0] ?? "";
+  if (grayMatter) config.metaConstruct.grayMatter = grayMatter.slice(4, -3);
   let output = marked.parse(grayMatter ? input.split(grayMatter)[1] : input);
-  if (grayMatter)
-    //@ts-ignore
-    config.metaConstruct.grayMatter = grayMatter.slice(4, -3);
-  //@ts-ignore
   output = await postTransform(output, config.plugins, config.metaConstruct);
+  [output, config.metaConstruct.components] = analyze(output);
   return [
     output,
     //@ts-ignore

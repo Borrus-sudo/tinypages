@@ -4,13 +4,11 @@ import iconsRenderer from "./helpers/icons";
 const tags = require("html-tags");
 
 export function PluginHTML(): Plugin {
-  let text: Plugin;
   let config: Config;
   return {
     name: "core:html",
     defineConfig(_config) {
       config = _config;
-      text = config.plugins.find((plugin) => plugin.name === "core:text");
     },
     transform(id: string, payload: string) {
       if (id === "html") {
@@ -33,16 +31,6 @@ export function PluginHTML(): Plugin {
                 });
                 if (!!iconsSvg) {
                   node.replaceWith(iconsSvg);
-                } else {
-                  node.innerHTML = text.transform("html", node.innerHTML);
-                  const compStr = node.toString().trim();
-                  config.metaConstruct.components.push({
-                    componentName: node.rawTagName,
-                    componentLiteral: compStr,
-                    props: node.attrs || {},
-                    children: node.innerHTML,
-                  });
-                  node.replaceWith(compStr);
                 }
                 continue;
               }
