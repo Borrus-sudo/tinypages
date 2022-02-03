@@ -7,7 +7,7 @@ export default function (vite: ViteDevServer) {
       res
         .status(200)
         .set({ "Content-type": "text/javascript" })
-        .end(result.code);
+        .end(result?.code);
     } else if (req.originalUrl.startsWith("/HIJACK_IMPORT")) {
       const fileUrl = req.originalUrl
         .split("/HIJACK_IMPORT")[1]
@@ -16,7 +16,7 @@ export default function (vite: ViteDevServer) {
       res
         .status(200)
         .set({ "Content-type": "text/javascript" })
-        .end(result.code);
+        .end(result?.code);
     } else {
       await next();
     }

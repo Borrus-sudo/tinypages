@@ -14,9 +14,8 @@ type cascadeContext = {
 };
 
 type RenderFunction = (
-  html: string,
-  meta: Meta,
-  pageCtx: Record<string, string>
+  payload: cascadeContext,
+  ctx: ResolvedConfig
 ) => Promise<[string, Meta]>;
 
 type Bridge = {
@@ -25,6 +24,7 @@ type Bridge = {
   pageCtx: Record<string, string>;
   sources: string[];
   prevHash: string;
+  configFile: Readonly<string>;
 };
 
 type TinyPagesConfig = {
@@ -34,13 +34,18 @@ type TinyPagesConfig = {
 
 type ResolvedConfig = {
   bridge: Bridge;
-  config: TinyPagesConfig;
-  utils: {
+  config: Readonly<TinyPagesConfig>;
+  utils: Readonly<{
     compile: (input: string) => Promise<[string, Meta]>;
     logger: Logger;
-    render: RenderFunction;
-    invalidate: (param: string) => void;
-  };
+    render: (
+      html: string,
+      meta: Meta,
+      pageCtx: Record<string, string>
+    ) => Promise<[string, Meta]>;
+    invalidate: (file: string) => void;
+    normalize: (file: string) => string;
+  }>;
 };
 
 export {

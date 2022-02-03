@@ -2,15 +2,18 @@ import { promises as fs } from "fs";
 import hasher from "node-object-hash";
 import Helmet from "preact-helmet";
 import { ModuleNode, normalizePath, type Plugin } from "vite";
-import { ResolvedConfig } from "../../types";
+import { Bridge, ResolvedConfig } from "../../types";
 
 const hashIt = hasher({ sort: false, coerce: true });
-const isParentJSX = (node: ModuleNode) => {
+const isParentJSX = (node: ModuleNode, bridge: Bridge) => {
   for (let module of node.importedModules) {
-    if (module.file.endsWith(".jsx") || module.file.endsWith(".tsx")) {
+    if (
+      (module.file.endsWith(".jsx") || module.file.endsWith(".tsx")) &&
+      bridge.sources.includes(module.file)
+    ) {
       return true;
     }
-    if (isParentJSX(module)) {
+    if (isParentJSX(module, bridge)) {
       return true;
     }
   }
@@ -42,16 +45,31 @@ export default async function ({
   bridge,
   utils,
 }: ResolvedConfig): Promise<Plugin> {
+  const reload = (file, ctx) => {
+    utils.logger.info(`Page reload ${file}`, {
+      timestamp: true,
+    });
+    ctx.server.ws.send({
+      type: "custom",
+      event: "reload:page",
+    });
+  };
   return {
     name: "vite-tinypages-hmr",
     async handleHotUpdate(ctx) {
       for (let module of ctx.modules) {
-        if (module.file === normalizePath(bridge.currentUrl)) {
+        if (module.file === normalizePath(bridge.configFile)) {
+          reload(module.file, ctx);
+          break;
+        } else if (module.file === normalizePath(bridge.currentUrl)) {
           let [html, meta] = await utils.compile(
             await fs.readFile(bridge.currentUrl, { encoding: "utf-8" })
           );
           const newHash = hashIt.hash({ components: meta.components });
+
+          // no change in component signature in markdown
           if (newHash === bridge.prevHash) {
+            // rerender the new changes, this will be fast as the components are cached
             [html, meta] = await utils.render(html, meta, bridge.pageCtx);
             html = appendPrelude(html, meta.headTags, meta.styles);
             ctx.server.ws.send({
@@ -60,21 +78,20 @@ export default async function ({
               data: html,
             });
           } else {
-            utils.logger.info(`Page reload ${module.file}`);
-            ctx.server.ws.send({
-              type: "custom",
-              event: "reload:page",
-            });
+            // change in component signature, reload the file. Cached ssr components will still be used
+            reload(module.file, ctx);
+            break;
           }
         } else {
-          if (module.file.endsWith(".jsx") || module.file.endsWith(".tsx")) {
+          if (bridge.sources.includes(module.file)) {
+            // invalidate the file and reload, so in the next reload, compileMarkdown cached values are used and cached ssr components
+            // other than module.file are utilized
             utils.invalidate(module.file);
-          } else if (isParentJSX(module)) {
-            utils.logger.info(`Page reload ${module.file}`);
-            ctx.server.ws.send({
-              type: "custom",
-              event: "reload:page",
-            });
+            reload(module.file, ctx);
+            break;
+          } else if (isParentJSX(module, bridge)) {
+            reload(module.file, ctx);
+            break;
           }
         }
       }

@@ -1,6 +1,12 @@
 import compileMarkdown from "@tinypages/compiler";
 import express from "express";
-import { createLogger, createServer, mergeConfig, ViteDevServer } from "vite";
+import {
+  createLogger,
+  createServer,
+  mergeConfig,
+  normalizePath,
+  ViteDevServer,
+} from "vite";
 import {
   Meta,
   RenderFunction,
@@ -19,14 +25,16 @@ export async function createDevServer(
   let invalidateFunction: (param: string) => void;
   let cache: Map<string, [string, Meta]> = new Map();
   let md5;
+
   let ctx: ResolvedConfig = {
     config,
     bridge: {
       currentUrl: "",
       preservedScriptGlobal: "",
       pageCtx: {},
-      sources: [source || ""],
+      sources: [],
       prevHash: "",
+      configFile: source || "",
     },
     utils: {
       async compile(input: string) {
@@ -43,28 +51,42 @@ export async function createDevServer(
       },
       logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
       async render(html: string, meta: Meta, pageCtx: Record<string, string>) {
-        return await renderFunction(html, meta, pageCtx);
+        return await renderFunction(
+          {
+            root: config.vite.root,
+            vite,
+            compile: async (input: string) => {
+              return await compileMarkdown(input, config.compiler);
+            },
+            html,
+            meta,
+            pageCtx,
+          },
+          ctx
+        );
       },
       invalidate(componentPath: string) {
         invalidateFunction(componentPath);
       },
+      normalize(file: string) {
+        return normalizePath(file);
+      },
     },
   };
   const plugins = await createPlugins(ctx);
+  //@ts-ignore
   ctx.config.vite = mergeConfig(ctx.config.vite, { plugins });
+
   const app = express();
   const vite = await createServer(config.vite);
+
+  if (source) vite.moduleGraph.createFileOnlyEntry(source);
+
   [renderFunction, invalidateFunction] = (
     await vite.ssrLoadModule(
       require.resolve("tinypages/entry-server").replace(".js", ".mjs")
     )
-  ).createRender({
-    root: config.vite.root,
-    vite,
-    compile: async (input: string) => {
-      return await compileMarkdown(input, config.compiler);
-    },
-  });
+  ).createRender();
   app.use(vite.middlewares);
   app.use(await createMiddlewares(vite, ctx));
   app.listen(3003, () => {
