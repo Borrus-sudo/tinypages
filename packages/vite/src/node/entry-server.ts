@@ -65,13 +65,8 @@ const render = async (payload: cascadeContext, ctx: ResolvedConfig) => {
       }
     } else {
       if (map.has(hash)) {
-        __comp__str = map
-          .get(hash)
-          .replace(/uid=\"(.*)\"/, (p) =>
-            p.startsWith('uid="') ? `uid="${uid}"` : p
-          );
-
-        if (__comp__str.includes("preact-error")) {
+        __comp__str = map.get(hash).replace(/uid=\"\d\"/, `uid="${uid}"`);
+        if (__comp__str.includes(" preact-error ")) {
           error = true;
         }
       } else {
