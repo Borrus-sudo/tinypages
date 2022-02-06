@@ -18,7 +18,7 @@ export function PluginHTML(): Plugin {
           for (let node of dom.childNodes) {
             if (node && node.nodeType === 3) {
               console.log("Text element yay!");
-              node._rawText = marked.parse(node._rawText);
+              node._rawText = marked.parseInline(node._rawText);
               console.log(node._rawText);
               continue;
             } else if (onlyText) {
