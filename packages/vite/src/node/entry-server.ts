@@ -31,8 +31,7 @@ const render = async (payload: cascadeContext, ctx: ResolvedConfig) => {
       component.componentName + ".jsx"
     );
 
-    let normalizedComponentPath = ctx.utils.normalize(componentPath);
-    ctx.bridge.sources.push(normalizedComponentPath);
+    ctx.bridge.sources.push(componentPath);
 
     const hash = hashIt.hash(component);
 
@@ -48,13 +47,10 @@ const render = async (payload: cascadeContext, ctx: ResolvedConfig) => {
       } else {
         __comp__str = `<div preact uid="${uid}"></div>`;
         map.set(hash, __comp__str);
-        if (hashComp.has(normalizedComponentPath)) {
-          hashComp.set(normalizedComponentPath, [
-            hash,
-            ...hashComp.get(normalizedComponentPath),
-          ]);
+        if (hashComp.has(componentPath)) {
+          hashComp.set(componentPath, [hash, ...hashComp.get(componentPath)]);
         } else {
-          hashComp.set(normalizedComponentPath, [hash]);
+          hashComp.set(componentPath, [hash]);
         }
 
         componentRegistration[uid] = {
@@ -107,13 +103,10 @@ const render = async (payload: cascadeContext, ctx: ResolvedConfig) => {
         }
 
         map.set(hash, __comp__str);
-        if (hashComp.has(normalizedComponentPath)) {
-          hashComp.set(normalizedComponentPath, [
-            hash,
-            ...hashComp.get(normalizedComponentPath),
-          ]);
+        if (hashComp.has(componentPath)) {
+          hashComp.set(componentPath, [hash, ...hashComp.get(componentPath)]);
         } else {
-          hashComp.set(normalizedComponentPath, [hash]);
+          hashComp.set(componentPath, [hash]);
         }
       }
 

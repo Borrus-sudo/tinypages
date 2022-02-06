@@ -44,7 +44,6 @@ type ResolvedConfig = {
       pageCtx: Record<string, string>
     ) => Promise<[string, Meta]>;
     invalidate: (file: string) => void;
-    normalize: (file: string) => string;
   }>;
 };
 

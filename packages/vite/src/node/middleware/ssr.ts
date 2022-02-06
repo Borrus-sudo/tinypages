@@ -1,5 +1,5 @@
 import { promises as fs } from "fs";
-import { ViteDevServer } from "vite";
+import { ViteDevServer, normalizePath } from "vite";
 import type { ResolvedConfig } from "../../types";
 import { fsRouter } from "../router/fs";
 import Helmet from "preact-helmet";
@@ -37,7 +37,9 @@ export default async function (
   const history: string[] = [];
   return async (req, res, next) => {
     try {
-      console.log(utils.logger.info(req.originalUrl, { timestamp: true }));
+      console.log(
+        utils.logger.info(normalizePath(req.originalUrl), { timestamp: true })
+      );
       const pageCtx = router(req.originalUrl);
       if (pageCtx.url === "404") {
         if (req.originalUrl !== "/404.md") res.redirect("/404.md");
@@ -64,12 +66,25 @@ export default async function (
         vite.watcher.add(pageCtx.url);
         watchedUrls.push(pageCtx.url);
       }
-      html = await vite.transformIndexHtml(pageCtx.url, html); // vite transformed html
+      const viteScriptTag = `<script type="module" src="/@vite/client"></script>`;
+      html = (await vite.transformIndexHtml(pageCtx.url, html)).replace(
+        viteScriptTag,
+        ""
+      ); // vite transformed html
       if (!vite.moduleGraph.fileToModulesMap.has(pageCtx.url)) {
         vite.moduleGraph.createFileOnlyEntry(pageCtx.url);
       }
       [html, meta] = await utils.render(html, meta, pageCtx);
       bridge.preservedScriptGlobal = meta.headTags[meta.headTags.length - 1];
+      meta.headTags.push(
+        `  
+      <script type="module">
+      import hydrate from "/@tinypages/client";
+      (async()=>{await hydrate();})();
+      </script>
+     `.trim(),
+        viteScriptTag
+      );
       html = appendPrelude(html, meta.headTags, meta.styles);
       res.status(200).set({ "Content-type": "text/html" }).end(html);
     } catch (err) {

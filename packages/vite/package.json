@@ -35,13 +35,18 @@
     "./client": {
       "require": "./out/client/entry-client.js",
       "import": "./out/client/entry-client.mjs"
+    },
+    "./server": {
+      "require": "./out/client/server.js",
+      "import": "./out/client/server.mjs"
     }
   },
   "dependencies": {
     "@tinypages/compiler": "^1.0.0",
+    "@unocss/vite": "^0.22.7",
     "cac": "^6.7.12",
     "express": "^4.17.2",
-    "million": "^1.4.3-1",
+    "million": "^1.4.2",
     "node-html-parser": "^5.2.0",
     "node-object-hash": "^2.3.10",
     "ohmyfetch": "^0.4.14",

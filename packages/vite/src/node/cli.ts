@@ -83,8 +83,9 @@ export function cli() {
         options: Vite.ServerOptions & GlobalCLIOptions
       ) => {
         try {
-          let entryPoint = "./server.js";
-          const { createDevServer } = require(entryPoint);
+          const { createDevServer } = require(require
+            .resolve("tinypages/server")
+            .replace(".js", ".mjs"));
           if (root.startsWith(".")) {
             root = join(process.cwd(), root);
           }

@@ -1,12 +1,7 @@
 import compileMarkdown from "@tinypages/compiler";
+import crypto from "crypto";
 import express from "express";
-import {
-  createLogger,
-  createServer,
-  mergeConfig,
-  normalizePath,
-  ViteDevServer,
-} from "vite";
+import { createLogger, createServer, mergeConfig, ViteDevServer } from "vite";
 import {
   Meta,
   RenderFunction,
@@ -15,7 +10,6 @@ import {
 } from "../types";
 import { createMiddlewares } from "./middleware";
 import { createPlugins } from "./plugins";
-import crypto from "crypto";
 
 export async function createDevServer(
   config: TinyPagesConfig,
@@ -67,9 +61,6 @@ export async function createDevServer(
       },
       invalidate(componentPath: string) {
         invalidateFunction(componentPath);
-      },
-      normalize(file: string) {
-        return normalizePath(file);
       },
     },
   };

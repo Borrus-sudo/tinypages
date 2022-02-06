@@ -14,11 +14,32 @@ async function replaceAsync(str, regex, asyncFn) {
 }
 export default function ({ bridge }: ResolvedConfig): Plugin {
   const reqCache: Map<string, string> = new Map();
+
   return {
     name: "vite-tinypages-ssrFetch",
     enforce: "pre",
+    async resolveId(id: string) {
+      if (id.startsWith("fetch:")) {
+        const url = id.split("fetch:")[1];
+        const res = await $fetch(url);
+        reqCache.set(url, res);
+        return id;
+      }
+    },
+    load(id: string) {
+      if (id.startsWith("fetch:")) {
+        const url = id.split("fetch:")[1];
+        return `export default ${JSON.stringify(reqCache.get(url))}`;
+      }
+    },
     async transform(code: string, id: string, options) {
-      if (!id.endsWith(".jsx") && !id.endsWith(".tsx")) return;
+      if (
+        !id.endsWith(".jsx") &&
+        !id.endsWith(".tsx") &&
+        !id.endsWith(".ts") &&
+        !id.endsWith(".js")
+      )
+        return;
       //Simply inject the pageCtx in ssr since in client it will be available globally
       if (options.ssr) {
         code = `const pageCtx=${JSON.stringify(bridge.pageCtx)}; \n` + code;
