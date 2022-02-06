@@ -37,7 +37,7 @@
     "node-icons": "^0.1.4",
     "param-case": "^3.0.4",
     "parse-key-value": "^1.0.0",
-    "proxy-hookified": "^1.1.4",
+    "proxy-hookified": "^1.1.5",
     "shiki": "^0.10.0"
   },
   "optionalDependencies": {

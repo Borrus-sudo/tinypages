@@ -97,7 +97,7 @@ type Plugin = {
   defineConfig?: (config: Config) => void;
   transform: (id: string, payload: string, meta?: Meta) => string | void;
   getReady?: () => Promise<void> | void;
-  tapArgs?: (id: string, args: any[]) => void;
+  tapArgs?: (id: string, args: any[]) => void | any[];
   postTransform?: (payload: string, meta?: Meta) => string | Promise<string>;
 };
 

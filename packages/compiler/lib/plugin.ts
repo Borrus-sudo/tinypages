@@ -13,7 +13,8 @@ export default async function createHandler(plugins: Plugin[], meta: Meta) {
     },
     methodArguments(info, args) {
       plugins.forEach((plugin) => {
-        if (plugin.tapArgs) plugin.tapArgs(info.propName, [...args]);
+        if (plugin.tapArgs)
+          args = plugin.tapArgs(info.propName, [...args]) || args;
       });
       return args;
     },

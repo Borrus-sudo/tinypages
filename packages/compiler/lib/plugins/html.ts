@@ -1,6 +1,7 @@
 import { parse } from "node-html-parser";
 import type { Config, Plugin } from "../types";
 import iconsRenderer from "./helpers/icons";
+import { marked } from "marked";
 const tags = require("html-tags");
 
 export function PluginHTML(): Plugin {
@@ -13,8 +14,16 @@ export function PluginHTML(): Plugin {
     transform(id: string, payload: string) {
       if (id === "html") {
         const dom = parse(payload);
-        const loop = (dom) => {
+        const loop = (dom, onlyText: boolean) => {
           for (let node of dom.childNodes) {
+            if (node && node.nodeType === 3) {
+              console.log("Text element yay!");
+              node._rawText = marked.parse(node._rawText);
+              console.log(node._rawText);
+              continue;
+            } else if (onlyText) {
+              continue;
+            }
             if (node && node.rawTagName) {
               const tagName = node.rawTagName.toLowerCase();
               if (
@@ -31,14 +40,16 @@ export function PluginHTML(): Plugin {
                 });
                 if (!!iconsSvg) {
                   node.replaceWith(iconsSvg);
+                } else {
+                  loop(node, true);
                 }
                 continue;
               }
-              loop(node);
+              loop(node, false);
             }
           }
         };
-        loop(dom);
+        loop(dom, false);
         return dom.toString();
       }
     },
