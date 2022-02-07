@@ -6,7 +6,7 @@ import { PluginCSS } from "./plugins/css";
 import { PluginHTML } from "./plugins/html";
 import { PluginText } from "./plugins/text";
 import type { Config, Meta, Plugin, UserConfig } from "./types";
-import { orderPlugins, postTransform } from "./utils";
+import { orderPlugins, postTransform, wrapObject } from "./utils";
 import { analyze } from "./revealComponents";
 
 export default async function compile(
