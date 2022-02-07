@@ -1,6 +1,6 @@
 # TinyPages
 
-Tiny pages is a sweet framework for spinning up a simple website!
+Tinypages is a vite based ssg, which uses markdown interpolated with preactjs components to help you build MPA websites tiny and fast!
 
 ## Getting started
  - Ensure you have NodeJS installed (Lastest version is preferable)
