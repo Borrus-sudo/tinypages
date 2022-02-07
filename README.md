@@ -9,10 +9,10 @@ Tiny pages is a sweet framework for spinning up a simple website!
  - `cd packages/compiler`
  - `yarn build`
  - `cd ../vite`
- - `cp -r ../../example/ .` Copy the examples folder into the vite folder
+ - `cp -r ../../example/ .` Copy the examples folder into the vite folder and rename it to demo
  - `yarn dev-build`
  - `cd demo`
- - `yarn dev-build`
+ - `node out/node/cli`
 
 ## Considerations...
 
