@@ -91,12 +91,14 @@ export default async function ({
           if (bridge.sources.includes(fileId)) {
             // invalidate the file and reload, so in the next reload, compileMarkdown cached values are used and cached ssr components
             // other than fileId are utilized
+            ctx.server.moduleGraph.invalidateModule(module);
             utils.invalidate(fileId);
             reload(fileId, ctx);
             break;
           } else {
             const res = isParentJSX(module, bridge);
             if (res[0]) {
+              ctx.server.moduleGraph.invalidateModule(module);
               utils.invalidate(res[1]);
               ctx.server.ws.send({
                 type: "custom",
