@@ -3,6 +3,7 @@ import type {
   Meta,
   UserConfig as TinypagesUserConfig,
 } from "@tinypages/compiler";
+import type { Server } from "connect";
 
 type cascadeContext = {
   html: string;
@@ -30,6 +31,10 @@ type Bridge = {
 type TinyPagesConfig = {
   compiler: TinypagesUserConfig;
   vite: ViteUserConfig;
+  middlewares: {
+    pre?: Server[];
+    post?: Server[];
+  };
 };
 
 type ResolvedConfig = {

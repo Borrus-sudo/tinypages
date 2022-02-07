@@ -6,7 +6,7 @@ import { presetCompilerConfig, presetViteConfig } from "./constants";
 export async function resolveConfig(
   cliViteConfig
 ): Promise<{ config: TinyPagesConfig; filePath: string }> {
-  let { config, sources } = await loadConfig<TinyPagesConfig>({
+  let { config, sources } = await loadConfig<Partial<TinyPagesConfig>>({
     sources: [
       {
         files: "tinypages.config",
@@ -19,12 +19,21 @@ export async function resolveConfig(
     config = {
       compiler: presetCompilerConfig,
       vite: mergeConfig(presetViteConfig, cliViteConfig),
+      middlewares: {
+        pre: [],
+        post: [],
+      },
     };
   } else {
+    if (!config.compiler) config.compiler = presetCompilerConfig;
+    if (!config.middlewares) config.middlewares = { pre: [], post: [] };
     config.vite = mergeConfig(
       presetViteConfig,
-      mergeConfig(config.vite, cliViteConfig)
+      mergeConfig(config.vite || {}, cliViteConfig)
     );
   }
-  return { config, filePath: sources[0] };
+  return { config, filePath: sources[0] } as {
+    config: TinyPagesConfig;
+    filePath: string;
+  };
 }

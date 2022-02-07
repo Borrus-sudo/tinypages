@@ -78,8 +78,14 @@ export async function createDevServer(
       require.resolve("tinypages/entry-server").replace(".js", ".mjs")
     )
   ).createRender();
+
+  if ((config.middlewares.pre?.length ?? -1) > 0)
+    app.use(config.middlewares.pre);
   app.use(vite.middlewares);
   app.use(await createMiddlewares(vite, ctx));
+  if ((config.middlewares.post?.length ?? -1) > 0)
+    app.use(config.middlewares.post);
+
   app.listen(3003, () => {
     console.log("http://localhost:3003");
   });
