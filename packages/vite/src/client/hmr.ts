@@ -1,4 +1,4 @@
-import { refresh } from "million/ssr";
+import { refresh } from "million/refresh";
 import { hydrate } from "./hydrate";
 
 export default function () {
@@ -11,7 +11,10 @@ export default function () {
         .split("<head>")[1]
         .split("<head/>")[0]
         .trim();
-      refresh(null, data.replace(document.head.innerHTML, ""));
+      refresh(
+        null,
+        `<body> ${data.split("<body>")[1].split("</body>")[0]} </body>`
+      );
     });
     import.meta.hot.on("reload:component", (componentName: string) => {
       Object.keys(window.globals).forEach((uid) =>

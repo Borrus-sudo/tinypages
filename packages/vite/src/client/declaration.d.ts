@@ -1,5 +1,4 @@
-declare module "tinypages";
-
+//@ts-ignore
 interface Window extends Window {
   globals: Record<
     string,

@@ -1,5 +1,6 @@
 import { hydrate } from "./hydrate";
 import hmr from "./hmr";
+import "uno.css";
 
 if (import.meta.env.DEV) {
   hmr();
