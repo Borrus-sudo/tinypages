@@ -458,10 +458,18 @@
     ts-node "^9"
     tslib "^2"
 
-"@iconify/json@^1.1.435":
-  version "1.1.461"
-  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-1.1.461.tgz#9e76f2339292e1a89855f93e497439afeb642f11"
-  integrity sha512-9Y41Tk9s3LDt4WI20XySNhNX6qTJ/WOBeE3O2iyoV9LJ6gFEDjp0uTPzfRU9NUx7D6VkvQ/htJEuRe9LmyMqUA==
+"@iconify/json@^2.0.34":
+  version "2.0.34"
+  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-2.0.34.tgz#bc8fb74001d547e40aa1cf83370e89ed1af36e52"
+  integrity sha512-cS6RkZEIMKIazihACTjLXlA2uPaTOFAScvq6jmn62DZPwjP5eo2SO7DlkIGoP1w+fvKXOKgWJtLStkJLXWG6Sw==
+  dependencies:
+    "@iconify/types" "^1.0.9"
+    pathe "^0.0.2"
+
+"@iconify/types@^1.0.9":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@iconify/types/-/types-1.0.12.tgz#839f1f784b7030b94482d51996570f4dbd7d6796"
+  integrity sha512-6er6wSGF3hgc1JEZqiGpg21CTCjHBYOUwqLmb2Idzkjiw6ogalGP0ZMLVutCzah+0WB4yP+Zd2oVPN8jvJ+Ftg==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -3935,6 +3943,11 @@ path-type@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
+
+pathe@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/pathe/-/pathe-0.0.2.tgz#d690780e578a8127e1d65828387609c153afc309"
+  integrity sha512-mmK20YtPb4yXHlaPuOD/uPIpRu7iIK45GA/GiRSlNpIdfWDG5aEQmFT1HHtBmJB+t/6DvFOtOsEipsPA8Bx2cw==
 
 pend@~1.2.0:
   version "1.2.0"
