@@ -22,7 +22,7 @@ You can use as low as NodeJS 14.... but just use the latest ;)
 ## Philosophy
 
 At first sight, tinypages looks like a Yet another JS framework, but tinypages is a meta framework which allows you to use a preactjs + markdown. 
-tinypages takes inspiration from astro and MDX. Like MDX it allows you to use md + components with some differences. But like MDX, we are faster to render on server or at build time as we attempt to convert most of the markdown to static html and compile the rest of components to string. MDX on the other hand converts stuff to jsx making the ssr/ssg process naturally slower.
+tinypages takes inspiration from astro and MDX. Like MDX it allows you to use md + components with some differences. But unlike MDX, we are faster to render on server or at build time as we attempt to convert most of the markdown to static html and compile the rest of components to string. MDX on the other hand converts stuff to jsx making the ssr/ssg process naturally slower.
 tinypages provides the standard stuff fs router, data fetching support, vite integration, snappy HMR etc. 
 At first go we might seem like astro but being opiniated with preactjs as the framework. That is actually true but what makes tinypages truly unique is its extensible markdown compiler which introduces a cool markdown flavour. It brings default support for icons,UnoCSS, mermaid graphs, latex, code highlighting etc. 
 
