@@ -37,8 +37,8 @@
       "import": "./out/client/entry-client.mjs"
     },
     "./server": {
-      "require": "./out/client/server.js",
-      "import": "./out/client/server.mjs"
+      "require": "./out/node/server.js",
+      "import": "./out/node/server.mjs"
     }
   },
   "dependencies": {
@@ -46,17 +46,21 @@
     "@unocss/vite": "^0.22.7",
     "cac": "^6.7.12",
     "express": "^4.17.2",
-    "million": "^1.4.2",
+    "million": "latest",
     "node-html-parser": "^5.2.0",
+    "node-icons": "^0.1.4",
     "node-object-hash": "^2.3.10",
     "ohmyfetch": "^0.4.14",
     "ora": "5.4.1",
     "picocolors": "^1.0.0",
-    "preact": "^10.5.15",
+    "preact": "latest",
     "preact-helmet": "^4.0.0-alpha-3",
-    "preact-render-to-string": "^5.1.19",
+    "preact-render-to-string": "latest",
     "unconfig": "^0.2.2",
-    "vite": "^2.7.2"
+    "vite": "latest"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/connect": "^3.4.35",
+    "@types/node": "^17.0.15"
+  }
 }

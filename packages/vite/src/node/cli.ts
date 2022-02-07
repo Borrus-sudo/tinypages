@@ -83,9 +83,9 @@ export function cli() {
         options: Vite.ServerOptions & GlobalCLIOptions
       ) => {
         try {
-          const { createDevServer } = require(require
-            .resolve("tinypages/server")
-            .replace(".js", ".mjs"));
+          const { createDevServer } = require(require.resolve(
+            "tinypages/server"
+          ));
           if (root.startsWith(".")) {
             root = join(process.cwd(), root);
           }
@@ -120,7 +120,7 @@ export function cli() {
   cli.parse();
 }
 
-export function defineConfig(config: TinyPagesConfig) {
+export function defineConfig(config: Partial<TinyPagesConfig>) {
   return config;
 }
 
