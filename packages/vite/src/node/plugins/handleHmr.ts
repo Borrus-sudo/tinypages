@@ -1,9 +1,9 @@
 import { promises as fs } from "fs";
 import hasher from "node-object-hash";
 import { normalize } from "path";
-import Helmet from "preact-helmet";
 import { ModuleNode, type Plugin } from "vite";
 import { Bridge, ResolvedConfig } from "../../types";
+import { appendPrelude } from "../utils";
 
 const hashIt = hasher({ sort: false, coerce: true });
 const isParentJSX = (node: ModuleNode, bridge: Bridge) => {
@@ -22,27 +22,6 @@ const isParentJSX = (node: ModuleNode, bridge: Bridge) => {
   }
   return [false, ""];
 };
-function appendPrelude(content: string, headTags, styles: string) {
-  const head = Helmet.rewind();
-  const html = String.raw`
-    <!doctype html>
-    <html ${head.htmlAttributes.toString()}>
-        <head>
-            ${head.title.toString()}
-            ${head.meta.toString()}
-            ${head.link.toString()}
-            ${headTags.join("\n")}
-        </head>
-        <style>${styles}</style>
-        <body>
-            <div id="app">
-                ${content}
-            </div>
-        </body>
-    </html>
-`;
-  return html;
-}
 
 export default async function ({
   bridge,

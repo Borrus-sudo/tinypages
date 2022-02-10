@@ -1,32 +1,11 @@
 import { promises as fs } from "fs";
-import { ViteDevServer, normalizePath } from "vite";
+import hasher from "node-object-hash";
+import { normalizePath, ViteDevServer } from "vite";
 import type { ResolvedConfig } from "../../types";
 import { fsRouter } from "../router/fs";
-import Helmet from "preact-helmet";
-import hasher from "node-object-hash";
+import { appendPrelude } from "../utils";
 
 const hashIt = hasher({ sort: false, coerce: true });
-function appendPrelude(content: string, headTags, styles: string) {
-  const head = Helmet.rewind();
-  const html = String.raw`
-    <!doctype html>
-    <html ${head.htmlAttributes.toString()}>
-        <head>
-            ${head.title.toString()}
-            ${head.meta.toString()}
-            ${head.link.toString()}
-            ${headTags.join("\n")}
-        </head>
-        <style>${styles}</style>
-        <body>
-            <div id="app">
-                ${content}
-            </div>
-        </body>
-    </html>
-`;
-  return html;
-}
 
 export default async function (
   vite: ViteDevServer,

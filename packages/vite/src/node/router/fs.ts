@@ -1,11 +1,13 @@
 import { existsSync } from "fs";
 import * as path from "path";
 import { loadPaths } from "./utils";
+import { createRouter } from "radix3";
 
 export async function fsRouter(root: string) {
   const fsPath = path.join(root, "pages");
   if (existsSync(fsPath)) {
-    const paths = await loadPaths(fsPath);
+    const router = createRouter();
+    await loadPaths(router, fsPath);
     return (url: string): Record<string, string> => {
       const normalizedUrl = url.endsWith("/")
         ? url + "index.md"
@@ -13,30 +15,9 @@ export async function fsRouter(root: string) {
         ? url + ".md"
         : url;
       url = path.join(fsPath, normalizedUrl);
-      const slicedUrl = url.split(path.sep);
-      if (paths.includes(url)) {
-        return {
-          url,
-        };
-      }
-      for (let possiblePath of paths) {
-        let idx = 0;
-        let score = 0;
-        let possiblePageCtx = {
-          url: possiblePath,
-        };
-        for (let segment of possiblePath.split(path.sep)) {
-          if (segment === slicedUrl[idx]) {
-            score++;
-          } else if (segment.startsWith("[") && segment.endsWith("]")) {
-            possiblePageCtx[segment.slice(1, -1)] = slicedUrl[idx];
-            score++;
-          }
-          idx++;
-        }
-        if (score === slicedUrl.length) {
-          return possiblePageCtx;
-        }
+      const result = router.lookup(url);
+      if (!!result) {
+        return { ...result.params };
       }
       return { url: "404" };
     };

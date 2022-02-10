@@ -12,8 +12,8 @@ export default function ({ config }: ResolvedConfig): Plugin {
       if (moduleMap.has(id)) {
         return id;
       }
-      if (id.startsWith("~/")) {
-        const parts = id.split("/");
+      if (id.startsWith("~icons/")) {
+        const parts = id.split("~icons/");
         const res = icons.getIconsSync(
           parts[1] + separator + parts[2],
           {},
@@ -40,7 +40,9 @@ export default function ({ config }: ResolvedConfig): Plugin {
             });
              return returnVal;
           }; 
-          const initial = "<svg "+ str(wrapObject(props));
+          const initial = "<svg "+ str(wrapObject(props||${JSON.stringify(
+            config.compiler.icons || {}
+          )}));
           return h("span", {
           dangerouslySetInnerHTML: { __html: ${
             "initial" + "+ `" + res.split("<svg")[1] + "`"

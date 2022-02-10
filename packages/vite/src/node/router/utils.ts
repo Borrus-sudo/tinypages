@@ -1,18 +1,15 @@
 import { promises as fs } from "fs";
 import * as path from "path";
 
-export async function loadPaths(dir: string): Promise<string[]> {
-  let result: string[] = [];
+export async function loadPaths(router, dir: string): Promise<void> {
   const dirents = await fs.readdir(dir, { withFileTypes: true });
   let folderLoadPaths = [];
   for (let dirent of dirents) {
     if (dirent.isDirectory()) {
-      folderLoadPaths.push(loadPaths(path.join(dir, dirent.name)));
+      folderLoadPaths.push(loadPaths(router, path.join(dir, dirent.name)));
     } else {
-      result.push(path.join(dir, dirent.name));
+      router.insert(path.join(dir, dirent.name), {});
     }
   }
-  const folderStructures = await Promise.all(folderLoadPaths);
-  result.push(...folderStructures.flat());
-  return result;
+  await Promise.all(folderLoadPaths);
 }

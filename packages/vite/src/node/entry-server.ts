@@ -28,7 +28,7 @@ const render = async (payload: cascadeContext, ctx: ResolvedConfig) => {
     let componentPath = join(
       payload.root,
       "./components",
-      component.componentName + ".jsx"
+      component.componentName.replace(/\./g, "/") + ".jsx"
     );
 
     ctx.bridge.sources.push(componentPath);
