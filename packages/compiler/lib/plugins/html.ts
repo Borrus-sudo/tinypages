@@ -14,7 +14,8 @@ export function PluginHTML(): Plugin {
     transform(id: string, payload: string, meta: Meta) {
       if (id === "html") {
         const dom = parse(payload);
-        if (dom.rawTagName.toLowerCase() === "head") {
+        //@ts-ignore
+        if (dom.childNodes?.[0]?.rawTagName.toLowerCase() === "head") {
           meta.headTags.push(dom.innerHTML);
           return "";
         }
