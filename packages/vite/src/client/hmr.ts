@@ -12,20 +12,19 @@ export default function () {
         .split("<head/>")[0]
         .trim();
       refresh(
-        null,
+        undefined,
         `<body> ${data.split("<body>")[1].split("</body>")[0]} </body>`
       );
     });
-    import.meta.hot.on("reload:component", (componentName: string) => {
-      Object.keys(window.globals).forEach((uid) =>
-        window.globals[uid].path === componentName
-          ? hydrate(
-              window.globals[uid],
-              document.querySelector(`[uid=${uid}]`),
-              uid
-            )
-          : 0
-      );
+    import.meta.hot.on("reload:component", (payloadPath: string) => {
+      Object.keys(window.globals).forEach((uid) => {
+        const component = window.globals[uid];
+        const element = document.querySelector(`[uid=${uid}]`);
+        // ignore attr is added to after the component hydrated and hence can be used as an indicator if the component
+        // is hydrated or not.
+        if (component.path === payloadPath && element.hasAttribute("ignore"))
+          hydrate(window.globals[uid], element, uid);
+      });
     });
   }
 }
