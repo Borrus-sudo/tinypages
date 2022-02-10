@@ -1,5 +1,5 @@
 import { parse } from "node-html-parser";
-import type { Config, Plugin } from "../types";
+import type { Config, Plugin, Meta } from "../types";
 import iconsRenderer from "./helpers/icons";
 import { marked } from "marked";
 const tags = require("html-tags");
@@ -11,9 +11,13 @@ export function PluginHTML(): Plugin {
     defineConfig(_config) {
       config = _config;
     },
-    transform(id: string, payload: string) {
+    transform(id: string, payload: string, meta: Meta) {
       if (id === "html") {
         const dom = parse(payload);
+        if (dom.rawTagName.toLowerCase() === "head") {
+          meta.headTags.push(dom.innerHTML);
+          return "";
+        }
         const loop = (dom, onlyText: boolean) => {
           for (let node of dom.childNodes) {
             if (node && node.nodeType === 3 && node._rawText.trim()) {
