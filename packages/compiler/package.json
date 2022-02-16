@@ -27,7 +27,7 @@
     }
   },
   "devDependencies": {
-    "@iconify/json": "^1.1.435",
+    "@iconify/json": "^2.1.2",
     "@types/katex": "^0.11.1",
     "@types/marked": "^4.0.1",
     "@types/node-emoji": "^1.8.1",
