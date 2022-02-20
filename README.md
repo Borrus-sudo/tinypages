@@ -15,7 +15,7 @@ tinypages is a Vite based SSG, using markdown interpolated with Preact component
 
 ## Philosophy 😇
 Tinypages might look like yet another JS framework at first, but it is a meta framework enabling you to leverage Preact + markdown. ⚛📝
-Taking inspiration from Astro and MDX, it allows the use of md + components with some differences. Theoretically, it should faster to render on the server or at build time than MDX as we attempt to convert most of the markdown to static HTML and compile the rest of the components to string. MDX on the other hand, converts stuff just making the SSR/SSG process naturally slower.
+Taking inspiration from Astro and MDX, it allows the use of md + components with some differences. Theoretically, it should faster to render on the server or at build time than MDX as we attempt to convert most of the markdown to static HTML and compile the rest of the components to string. MDX on the other hand, converts stuff into JSX first just making the SSR/SSG process naturally slower.
 
 ## Features 🤯
 - Filesystem based router 🌲
