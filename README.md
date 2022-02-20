@@ -1,8 +1,8 @@
-# tinypages 
+# tinypages
 tinypages is a Vite based SSG, using markdown interpolated with Preact components to build MPA websites tiny and fast!
 
 ## Getting started 👶
-- Tinypages requires Node.js version >=14 installed.
+- Requires Node.js version >=14 installed.
 - `npm i -g yarn` installs yarn if not already.
 - `yarn install` installs base packages.
 - `cd packages/compiler`
@@ -14,8 +14,8 @@ tinypages is a Vite based SSG, using markdown interpolated with Preact component
 - `node out/node/cli`
 
 ## Philosophy 😇
-Tinypages might look like yet another JS framework at first, but it is a meta framework enabling you to leverage Preact + markdown. ⚛📝
-Taking inspiration from Astro and MDX, it allows the use of md + components with some differences. Theoretically, it should faster to render on the server or at build time than MDX as we attempt to convert most of the markdown to static HTML and compile the rest of the components to string. MDX on the other hand, converts stuff into JSX first just making the SSR/SSG process naturally slower.
+While it might look like yet another JS framework at first, tinypages is a meta framework enabling you to leverage Preact + markdown. ⚛📝
+Taking inspiration from Astro and MDX, it allows the use of md + components with some differences. Theoretically, it should faster to render on the server or at build time than MDX as we attempt to convert most of the markdown to static HTML and compile the rest of the components to string. MDX on the other hand converts stuff into JSX first, making the SSR/SSG process naturally slower.
 
 ## Features 🤯
 - Filesystem based router 🌲
