@@ -1,3 +1,4 @@
+import * as fs from "fs";
 import { parse } from "node-html-parser";
 import hasher from "node-object-hash";
 import { join } from "path";
@@ -15,6 +16,9 @@ let hashComp: Map<string, string[]> = new Map();
 
 const hashIt = hasher({ sort: false, coerce: true });
 
+const resolve = (fsPath: string) =>
+  fsPath + (fs.existsSync(fsPath + ".jsx") ? ".jsx" : ".tsx");
+
 const render = async (payload: cascadeContext, ctx: ResolvedConfig) => {
   let componentRegistration: componentRegistration = {};
   let uid: number = 0;
@@ -25,12 +29,13 @@ const render = async (payload: cascadeContext, ctx: ResolvedConfig) => {
 
   for (let component of payload.meta.components) {
     error = false;
-    let componentPath = join(
-      payload.root,
-      "./components",
-      component.componentName.replace(/\./g, "/") + ".jsx"
+    let componentPath = resolve(
+      join(
+        payload.root,
+        "./components",
+        component.componentName.replace(/\./g, "/")
+      )
     );
-
     ctx.bridge.sources.push(componentPath);
 
     const hash = hashIt.hash(component);
@@ -74,9 +79,9 @@ const render = async (payload: cascadeContext, ctx: ResolvedConfig) => {
 
           if (pageProps) {
             // the client shall receive this as well because component.props is passed by reference to componentRegistration
-            component.props["ssrProps"] = await pageProps({
-              ...payload.pageCtx,
-            });
+            component.props["ssrProps"] = await pageProps(
+              JSON.parse(JSON.stringify(payload.pageCtx))
+            );
           }
           //children in the Vnode
           let __comp__slot__vnode =

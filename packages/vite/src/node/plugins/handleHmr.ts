@@ -1,9 +1,10 @@
 import { promises as fs } from "fs";
 import hasher from "node-object-hash";
 import { normalize } from "path";
-import { ModuleNode, type Plugin } from "vite";
+import { ModuleNode, ViteDevServer, type Plugin } from "vite";
 import { Bridge, ResolvedConfig } from "../../types";
 import { appendPrelude } from "../utils";
+import { refreshRouter } from "../router/fs";
 
 const hashIt = hasher({ sort: false, coerce: true });
 const isParentJSX = (node: ModuleNode, bridge: Bridge) => {
@@ -27,11 +28,11 @@ export default async function ({
   bridge,
   utils,
 }: ResolvedConfig): Promise<Plugin> {
-  const reload = (file, ctx) => {
-    utils.logger.info(`Page reload ${file}`, {
+  const reload = (file, server: ViteDevServer) => {
+    utils.logger.info(`Page reload: ${file}`, {
       timestamp: true,
     });
-    ctx.server.ws.send({
+    server.ws.send({
       type: "custom",
       event: "reload:page",
     });
@@ -39,11 +40,22 @@ export default async function ({
   return {
     name: "vite-tinypages-hmr",
     apply: "serve",
+    configureServer(server) {
+      server.watcher.addListener("change", async (_, filePath) => {
+        if (
+          typeof filePath === "string" &&
+          normalize(filePath) === utils.pageDir
+        ) {
+          await refreshRouter(utils.pageDir);
+          reload("change in /pages dir", server);
+        }
+      });
+    },
     async handleHotUpdate(ctx) {
       for (let module of ctx.modules) {
         const fileId = normalize(module.file);
         if (fileId === bridge.configFile) {
-          reload(fileId, ctx);
+          reload(fileId, ctx.server);
           break;
         } else if (fileId === bridge.currentUrl) {
           let [html, meta] = await utils.compile(
@@ -56,6 +68,9 @@ export default async function ({
             // rerender the new changes, this will be fast as the components are cached
             [html, meta] = await utils.render(html, meta, bridge.pageCtx);
             html = appendPrelude(html, meta.headTags, meta.styles);
+            utils.logger.info(`Page reload: ${fileId}`, {
+              timestamp: true,
+            });
             ctx.server.ws.send({
               type: "custom",
               event: "new:document",
@@ -63,7 +78,7 @@ export default async function ({
             });
           } else {
             // change in component signature, reload the file. Cached ssr components will still be used
-            reload(fileId, ctx);
+            reload(fileId, ctx.server);
             break;
           }
         } else {
@@ -72,7 +87,7 @@ export default async function ({
             // other than fileId are utilized
             ctx.server.moduleGraph.invalidateModule(module);
             utils.invalidate(fileId);
-            reload(fileId, ctx);
+            reload(fileId, ctx.server);
             break;
           } else {
             const res = isParentJSX(module, bridge);

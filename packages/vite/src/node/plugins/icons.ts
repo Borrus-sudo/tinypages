@@ -6,6 +6,9 @@ export default function ({ config }: ResolvedConfig): Plugin {
   const icons = Icons(config.compiler.icons);
   const separator = config.compiler.icons?.separator || ":";
   const moduleMap: Map<string, string> = new Map();
+  const stringifiedDefaults = JSON.stringify(
+    config.compiler.defaultIconsStyles || {}
+  );
   return {
     name: "vite-tinypages-icons",
     async resolveId(id: string) {
@@ -13,9 +16,9 @@ export default function ({ config }: ResolvedConfig): Plugin {
         return id;
       }
       if (id.startsWith("~icons/")) {
-        const parts = id.split("~icons/");
+        const parts = id.split("~icons/").slice(1)[0].split("/");
         const res = icons.getIconsSync(
-          parts[1] + separator + parts[2],
+          parts[0] + separator + parts[1],
           {},
           false
         );
@@ -40,9 +43,7 @@ export default function ({ config }: ResolvedConfig): Plugin {
             });
              return returnVal;
           }; 
-          const initial = "<svg "+ str(wrapObject(props||${JSON.stringify(
-            config.compiler.icons || {}
-          )}));
+          const initial = "<svg "+ str(wrapObject(props||${stringifiedDefaults}));
           return h("span", {
           dangerouslySetInnerHTML: { __html: ${
             "initial" + "+ `" + res.split("<svg")[1] + "`"

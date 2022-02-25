@@ -9,9 +9,9 @@ const hashIt = hasher({ sort: false, coerce: true });
 
 export default async function (
   vite: ViteDevServer,
-  { config, bridge, utils }: ResolvedConfig
+  { bridge, utils }: ResolvedConfig
 ) {
-  const router = await fsRouter(config.vite.root);
+  const router = await fsRouter(utils.pageDir);
   const watchedUrls = [];
   const history: string[] = [];
   return async (req, res, next) => {
@@ -41,6 +41,7 @@ export default async function (
       bridge.prevHash = hashIt.hash({ components: meta.components });
       bridge.currentUrl = pageCtx.url;
       bridge.pageCtx = pageCtx;
+      bridge.sources = [];
       if (!watchedUrls.includes(pageCtx.url)) {
         vite.watcher.add(pageCtx.url);
         watchedUrls.push(pageCtx.url);

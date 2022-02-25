@@ -1,10 +1,6 @@
 import { hydrate } from "./hydrate";
-import hmr from "./hmr";
+import "./hmr";
 import "uno.css";
-
-if (import.meta.env.DEV) {
-  hmr();
-}
 
 const lazyLoad = (target, component, uid) => {
   const io = new IntersectionObserver((entries, observer) => {
@@ -21,7 +17,7 @@ const lazyLoad = (target, component, uid) => {
 export default async function () {
   for (let element of document.querySelectorAll("[preact]")) {
     const uid = element.getAttribute("uid");
-    const component = window.globals[uid];
+    const component = globals[uid];
     if (component.props["client:idle"]) {
       requestIdleCallback(() => {
         delete component.props["client:idle"];
@@ -30,6 +26,8 @@ export default async function () {
     } else if (component.props["media:visible"]) {
       delete component.props["media:visible"];
       lazyLoad(element, component, uid);
+    } else {
+      hydrate(component, element, uid);
     }
   }
 }

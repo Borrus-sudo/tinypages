@@ -1,28 +1,46 @@
-import { existsSync } from "fs";
-import * as path from "path";
-import { loadPaths } from "./utils";
+import { existsSync, promises as fs } from "fs";
 import { createRouter } from "radix3";
+import type { PageCtx } from "../../types";
+import { generateTypes, loadPaths } from "./utils";
 
-export async function fsRouter(root: string) {
-  const fsPath = path.join(root, "pages");
-  if (existsSync(fsPath)) {
-    const router = createRouter();
-    await loadPaths(router, fsPath);
-    return (url: string): Record<string, string> => {
+let router;
+const typesPath = require.resolve("tinypages/types");
+
+const boilerplate = async (pagesDir: string) => {
+  router = createRouter();
+  const [addType, returnType] = generateTypes();
+  await loadPaths(pagesDir, router, pagesDir, addType);
+  const newTypes = returnType();
+  if (!!newTypes) {
+    const prevTypes = await fs.readFile(typesPath, {
+      encoding: "utf-8",
+    });
+    const regex = /\/\*start\*\/[\s\S]*\/\*end\*\//;
+    await fs.writeFile(typesPath, prevTypes.replace(regex, newTypes));
+  }
+};
+
+export async function fsRouter(pagesDir: string) {
+  if (existsSync(pagesDir)) {
+    await boilerplate(pagesDir);
+    return (url: string): PageCtx => {
       const normalizedUrl = url.endsWith("/")
         ? url + "index.md"
         : !/\.(.*?)$/.test(url)
         ? url + ".md"
         : url;
-      url = path.join(fsPath, normalizedUrl);
-      const result = router.lookup(url);
+      const result = router.lookup(normalizedUrl);
       if (!!result) {
-        return { ...result.params };
+        return { url: result.payload, params: result.params };
       }
       return { url: "404" };
     };
   }
-  return (): Record<string, string> => ({
+  return (): PageCtx => ({
     url: "404",
   });
+}
+
+export async function refreshRouter(pagesDir: string) {
+  await boilerplate(pagesDir);
 }

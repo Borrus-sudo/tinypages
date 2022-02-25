@@ -38,6 +38,6 @@ export async function hydrate(
   if (import.meta.env.DEV) {
     element.setAttribute("preact", "");
     element.setAttribute("uid", uid);
-    element.setAttribute("ignore", "");
+    element.setAttribute("hydrated", "");
   }
 }

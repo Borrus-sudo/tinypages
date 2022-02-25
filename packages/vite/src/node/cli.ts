@@ -4,6 +4,7 @@ import * as Colors from "picocolors";
 import * as Vite from "vite";
 import { TinyPagesConfig } from "../types";
 import { resolveConfig } from "./resolveConfig";
+import { createDevServer } from "./server";
 
 interface GlobalCLIOptions {
   "--"?: string[];
@@ -83,9 +84,6 @@ export function cli() {
         options: Vite.ServerOptions & GlobalCLIOptions
       ) => {
         try {
-          const { createDevServer } = require(require.resolve(
-            "tinypages/server"
-          ));
           if (root.startsWith(".")) {
             root = join(process.cwd(), root);
           }
@@ -123,5 +121,3 @@ export function cli() {
 export function defineConfig(config: Partial<TinyPagesConfig>) {
   return config;
 }
-
-cli();

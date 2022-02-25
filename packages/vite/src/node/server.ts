@@ -1,9 +1,11 @@
 import compileMarkdown from "@tinypages/compiler";
 import crypto from "crypto";
 import express from "express";
+import { join } from "path";
 import { createLogger, createServer, mergeConfig, ViteDevServer } from "vite";
 import {
   Meta,
+  PageCtx,
   RenderFunction,
   ResolvedConfig,
   TinyPagesConfig,
@@ -16,7 +18,7 @@ export async function createDevServer(
   source: string
 ): Promise<ViteDevServer> {
   let renderFunction: RenderFunction;
-  let invalidateFunction: (param: string) => void;
+  let invalidate: (param: string) => void;
   let cache: Map<string, [string, Meta]> = new Map();
   let md5;
 
@@ -25,7 +27,7 @@ export async function createDevServer(
     bridge: {
       currentUrl: "",
       preservedScriptGlobal: "",
-      pageCtx: {},
+      pageCtx: { url: "" },
       sources: [],
       prevHash: "",
       configFile: source || "",
@@ -44,7 +46,7 @@ export async function createDevServer(
         return result;
       },
       logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
-      async render(html: string, meta: Meta, pageCtx: Record<string, string>) {
+      async render(html: string, meta: Meta, pageCtx: PageCtx) {
         return await renderFunction(
           {
             root: config.vite.root,
@@ -59,21 +61,25 @@ export async function createDevServer(
           ctx
         );
       },
-      invalidate(componentPath: string) {
-        invalidateFunction(componentPath);
+      invalidate(comp: string) {
+        invalidate(comp);
       },
+      pageDir: join(config.vite.root, "pages"),
     },
   };
+
   const plugins = await createPlugins(ctx);
   //@ts-ignore
   ctx.config.vite = mergeConfig(ctx.config.vite, { plugins });
 
   const app = express();
-  const vite = await createServer(config.vite);
+  const vite = await createServer(ctx.config.vite);
+
+  vite.watcher.add(ctx.utils.pageDir);
 
   if (source) vite.moduleGraph.createFileOnlyEntry(source);
 
-  [renderFunction, invalidateFunction] = (
+  [renderFunction, invalidate] = (
     await vite.ssrLoadModule(
       require.resolve("tinypages/entry-server").replace(".js", ".mjs")
     )
@@ -81,8 +87,10 @@ export async function createDevServer(
 
   if ((config.middlewares.pre?.length ?? -1) > 0)
     app.use(config.middlewares.pre);
+
   app.use(vite.middlewares);
   app.use(await createMiddlewares(vite, ctx));
+
   if ((config.middlewares.post?.length ?? -1) > 0)
     app.use(config.middlewares.post);
 

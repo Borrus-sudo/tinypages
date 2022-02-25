@@ -4,7 +4,7 @@ export function appendPrelude(content: string, headTags, styles: string) {
   const head = Helmet.rewind();
   const html = String.raw`
       <!doctype html>
-      <html ${head.htmlAttributes.toString()}>
+      <html${head.htmlAttributes.toString()}>
           <head>
               ${head.title.toString()}
               ${head.meta.toString()}

@@ -42,7 +42,6 @@ export const presetViteConfig = {
       "preact/hooks",
       "preact/compat",
       "million",
-      "million/refresh",
     ],
   },
   ssr: {

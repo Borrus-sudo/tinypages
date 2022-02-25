@@ -1,19 +1,18 @@
 {
   "name": "tinypages",
-  "private": "true",
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "build": "tsup-node",
-    "dev": "tsup-node --watch src",
-    "dev-build": "tsup-node --outDir ./demo/out&&yarn build"
+    "dev": "tsup-node --watch src"
   },
   "main": "out/index.js",
   "module": "out/index.mjs",
   "types": "out/index.d.ts",
   "files": [
     "out",
-    "bin"
+    "bin",
+    "types"
   ],
   "bin": {
     "tinypages": "./bin/tinypage.js"
@@ -39,6 +38,10 @@
     "./server": {
       "require": "./out/node/server.js",
       "import": "./out/node/server.mjs"
+    },
+    "./types": {
+      "require": "./types/dynamicTypes.d.ts",
+      "import": "./types/dynamicTypes.d.ts"
     }
   },
   "dependencies": {
@@ -46,7 +49,8 @@
     "@unocss/vite": "^0.22.7",
     "cac": "^6.7.12",
     "express": "^4.17.2",
-    "million": "latest",
+    "micromorph": "^0.0.3",
+    "million": "^1.4.3",
     "node-html-parser": "^5.2.0",
     "node-icons": "^0.1.4",
     "node-object-hash": "^2.3.10",
@@ -58,7 +62,7 @@
     "preact-render-to-string": "latest",
     "radix3": "^0.1.0",
     "unconfig": "^0.2.2",
-    "vite": "latest"
+    "vite": "^2.8.4"
   },
   "devDependencies": {
     "@types/connect": "^3.4.35",

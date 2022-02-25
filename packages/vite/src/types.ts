@@ -5,11 +5,13 @@ import type {
 } from "@tinypages/compiler";
 import type { Server } from "connect";
 
+type PageCtx = { url: string; params?: Record<string, string> };
+
 type cascadeContext = {
   html: string;
   meta: Meta;
   root: string;
-  pageCtx: Record<string, string>;
+  pageCtx: PageCtx;
   vite: ViteDevServer;
   compile: Function;
 };
@@ -22,7 +24,7 @@ type RenderFunction = (
 type Bridge = {
   currentUrl: string;
   preservedScriptGlobal: string;
-  pageCtx: Record<string, string>;
+  pageCtx: PageCtx;
   sources: string[];
   prevHash: string;
   configFile: Readonly<string>;
@@ -46,14 +48,16 @@ type ResolvedConfig = {
     render: (
       html: string,
       meta: Meta,
-      pageCtx: Record<string, string>
+      pageCtx: PageCtx
     ) => Promise<[string, Meta]>;
     invalidate: (file: string) => void;
+    pageDir: string;
   }>;
 };
 
 export {
   cascadeContext,
+  PageCtx,
   Meta,
   Bridge,
   TinyPagesConfig,

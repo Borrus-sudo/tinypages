@@ -10,8 +10,10 @@ export async function createMiddlewares(
   ctx: ResolvedConfig
 ) {
   const router = express.Router();
+
   router.use(resolveClientMiddleware(vite));
   router.use(await ssrMiddleware(vite, ctx));
   router.use(errorMiddleware(ctx));
+
   return router;
 }

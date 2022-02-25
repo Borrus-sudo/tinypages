@@ -7,7 +7,6 @@ const config: Options = {
   entry: [
     "src/node/cli.ts",
     "src/node/entry-server.ts",
-    "src/node/server.ts",
     "src/client/entry-client.ts",
   ],
   clean: true,
