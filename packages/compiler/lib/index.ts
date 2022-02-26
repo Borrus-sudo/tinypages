@@ -1,12 +1,12 @@
 import { marked } from "marked";
 import Spy from "proxy-hookified";
+import type { Config, Head, Meta, Plugin, UserConfig } from "../types/types";
 import useHandler from "./plugin";
 import { PluginCode } from "./plugins/code";
 import { PluginCSS } from "./plugins/css";
 import { PluginHTML } from "./plugins/html";
 import { PluginText } from "./plugins/text";
 import { analyze } from "./revealComponents";
-import type { Config, Head, Meta, Plugin, UserConfig } from "../types/types";
 import { orderPlugins, postTransform } from "./utils";
 
 export default async function compile(
@@ -19,6 +19,17 @@ export default async function compile(
       styles: "",
       components: [],
       headTags: UserConfig.headTags || [],
+      head: {
+        base: {},
+        htmlAttributes: {},
+        link: [],
+        meta: [],
+        noscript: [],
+        script: [],
+        style: [],
+        title: "",
+        titleAttributes: {},
+      },
       grayMatter: "",
     },
   });

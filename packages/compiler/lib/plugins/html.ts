@@ -16,9 +16,8 @@ export function PluginHTML(): Plugin {
       if (id === "html") {
         const dom = parse(payload);
         if (dom?.childNodes[0].rawTagName.toLowerCase() === "head") {
-          meta.headTags.push(dom.childNodes[0].innerHTML);
           for (let node of dom.childNodes[0].childNodes) {
-            switch (node.rawTagName.toLowerCase()) {
+            switch (node?.rawTagName?.toLowerCase()) {
               case "base":
                 meta.head.base = { ...node.attrs };
                 break;
