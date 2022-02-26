@@ -1,5 +1,5 @@
 import * as shiki from "shiki";
-import type { Config, Plugin } from "../types";
+import type { Config, Plugin } from "../../types/types";
 import katexRenderer from "./helpers/katex";
 const parse = require("parse-key-value");
 

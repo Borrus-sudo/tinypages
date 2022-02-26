@@ -1,5 +1,5 @@
 import { parse } from "node-html-parser";
-import type { Config, Plugin } from "../types";
+import type { Config, Plugin } from "../../types/types";
 
 export function PluginCSS(): Plugin {
   let lastText = false,

@@ -1,4 +1,4 @@
-import type { Meta, Plugin } from "./types";
+import type { Meta, Plugin } from "../types/types";
 
 export default async function createHandler(plugins: Plugin[], meta: Meta) {
   await Promise.all(

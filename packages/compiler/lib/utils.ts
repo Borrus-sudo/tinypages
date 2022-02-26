@@ -1,4 +1,4 @@
-import type { Meta, Plugin } from "./types";
+import type { Meta, Plugin } from "../types/types";
 
 export function wrapObject(styles: Record<string, string>) {
   Object.keys(styles).forEach((key) => {

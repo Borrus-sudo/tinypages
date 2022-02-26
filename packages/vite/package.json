@@ -11,8 +11,7 @@
   "types": "out/index.d.ts",
   "files": [
     "out",
-    "bin",
-    "types"
+    "bin"
   ],
   "bin": {
     "tinypages": "./bin/tinypage.js"
@@ -40,8 +39,9 @@
       "import": "./out/node/server.mjs"
     },
     "./types": {
-      "require": "./types/dynamicTypes.d.ts",
-      "import": "./types/dynamicTypes.d.ts"
+      "require": "./out/dynamicTypes.d.ts",
+      "import": "./out/dynamicTypes.d.ts",
+      "types": "./out/dynamicTypes.d.ts"
     }
   },
   "dependencies": {

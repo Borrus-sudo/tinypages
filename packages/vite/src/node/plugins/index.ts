@@ -1,18 +1,19 @@
-import type { ResolvedConfig } from "../../types";
-import hmr from "./handleHmr";
-import ssrFetch from "./ssrFetch";
-import unocss from "@unocss/vite";
+import UnoCSSPlugin from "@unocss/vite";
+import { useContext } from "../createContext";
 import IconPlugin from "./icons";
+import HmrPlugin from "./jsxHmr";
+import DataFetchPlugin from "./ssrFetch";
 
-export async function createPlugins(ctx: ResolvedConfig) {
+export async function createPlugins() {
+  const { config } = useContext();
   return [
-    unocss(<{}>{
+    UnoCSSPlugin(<{}>{
       inspector: true,
       mode: "dist-chunk",
-      ...(ctx.config.compiler.unocss || {}),
+      ...(config.compiler.unocss || {}),
     }),
-    IconPlugin(ctx),
-    ssrFetch(ctx),
-    await hmr(ctx),
+    IconPlugin(),
+    DataFetchPlugin(),
+    await HmrPlugin(),
   ];
 }

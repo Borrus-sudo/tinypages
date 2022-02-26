@@ -11,7 +11,8 @@
   "module": "out/index.mjs",
   "types": "out/index.d.ts",
   "files": [
-    "out"
+    "out",
+    "types"
   ],
   "exports": {
     ".": {
@@ -23,6 +24,11 @@
       "require": "./out/wrapObject.js",
       "import": "./out/wrapObject.mjs",
       "types": "./out/wrapObject.d.ts"
+    },
+    "./types": {
+      "require": "./types/types.d.ts",
+      "import": "./types/types.d.ts",
+      "types": "./types/types.d.ts"
     }
   },
   "devDependencies": {

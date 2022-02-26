@@ -1,5 +1,6 @@
+//@ts-nocheck
 import { parse } from "node-html-parser";
-import type { Config, Plugin, Meta } from "../types";
+import type { Config, Plugin, Meta } from "../../types/types";
 import iconsRenderer from "./helpers/icons";
 import { marked } from "marked";
 const tags = require("html-tags");
@@ -14,10 +15,40 @@ export function PluginHTML(): Plugin {
     transform(id: string, payload: string, meta: Meta) {
       if (id === "html") {
         const dom = parse(payload);
-        //@ts-ignore
-        if (dom.childNodes?.[0]?.rawTagName.toLowerCase() === "head") {
-          //@ts-ignore
+        if (dom?.childNodes[0].rawTagName.toLowerCase() === "head") {
           meta.headTags.push(dom.childNodes[0].innerHTML);
+          for (let node of dom.childNodes[0].childNodes) {
+            switch (node.rawTagName.toLowerCase()) {
+              case "base":
+                meta.head.base = { ...node.attrs };
+                break;
+              case "link":
+                meta.head.link.push({ ...node.attrs });
+                break;
+              case "meta":
+                meta.head.meta.push({ ...node.attrs });
+                break;
+              case "noscript":
+                meta.head.noscript.push({ innerHTML: node.innerHTML });
+                break;
+              case "script":
+                meta.head.script.push(
+                  node.attrs["src"]
+                    ? { ...node.attrs }
+                    : { type: node.attrs["type"], innerHTML: node.innerHTML }
+                );
+                break;
+              case "style":
+                meta.head.style.push({
+                  type: node.attrs["type"],
+                  cssText: node.innerHTML,
+                });
+              case "title":
+                meta.head.title = node.innerText;
+                meta.head.titleAttributes = node.attrs;
+                break;
+            }
+          }
           return "";
         }
         const loop = (dom, onlyText: boolean) => {

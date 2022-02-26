@@ -1,6 +1,6 @@
 import Icons from "node-icons";
 import { paramCase } from "param-case";
-import type { Config } from "../../types";
+import type { Config } from "../../../types/types";
 import { wrapObject } from "../../utils";
 
 let icons;

@@ -4,12 +4,8 @@ import hasher from "node-object-hash";
 import { join } from "path";
 import { h } from "preact";
 import renderToString from "preact-render-to-string";
-import type { cascadeContext, ResolvedConfig } from "../types";
-
-type componentRegistration = Record<
-  string,
-  { path: string; props: Record<string, string>; error: boolean }
->;
+import type { ViteDevServer } from "vite";
+import type { ResolvedConfig, ComponentRegistration } from "../types";
 
 let map: Map<string, string> = new Map();
 let hashComp: Map<string, string[]> = new Map();
@@ -19,24 +15,26 @@ const hashIt = hasher({ sort: false, coerce: true });
 const resolve = (fsPath: string) =>
   fsPath + (fs.existsSync(fsPath + ".jsx") ? ".jsx" : ".tsx");
 
-const render = async (payload: cascadeContext, ctx: ResolvedConfig) => {
-  let componentRegistration: componentRegistration = {};
+const render = async (
+  html: string,
+  vite: ViteDevServer,
+  ctx: ResolvedConfig
+) => {
+  let componentRegistration: ComponentRegistration = {};
   let uid: number = 0;
   let __comp__str: string;
   let error = false;
-
-  ctx.bridge.sources = [];
-
-  for (let component of payload.meta.components) {
+  ctx.page.sources = [];
+  for (let component of ctx.page.meta.components) {
     error = false;
     let componentPath = resolve(
       join(
-        payload.root,
+        ctx.config.vite.root,
         "./components",
         component.componentName.replace(/\./g, "/")
       )
     );
-    ctx.bridge.sources.push(componentPath);
+    ctx.page.sources.push(componentPath);
 
     const hash = hashIt.hash(component);
 
@@ -73,14 +71,14 @@ const render = async (payload: cascadeContext, ctx: ResolvedConfig) => {
       } else {
         let __comp__html;
         try {
-          const __module__ = await payload.vite.ssrLoadModule(componentPath);
+          const __module__ = await vite.ssrLoadModule(componentPath);
           const __comp__ = __module__.default;
           const pageProps = __module__.pageProps;
 
           if (pageProps) {
             // the client shall receive this as well because component.props is passed by reference to componentRegistration
             component.props["ssrProps"] = await pageProps(
-              JSON.parse(JSON.stringify(payload.pageCtx))
+              JSON.parse(JSON.stringify(ctx.page.pageCtx))
             );
           }
           //children in the Vnode
@@ -124,17 +122,11 @@ const render = async (payload: cascadeContext, ctx: ResolvedConfig) => {
         };
       }
     }
-    payload.html = payload.html.replace(
-      component.componentLiteral,
-      __comp__str
-    );
+    html = html.replace(component.componentLiteral, __comp__str);
     uid++;
   }
-  const scriptTag = `<script> window.globals= ${JSON.stringify(
-    componentRegistration
-  )}; window.pageCtx=${JSON.stringify(payload.pageCtx)}; </script>`;
-  payload.meta.headTags.push(scriptTag);
-  return [payload.html, payload.meta];
+  ctx.page.global = componentRegistration;
+  return html;
 };
 
 const createRender = () => {

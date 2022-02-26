@@ -1,18 +1,11 @@
 import { promises as fs } from "fs";
-import hasher from "node-object-hash";
 import { normalizePath, ViteDevServer } from "vite";
-import type { ResolvedConfig } from "../../types";
+import { useContext } from "../createContext";
 import { fsRouter } from "../router/fs";
-import { appendPrelude } from "../utils";
 
-const hashIt = hasher({ sort: false, coerce: true });
-
-export default async function (
-  vite: ViteDevServer,
-  { bridge, utils }: ResolvedConfig
-) {
+export default async function (vite: ViteDevServer) {
+  const { page, utils } = useContext();
   const router = await fsRouter(utils.pageDir);
-  const watchedUrls = [];
   const history: string[] = [];
   return async (req, res, next) => {
     try {
@@ -36,36 +29,10 @@ export default async function (
       ) {
         return;
       }
+      page.currentUrl = pageCtx.url;
+      page.pageCtx = pageCtx;
       const markdown = await fs.readFile(pageCtx.url, "utf-8");
-      let [html, meta] = await utils.compile(markdown); // convert tinypages styled markdown to html
-      bridge.prevHash = hashIt.hash({ components: meta.components });
-      bridge.currentUrl = pageCtx.url;
-      bridge.pageCtx = pageCtx;
-      bridge.sources = [];
-      if (!watchedUrls.includes(pageCtx.url)) {
-        vite.watcher.add(pageCtx.url);
-        watchedUrls.push(pageCtx.url);
-      }
-      const viteScriptTag = `<script type="module" src="/@vite/client"></script>`;
-      html = (await vite.transformIndexHtml(pageCtx.url, html)).replace(
-        viteScriptTag,
-        ""
-      ); // vite transformed html
-      if (!vite.moduleGraph.fileToModulesMap.has(pageCtx.url)) {
-        vite.moduleGraph.createFileOnlyEntry(pageCtx.url);
-      }
-      [html, meta] = await utils.render(html, meta, pageCtx);
-      bridge.preservedScriptGlobal = meta.headTags[meta.headTags.length - 1];
-      meta.headTags.push(
-        `  
-      <script type="module">
-      import hydrate from "/@tinypages/client";
-      (async()=>{await hydrate();})();
-      </script>
-     `.trim(),
-        viteScriptTag
-      );
-      html = appendPrelude(html, meta.headTags, meta.styles);
+      const html = await vite.transformIndexHtml(pageCtx.url, markdown); // vite transformed html
       res.status(200).set({ "Content-type": "text/html" }).end(html);
     } catch (err) {
       vite.ssrFixStacktrace(err);

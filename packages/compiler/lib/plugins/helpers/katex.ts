@@ -1,4 +1,4 @@
-import type { Config } from "../../types";
+import type { Config } from "../../../types/types";
 import * as katex from "katex";
 
 export default function (

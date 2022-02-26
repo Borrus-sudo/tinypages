@@ -1,7 +1,7 @@
 import { $fetch } from "ohmyfetch";
 import ora from "ora";
 import type { Plugin } from "vite";
-import type { ResolvedConfig } from "../../types";
+import { useContext } from "../createContext";
 
 async function replaceAsync(str, regex, asyncFn) {
   const promises = [];
@@ -12,7 +12,8 @@ async function replaceAsync(str, regex, asyncFn) {
   const data = await Promise.all(promises);
   return str.replace(regex, () => data.shift());
 }
-export default function ({ bridge }: ResolvedConfig): Plugin {
+export default function (): Plugin {
+  const { page } = useContext();
   const reqCache: Map<string, string> = new Map();
 
   return {
@@ -42,7 +43,7 @@ export default function ({ bridge }: ResolvedConfig): Plugin {
         return;
       //Simply inject the pageCtx in ssr since in client it will be available globally
       if (options.ssr) {
-        code = `const pageCtx=${JSON.stringify(bridge.pageCtx)}; \n` + code;
+        code = `const pageCtx=${JSON.stringify(page.pageCtx)}; \n` + code;
       }
       return await replaceAsync(
         code,

@@ -155,13 +155,13 @@ if (import.meta.hot) {
   });
 
   import.meta.hot.on("reload:component", (payloadPath: string) => {
-    Object.keys(globals).forEach((uid) => {
-      const component = globals[uid];
-      const element = document.querySelector(`[uid=${uid}]`);
-      // ignore attr is added to after the component hydrated and hence can be used as an indicator if the component
-      // is hydrated or not.
-      if (component.path === payloadPath && element.hasAttribute("hydrated"))
-        hydrate(globals[uid], element, uid);
-    });
+    // Object.keys(globals).forEach((uid) => {
+    //   const component = globals[uid];
+    //   const element = document.querySelector(`[uid=${uid}]`);
+    //   // ignore attr is added to after the component hydrated and hence can be used as an indicator if the component
+    //   // is hydrated or not.
+    //   if (component.path === payloadPath && element.hasAttribute("hydrated"))
+    //     hydrate(globals[uid], element, uid);
+    // });
   });
 }

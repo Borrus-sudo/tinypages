@@ -10,7 +10,9 @@ const config: Options = {
     "src/client/entry-client.ts",
   ],
   clean: true,
-  dts: false,
+  dts: {
+    entry: ["types/dynamicTypes.ts"],
+  },
   outDir: "./out",
   minify: false,
 };

@@ -5,9 +5,9 @@ import { PluginCode } from "./plugins/code";
 import { PluginCSS } from "./plugins/css";
 import { PluginHTML } from "./plugins/html";
 import { PluginText } from "./plugins/text";
-import type { Config, Meta, Plugin, UserConfig } from "./types";
-import { orderPlugins, postTransform, wrapObject } from "./utils";
 import { analyze } from "./revealComponents";
+import type { Config, Head, Meta, Plugin, UserConfig } from "../types/types";
+import { orderPlugins, postTransform } from "./utils";
 
 export default async function compile(
   input: string,
@@ -49,4 +49,4 @@ export default async function compile(
   ];
 }
 
-export type { UserConfig, Meta, Plugin };
+export type { UserConfig, Meta, Plugin, Head };

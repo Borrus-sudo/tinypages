@@ -1,8 +1,9 @@
-import type { Plugin } from "vite";
-import type { ResolvedConfig } from "../../types";
 import Icons from "node-icons";
+import type { Plugin } from "vite";
+import { useContext } from "../createContext";
 
-export default function ({ config }: ResolvedConfig): Plugin {
+export default function (): Plugin {
+  const { config } = useContext();
   const icons = Icons(config.compiler.icons);
   const separator = config.compiler.icons?.separator || ":";
   const moduleMap: Map<string, string> = new Map();

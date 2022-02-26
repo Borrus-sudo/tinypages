@@ -1,4 +1,4 @@
-import type { Config, Plugin } from "../types";
+import type { Config, Plugin } from "../../types/types";
 
 export function PluginI18n(): Plugin {
   let config: Config;

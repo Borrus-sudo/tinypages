@@ -12,8 +12,8 @@ export async function createMiddlewares(
   const router = express.Router();
 
   router.use(resolveClientMiddleware(vite));
-  router.use(await ssrMiddleware(vite, ctx));
-  router.use(errorMiddleware(ctx));
+  router.use(await ssrMiddleware(vite));
+  router.use(errorMiddleware());
 
   return router;
 }

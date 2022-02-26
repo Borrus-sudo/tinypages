@@ -1,21 +1,19 @@
-import { h, render } from "preact";
+import { ComponentFactory, h, render } from "preact";
 
 export async function hydrate(
-  component: { path: string; props: Record<string, string>; error: boolean },
+  component: {
+    props: Record<string, string>;
+    error: boolean;
+    factoryFunction: ComponentFactory;
+  },
   element: Element,
   uid: string
 ) {
-  if (import.meta.env.DEV) {
-    component.path = "/HIJACK_IMPORT" + component.path;
-    if (component.error) {
-      return;
-    }
-  }
   let html = "";
   let innerSlot;
   const parent = element.parentElement;
   try {
-    const __comp__ = (await import(/* @vite-ignore */ component.path)).default;
+    const __comp__ = component.factoryFunction;
     html = element.getElementsByTagName("tinypages-fragment")?.[0]?.innerHTML;
     innerSlot = html
       ? h("div", {

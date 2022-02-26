@@ -1,5 +1,5 @@
 import * as emoji from "node-emoji";
-import type { Config, Plugin } from "../types";
+import type { Config, Plugin } from "../../types/types";
 import iconsRenderer from "./helpers/icons";
 
 export function PluginText(): Plugin {

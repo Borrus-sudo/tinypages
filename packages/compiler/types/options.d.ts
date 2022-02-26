@@ -12,14 +12,14 @@ type TrustContext = {
   protocol: string;
 };
 
-type IconsConfig = {
+interface IconsConfig {
   installPkg: boolean;
   alias: Map<string, string>;
   prefix: string;
   separator: string;
-};
+}
 
-type MarkedConfig = {
+interface MarkedConfig {
   baseUrl?: string;
   breaks?: boolean;
   gfm?: boolean;
@@ -33,16 +33,16 @@ type MarkedConfig = {
   smartLists?: boolean;
   smartypants?: boolean;
   xhtml?: boolean;
-};
+}
 
-type ShikiConfig = {
+interface ShikiConfig {
   theme?: IThemeRegistration;
   themes?: IThemeRegistration[];
   langs?: (Lang | ILanguageRegistration)[];
   paths?: IHighlighterPaths;
-};
+}
 
-type KatexConfig = {
+interface KatexConfig {
   output?: "html" | "mathml" | "htmlAndMathml" | undefined;
   leqno?: boolean | undefined;
   fleqn?: boolean | undefined;
@@ -56,49 +56,6 @@ type KatexConfig = {
   strict?: boolean | string | Function | undefined;
   trust?: boolean | ((context: TrustContext) => boolean) | undefined;
   globalGroup?: boolean | undefined;
-};
+}
 
-type UserConfig = {
-  marked?: MarkedConfig;
-  icons?: IconsConfig;
-  shiki?: ShikiConfig;
-  katex?: KatexConfig;
-  unocss?: UnoCSSConfig;
-  headTags?: string[];
-  minify?: boolean;
-  format?: boolean;
-  resolveUnoCSS?: boolean;
-  renderMermaid?: boolean;
-  renderKatex?: boolean;
-  defaultIconsStyles?: Record<string, string>;
-  defaultBase64IconsStyles?: Record<string, string>;
-  plugins?: Plugin[];
-};
-
-type Meta = {
-  styles: string;
-  components: {
-    componentLiteral: string;
-    componentName: string;
-    props: Record<string, string>;
-    children: string;
-  }[];
-  headTags: string[];
-  grayMatter: string;
-} & Record<any, any>;
-
-type Config = { metaConstruct: Meta } & Omit<UserConfig, "plugins"> & {
-    plugins: Plugin[];
-  };
-
-type Plugin = {
-  name: string;
-  enforce?: "pre" | "post";
-  defineConfig?: (config: Config) => void;
-  transform: (id: string, payload: string, meta?: Meta) => string | void;
-  getReady?: () => Promise<void> | void;
-  tapArgs?: (id: string, args: any[]) => void | any[];
-  postTransform?: (payload: string, meta?: Meta) => string | Promise<string>;
-};
-
-export { Config, Plugin, UserConfig, Meta };
+export { KatexConfig, MarkedConfig, ShikiConfig, IconsConfig, UnoCSSConfig };

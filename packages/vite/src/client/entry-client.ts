@@ -1,6 +1,7 @@
 import { hydrate } from "./hydrate";
 import "./hmr";
 import "uno.css";
+import { ComponentFactory } from "preact";
 
 const lazyLoad = (target, component, uid) => {
   const io = new IntersectionObserver((entries, observer) => {
@@ -14,20 +15,28 @@ const lazyLoad = (target, component, uid) => {
   io.observe(target);
 };
 
-export default async function () {
+export default async function (componentMap: Map<string, ComponentFactory>) {
   for (let element of document.querySelectorAll("[preact]")) {
     const uid = element.getAttribute("uid");
     const component = globals[uid];
     if (component.props["client:idle"]) {
       requestIdleCallback(() => {
         delete component.props["client:idle"];
-        hydrate(component, element, uid);
+        hydrate(
+          { ...component, factoryFunction: componentMap.get(uid) },
+          element,
+          uid
+        );
       });
     } else if (component.props["media:visible"]) {
       delete component.props["media:visible"];
       lazyLoad(element, component, uid);
     } else {
-      hydrate(component, element, uid);
+      hydrate(
+        { ...component, factoryFunction: componentMap.get(uid) },
+        element,
+        uid
+      );
     }
   }
 }
