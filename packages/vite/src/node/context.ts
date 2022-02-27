@@ -1,6 +1,7 @@
 import { join } from "path";
-import { createLogger, createServer, ViteDevServer, mergeConfig } from "vite";
+import { createLogger, createServer, mergeConfig, ViteDevServer } from "vite";
 import { RenderFunction, ResolvedConfig, TinyPagesConfig } from "../types";
+import { presetPageConfig } from "./constants";
 import { createPlugins } from "./plugins";
 
 let ctx: ResolvedConfig;
@@ -11,33 +12,9 @@ export async function createContext(
 ): Promise<[ResolvedConfig, ViteDevServer]> {
   let render: RenderFunction;
   let invalidate: (input: string) => void;
-  const head = {
-    base: {},
-    htmlAttributes: {},
-    link: [],
-    meta: [],
-    noscript: [],
-    script: [],
-    style: [],
-    title: "",
-    titleAttributes: {},
-  };
-
   ctx = {
     config,
-    page: {
-      pageCtx: { url: "" },
-      sources: [],
-      prevHash: "",
-      global: {},
-      meta: {
-        styles: "",
-        components: [],
-        headTags: [],
-        head,
-        grayMatter: "",
-      },
-    },
+    page: presetPageConfig,
     utils: {
       logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
       async render(html: string) {

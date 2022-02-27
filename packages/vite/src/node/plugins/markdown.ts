@@ -3,7 +3,7 @@ import crypto from "crypto";
 import { promises as fs } from "fs";
 import * as path from "path";
 import { pathToFileURL } from "url";
-import type { Plugin } from "vite";
+import type { ModuleNode, Plugin } from "vite";
 import type { Meta } from "../../types";
 import { useContext } from "../context";
 import { appendPrelude } from "../utils";
@@ -26,34 +26,41 @@ export default function (): Plugin {
     md5.end();
     return result;
   };
-  let moduleMap = new Map();
-  let uniqueNumber = 1;
+  const moduleMap = new Map();
+  const addedModule = [];
   return {
     name: "vite-tinypages-markdown",
     enforce: "pre",
-    async transformIndexHtml(markdown: string) {
-      const [rawHtml, meta] = await compile(markdown);
-      page.prevHash = hashIt.hash({ components: meta.components });
-      page.meta = meta;
-      page.sources = [];
-      page.global = {};
-      const renderedHtml = await utils.render(rawHtml);
-      const virtualModuleId = normalizePath(
-        `/virtualModule${pathToFileURL(page.pageCtx.url).href.replace(
-          /\.md$/,
-          ".js"
-        )}`
-      );
-      page.meta.head.script.push({
-        type: "module",
-        src: virtualModuleId,
-      });
-      moduleMap.set(
-        virtualModuleId,
-        generateVirtualEntryPoint(page.global, config.vite.root)
-      );
-      const appHtml = appendPrelude(renderedHtml, page);
-      return appHtml;
+    transformIndexHtml: {
+      enforce: "pre",
+      async transform(markdown: string, ctx) {
+        const [rawHtml, meta] = await compile(markdown);
+        page.prevHash = hashIt.hash({ components: meta.components });
+        page.meta = meta;
+        page.sources = [];
+        page.global = {};
+        const renderedHtml = await utils.render(rawHtml);
+        const virtualModuleId = normalizePath(
+          `/virtualModule${pathToFileURL(page.pageCtx.url).href.replace(
+            /\.md$/,
+            ".js"
+          )}`
+        );
+        page.meta.head.script.push({
+          type: "module",
+          src: virtualModuleId,
+        });
+        moduleMap.set(
+          virtualModuleId,
+          generateVirtualEntryPoint(page.global, config.vite.root)
+        );
+        const appHtml = appendPrelude(renderedHtml, page);
+        if (!addedModule.includes(page.pageCtx.url)) {
+          ctx.server.moduleGraph.createFileOnlyEntry(page.pageCtx.url);
+          addedModule.push(page.pageCtx.url);
+        }
+        return appHtml;
+      },
     },
     resolveId(id: string) {
       return moduleMap.has(id) ? id : null;
@@ -64,6 +71,8 @@ export default function (): Plugin {
       }
     },
     async handleHotUpdate(ctx) {
+      console.log(ctx.modules);
+      const toReturnModules: ModuleNode[] = [];
       for (let module of ctx.modules) {
         const fileId = path.normalize(module.file);
         if (page.pageCtx.url === fileId) {
@@ -90,8 +99,11 @@ export default function (): Plugin {
             reload(fileId, ctx.server, utils.logger);
             break;
           }
+        } else {
+          toReturnModules.push(module);
         }
       }
+      return toReturnModules;
     },
   };
 }

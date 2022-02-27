@@ -1,4 +1,5 @@
 import { InlineConfig } from "vite";
+import { Page } from "../types";
 
 export const presetCompilerConfig = {
   marked: { gfm: true, xhtml: true },
@@ -54,3 +55,27 @@ export const presetViteConfig = {
     },
   },
 } as InlineConfig;
+
+export const presetPageConfig = {
+  pageCtx: { url: "" },
+  sources: [],
+  prevHash: "",
+  global: {},
+  meta: {
+    styles: "",
+    components: [],
+    headTags: [],
+    head: {
+      base: {},
+      htmlAttributes: {},
+      link: [],
+      meta: [],
+      noscript: [],
+      script: [],
+      style: [],
+      title: "",
+      titleAttributes: {},
+    },
+    grayMatter: "",
+  },
+} as Page;

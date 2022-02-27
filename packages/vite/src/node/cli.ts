@@ -4,7 +4,7 @@ import * as Colors from "picocolors";
 import * as Vite from "vite";
 import { TinyPagesConfig } from "../types";
 import { resolveConfig } from "./resolveConfig";
-import { createDevServer } from "./server";
+import { createDevServer } from "./dev";
 
 interface GlobalCLIOptions {
   "--"?: string[];
