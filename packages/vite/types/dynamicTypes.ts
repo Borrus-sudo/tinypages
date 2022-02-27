@@ -1,8 +1,4 @@
-type PageCtx = /*start*/ {
-  url: string;
-  params?: Record<string, string>;
-};
-/*end*/
+type PageCtx = /*start*/ { url: "/[id].md"; params: { id: string } }; /*end*/
 
 declare module NodeJS {
   interface Global {

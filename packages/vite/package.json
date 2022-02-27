@@ -8,10 +8,11 @@
   },
   "main": "out/index.js",
   "module": "out/index.mjs",
-  "types": "out/index.d.ts",
+  "types": "types/dynamicTypes.ts",
   "files": [
     "out",
-    "bin"
+    "bin",
+    "types"
   ],
   "bin": {
     "tinypages": "./bin/tinypage.js"
@@ -31,17 +32,17 @@
       "import": "./package.json"
     },
     "./client": {
-      "require": "./out/client/entry-client.js",
-      "import": "./out/client/entry-client.mjs"
+      "require": "./out/client/client.js",
+      "import": "./out/client/client.mjs"
     },
     "./server": {
       "require": "./out/node/server.js",
       "import": "./out/node/server.mjs"
     },
     "./types": {
-      "require": "./out/dynamicTypes.d.ts",
-      "import": "./out/dynamicTypes.d.ts",
-      "types": "./out/dynamicTypes.d.ts"
+      "require": "./types/dynamicTypes.ts",
+      "import": "./types/dynamicTypes.ts",
+      "types": "./types/dynamicTypes.ts"
     }
   },
   "dependencies": {
@@ -66,6 +67,6 @@
   },
   "devDependencies": {
     "@types/connect": "^3.4.35",
-    "@types/node": "^17.0.15"
+    "@types/node": "^17.0.21"
   }
 }

@@ -7,12 +7,10 @@ const config: Options = {
   entry: [
     "src/node/cli.ts",
     "src/node/entry-server.ts",
-    "src/client/entry-client.ts",
+    "src/client/client.ts",
   ],
   clean: true,
-  dts: {
-    entry: ["types/dynamicTypes.ts"],
-  },
+  dts: false,
   outDir: "./out",
   minify: false,
 };

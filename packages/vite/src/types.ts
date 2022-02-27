@@ -1,12 +1,9 @@
-import { ViteDevServer, UserConfig as ViteUserConfig, Logger } from "vite";
 import type {
   Meta,
   UserConfig as TinypagesUserConfig,
-  Head,
 } from "@tinypages/compiler";
 import type { Server } from "connect";
-
-type PageCtx = { url: string; params?: Record<string, string> };
+import { Logger, UserConfig as ViteUserConfig, ViteDevServer } from "vite";
 
 type RenderFunction = (
   html: string,
@@ -22,12 +19,15 @@ type ComponentRegistration = {
   };
 };
 
+interface PageCtx {
+  url: string;
+  params?: Record<string, string>;
+}
+
 interface Page {
-  currentUrl: string;
   pageCtx: PageCtx;
   sources: string[];
   prevHash: string;
-  head: Head;
   global: ComponentRegistration;
   meta: Meta;
 }
@@ -41,7 +41,7 @@ interface TinyPagesConfig {
   };
 }
 
-type ResolvedConfig = {
+interface ResolvedConfig {
   page: Page;
   config: Readonly<TinyPagesConfig>;
   utils: Readonly<{
@@ -51,7 +51,7 @@ type ResolvedConfig = {
     pageDir: Readonly<string>;
     configFile: Readonly<string>;
   }>;
-};
+}
 
 export {
   PageCtx,

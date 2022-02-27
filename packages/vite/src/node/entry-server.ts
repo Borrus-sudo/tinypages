@@ -129,16 +129,11 @@ const render = async (
   return html;
 };
 
-const createRender = () => {
-  return [
-    render,
-    (invalidateComponent: string) => {
-      if (hashComp.has(invalidateComponent)) {
-        const hashes = hashComp.get(invalidateComponent);
-        hashes.forEach((hash) => map.delete(hash));
-      }
-    },
-  ];
+const invalidate = (invalidateComponent: string) => {
+  if (hashComp.has(invalidateComponent)) {
+    const hashes = hashComp.get(invalidateComponent);
+    hashes.forEach((hash) => map.delete(hash));
+  }
 };
 
-export { createRender };
+export { invalidate, render };

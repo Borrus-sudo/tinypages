@@ -1,6 +1,6 @@
 import Icons from "node-icons";
 import type { Plugin } from "vite";
-import { useContext } from "../createContext";
+import { useContext } from "../context";
 
 export default function (): Plugin {
   const { config } = useContext();

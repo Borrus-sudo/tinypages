@@ -6,11 +6,11 @@ const regex1 = /\/\[(.*?)\]\//g;
 const regex2 = /\/\[(.*?)\]\./g;
 
 const transformDynamicArgs = (input: string) => {
-  if (!(regex1.test(input) && regex2.test(input))) {
-    return [input, false];
+  if (regex1.test(input) || regex2.test(input)) {
+    const output = input.replace(regex1, "/:$1/").replace(regex2, "/:$1.");
+    return [output, true];
   }
-  const output = input.replace(regex1, "/:$1/").replace(regex2, "/:$1.");
-  return [output, true];
+  return [input, false];
 };
 
 const generateMockRoute = (input: string) => {
@@ -27,13 +27,13 @@ export function generateTypes(): [
   return [
     (props: Record<string, string | number>, url: string) => {
       edited = true;
-      let type = ` {url:${url};params:{ `;
+      let type = ` {url:"${url}";params:{ `;
       Object.keys(props).forEach((key) => {
-        type += `${key}:string;`;
+        type += `${path.parse(key).name}:string;`;
       });
       schema += type + "}} |";
     },
-    () => (edited ? schema.slice(0, -1) + " /*end*/;" : ""),
+    () => (edited ? schema.slice(0, -2) + ";/*end*/" : ""),
   ];
 }
 

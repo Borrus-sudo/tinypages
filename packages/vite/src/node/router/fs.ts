@@ -24,11 +24,12 @@ export async function fsRouter(pagesDir: string) {
   if (existsSync(pagesDir)) {
     await boilerplate(pagesDir);
     return (url: string): PageCtx => {
-      const normalizedUrl = url.endsWith("/")
+      let normalizedUrl = url.endsWith("/")
         ? url + "index.md"
         : !/\.(.*?)$/.test(url)
         ? url + ".md"
         : url;
+      normalizedUrl = normalizedUrl.replace(/\.html$/, ".md");
       const result = router.lookup(normalizedUrl);
       if (!!result) {
         return { url: result.payload, params: result.params };

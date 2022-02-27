@@ -1,6 +1,5 @@
 import { hydrate } from "./hydrate";
 import "./hmr";
-import "uno.css";
 import { ComponentFactory } from "preact";
 
 const lazyLoad = (target, component, uid) => {
@@ -23,7 +22,7 @@ export default async function (componentMap: Map<string, ComponentFactory>) {
       requestIdleCallback(() => {
         delete component.props["client:idle"];
         hydrate(
-          { ...component, factoryFunction: componentMap.get(uid) },
+          { ...component, factoryFunction: componentMap[uid] },
           element,
           uid
         );
@@ -33,7 +32,7 @@ export default async function (componentMap: Map<string, ComponentFactory>) {
       lazyLoad(element, component, uid);
     } else {
       hydrate(
-        { ...component, factoryFunction: componentMap.get(uid) },
+        { ...component, factoryFunction: componentMap[uid] },
         element,
         uid
       );

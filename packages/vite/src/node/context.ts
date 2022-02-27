@@ -1,33 +1,47 @@
 import { join } from "path";
-import { createLogger, createServer, ViteDevServer } from "vite";
+import { createLogger, createServer, ViteDevServer, mergeConfig } from "vite";
 import { RenderFunction, ResolvedConfig, TinyPagesConfig } from "../types";
 import { createPlugins } from "./plugins";
 
 let ctx: ResolvedConfig;
+
 export async function createContext(
   config: TinyPagesConfig,
   source: string
 ): Promise<[ResolvedConfig, ViteDevServer]> {
-  let renderFunction: RenderFunction;
-  let invalidate: (param: string) => void;
-  const vite = await createServer(ctx.config.vite);
+  let render: RenderFunction;
+  let invalidate: (input: string) => void;
+  const head = {
+    base: {},
+    htmlAttributes: {},
+    link: [],
+    meta: [],
+    noscript: [],
+    script: [],
+    style: [],
+    title: "",
+    titleAttributes: {},
+  };
+
   ctx = {
     config,
     page: {
-      currentUrl: "",
       pageCtx: { url: "" },
       sources: [],
       prevHash: "",
       global: {},
-      //@ts-ignore
-      meta: {},
-      //@ts-ignore
-      head: {},
+      meta: {
+        styles: "",
+        components: [],
+        headTags: [],
+        head,
+        grayMatter: "",
+      },
     },
     utils: {
       logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
       async render(html: string) {
-        return await renderFunction(html, vite, ctx);
+        return await render(html, vite, ctx);
       },
       invalidate(comp: string) {
         invalidate(comp);
@@ -39,11 +53,13 @@ export async function createContext(
   const plugins = await createPlugins();
   //@ts-ignore
   ctx.config.vite = mergeConfig(ctx.config.vite, { plugins });
-  [renderFunction, invalidate] = (
+  const vite = await createServer(ctx.config.vite);
+  const { render: renderFunction, invalidate: invalidateFunction } =
     await vite.ssrLoadModule(
       require.resolve("tinypages/entry-server").replace(".js", ".mjs")
-    )
-  ).createRender();
+    );
+  render = renderFunction;
+  invalidate = invalidateFunction;
   return [ctx, vite];
 }
 export function useContext(): ResolvedConfig {

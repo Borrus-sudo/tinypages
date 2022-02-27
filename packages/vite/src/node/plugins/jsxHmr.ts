@@ -1,6 +1,6 @@
-import { normalize } from "path";
+import * as path from "path";
 import { type Plugin } from "vite";
-import { useContext } from "../createContext";
+import { useContext } from "../context";
 import { refreshRouter } from "../router/fs";
 import { isParentJSX, reload } from "./pluginUtils";
 
@@ -13,7 +13,7 @@ export default async function (): Promise<Plugin> {
       server.watcher.addListener("change", async (_, filePath) => {
         if (
           typeof filePath === "string" &&
-          normalize(filePath) === utils.pageDir
+          path.normalize(filePath) === utils.pageDir
         ) {
           await refreshRouter(utils.pageDir);
           reload("change in /pages dir", server, utils.logger);
@@ -22,7 +22,7 @@ export default async function (): Promise<Plugin> {
     },
     async handleHotUpdate(ctx) {
       for (let module of ctx.modules) {
-        const fileId = normalize(module.file);
+        const fileId = path.normalize(module.file);
         if (fileId === utils.configFile) {
           reload(fileId, ctx.server, utils.logger);
           break;

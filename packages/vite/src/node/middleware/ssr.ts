@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import { normalizePath, ViteDevServer } from "vite";
-import { useContext } from "../createContext";
+import { useContext } from "../context";
 import { fsRouter } from "../router/fs";
 
 export default async function (vite: ViteDevServer) {
@@ -29,7 +29,6 @@ export default async function (vite: ViteDevServer) {
       ) {
         return;
       }
-      page.currentUrl = pageCtx.url;
       page.pageCtx = pageCtx;
       const markdown = await fs.readFile(pageCtx.url, "utf-8");
       const html = await vite.transformIndexHtml(pageCtx.url, markdown); // vite transformed html

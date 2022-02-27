@@ -1,7 +1,7 @@
 import express from "express";
 import { ViteDevServer } from "vite";
 import { TinyPagesConfig } from "../types";
-import { createContext } from "./createContext";
+import { createContext } from "./context";
 import { createMiddlewares } from "./middleware";
 
 export async function createDevServer(
@@ -9,16 +9,16 @@ export async function createDevServer(
   source: string
 ): Promise<ViteDevServer> {
   const [ctx, vite] = await createContext(config, source);
-
   const app = express();
-  vite.watcher.add(ctx.utils.pageDir);
 
+  vite.watcher.add(ctx.utils.pageDir);
   if (source) vite.moduleGraph.createFileOnlyEntry(source);
+
   if ((config.middlewares.pre?.length ?? -1) > 0)
     app.use(config.middlewares.pre);
 
   app.use(vite.middlewares);
-  app.use(await createMiddlewares(vite, ctx));
+  app.use(await createMiddlewares(vite));
 
   if ((config.middlewares.post?.length ?? -1) > 0)
     app.use(config.middlewares.post);

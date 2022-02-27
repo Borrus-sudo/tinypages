@@ -1,7 +1,7 @@
 import { $fetch } from "ohmyfetch";
 import ora from "ora";
 import type { Plugin } from "vite";
-import { useContext } from "../createContext";
+import { useContext } from "../context";
 
 async function replaceAsync(str, regex, asyncFn) {
   const promises = [];

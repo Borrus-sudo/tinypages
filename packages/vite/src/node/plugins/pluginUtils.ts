@@ -1,13 +1,14 @@
 import hasher from "node-object-hash";
 import type { ModuleNode, Logger, ViteDevServer } from "vite";
 import type { ComponentRegistration, Page } from "../../types";
-import { normalize, relative } from "path";
+import * as path from "path";
+import { normalizePath } from "vite";
 
 export const hashIt = hasher({ sort: false, coerce: true });
 
 export const isParentJSX = (node: ModuleNode, page: Page) => {
   for (let module of node.importedModules) {
-    const fileId = normalize(module.file);
+    const fileId = path.normalize(module.file);
     if (
       (module.file.endsWith(".jsx") || module.file.endsWith(".tsx")) &&
       page.sources.includes(fileId)
@@ -41,18 +42,20 @@ export const generateVirtualEntryPoint = (
     const mod = components[uid];
     if (!importMap.has(uid)) {
       importMap.set(uid, `comp${idx}`);
-      return `import comp${idx} from ${relative(root, mod.path)};`;
+      return `import comp${idx} from "/${normalizePath(
+        path.relative(root, mod.path)
+      )}";`;
     }
   });
   imports.push(`import hydrate from "tinypages/client";`);
-  imports.push(`import "uno.css"`);
+  imports.push(`import "uno.css";`);
   let code = `
   ${imports.join("\n")}
   (async()=>{
     await hydrate({
      ${Object.keys(components)
        .map((uid: string) => {
-         return uid + ":" + importMap.get(uid);
+         return "'" + uid + "':" + importMap.get(uid);
        })
        .join(",")}
     });
