@@ -27,9 +27,9 @@ interface PageCtx {
 interface Page {
   pageCtx: PageCtx;
   sources: string[];
-  prevHash: string;
   global: ComponentRegistration;
   meta: Meta;
+  prevHash: string;
 }
 
 interface TinyPagesConfig {

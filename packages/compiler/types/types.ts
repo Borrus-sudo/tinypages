@@ -6,7 +6,7 @@ import {
   UnoCSSConfig,
 } from "./options";
 
-type Meta = {
+interface BaseMeta {
   styles: string;
   components: {
     componentLiteral: string;
@@ -17,7 +17,11 @@ type Meta = {
   headTags: string[];
   head: Head;
   grayMatter: string;
-} & Record<any, any>;
+}
+
+interface Meta extends BaseMeta {
+  [key: string | number | symbol]: any;
+}
 
 type Config = { metaConstruct: Meta } & Omit<UserConfig, "plugins"> & {
     plugins: Plugin[];

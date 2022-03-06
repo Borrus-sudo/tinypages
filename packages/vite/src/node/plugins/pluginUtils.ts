@@ -1,8 +1,8 @@
 import hasher from "node-object-hash";
-import type { ModuleNode, Logger, ViteDevServer } from "vite";
-import type { ComponentRegistration, Page } from "../../types";
 import * as path from "path";
+import type { Logger, ModuleNode, ViteDevServer } from "vite";
 import { normalizePath } from "vite";
+import type { ComponentRegistration, Page } from "../../types";
 
 export const hashIt = hasher({ sort: false, coerce: true });
 
@@ -35,7 +35,8 @@ export const reload = (file: string, server: ViteDevServer, logger: Logger) => {
 
 export const generateVirtualEntryPoint = (
   components: ComponentRegistration,
-  root: string
+  root: string,
+  pageUrl: string
 ) => {
   const importMap: Map<string, string> = new Map();
   const imports = Object.keys(components).map((uid: string, idx) => {
@@ -48,7 +49,8 @@ export const generateVirtualEntryPoint = (
     }
   });
   imports.push(`import hydrate from "tinypages/client";`);
-  imports.push(`import "uno.css";`);
+  imports.unshift(`import "uno.css";`);
+  // imports.push(`import "/${normalizePath(path.relative(root, pageUrl))}"`);
   let code = `
   ${imports.join("\n")}
   (async()=>{

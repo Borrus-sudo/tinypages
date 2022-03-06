@@ -1,14 +1,27 @@
-
 ## TSGandalf ::mdi:language-typescript:: [text-blue-500 text-center]
 
 <head>
-<title>tinypages!</title>
+<title>hello hi</title>
 </head>
 
-<Counter/>
-hi
+hi 
 
 hi hi hi hi
+  
+hi huhuh
+jijij
+uihuh
+hello 
 
 hi
-hi hi hi jo hu hu  hu hi
+
+<mdi-github/>
+<mdi-twitter/>
+
+<Counter2/>
+
+![hello pls](~images/crap/pls/load.jpg)
+
+<Counter2/>
+
+hihhi huhuh

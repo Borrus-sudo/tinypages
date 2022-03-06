@@ -24,7 +24,7 @@ export default async function (): Promise<Plugin> {
       for (let module of ctx.modules) {
         const fileId = path.normalize(module.file);
         if (fileId === utils.configFile) {
-          reload(fileId, ctx.server, utils.logger);
+          reload(module.file, ctx.server, utils.logger);
           break;
         } else {
           if (page.sources.includes(fileId)) {
@@ -32,7 +32,7 @@ export default async function (): Promise<Plugin> {
             // other than fileId are utilized
             ctx.server.moduleGraph.invalidateModule(module);
             utils.invalidate(fileId);
-            reload(fileId, ctx.server, utils.logger);
+            reload(module.file, ctx.server, utils.logger);
             break;
           } else {
             const res = isParentJSX(module, page);

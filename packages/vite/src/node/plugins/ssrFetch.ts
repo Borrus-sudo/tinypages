@@ -41,10 +41,6 @@ export default function (): Plugin {
         !id.endsWith(".js")
       )
         return;
-      //Simply inject the pageCtx in ssr since in client it will be available globally
-      if (options.ssr) {
-        code = `const pageCtx=${JSON.stringify(page.pageCtx)}; \n` + code;
-      }
       return await replaceAsync(
         code,
         /\$\$fetch\([\"\`\'][\s\S]*[\"\`\']\)/g,

@@ -3,8 +3,11 @@ import { createLogger, createServer, mergeConfig, ViteDevServer } from "vite";
 import { RenderFunction, ResolvedConfig, TinyPagesConfig } from "../types";
 import { presetPageConfig } from "./constants";
 import { createPlugins } from "./plugins";
+import { deepCopy } from "./utils";
+// import { polyfill } from "@astropub/webapi";
 
 let ctx: ResolvedConfig;
+let vite: ViteDevServer;
 
 export async function createContext(
   config: TinyPagesConfig,
@@ -14,7 +17,7 @@ export async function createContext(
   let invalidate: (input: string) => void;
   ctx = {
     config,
-    page: presetPageConfig,
+    page: deepCopy(presetPageConfig),
     utils: {
       logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
       async render(html: string) {
@@ -30,7 +33,7 @@ export async function createContext(
   const plugins = await createPlugins();
   //@ts-ignore
   ctx.config.vite = mergeConfig(ctx.config.vite, { plugins });
-  const vite = await createServer(ctx.config.vite);
+  vite = await createServer(ctx.config.vite);
   const { render: renderFunction, invalidate: invalidateFunction } =
     await vite.ssrLoadModule(
       require.resolve("tinypages/entry-server").replace(".js", ".mjs")
@@ -41,4 +44,8 @@ export async function createContext(
 }
 export function useContext(): ResolvedConfig {
   return ctx;
+}
+
+export function useVite(): ViteDevServer {
+  return vite;
 }

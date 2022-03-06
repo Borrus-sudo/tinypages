@@ -40,12 +40,13 @@
       "import": "./out/node/server.mjs"
     },
     "./types": {
-      "require": "./types/dynamicTypes.ts",
-      "import": "./types/dynamicTypes.ts",
-      "types": "./types/dynamicTypes.ts"
+      "require": "./types/index.d.ts",
+      "import": "./types/index.d.ts",
+      "types": "./types/index.d.ts"
     }
   },
   "dependencies": {
+    "@astropub/webapi": "^0.10.14",
     "@tinypages/compiler": "^1.0.0",
     "@unocss/vite": "^0.22.7",
     "cac": "^6.7.12",
@@ -63,7 +64,8 @@
     "preact-render-to-string": "latest",
     "radix3": "^0.1.0",
     "unconfig": "^0.2.2",
-    "vite": "^2.8.4"
+    "vite": "^2.8.4",
+    "vite-plugin-inspect": "^0.4.3"
   },
   "devDependencies": {
     "@types/connect": "^3.4.35",

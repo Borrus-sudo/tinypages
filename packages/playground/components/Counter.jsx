@@ -1,6 +1,7 @@
 import { useState } from "preact/hooks";
 import Github from "~icons/mdi/github";
 // console.log(pageCtx);
+console.log("hello");
 export default function PreactCounter(props) {
   const [count, setCount] = useState(0);
   const add = () => setCount((i) => i + 1);

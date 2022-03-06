@@ -1,4 +1,3 @@
-
 export default function PreactCounter(props) {
   return (
     <div className="counter">

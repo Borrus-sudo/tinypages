@@ -2,6 +2,7 @@ import { h } from "preact";
 import Helmet from "preact-helmet";
 import { Page } from "../types";
 import renderToString from "preact-render-to-string";
+import { createHash } from "crypto";
 
 export function appendPrelude(content: string, page: Page) {
   const scriptTag = `
@@ -40,4 +41,22 @@ export function appendPrelude(content: string, page: Page) {
       </html>
   `.trim();
   return html;
+}
+
+export function deepCopy<T>(obj: T): T {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+export function hash(content: string) {
+  return createHash("md5").update(content).digest("hex");
+}
+
+export function normalizeUrl(url: string) {
+  let normalizedUrl = url.endsWith("/")
+    ? url + "index.md"
+    : !/\.(.*?)$/.test(url)
+    ? url + ".md"
+    : url;
+  normalizedUrl = normalizedUrl.replace(/\.html$/, ".md");
+  return normalizedUrl;
 }
