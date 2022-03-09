@@ -2,7 +2,7 @@ import cac from "cac";
 import { join } from "path";
 import * as Colors from "picocolors";
 import * as Vite from "vite";
-import { TinyPagesConfig } from "../types";
+import { UserTinyPagesConfig } from "../types/types";
 import { resolveConfig } from "./resolveConfig";
 import { createDevServer } from "./dev";
 
@@ -118,6 +118,6 @@ export function cli() {
   cli.parse();
 }
 
-export function defineConfig(config: Partial<TinyPagesConfig>) {
+export function defineConfig(config: UserTinyPagesConfig) {
   return config;
 }

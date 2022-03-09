@@ -1,9 +1,6 @@
-import type {
-  Meta,
-  UserConfig as TinypagesUserConfig,
-} from "@tinypages/compiler";
-import type { Server } from "connect";
-import { Logger, UserConfig as ViteUserConfig, ViteDevServer } from "vite";
+import type { Meta } from "@tinypages/compiler";
+import type { Logger, ViteDevServer } from "vite";
+import type { TinyPagesConfig, UserTinyPagesConfig } from "./config";
 
 type RenderFunction = (
   html: string,
@@ -32,25 +29,18 @@ interface Page {
   prevHash: string;
 }
 
-interface TinyPagesConfig {
-  compiler: TinypagesUserConfig;
-  vite: ViteUserConfig;
-  middlewares: {
-    pre?: Server[];
-    post?: Server[];
-  };
+interface Utils {
+  logger: Logger;
+  render: (html: string) => Promise<string>;
+  invalidate: (file: string) => void;
+  pageDir: Readonly<string>;
+  configFile: Readonly<string>;
 }
 
 interface ResolvedConfig {
   page: Page;
   config: Readonly<TinyPagesConfig>;
-  utils: Readonly<{
-    logger: Logger;
-    render: (html: string) => Promise<string>;
-    invalidate: (file: string) => void;
-    pageDir: Readonly<string>;
-    configFile: Readonly<string>;
-  }>;
+  utils: Readonly<Utils>;
 }
 
 export {
@@ -58,6 +48,7 @@ export {
   Meta,
   Page,
   TinyPagesConfig,
+  UserTinyPagesConfig,
   ResolvedConfig,
   RenderFunction,
   ComponentRegistration,

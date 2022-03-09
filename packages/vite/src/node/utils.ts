@@ -1,6 +1,6 @@
 import { h } from "preact";
 import Helmet from "preact-helmet";
-import { Page } from "../types";
+import { Page } from "../types/types";
 import renderToString from "preact-render-to-string";
 import { createHash } from "crypto";
 

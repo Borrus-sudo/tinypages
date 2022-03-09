@@ -30,7 +30,7 @@ export function PluginCSS(): Plugin {
       return payload;
     },
     async postTransform(payload) {
-      if (!config.resolveUnoCSS) return payload;
+      if (!config.renderUnoCSS) return payload;
       const { createGenerator } = require("@unocss/core");
       const uno = createGenerator(config.unocss || {});
       const css = await uno.generate(payload, { minify: !!config.minify });

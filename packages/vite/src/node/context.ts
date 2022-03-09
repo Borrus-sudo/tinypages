@@ -1,6 +1,10 @@
 import { join } from "path";
 import { createLogger, createServer, mergeConfig, ViteDevServer } from "vite";
-import { RenderFunction, ResolvedConfig, TinyPagesConfig } from "../types";
+import {
+  RenderFunction,
+  ResolvedConfig,
+  TinyPagesConfig,
+} from "../types/types";
 import { presetPageConfig } from "./constants";
 import { createPlugins } from "./plugins";
 import { deepCopy } from "./utils";

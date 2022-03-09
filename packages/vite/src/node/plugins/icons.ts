@@ -5,7 +5,7 @@ import { useContext } from "../context";
 export default function (): Plugin {
   const { config } = useContext();
   const icons = Icons(config.compiler.icons);
-  const separator = config.compiler.icons?.separator || ":";
+  const separator = config.modules.icons?.separator || ":";
   const moduleMap: Map<string, string> = new Map();
   const stringifiedDefaults = JSON.stringify(
     config.compiler.defaultIconsStyles || {}

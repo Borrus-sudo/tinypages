@@ -6,9 +6,9 @@
     "build": "tsup-node",
     "dev": "tsup-node --watch src"
   },
-  "main": "out/index.js",
-  "module": "out/index.mjs",
-  "types": "types/dynamicTypes.ts",
+  "main": "./out/node/cli.js",
+  "module": "./out/node/cli.mjs",
+  "types": "./out/node/cli.d.ts",
   "files": [
     "out",
     "bin",
@@ -47,14 +47,16 @@
   },
   "dependencies": {
     "@astropub/webapi": "^0.10.14",
+    "@prefresh/vite": "^2.2.8",
     "@tinypages/compiler": "^1.0.0",
     "@unocss/vite": "^0.22.7",
     "cac": "^6.7.12",
+    "defu": "^5.0.1",
     "express": "^4.17.2",
     "micromorph": "^0.0.3",
     "million": "^1.4.3",
     "node-html-parser": "^5.2.0",
-    "node-icons": "^0.1.4",
+    "node-icons": "^0.1.6",
     "node-object-hash": "^2.3.10",
     "ohmyfetch": "^0.4.14",
     "ora": "5.4.1",
@@ -65,6 +67,7 @@
     "radix3": "^0.1.0",
     "unconfig": "^0.2.2",
     "vite": "^2.8.4",
+    "vite-plugin-image-presets": "^0.3.1",
     "vite-plugin-inspect": "^0.4.3"
   },
   "devDependencies": {

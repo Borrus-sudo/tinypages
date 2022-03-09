@@ -2,7 +2,7 @@ import hasher from "node-object-hash";
 import * as path from "path";
 import type { Logger, ModuleNode, ViteDevServer } from "vite";
 import { normalizePath } from "vite";
-import type { ComponentRegistration, Page } from "../../types";
+import type { ComponentRegistration, Page } from "../../types/types";
 
 export const hashIt = hasher({ sort: false, coerce: true });
 
@@ -35,8 +35,7 @@ export const reload = (file: string, server: ViteDevServer, logger: Logger) => {
 
 export const generateVirtualEntryPoint = (
   components: ComponentRegistration,
-  root: string,
-  pageUrl: string
+  root: string
 ) => {
   const importMap: Map<string, string> = new Map();
   const imports = Object.keys(components).map((uid: string, idx) => {

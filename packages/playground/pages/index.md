@@ -18,10 +18,10 @@ hi
 <mdi-github/>
 <mdi-twitter/>
 
-<Counter2/>
 
 ![hello pls](~images/crap/pls/load.jpg)
 
-<Counter2/>
+<Counter/>
 
 hihhi huhuh
+huhuhuh hi

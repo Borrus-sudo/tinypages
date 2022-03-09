@@ -1,6 +1,14 @@
 import { marked } from "marked";
 import Spy from "proxy-hookified";
-import type { Config, Head, Meta, Plugin, UserConfig } from "../types/types";
+import type {
+  Config,
+  Head,
+  IconsConfig,
+  Meta,
+  Plugin,
+  UnoCSSConfig,
+  UserConfig,
+} from "../types/types";
 import useHandler from "./plugin";
 import { PluginCode } from "./plugins/code";
 import { PluginCSS } from "./plugins/css";
@@ -60,4 +68,4 @@ export default async function compile(
   ];
 }
 
-export type { UserConfig, Meta, Plugin, Head };
+export type { UserConfig, Meta, Plugin, Head, IconsConfig, UnoCSSConfig };

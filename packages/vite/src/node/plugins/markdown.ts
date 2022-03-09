@@ -1,13 +1,13 @@
 import compileMarkdown from "@tinypages/compiler";
+import { promises as fs } from "fs";
 import * as path from "path";
 import { pathToFileURL } from "url";
 import type { ModuleNode, Plugin } from "vite";
 import { normalizePath as viteNormalizePath } from "vite";
-import type { Meta } from "../../types";
+import type { Meta } from "../../types/types";
 import { useContext } from "../context";
 import { appendPrelude, deepCopy, hash } from "../utils";
 import { generateVirtualEntryPoint, hashIt } from "./pluginUtils";
-import { promises as fs } from "fs";
 
 export default function (): Plugin {
   const { config, page, utils } = useContext();
@@ -48,11 +48,7 @@ export default function (): Plugin {
         });
         virtualModuleMap.set(
           virtualModuleId,
-          generateVirtualEntryPoint(
-            page.global,
-            config.vite.root,
-            page.pageCtx.url
-          )
+          generateVirtualEntryPoint(page.global, config.vite.root)
         );
         const appHtml = appendPrelude(renderedHtml, page);
         if (!addedModule.includes(page.pageCtx.url)) {
@@ -86,6 +82,7 @@ export default function (): Plugin {
           );
           const newHash = hashIt.hash(meta.components);
           if (newHash !== page.prevHash) {
+            ctx.server.moduleGraph.invalidateAll();
             ctx.server.ws.send({
               type: "custom",
               event: "reload:page",

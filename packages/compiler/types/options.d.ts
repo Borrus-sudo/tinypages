@@ -13,10 +13,10 @@ type TrustContext = {
 };
 
 interface IconsConfig {
-  installPkg: boolean;
-  alias: Map<string, string>;
-  prefix: string;
-  separator: string;
+  installPkg?: boolean;
+  alias?: Map<string, string>;
+  prefix?: string;
+  separator?: string;
 }
 
 interface MarkedConfig {

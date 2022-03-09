@@ -1,6 +1,6 @@
 import express from "express";
 import { ViteDevServer } from "vite";
-import { TinyPagesConfig } from "../types";
+import { TinyPagesConfig } from "../types/types";
 import { createContext } from "./context";
 import { createMiddlewares } from "./middleware";
 

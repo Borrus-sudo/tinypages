@@ -13,7 +13,6 @@ async function replaceAsync(str, regex, asyncFn) {
   return str.replace(regex, () => data.shift());
 }
 export default function (): Plugin {
-  const { page } = useContext();
   const reqCache: Map<string, string> = new Map();
 
   return {

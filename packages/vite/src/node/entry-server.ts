@@ -6,7 +6,7 @@ import { join } from "path";
 import { h } from "preact";
 import renderToString from "preact-render-to-string";
 import type { ViteDevServer } from "vite";
-import type { ComponentRegistration, ResolvedConfig } from "../types";
+import type { ComponentRegistration, ResolvedConfig } from "../types/types";
 
 const map: Map<string, string> = new Map();
 const hashComp: Map<string, string[]> = new Map();

@@ -36,7 +36,7 @@ interface UserConfig {
   headTags?: string[];
   minify?: boolean;
   format?: boolean;
-  resolveUnoCSS?: boolean;
+  renderUnoCSS?: boolean;
   renderMermaid?: boolean;
   renderKatex?: boolean;
   defaultIconsStyles?: Record<string, string>;
@@ -66,4 +66,4 @@ interface Head {
   base: Record<string, string>;
 }
 
-export { Config, Plugin, UserConfig, Meta, Head };
+export { Config, Plugin, UserConfig, Meta, Head, UnoCSSConfig, IconsConfig };

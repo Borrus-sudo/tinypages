@@ -4,21 +4,25 @@ import IconPlugin from "./icons";
 import HmrPlugin from "./jsxHmr";
 import MarkdownPlugin from "./markdown";
 import DataFetchPlugin from "./ssrFetch";
-import Inspect from "vite-plugin-inspect";
+import InspectPlugin from "vite-plugin-inspect";
+import ImagePlugin from "vite-plugin-image-presets";
+import PrefreshPlugin from "@prefresh/vite";
 
 export async function createPlugins() {
   const { config } = useContext();
   const plugins = [
-    Inspect(),
+    InspectPlugin(),
+    DataFetchPlugin(),
     MarkdownPlugin(),
     UnoCSSPlugin(<{}>{
       inspector: true,
       mode: "global",
-      ...(config.compiler.unocss || {}),
+      ...(config.modules.unocss || {}),
     }),
+    ImagePlugin(config.modules.image.presets, config.modules.image.options),
     IconPlugin(),
-    DataFetchPlugin(),
-    await HmrPlugin(),
+    HmrPlugin(),
+    PrefreshPlugin(),
   ];
   return plugins;
 }
