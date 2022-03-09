@@ -2,8 +2,7 @@ import { loadConfig } from "unconfig";
 import { mergeConfig } from "vite";
 import type { TinyPagesConfig, UserTinyPagesConfig } from "../types/types";
 import { presetCompilerConfig, presetViteConfig } from "./constants";
-const pkg = "defu";
-const defu = require(pkg);
+const defu = require("defu");
 
 export async function resolveConfig(
   cliViteConfig
@@ -17,7 +16,6 @@ export async function resolveConfig(
       },
     ],
   });
-  console.log("Before extending extend");
 
   const ext = defu.extend((obj, key, _) => {
     console.log(key);
@@ -29,7 +27,6 @@ export async function resolveConfig(
       return true;
     }
   });
-  console.log("before extend");
 
   config = ext(config, {
     compiler: presetCompilerConfig,
@@ -48,7 +45,6 @@ export async function resolveConfig(
   config.compiler.resolveUnoCSS = false;
   //@ts-ignore
   config.compiler.icons = config.modules.icons;
-  console.log(config);
   return { config, filePath: sources[0] } as {
     config: TinyPagesConfig;
     filePath: string;
