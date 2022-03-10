@@ -1,7 +1,6 @@
 import { $fetch } from "ohmyfetch";
 import ora from "ora";
 import type { Plugin } from "vite";
-import { useContext } from "../context";
 
 async function replaceAsync(str, regex, asyncFn) {
   const promises = [];
@@ -33,13 +32,7 @@ export default function (): Plugin {
       }
     },
     async transform(code: string, id: string, options) {
-      if (
-        !id.endsWith(".jsx") &&
-        !id.endsWith(".tsx") &&
-        !id.endsWith(".ts") &&
-        !id.endsWith(".js")
-      )
-        return;
+      if (!/\.(t|j)sx$/.test(id) && !/\.(t|j)s$/.test(id)) return;
       return await replaceAsync(
         code,
         /\$\$fetch\([\"\`\'][\s\S]*[\"\`\']\)/g,

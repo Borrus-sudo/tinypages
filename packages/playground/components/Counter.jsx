@@ -1,21 +1,22 @@
 import { useState } from "preact/hooks";
 import Github from "~icons/mdi/github";
-// console.log(pageCtx);
-console.log("hello moar");
+
 export const PreactCounter = (props) => {
   const [count, setCount] = useState(0);
   const add = () => setCount((i) => i + 1);
   const subtract = () => setCount((i) => i - 1);
   // const stuff = $\$fetch("https://jdev.glitch.me/post/getPost");
   return (
-    <div class="counter">
+    <>
+    <div className="counter">
       <button onClick={subtract}>-</button>
       <pre>{count}</pre>
       <button onClick={add}>+</button>
       <Github />
-      hello
+      change2
       {props.children}
     </div>
+    </>
   );
 };
 

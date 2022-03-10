@@ -22,12 +22,13 @@ export default function (): Plugin {
       });
     },
     async handleHotUpdate(ctx) {
+      const toReturn = [];
       for (let module of ctx.modules) {
         const fileId = path.normalize(module.file);
         if (fileId === utils.configFile) {
           reload(module.file, ctx.server, utils.logger);
           break;
-        } else {
+        } else if (module.url.startsWith("/component")) {
           if (page.sources.includes(fileId)) {
             // invalidate the file and reload, so in the next reload, compileMarkdown cached values are used and cached ssr components
             // other than fileId are utilized
@@ -49,8 +50,10 @@ export default function (): Plugin {
               // });
             }
           }
+          toReturn.push(module);
         }
       }
+      return toReturn;
     },
   };
 }

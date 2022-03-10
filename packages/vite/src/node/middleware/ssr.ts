@@ -17,6 +17,7 @@ export default async function (vite: ViteDevServer) {
           utils.logger.info(`404 not found ${req.originalUrl}`, {
             timestamp: true,
           });
+          res.sendStatus(404);
         } else {
           utils.logger.info(req.originalUrl, { timestamp: true });
           res.send(await fs.readFile(pageCtx.url, { encoding: "utf-8" }));
