@@ -13,13 +13,9 @@ export function appendPrelude(content: string, page: Page) {
     type: "text/javascript",
     innerHTML: scriptTag,
   });
+  renderToString(h(Helmet, page.meta.head, null)); // renderToString the head to make Helmet.rewind work
 
-  // render head to string;
-  // to make Helmet.rewind work
-  const stuff = renderToString(h(Helmet, page.meta.head, null));
-  console.log(stuff);
   const HelmetHead = Helmet.rewind();
-
   const html = String.raw`
       <!doctype html>
       <html${HelmetHead.htmlAttributes.toString()}>

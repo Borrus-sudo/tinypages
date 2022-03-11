@@ -24,5 +24,6 @@ export async function createPlugins() {
     HmrPlugin(),
     PrefreshPlugin(),
   ];
+  console.log(plugins);
   return plugins;
 }

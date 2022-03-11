@@ -7,7 +7,7 @@ import { normalizePath as viteNormalizePath } from "vite";
 import type { Meta } from "../../types/types";
 import { useContext } from "../context";
 import { appendPrelude, deepCopy, hash } from "../utils";
-import { generateVirtualEntryPoint, hashIt } from "./pluginUtils";
+import { generateVirtualEntryPoint, hashIt, reload } from "./pluginUtils";
 
 export default function (): Plugin {
   const { config, page, utils } = useContext();
@@ -73,22 +73,18 @@ export default function (): Plugin {
       for (let module of ctx.modules) {
         const fileId = path.normalize(module.file);
         if (page.pageCtx.url === fileId) {
-          utils.logger.info(`Page reload ${module.file}`, {
-            timestamp: true,
-            clear: true,
-          });
           const [, meta] = await compile(
             await fs.readFile(page.pageCtx.url, { encoding: "utf-8" })
           );
           const newHash = hashIt.hash(meta.components);
           if (newHash !== page.prevHash) {
-            ctx.server.moduleGraph.invalidateAll();
-            ctx.server.ws.send({
-              type: "custom",
-              event: "reload:page",
-            });
+            reload(module.file, ctx.server, utils.logger);
             return [];
           }
+          utils.logger.info(`Page reload ${module.file}`, {
+            timestamp: true,
+            clear: true,
+          });
           ctx.server.ws.send({
             type: "custom",
             event: "new:page",

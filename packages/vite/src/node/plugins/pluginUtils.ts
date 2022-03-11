@@ -27,6 +27,7 @@ export const reload = (file: string, server: ViteDevServer, logger: Logger) => {
   logger.info(`Page reload: ${file}`, {
     timestamp: true,
   });
+  server.moduleGraph.invalidateAll();
   server.ws.send({
     type: "custom",
     event: "reload:page",

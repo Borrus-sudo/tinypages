@@ -7,7 +7,7 @@ const defu = require("defu");
 export async function resolveConfig(
   cliViteConfig
 ): Promise<{ config: TinyPagesConfig; filePath: string }> {
-  let { config, sources } = await loadConfig<Partial<UserTinyPagesConfig>>({
+  let { config, sources } = await loadConfig<UserTinyPagesConfig>({
     sources: [
       {
         files: "tinypages.config",
@@ -17,13 +17,15 @@ export async function resolveConfig(
     ],
   });
 
-  const ext = defu.extend((obj, key, _) => {
-    console.log(key);
+  const ext = defu.extend((obj, key, value) => {
     if (key === "vite") {
-      obj[key] = mergeConfig(
-        presetViteConfig,
-        mergeConfig(obj[key] || {}, cliViteConfig)
-      );
+      obj[key] =
+        typeof obj[key] === "object"
+          ? mergeConfig(presetViteConfig, mergeConfig(obj[key], cliViteConfig))
+          : value;
+      return true;
+    } else if (key === "resolveUnoCSS") {
+      obj[key] = true;
       return true;
     }
   });
@@ -41,8 +43,6 @@ export async function resolveConfig(
       unocss: {},
     },
   });
-  //@ts-ignore
-  config.compiler.resolveUnoCSS = false;
   //@ts-ignore
   config.compiler.icons = config.modules.icons;
   return { config, filePath: sources[0] } as {
