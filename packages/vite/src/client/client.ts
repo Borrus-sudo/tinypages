@@ -1,6 +1,6 @@
 import { hydrate } from "./hydrate";
 import "./hmr";
-import { ComponentFactory } from "preact";
+import type { ComponentFactory } from "preact";
 
 const lazyLoad = (target, component, uid) => {
   const io = new IntersectionObserver((entries, observer) => {
@@ -39,3 +39,5 @@ export default async function (componentMap: Map<string, ComponentFactory>) {
     }
   }
 }
+
+export { lazy } from "preact-iso";

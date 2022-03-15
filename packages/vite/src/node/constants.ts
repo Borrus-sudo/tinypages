@@ -39,6 +39,7 @@ export const presetViteConfig = {
   optimizeDeps: {
     include: [
       "preact",
+      "preact-iso",
       "preact-helmet",
       "preact/hooks",
       "preact/compat",
@@ -46,7 +47,13 @@ export const presetViteConfig = {
     ],
   },
   ssr: {
-    externals: ["preact-render-to-string"],
+    externals: [
+      "preact-render-to-string",
+      "preact-iso",
+      "preact",
+      "node-object-hash",
+      "tinypages/entry-server",
+    ],
   },
   resolve: {
     alias: {

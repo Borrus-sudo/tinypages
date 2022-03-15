@@ -39,9 +39,7 @@ export async function createContext(
   ctx.config.vite = mergeConfig(ctx.config.vite, { plugins });
   vite = await createServer(ctx.config.vite);
   const { render: renderFunction, invalidate: invalidateFunction } =
-    await vite.ssrLoadModule(
-      require.resolve("tinypages/entry-server").replace(".js", ".mjs")
-    );
+    await vite.ssrLoadModule("tinypages/entry-server");
   render = renderFunction;
   invalidate = invalidateFunction;
   return [ctx, vite];

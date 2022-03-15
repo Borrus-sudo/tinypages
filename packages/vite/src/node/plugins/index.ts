@@ -10,7 +10,7 @@ import PrefreshPlugin from "@prefresh/vite";
 
 export async function createPlugins() {
   const { config } = useContext();
-  const plugins = [
+  return [
     InspectPlugin(),
     DataFetchPlugin(),
     MarkdownPlugin(),
@@ -24,6 +24,4 @@ export async function createPlugins() {
     HmrPlugin(),
     PrefreshPlugin(),
   ];
-  console.log(plugins);
-  return plugins;
 }

@@ -95,6 +95,7 @@ export function cli() {
             logLevel: options.logLevel,
             clearScreen: options.clearScreen,
             server: cleanOptions(options),
+            config: options.config,
           };
           const { config, filePath } = await resolveConfig(cliViteOptions);
           const server = await createDevServer(config, filePath);

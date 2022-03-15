@@ -5,15 +5,30 @@ import renderToString from "preact-render-to-string";
 import { createHash } from "crypto";
 
 export function appendPrelude(content: string, page: Page) {
-  const scriptTag = `
+  const keys = Object.keys(page.global);
+  if (keys.length > 0) {
+    const clone = deepCopy(page.global);
+    keys.forEach((key) => {
+      delete clone[key].error;
+      delete clone[key].path;
+      delete clone[key].lazy;
+      delete clone[key].props["no:hydrate"];
+      delete clone[key].props["client:only"];
+      delete clone[key].props["lazy:load"];
+    });
+    const scriptTag = `
     window.pageCtx=${JSON.stringify(page.pageCtx)};
-    window.globals=${JSON.stringify(page.global)};
+    window.globals=${JSON.stringify(clone)};
   `.trim();
-  page.meta.head.script.push({
-    type: "text/javascript",
-    innerHTML: scriptTag,
-  });
-  renderToString(h(Helmet, page.meta.head, null)); // renderToString the head to make Helmet.rewind work
+    page.meta.head.script.push({
+      type: "text/javascript",
+      innerHTML: scriptTag,
+    });
+  }
+
+  const vnode = h(Helmet, page.meta.head, null);
+  const string = renderToString(vnode); // renderToString the head to make Helmet.rewind work
+  console.log("head", string);
 
   const HelmetHead = Helmet.rewind();
   const html = String.raw`

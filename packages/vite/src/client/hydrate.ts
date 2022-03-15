@@ -1,9 +1,9 @@
-import { ComponentFactory, h, render } from "preact";
+import { ComponentFactory, h } from "preact";
+import { hydrate as hydrativeRender } from "preact-iso";
 
 export async function hydrate(
   component: {
     props: Record<string, string>;
-    error: boolean;
     factoryFunction: ComponentFactory;
   },
   element: Element,
@@ -23,7 +23,7 @@ export async function hydrate(
         })
       : null;
     const vnode = h(__comp__, component.props, innerSlot);
-    render(vnode, parent, element);
+    hydrativeRender(vnode, parent);
   } catch (err) {
     if (import.meta.env.DEV) {
       element.replaceWith(

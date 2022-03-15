@@ -5,6 +5,7 @@ export const PreactCounter = (props) => {
   const [count, setCount] = useState(0);
   const add = () => setCount((i) => i + 1);
   const subtract = () => setCount((i) => i - 1);
+  console.log(props.ssrProps);
   // const stuff = $\$fetch("https://jdev.glitch.me/post/getPost");
   return (
     <>

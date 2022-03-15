@@ -12,7 +12,7 @@ export default async function (vite: ViteDevServer) {
     try {
       const url = normalizeUrl(req.originalUrl);
       const pageCtx = router(url);
-      if (!/\.(md|html)$/.test(url)) {
+      if (!/\.md$/.test(url)) {
         if (pageCtx.url === "404") {
           utils.logger.info(`404 not found ${req.originalUrl}`, {
             timestamp: true,

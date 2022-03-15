@@ -1,14 +1,14 @@
 import * as fs from "fs";
-import { parse } from "node-html-parser";
 import hasher from "node-object-hash";
 import ora from "ora";
 import { join } from "path";
 import { h } from "preact";
-import renderToString from "preact-render-to-string";
+import { prerender } from "preact-iso";
 import type { ViteDevServer } from "vite";
 import type { ComponentRegistration, ResolvedConfig } from "../types/types";
 
-const map: Map<string, string> = new Map();
+const map: Map<string, { html: string; ssrProps?: Record<string, any> }> =
+  new Map();
 const hashComp: Map<string, string[]> = new Map();
 const hashIt = hasher({ sort: false, coerce: true });
 
@@ -41,10 +41,10 @@ const render = async (
     if (component.props["client:only"]) {
       delete component.props["client:only"];
       if (map.has(hash)) {
-        payload = map.get(hash).replace(/uid=\"\d\"/, `uid="${uid}"`);
+        payload = map.get(hash).html.replace(/uid=\"\d\"/, `uid="${uid}"`);
       } else {
         payload = `<div preact uid="${uid}"></div>`;
-        map.set(hash, payload);
+        map.set(hash, { html: payload });
         if (hashComp.has(componentPath)) {
           hashComp.set(componentPath, [hash, ...hashComp.get(componentPath)]);
         } else {
@@ -54,16 +54,20 @@ const render = async (
           path: componentPath,
           props: component.props,
           error,
+          lazy: !!component.props["lazy:load"],
         };
       }
     } else {
       if (map.has(hash)) {
-        payload = map.get(hash).replace(/uid=\"\d\"/, `uid="${uid}"`);
+        const cached = map.get(hash);
+        payload = cached.html.replace(/uid=\"\d\"/, `uid="${uid}"`);
         if (payload.includes(" preact-error ")) {
           error = true;
         }
+        if (cached.ssrProps) {
+          component.props["ssrProps"] = cached.ssrProps;
+        }
       } else {
-        let compHtml;
         try {
           const module = await vite.ssrLoadModule(componentPath);
           const preactComponent = module.default;
@@ -87,21 +91,14 @@ const render = async (
                 })
               : null;
           let vnode = h(preactComponent, component.props, slotVnode); // the component in Vnode
-          compHtml = renderToString(vnode); // the component html
-          const dom = parse(compHtml);
-          //@ts-ignore
-          dom.childNodes?.[0]?.setAttribute?.("preact", ""); // Add a preact component prop
-          if (!component.props["no:hydrate"]) {
-            //@ts-ignore
-            dom?.childNodes?.[0]?.setAttribute?.("uid", uid);
-          }
-          payload = dom.toString();
+          payload = `<div preact ${
+            !component.props["no:hydrate"] ? 'uid="' + uid + '"' : ""
+          }>${(await prerender(vnode)).html}</div>`; // the component html
         } catch (err) {
           error = true;
           payload = `<div preact preact-error uid="${uid}" style="color:red; background-color: lightpink;border: 2px dotted black;margin-bottom: 36px;">${err}</div>`;
         }
-        map.set(hash, payload);
-
+        map.set(hash, { html: payload, ssrProps: component.props["ssrProps"] });
         if (hashComp.has(componentPath)) {
           hashComp.set(componentPath, [hash, ...hashComp.get(componentPath)]);
         } else {
@@ -115,6 +112,7 @@ const render = async (
           path: componentPath,
           props: component.props,
           error,
+          lazy: !!component.props["lazy:load"],
         };
       }
     }

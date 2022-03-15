@@ -11,7 +11,7 @@ interface BaseMeta {
   components: {
     componentLiteral: string;
     componentName: string;
-    props: Record<string, string>;
+    props: Record<string, any>;
     children: string;
   }[];
   headTags: string[];

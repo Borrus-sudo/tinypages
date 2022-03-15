@@ -23,10 +23,14 @@ export default function (): Plugin {
   };
   const virtualModuleMap = new Map();
   const addedModule = [];
+  let isBuild = false;
 
   return {
     name: "vite-tinypages-markdown",
     enforce: "pre",
+    configResolved(config) {
+      isBuild = config.command === "build" || config.isProduction;
+    },
     transformIndexHtml: {
       enforce: "pre",
       async transform(markdown: string, ctx) {
@@ -48,15 +52,14 @@ export default function (): Plugin {
         });
         virtualModuleMap.set(
           virtualModuleId,
-          generateVirtualEntryPoint(page.global, config.vite.root)
+          generateVirtualEntryPoint(page.global, config.vite.root, isBuild)
         );
         const appHtml = appendPrelude(renderedHtml, page);
         if (!addedModule.includes(page.pageCtx.url)) {
           ctx.server.moduleGraph.createFileOnlyEntry(page.pageCtx.url);
           addedModule.push(page.pageCtx.url);
         }
-        ctx.filename = path.basename(page.pageCtx.url);
-        ctx.path = viteNormalizePath(page.pageCtx.url);
+        ctx.filename = viteNormalizePath(page.pageCtx.url);
         return appHtml;
       },
     },

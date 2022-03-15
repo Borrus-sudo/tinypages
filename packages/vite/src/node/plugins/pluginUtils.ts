@@ -1,7 +1,7 @@
 import hasher from "node-object-hash";
 import * as path from "path";
 import type { Logger, ModuleNode, ViteDevServer } from "vite";
-import { normalizePath } from "vite";
+import { normalizePath as viteNormalizePath } from "vite";
 import type { ComponentRegistration, Page } from "../../types/types";
 
 export const hashIt = hasher({ sort: false, coerce: true });
@@ -36,28 +36,46 @@ export const reload = (file: string, server: ViteDevServer, logger: Logger) => {
 
 export const generateVirtualEntryPoint = (
   components: ComponentRegistration,
-  root: string
+  root: string,
+  isBuild: boolean
 ) => {
   const importMap: Map<string, string> = new Map();
+  const resolve = (p: string) => viteNormalizePath(path.relative(root, p));
+  let usesLazy = false;
   const imports = Object.keys(components).map((uid: string, idx) => {
     const mod = components[uid];
+    if (components[uid].lazy) {
+      usesLazy = true;
+    }
     if (!importMap.has(uid)) {
-      importMap.set(uid, `comp${idx}`);
-      return `import comp${idx} from "/${normalizePath(
-        path.relative(root, mod.path)
-      )}";`;
+      if (!components[uid].lazy) {
+        importMap.set(uid, `comp${idx}`);
+        return `import comp${idx} from "/${resolve(mod.path)}";`;
+      }
     }
   });
-  imports.push(`import hydrate from "tinypages/client";`);
-  imports.unshift(`import "uno.css";`);
-  // imports.push(`import "/${normalizePath(path.relative(root, pageUrl))}"`);
+  if (!isBuild) {
+    imports.unshift(`import "preact/debug"`);
+  }
+  imports.push(
+    `import ${usesLazy ? "{hydrate,lazy}" : "hydrate"} from "tinypages/client";`
+  );
+  imports.push(`import "uno.css";`);
+
   let code = `
   ${imports.join("\n")}
   (async()=>{
     await hydrate({
      ${Object.keys(components)
        .map((uid: string) => {
-         return "'" + uid + "':" + importMap.get(uid);
+         return (
+           "'" +
+           uid +
+           "':" +
+           (components[uid].lazy
+             ? 'lazy(()=>import("' + resolve(components[uid].path) + '"))'
+             : importMap.get(uid))
+         );
        })
        .join(",")}
     });

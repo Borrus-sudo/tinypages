@@ -13,7 +13,8 @@ async function replaceAsync(str, regex, asyncFn) {
 }
 export default function (): Plugin {
   const reqCache: Map<string, string> = new Map();
-
+  const regexPageProps =
+    /export.*?(async|\S).*?function.*?pageProps.*?\(.*?\).*?\{\n([\s\S]*?\n)\}/gm;
   return {
     name: "vite-tinypages-ssrFetch",
     enforce: "pre",
@@ -32,7 +33,10 @@ export default function (): Plugin {
       }
     },
     async transform(code: string, id: string, options) {
-      if (!/\.(t|j)sx$/.test(id) && !/\.(t|j)s$/.test(id)) return;
+      if (!/\.(t|j)sx{0,1}$/.test(id)) return;
+      // if (!options.ssr) {
+      //   code = code.replace(regexPageProps, "");
+      // }
       return await replaceAsync(
         code,
         /\$\$fetch\([\"\`\'][\s\S]*[\"\`\']\)/g,

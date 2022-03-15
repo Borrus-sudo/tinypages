@@ -7,15 +7,21 @@ const defu = require("defu");
 export async function resolveConfig(
   cliViteConfig
 ): Promise<{ config: TinyPagesConfig; filePath: string }> {
-  let { config, sources } = await loadConfig<UserTinyPagesConfig>({
-    sources: [
-      {
-        files: "tinypages.config",
-        // default extensions
-        extensions: ["ts", "mts", "cts", "js", "mjs", "cjs", "json", ""],
-      },
-    ],
-  });
+  let config,
+    sources = [""];
+  if (cliViteConfig.config) {
+    let { config: c, sources: s } = await loadConfig<UserTinyPagesConfig>({
+      sources: [
+        {
+          files: "tinypages.config",
+          // default extensions
+          extensions: ["ts", "mts", "cts", "js", "mjs", "cjs", "json", ""],
+        },
+      ],
+    });
+    (config = c), (sources = s);
+  }
+  delete cliViteConfig["config"];
 
   const ext = defu.extend((obj, key, value) => {
     if (key === "vite") {

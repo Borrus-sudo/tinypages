@@ -1,4 +1,1 @@
-declare const globals: Record<
-  string,
-  { props: Record<string, string>; error: boolean }
->;
+declare const globals: Record<string, { props: Record<string, any> }>;
