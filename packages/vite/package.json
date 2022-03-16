@@ -66,7 +66,7 @@
     "preact-iso": "^2.3.0",
     "preact-render-to-string": "latest",
     "radix3": "^0.1.0",
-    "unconfig": "^0.2.2",
+    "unconfig": "^0.3.1",
     "vite": "^2.8.4",
     "vite-plugin-image-presets": "^0.3.1",
     "vite-plugin-inspect": "^0.4.3"
