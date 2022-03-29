@@ -1,11 +1,9 @@
-import hasher from "node-object-hash";
 import * as path from "path";
 import type { Logger, ModuleNode, ViteDevServer } from "vite";
 import { normalizePath as viteNormalizePath } from "vite";
 import type { ComponentRegistration, Page } from "../../types/types";
 
-export const hashIt = hasher({ sort: false, coerce: true });
-
+export { hash } from "ohash";
 export const isParentJSX = (node: ModuleNode, page: Page) => {
   for (let module of node.importedModules) {
     const fileId = path.normalize(module.file);
@@ -62,24 +60,24 @@ export const generateVirtualEntryPoint = (
   );
   imports.push(`import "uno.css";`);
 
-  let code = `
+  const moduleMapStr = Object.keys(components)
+    .map((uid: string) => {
+      const left = `'${uid}'`;
+
+      const right = components[uid].lazy
+        ? `lazy(()=>import("${resolve(components[uid].path)}"))`
+        : importMap.get(uid);
+
+      return `${left}: ${right}`;
+    })
+    .join(",");
+
+  return `
   ${imports.join("\n")}
   (async()=>{
     await hydrate({
-     ${Object.keys(components)
-       .map((uid: string) => {
-         return (
-           "'" +
-           uid +
-           "':" +
-           (components[uid].lazy
-             ? 'lazy(()=>import("' + resolve(components[uid].path) + '"))'
-             : importMap.get(uid))
-         );
-       })
-       .join(",")}
+     ${moduleMapStr}
     });
   })();
   `;
-  return code;
 };

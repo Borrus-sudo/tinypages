@@ -1,14 +1,19 @@
+import consolaPkg from "consola";
+import { murmurHash } from "ohash";
 import { h } from "preact";
 import Helmet from "preact-helmet";
-import { Page } from "../types/types";
 import renderToString from "preact-render-to-string";
-import { createHash } from "crypto";
+import env from "std-env";
+import { Page } from "../types/types";
 
 export function appendPrelude(content: string, page: Page) {
   const keys = Object.keys(page.global);
+
   if (keys.length > 0) {
     const clone = deepCopy(page.global);
+
     keys.forEach((key) => {
+      // delete different tags which aren't needed on the server
       delete clone[key].error;
       delete clone[key].path;
       delete clone[key].lazy;
@@ -16,6 +21,7 @@ export function appendPrelude(content: string, page: Page) {
       delete clone[key].props["client:only"];
       delete clone[key].props["lazy:load"];
     });
+
     const scriptTag = `
     window.pageCtx=${JSON.stringify(page.pageCtx)};
     window.globals=${JSON.stringify(clone)};
@@ -26,8 +32,8 @@ export function appendPrelude(content: string, page: Page) {
     });
   }
 
-  const vnode = h(Helmet, page.meta.head, null);
-  const string = renderToString(vnode); // renderToString the head to make Helmet.rewind work
+  h(Helmet, page.meta.head, null);
+  const string = renderToString(Helmet); // renderToString the head to make Helmet.rewind work
   console.log("head", string);
 
   const HelmetHead = Helmet.rewind();
@@ -59,7 +65,7 @@ export function deepCopy<T>(obj: T): T {
 }
 
 export function hash(content: string) {
-  return createHash("md5").update(content).digest("hex");
+  return murmurHash(content);
 }
 
 export function normalizeUrl(url: string) {
@@ -70,4 +76,26 @@ export function normalizeUrl(url: string) {
     : url;
   normalizedUrl = normalizedUrl.replace(/\.html$/, ".md");
   return normalizedUrl;
+}
+
+export function createConsola() {
+  const { Consola, BasicReporter, FancyReporter, LogLevel } =
+    consolaPkg as unknown as typeof import("consola");
+
+  //@ts-ignore
+  let level = env.debug
+    ? LogLevel.Debug //@ts-ignore
+    : env.test
+    ? LogLevel.Warn
+    : LogLevel.Info;
+  if (process.env.CONSOLA_LEVEL) {
+    level = parseInt(process.env.CONSOLA_LEVEL) || level;
+  }
+
+  // Create new consola instance
+  const consola = new Consola({
+    level, //@ts-ignore
+    reporters: [env.ci || env.test ? new BasicReporter() : new FancyReporter()],
+  });
+  return consola;
 }

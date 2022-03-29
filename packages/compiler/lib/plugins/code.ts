@@ -1,14 +1,13 @@
 import * as shiki from "shiki";
 import type { Config, Plugin } from "../../types/types";
 import katexRenderer from "./helpers/katex";
-const parse = require("parse-key-value");
 
-let highlighter;
 export function PluginCode(): Plugin {
-  let code,
-    lang,
-    config: Config,
-    mermaidGraphs: Record<string, string>[] = [];
+  let highlighter;
+  let code, lang;
+  let config: Config;
+  let mermaidGraphs: Record<string, string>[] = [];
+
   return {
     name: "core:code",
     async getReady() {
@@ -39,7 +38,7 @@ export function PluginCode(): Plugin {
           if (lang.includes(" ")) {
             [lang, ...keyValue] = lang.split(" ");
             keyValue = keyValue.join(" ").slice(1, -1);
-            options = { lang, ...parse(keyValue) };
+            options = { lang, ...JSON.parse(keyValue) };
           }
           try {
             let result = highlighter.codeToHtml(code, options);
@@ -61,7 +60,7 @@ export function PluginCode(): Plugin {
     },
     async postTransform(payload: string) {
       if (mermaidGraphs.length > 0) {
-        const mermaid = require("headless-mermaid");
+        const mermaid = (await import("headless-mermaid")).default;
         const promisesArr = [];
         for (let graph of mermaidGraphs) {
           let keyValue: string | string[] = [];
@@ -74,7 +73,7 @@ export function PluginCode(): Plugin {
           if (graph.lang.includes(" ")) {
             [, ...keyValue] = graph.lang.split(" ");
             keyValue = keyValue.join(" ").slice(1, -1);
-            options = { ...parse(keyValue) };
+            options = { ...JSON.parse(keyValue) };
           }
           promisesArr.push(mermaid.execute(graph.code, options));
         }

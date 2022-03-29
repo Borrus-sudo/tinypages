@@ -1,5 +1,5 @@
 import { parse } from "node-html-parser";
-const tags = require("html-tags");
+import { tags } from "./utils";
 
 export function analyze(input: string): [
   string,

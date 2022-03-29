@@ -8,6 +8,12 @@ type RenderFunction = (
   ctx: ResolvedConfig
 ) => Promise<string>;
 
+interface Consola {
+  info: (input: string) => void;
+  error: (input: Error) => void;
+  success: (input: string) => void;
+}
+
 type ComponentRegistration = {
   [key: string]: {
     path: string;
@@ -36,6 +42,7 @@ interface Utils {
   invalidate: (file: string) => void;
   pageDir: Readonly<string>;
   configFile: Readonly<string>;
+  consola: Consola;
 }
 
 interface ResolvedConfig {

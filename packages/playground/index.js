@@ -1,1 +1,0 @@
-require("tinypages").cli();

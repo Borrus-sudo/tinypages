@@ -1,5 +1,5 @@
-import { InlineConfig } from "vite";
-import { Page } from "../types/types";
+import type { InlineConfig } from "vite";
+import type { Page } from "../types/types";
 
 export const presetCompilerConfig = {
   marked: { gfm: true, xhtml: true },
@@ -37,22 +37,16 @@ export const presetViteConfig = {
   },
   plugins: [],
   optimizeDeps: {
-    include: [
-      "preact",
-      "preact-iso",
-      "preact-helmet",
-      "preact/hooks",
-      "preact/compat",
-      "million",
-    ],
+    include: ["million", "preact", "preact-iso"],
   },
   ssr: {
     externals: [
       "preact-render-to-string",
       "preact-iso",
       "preact",
-      "node-object-hash",
-      "tinypages/entry-server",
+      "ohash",
+      "ohmyfetch",
+      "preact-helmet",
     ],
   },
   resolve: {

@@ -1,7 +1,6 @@
 import * as fs from "fs";
-import hasher from "node-object-hash";
-import ora from "ora";
-import { join } from "path";
+import { hash as hashObj } from "ohash";
+import * as path from "path";
 import { h } from "preact";
 import { prerender } from "preact-iso";
 import type { ViteDevServer } from "vite";
@@ -10,16 +9,16 @@ import type { ComponentRegistration, ResolvedConfig } from "../types/types";
 const map: Map<string, { html: string; ssrProps?: Record<string, any> }> =
   new Map();
 const hashComp: Map<string, string[]> = new Map();
-const hashIt = hasher({ sort: false, coerce: true });
 
-const resolve = (fsPath: string) =>
-  fsPath + (fs.existsSync(fsPath + ".jsx") ? ".jsx" : ".tsx");
+const resolve = (fsPath: string) => {
+  return fsPath + (fs.existsSync(fsPath + ".jsx") ? ".jsx" : ".tsx");
+};
 
-const render = async (
+export async function render(
   html: string,
   vite: ViteDevServer,
   ctx: ResolvedConfig
-) => {
+) {
   let componentRegistration: ComponentRegistration = {};
   let uid: number = 0;
   let payload: string;
@@ -28,13 +27,14 @@ const render = async (
   ctx.page.sources = [];
   for (let component of ctx.page.meta.components) {
     const componentPath = resolve(
-      join(
+      path.join(
         ctx.config.vite.root,
         "./components",
         component.componentName.replace(/\./g, "/")
       )
     );
-    const hash = hashIt.hash(component);
+
+    const hash = hashObj(component);
     ctx.page.sources.push(componentPath);
     error = false;
 
@@ -50,6 +50,7 @@ const render = async (
         } else {
           hashComp.set(componentPath, [hash]);
         }
+
         componentRegistration[uid] = {
           path: componentPath,
           props: component.props,
@@ -64,6 +65,7 @@ const render = async (
         if (payload.includes(" preact-error ")) {
           error = true;
         }
+
         if (cached.ssrProps) {
           component.props["ssrProps"] = cached.ssrProps;
         }
@@ -76,13 +78,12 @@ const render = async (
           if (pageProps) {
             // the client shall receive this as well because component.props
             //  is passed by reference to componentRegistration
-            const spinner = ora(`Loading pageProps ...`);
-            spinner.start();
             component.props["ssrProps"] = await pageProps(
               JSON.parse(JSON.stringify(ctx.page.pageCtx))
             );
-            spinner.succeed("");
+            ctx.utils.consola.success("Loaded page props!");
           }
+
           //children in the Vnode
           let slotVnode =
             component.children.trim() !== ""
@@ -91,6 +92,7 @@ const render = async (
                 })
               : null;
           let vnode = h(preactComponent, component.props, slotVnode); // the component in Vnode
+
           payload = `<div preact ${
             !component.props["no:hydrate"] ? 'uid="' + uid + '"' : ""
           }>${(await prerender(vnode)).html}</div>`; // the component html
@@ -98,6 +100,7 @@ const render = async (
           error = true;
           payload = `<div preact preact-error uid="${uid}" style="color:red; background-color: lightpink;border: 2px dotted black;margin-bottom: 36px;">${err}</div>`;
         }
+
         map.set(hash, { html: payload, ssrProps: component.props["ssrProps"] });
         if (hashComp.has(componentPath)) {
           hashComp.set(componentPath, [hash, ...hashComp.get(componentPath)]);
@@ -122,13 +125,11 @@ const render = async (
   }
   ctx.page.global = componentRegistration;
   return html;
-};
+}
 
-const invalidate = (invalidateComponent: string) => {
+export function invalidate(invalidateComponent: string) {
   if (hashComp.has(invalidateComponent)) {
     const hashes = hashComp.get(invalidateComponent);
     hashes.forEach((hash) => map.delete(hash));
   }
-};
-
-export { invalidate, render };
+}

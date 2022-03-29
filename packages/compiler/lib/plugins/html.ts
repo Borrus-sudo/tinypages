@@ -3,7 +3,7 @@ import { parse } from "node-html-parser";
 import type { Config, Plugin, Meta } from "../../types/types";
 import iconsRenderer from "./helpers/icons";
 import { marked } from "marked";
-const tags = require("html-tags");
+import { tags } from "../utils";
 
 export function PluginHTML(): Plugin {
   let config: Config;

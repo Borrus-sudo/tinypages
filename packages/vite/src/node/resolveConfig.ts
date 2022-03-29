@@ -1,14 +1,15 @@
+import { createDefu } from "defu";
 import { loadConfig } from "unconfig";
 import { mergeConfig } from "vite";
 import type { TinyPagesConfig, UserTinyPagesConfig } from "../types/types";
 import { presetCompilerConfig, presetViteConfig } from "./constants";
-const defu = require("defu");
 
 export async function resolveConfig(
   cliViteConfig
 ): Promise<{ config: TinyPagesConfig; filePath: string }> {
-  let config,
-    sources = [""];
+  let config;
+  let sources = [""];
+
   if (cliViteConfig.config) {
     let { config: c, sources: s } = await loadConfig<UserTinyPagesConfig>({
       sources: [
@@ -23,14 +24,16 @@ export async function resolveConfig(
   }
   delete cliViteConfig["config"];
 
-  const ext = defu.extend((obj, key, value) => {
+  const ext = createDefu((obj, key, value) => {
     if (key === "vite") {
+      //@ts-ignore
       obj[key] =
         typeof obj[key] === "object"
           ? mergeConfig(presetViteConfig, mergeConfig(obj[key], cliViteConfig))
           : value;
       return true;
     } else if (key === "resolveUnoCSS") {
+      //@ts-ignore
       obj[key] = true;
       return true;
     }
@@ -48,8 +51,7 @@ export async function resolveConfig(
       icons: {},
       unocss: {},
     },
-  });
-  //@ts-ignore
+  }); //@ts-ignore
   config.compiler.icons = config.modules.icons;
   return { config, filePath: sources[0] } as {
     config: TinyPagesConfig;

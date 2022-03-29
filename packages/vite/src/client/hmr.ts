@@ -27,8 +27,7 @@ import type { DOMNode, Flags, VNode, VProps } from "million";
       let delta;
       const normalizedChildren: VNode[] = [];
       if (props) {
-        const rawDelta = <unknown>props.delta;
-        //@ts-ignore
+        const rawDelta = <unknown>props.delta; //@ts-ignore
         if (rawDelta && rawDelta.length) {
           delta = rawDelta;
           delete props.delta;

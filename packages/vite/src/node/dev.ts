@@ -1,6 +1,6 @@
 import express from "express";
-import { ViteDevServer } from "vite";
-import { TinyPagesConfig } from "../types/types";
+import type { ViteDevServer } from "vite";
+import type { TinyPagesConfig } from "../types/types";
 import { createContext } from "./context";
 import { createMiddlewares } from "./middleware";
 
@@ -24,7 +24,7 @@ export async function createDevServer(
     app.use(config.middlewares.post);
 
   app.listen(3003, () => {
-    console.log("http://localhost:3003");
+    ctx.utils.consola.info("http://localhost:3003");
   });
   return vite;
 }

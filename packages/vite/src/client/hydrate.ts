@@ -11,7 +11,6 @@ export async function hydrate(
 ) {
   let html = "";
   let innerSlot;
-  const parent = element.parentElement;
   try {
     const __comp__ = component.factoryFunction;
     html = element.getElementsByTagName("tinypages-fragment")?.[0]?.innerHTML;
@@ -23,7 +22,7 @@ export async function hydrate(
         })
       : null;
     const vnode = h(__comp__, component.props, innerSlot);
-    hydrativeRender(vnode, parent);
+    hydrativeRender(vnode, element);
   } catch (err) {
     if (import.meta.env.DEV) {
       element.replaceWith(

@@ -20,8 +20,7 @@ export function PluginCSS(): Plugin {
       } else if (lastText) {
         lastText = false;
         if (classes.length > 0) {
-          const dom = parse(payload);
-          //@ts-ignore
+          const dom = parse(payload); //@ts-ignore
           classes.forEach((c) => dom.childNodes?.[0]?.classList.add(c));
           classes = [];
           return dom.toString();
@@ -31,7 +30,7 @@ export function PluginCSS(): Plugin {
     },
     async postTransform(payload) {
       if (!config.renderUnoCSS) return payload;
-      const { createGenerator } = require("@unocss/core");
+      const { createGenerator } = await import("@unocss/core");
       const uno = createGenerator(config.unocss || {});
       const css = await uno.generate(payload, { minify: !!config.minify });
       config.metaConstruct.styles = css.css;

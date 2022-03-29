@@ -7,8 +7,7 @@ export default function (
 ): string {
   if (ctx.type === "katex-mhcem") {
     require("katex/contrib/mhchem");
-  }
-  //@ts-ignore
+  } //@ts-ignore
   ctx.config.katex.displayMode = !ctx.inlineRender;
   return katex.renderToString(
     content,

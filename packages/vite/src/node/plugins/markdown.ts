@@ -7,13 +7,17 @@ import { normalizePath as viteNormalizePath } from "vite";
 import type { Meta } from "../../types/types";
 import { useContext } from "../context";
 import { appendPrelude, deepCopy, hash } from "../utils";
-import { generateVirtualEntryPoint, hashIt, reload } from "./pluginUtils";
+import {
+  generateVirtualEntryPoint,
+  hash as hashIt,
+  reload,
+} from "./pluginUtils";
 
 export default function (): Plugin {
   const { config, page, utils } = useContext();
   const cache: Map<string, [string, Meta]> = new Map();
   const compile = async (input: string): Promise<[string, Meta]> => {
-    const digest = hash(input);
+    const digest = hash(input).toString();
     if (cache.has(digest)) {
       return deepCopy(cache.get(digest));
     }
@@ -38,13 +42,12 @@ export default function (): Plugin {
         page.meta = meta;
         page.sources = [];
         page.global = {};
-        page.prevHash = hashIt.hash(meta.components);
+        page.prevHash = hashIt(meta.components);
         const renderedHtml = await utils.render(rawHtml);
         const virtualModuleId = viteNormalizePath(
-          `/virtualModule${pathToFileURL(page.pageCtx.url).href.replace(
-            /\.md$/,
-            ".js"
-          )}`
+          `/virtualModule${
+            pathToFileURL(page.pageCtx.url.replace(/\.md$/, ".js")).href
+          }`
         );
         page.meta.head.script.push({
           type: "module",
@@ -79,7 +82,7 @@ export default function (): Plugin {
           const [, meta] = await compile(
             await fs.readFile(page.pageCtx.url, { encoding: "utf-8" })
           );
-          const newHash = hashIt.hash(meta.components);
+          const newHash = hashIt(meta.components);
           if (newHash !== page.prevHash) {
             reload(module.file, ctx.server, utils.logger);
             return [];

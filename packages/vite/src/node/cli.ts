@@ -1,8 +1,7 @@
 import cac from "cac";
 import { join } from "path";
-import * as Colors from "picocolors";
 import * as Vite from "vite";
-import { UserTinyPagesConfig } from "../types/types";
+import type { UserTinyPagesConfig } from "../types/types";
 import { resolveConfig } from "./resolveConfig";
 import { createDevServer } from "./dev";
 
@@ -43,9 +42,6 @@ function cleanOptions<Options extends GlobalCLIOptions>(
 }
 
 export function cli() {
-  console.log(
-    Colors.cyan(`tinypages ${require("../../package.json").version}`)
-  );
   const cli = cac("tinypages");
   cli
     .option("-c, --config <file>", `[string] use specified config file`)
@@ -100,14 +96,9 @@ export function cli() {
           const { config, filePath } = await resolveConfig(cliViteOptions);
           const server = await createDevServer(config, filePath);
           const info = server.config.logger.info;
-          info(
-            Colors.cyan(
-              `\n  vite v${require("tinypages/package.json").version}`
-            ) + Colors.green(` dev server running at: `),
-            {
-              clear: !server.config.logger.hasWarned,
-            }
-          );
+          info(`\n  vite v1.0.0` + ` dev server running at: `, {
+            clear: !server.config.logger.hasWarned,
+          });
         } catch (e) {
           process.exit(1);
         }
@@ -115,7 +106,7 @@ export function cli() {
     );
 
   cli.help();
-  cli.version(require("../../package.json").version);
+  cli.version("1.0.0");
   cli.parse();
 }
 

@@ -1,12 +1,11 @@
-import * as Colors from "picocolors";
 import { useContext, useVite } from "../context";
 
 export default function () {
-  const { utils } = useContext();
   const vite = useVite();
+  const { utils } = useContext();
   return (err: Error, _req, res) => {
     if (err) {
-      utils.logger.error(Colors.red(`${err.stack}`), { error: err });
+      utils.consola.error(err);
       vite.ws.send({
         type: "error",
         err: {

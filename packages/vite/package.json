@@ -7,8 +7,6 @@
     "dev": "tsup-node --watch src"
   },
   "main": "./out/node/cli.js",
-  "module": "./out/node/cli.mjs",
-  "types": "./out/node/cli.d.ts",
   "files": [
     "out",
     "bin",
@@ -19,30 +17,17 @@
   },
   "exports": {
     ".": {
-      "require": "./out/node/cli.js",
       "import": "./out/node/cli.mjs",
       "types": "./out/cli.d.ts"
     },
     "./entry-server": {
-      "require": "./out/node/entry-server.js",
       "import": "./out/node/entry-server.mjs"
     },
-    "./package.json": {
-      "require": "./package.json",
-      "import": "./package.json"
-    },
     "./client": {
-      "require": "./out/client/client.js",
       "import": "./out/client/client.mjs"
     },
-    "./server": {
-      "require": "./out/node/server.js",
-      "import": "./out/node/server.mjs"
-    },
     "./types": {
-      "require": "./types/index.d.ts",
-      "import": "./types/index.d.ts",
-      "types": "./types/index.d.ts"
+      "require": "./types/index.d.ts"
     }
   },
   "dependencies": {
@@ -51,28 +36,26 @@
     "@tinypages/compiler": "^1.0.0",
     "@unocss/vite": "^0.22.7",
     "cac": "^6.7.12",
-    "defu": "^5.0.1",
-    "express": "^4.17.2",
-    "micromorph": "^0.0.3",
-    "million": "^1.4.3",
-    "node-html-parser": "^5.2.0",
-    "node-icons": "^0.1.6",
-    "node-object-hash": "^2.3.10",
+    "consola": "^2.15.3",
+    "defu": "^6.0.0",
+    "express": "^4.17.3",
+    "million": "^1.6.2",
+    "node-icons": "^0.1.7",
+    "ohash": "^0.1.0",
     "ohmyfetch": "^0.4.14",
-    "ora": "5.4.1",
-    "picocolors": "^1.0.0",
-    "preact": "latest",
+    "ora": "^6.1.0",
+    "preact": "^10.6.6",
     "preact-helmet": "^4.0.0-alpha-3",
     "preact-iso": "^2.3.0",
-    "preact-render-to-string": "latest",
+    "preact-render-to-string": "^5.1.20",
     "radix3": "^0.1.0",
+    "std-env": "^3.0.1",
     "unconfig": "^0.3.1",
     "vite": "^2.8.4",
     "vite-plugin-image-presets": "^0.3.1",
     "vite-plugin-inspect": "^0.4.3"
   },
   "devDependencies": {
-    "@types/connect": "^3.4.35",
-    "@types/node": "^17.0.21"
+    "@types/connect": "^3.4.35"
   }
 }

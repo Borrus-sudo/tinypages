@@ -44,7 +44,7 @@
     "marked": "^4.0.10",
     "node-emoji": "^1.11.0",
     "node-html-parser": "^5.2.0",
-    "node-icons": "^0.1.6",
+    "node-icons": "^0.1.7",
     "param-case": "^3.0.4",
     "parse-key-value": "^1.0.0",
     "proxy-hookified": "^1.1.5",

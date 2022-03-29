@@ -62,8 +62,7 @@ export default async function compile(
   output = await postTransform(output, config.plugins, config.metaConstruct);
   [output, config.metaConstruct.components] = analyze(output);
   return [
-    output,
-    //@ts-ignore
+    output, //@ts-ignore
     config.metaConstruct,
   ];
 }
