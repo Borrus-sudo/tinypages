@@ -3,8 +3,7 @@ import type { Logger, ModuleNode, ViteDevServer } from "vite";
 import { normalizePath as viteNormalizePath } from "vite";
 import type { ComponentRegistration, Page } from "../../types/types";
 
-export { hash } from "ohash";
-export const isParentJSX = (node: ModuleNode, page: Page) => {
+export function isParentJSX(node: ModuleNode, page: Page) {
   for (let module of node.importedModules) {
     const fileId = path.normalize(module.file);
     if (
@@ -19,9 +18,9 @@ export const isParentJSX = (node: ModuleNode, page: Page) => {
     }
   }
   return [false, ""];
-};
+}
 
-export const reload = (file: string, server: ViteDevServer, logger: Logger) => {
+export function reload(file: string, server: ViteDevServer, logger: Logger) {
   logger.info(`Page reload: ${file}`, {
     timestamp: true,
   });
@@ -30,17 +29,18 @@ export const reload = (file: string, server: ViteDevServer, logger: Logger) => {
     type: "custom",
     event: "reload:page",
   });
-};
+}
 
-export const generateVirtualEntryPoint = (
+export function generateVirtualEntryPoint(
   components: ComponentRegistration,
   root: string,
   isBuild: boolean
-) => {
+) {
   const importMap: Map<string, string> = new Map();
   const resolve = (p: string) => viteNormalizePath(path.relative(root, p));
   let usesLazy = false;
-  const imports = Object.keys(components).map((uid: string, idx) => {
+  let imports = [isBuild ? "" : `import "preact/debug"`, `import "uno.css";`];
+  let compImports = Object.keys(components).map((uid: string, idx) => {
     const mod = components[uid];
     if (components[uid].lazy) {
       usesLazy = true;
@@ -52,18 +52,14 @@ export const generateVirtualEntryPoint = (
       }
     }
   });
-  if (!isBuild) {
-    imports.unshift(`import "preact/debug"`);
-  }
   imports.push(
     `import ${usesLazy ? "{hydrate,lazy}" : "hydrate"} from "tinypages/client";`
   );
-  imports.push(`import "uno.css";`);
+  imports.push(...compImports);
 
   const moduleMapStr = Object.keys(components)
     .map((uid: string) => {
       const left = `'${uid}'`;
-
       const right = components[uid].lazy
         ? `lazy(()=>import("${resolve(components[uid].path)}"))`
         : importMap.get(uid);
@@ -80,4 +76,6 @@ export const generateVirtualEntryPoint = (
     });
   })();
   `;
-};
+}
+
+export { hash } from "ohash";

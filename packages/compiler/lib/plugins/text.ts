@@ -1,6 +1,6 @@
-import * as emoji from "node-emoji";
 import type { Config, Plugin } from "../../types/types";
-import iconsRenderer from "./helpers/icons";
+import iconsRenderer from "./helpers/icons"; //@ts-ignore
+import emoji from "node-emoji";
 
 export function PluginText(): Plugin {
   let codeTransformer;

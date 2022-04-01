@@ -9,10 +9,10 @@ import type { ComponentRegistration, ResolvedConfig } from "../types/types";
 const map: Map<string, { html: string; ssrProps?: Record<string, any> }> =
   new Map();
 const hashComp: Map<string, string[]> = new Map();
-
 const resolve = (fsPath: string) => {
   return fsPath + (fs.existsSync(fsPath + ".jsx") ? ".jsx" : ".tsx");
 };
+const errorCSS = `style="color:red; background-color: lightpink;border: 2px dotted black;margin-bottom: 36px;"`;
 
 export async function render(
   html: string,
@@ -44,7 +44,9 @@ export async function render(
         payload = map.get(hash).html.replace(/uid=\"\d\"/, `uid="${uid}"`);
       } else {
         payload = `<div preact uid="${uid}"></div>`;
+
         map.set(hash, { html: payload });
+
         if (hashComp.has(componentPath)) {
           hashComp.set(componentPath, [hash, ...hashComp.get(componentPath)]);
         } else {
@@ -61,6 +63,7 @@ export async function render(
     } else {
       if (map.has(hash)) {
         const cached = map.get(hash);
+
         payload = cached.html.replace(/uid=\"\d\"/, `uid="${uid}"`);
         if (payload.includes(" preact-error ")) {
           error = true;
@@ -91,17 +94,18 @@ export async function render(
                   dangerouslySetInnerHTML: { __html: component.children },
                 })
               : null;
-          let vnode = h(preactComponent, component.props, slotVnode); // the component in Vnode
 
-          payload = `<div preact ${
-            !component.props["no:hydrate"] ? 'uid="' + uid + '"' : ""
-          }>${(await prerender(vnode)).html}</div>`; // the component html
+          let vnode = h(preactComponent, component.props, slotVnode); // the component in Vnode
+          let attrs = !component.props["no:hydrate"] ? 'uid="' + uid + '"' : "";
+          let prerenderedHtml = (await prerender(vnode)).html;
+          payload = `<div preact ${attrs}>${prerenderedHtml}</div>`; // the component html
         } catch (err) {
           error = true;
-          payload = `<div preact preact-error uid="${uid}" style="color:red; background-color: lightpink;border: 2px dotted black;margin-bottom: 36px;">${err}</div>`;
+          payload = `<div preact preact-error uid="${uid}" ${errorCSS}>${err}</div>`;
         }
 
         map.set(hash, { html: payload, ssrProps: component.props["ssrProps"] });
+
         if (hashComp.has(componentPath)) {
           hashComp.set(componentPath, [hash, ...hashComp.get(componentPath)]);
         } else {

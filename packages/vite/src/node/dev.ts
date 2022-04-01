@@ -24,7 +24,7 @@ export async function createDevServer(
     app.use(config.middlewares.post);
 
   app.listen(3003, () => {
-    ctx.utils.consola.info("http://localhost:3003");
+    ctx.utils.consola.info("Server running at http://localhost:3003");
   });
   return vite;
 }

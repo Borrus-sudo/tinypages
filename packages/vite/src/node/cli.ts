@@ -83,7 +83,7 @@ export function cli() {
           if (root.startsWith(".")) {
             root = join(process.cwd(), root);
           }
-          // never give configFileOption to vite as tinypages will auto-resolve the config
+          // hijack the configFileOption for tinypages' config system
           const cliViteOptions = {
             root,
             base: options.base,
@@ -94,11 +94,7 @@ export function cli() {
             config: options.config,
           };
           const { config, filePath } = await resolveConfig(cliViteOptions);
-          const server = await createDevServer(config, filePath);
-          const info = server.config.logger.info;
-          info(`\n  vite v1.0.0` + ` dev server running at: `, {
-            clear: !server.config.logger.hasWarned,
-          });
+          await createDevServer(config, filePath);
         } catch (e) {
           process.exit(1);
         }

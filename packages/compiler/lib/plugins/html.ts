@@ -15,6 +15,8 @@ export function PluginHTML(): Plugin {
     transform(id: string, payload: string, meta: Meta) {
       if (id === "html") {
         const dom = parse(payload);
+        console.log("PLUGIN CALLED");
+
         if (dom?.childNodes[0].rawTagName.toLowerCase() === "head") {
           for (let node of dom.childNodes[0].childNodes) {
             switch (node?.rawTagName?.toLowerCase()) {
@@ -68,10 +70,12 @@ export function PluginHTML(): Plugin {
                 continue;
               }
               if (!tags.includes(tagName)) {
+                console.log(tagName);
                 const iconsSvg = iconsRenderer(tagName, {
                   attrs: node.attrs,
                   config,
                 });
+                console.log(iconsSvg);
                 if (!!iconsSvg) {
                   node.replaceWith(iconsSvg);
                 } else {

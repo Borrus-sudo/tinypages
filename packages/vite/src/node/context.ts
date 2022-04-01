@@ -4,7 +4,8 @@ import { createLogger, createServer, mergeConfig, ViteDevServer } from "vite";
 import { ResolvedConfig, TinyPagesConfig } from "../types/types";
 import { presetPageConfig } from "./constants";
 import { createPlugins } from "./plugins";
-import { createConsola, deepCopy } from "./utils";
+import { deepCopy, createConsola } from "./utils";
+import { render, invalidate } from "./entry-server";
 
 let ctx: ResolvedConfig;
 let vite: ViteDevServer;
@@ -13,7 +14,7 @@ export async function createContext(
   config: TinyPagesConfig,
   source: string
 ): Promise<[ResolvedConfig, ViteDevServer]> {
-  let render, invalidate;
+  // let render, invalidate;
 
   ctx = {
     config,
@@ -34,13 +35,9 @@ export async function createContext(
   ctx.config.vite = mergeConfig(ctx.config.vite, { plugins });
   vite = await createServer(ctx.config.vite);
 
-  console.log("vite created");
-
-  const module = await vite.ssrLoadModule("tinypages/entry-server");
-  render = module.render;
-  invalidate = module.invalidate;
-
-  console.log("post module");
+  // const module = await vite.ssrLoadModule("tinypages/entry-server");
+  // render = module.render;
+  // invalidate = module.invalidate;
 
   polyfill(global, {
     exclude: "window document",

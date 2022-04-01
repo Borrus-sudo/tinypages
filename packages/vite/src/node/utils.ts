@@ -3,7 +3,6 @@ import { murmurHash } from "ohash";
 import { h } from "preact";
 import Helmet from "preact-helmet";
 import renderToString from "preact-render-to-string";
-import env from "std-env";
 import { Page } from "../types/types";
 
 export function appendPrelude(content: string, page: Page) {
@@ -25,17 +24,15 @@ export function appendPrelude(content: string, page: Page) {
     const scriptTag = `
     window.pageCtx=${JSON.stringify(page.pageCtx)};
     window.globals=${JSON.stringify(clone)};
-  `.trim();
+    `;
+
     page.meta.head.script.push({
       type: "text/javascript",
       innerHTML: scriptTag,
     });
   }
 
-  h(Helmet, page.meta.head, null);
-  const string = renderToString(Helmet); // renderToString the head to make Helmet.rewind work
-  console.log("head", string);
-
+  renderToString(h(Helmet, page.meta.head, null)); // renderToString the head to make Helmet.rewind work
   const HelmetHead = Helmet.rewind();
   const html = String.raw`
       <!doctype html>
@@ -79,23 +76,13 @@ export function normalizeUrl(url: string) {
 }
 
 export function createConsola() {
-  const { Consola, BasicReporter, FancyReporter, LogLevel } =
+  const { Consola, FancyReporter, LogLevel } =
     consolaPkg as unknown as typeof import("consola");
 
-  //@ts-ignore
-  let level = env.debug
-    ? LogLevel.Debug //@ts-ignore
-    : env.test
-    ? LogLevel.Warn
-    : LogLevel.Info;
-  if (process.env.CONSOLA_LEVEL) {
-    level = parseInt(process.env.CONSOLA_LEVEL) || level;
-  }
-
-  // Create new consola instance
   const consola = new Consola({
-    level, //@ts-ignore
-    reporters: [env.ci || env.test ? new BasicReporter() : new FancyReporter()],
+    level: LogLevel.Debug,
+    reporters: [new FancyReporter()],
   });
+
   return consola;
 }

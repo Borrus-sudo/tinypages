@@ -6,6 +6,7 @@ export default async function createHandler(plugins: Plugin[], meta: Meta) {
   );
   return {
     methodReturn(info, payload) {
+      console.log("PLUGINS CALLED");
       plugins.forEach((plugin) => {
         payload = plugin.transform(info.propName, payload, meta) || payload;
       });

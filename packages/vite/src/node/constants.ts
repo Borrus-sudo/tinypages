@@ -37,7 +37,7 @@ export const presetViteConfig = {
   },
   plugins: [],
   optimizeDeps: {
-    include: ["million", "preact", "preact-iso"],
+    include: ["million", "preact", "preact-iso", "preact/debug"],
   },
   ssr: {
     externals: [
