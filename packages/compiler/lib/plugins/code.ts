@@ -37,7 +37,7 @@ export function PluginCode(): Plugin {
           let options: Record<string, string> = { lang };
           if (lang.includes(" ")) {
             [lang, ...keyValue] = lang.split(" ");
-            keyValue = keyValue.join(" ").slice(1, -1);
+            keyValue = keyValue.join(" ");
             options = { lang, ...JSON.parse(keyValue) };
           }
           try {
@@ -72,14 +72,14 @@ export function PluginCode(): Plugin {
           };
           if (graph.lang.includes(" ")) {
             [, ...keyValue] = graph.lang.split(" ");
-            keyValue = keyValue.join(" ").slice(1, -1);
+            keyValue = keyValue.join(" ");
             options = { ...JSON.parse(keyValue) };
           }
           promisesArr.push(mermaid.execute(graph.code, options));
         }
         const strs: string[] = await Promise.all(promisesArr);
-        let idx = -1;
-        return payload.replace(/\<GRAPH\>\<\/GRAPH\>/g, (_) => strs[++idx]);
+        let idx = 0;
+        return payload.replace(/\<GRAPH\>\<\/GRAPH\>/g, (_) => strs[idx++]);
       }
       return payload;
     },
