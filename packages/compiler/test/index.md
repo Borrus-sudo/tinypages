@@ -6,7 +6,7 @@
 c=\pm\sqrt{a^2+b^2}
 ```
 
-```ts [theme="nord"]
+```ts {"theme":"nord"}
 console.log("Hello OhMyMarkdown!");
 ```
 
