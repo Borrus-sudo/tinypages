@@ -37,8 +37,7 @@ export function PluginCode(): Plugin {
           let options: Record<string, string> = { lang };
           if (lang.includes(" ")) {
             [lang, ...keyValue] = lang.split(" ");
-            keyValue = keyValue.join(" ");
-            options = { lang, ...JSON.parse(keyValue) };
+            options = { lang, ...JSON.parse(keyValue.join(" ")) };
           }
           try {
             let result = highlighter.codeToHtml(code, options);
@@ -72,8 +71,7 @@ export function PluginCode(): Plugin {
           };
           if (graph.lang.includes(" ")) {
             [, ...keyValue] = graph.lang.split(" ");
-            keyValue = keyValue.join(" ");
-            options = { ...JSON.parse(keyValue) };
+            options = { ...JSON.parse(keyValue.join(" ")) };
           }
           promisesArr.push(mermaid.execute(graph.code, options));
         }
