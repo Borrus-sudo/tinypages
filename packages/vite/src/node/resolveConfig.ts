@@ -32,11 +32,7 @@ export async function resolveConfig(
           ? mergeConfig(presetViteConfig, mergeConfig(obj[key], cliViteConfig))
           : value;
       return true;
-    } else if (key === "resolveUnoCSS") {
-      //@ts-ignore
-      obj[key] = true;
-      return true;
-    }
+    };
   });
 
   config = ext(config, {
