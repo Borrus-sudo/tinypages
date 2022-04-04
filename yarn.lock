@@ -914,10 +914,10 @@
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.30.8.tgz#a449e2a2213587aee09d0b785f9878d4ade2bf74"
   integrity sha512-qy9ZKl9wBS0qLEMIfkv6Z584OmrYm337WYqNwslnXEh6dazlr3YjQpLJi/bwICjoQEiix3tft8db/g12myxFQw==
 
-"@unocss/core@^0.23.0":
-  version "0.23.0"
-  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.23.0.tgz#525aadcdf33bb640912c3faefe24aaa45b5ed7c9"
-  integrity sha512-0Z1uH6nTb4xmolNiWOv9YncraY7mmMoIsBkuHhL+U5ONarMKhWzEFnX925ZJfU8SHo2QxhPRXlQCxhjfR0mozQ==
+"@unocss/core@^0.30.11":
+  version "0.30.11"
+  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.30.11.tgz#2626d941a25e1a850c9e1ca1e22394980986152e"
+  integrity sha512-lOvo8fuKnf/cI8FxUIFDfPxK4OoPsQwuS+0ABuvXXKvV9hAtrg4RYMBuuFEgzCGDTeA7jLoMZGNT/wXqp6mMsg==
 
 "@unocss/inspector@0.30.8":
   version "0.30.8"
