@@ -75,5 +75,5 @@ typings/
 # Serverless directories
 .serverless
 dist
-out
+packages/vite/out
 demo

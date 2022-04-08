@@ -11,7 +11,7 @@
     "packages/*"
   ],
   "lint-staged": {
-    "*.{ts,js,json}": [
+    "*.{ts,json}": [
       "prettier --write"
     ]
   },
