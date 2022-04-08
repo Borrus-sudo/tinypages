@@ -43,6 +43,6 @@
     "shiki": "^0.10.0"
   },
   "optionalDependencies": {
-    "@unocss/core": "^0.23.0"
+    "@unocss/core": "^0.30.12"
   }
 }
