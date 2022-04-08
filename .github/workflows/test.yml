@@ -15,4 +15,5 @@ jobs:
         with:
           node-version: 14.17.0
       - run: yarn install
+      - run: yarn workspace @tinypages/compiler build
       - run: yarn run test
