@@ -461,10 +461,18 @@
     ts-node "^9"
     tslib "^2"
 
-"@iconify/json@^1.1.435":
-  version "1.1.461"
-  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-1.1.461.tgz#9e76f2339292e1a89855f93e497439afeb642f11"
-  integrity sha512-9Y41Tk9s3LDt4WI20XySNhNX6qTJ/WOBeE3O2iyoV9LJ6gFEDjp0uTPzfRU9NUx7D6VkvQ/htJEuRe9LmyMqUA==
+"@iconify/json@^2.1.26":
+  version "2.1.26"
+  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-2.1.26.tgz#45f870f52b9ff1d73012a6dac9a1741d7805a927"
+  integrity sha512-nOrXZzu0LPai/lseCLwVJPKTSL9DzzDZWagItLmkKkF+61Hs25NYP5gykHOTvh74+65BRgNt8s3MTIW5g53Zsg==
+  dependencies:
+    "@iconify/types" "^1.1.0"
+    pathe "^0.2.0"
+
+"@iconify/types@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@iconify/types/-/types-1.1.0.tgz#dc15fc988b1b3fd558dd140a24ede7e0aac11280"
+  integrity sha512-Jh0llaK2LRXQoYsorIH8maClebsnzTcve+7U3rQUSnC11X4jtPnFuyatqFLvMxZ8MLG8dB4zfHsbPfuvxluONw==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -826,11 +834,6 @@
   dependencies:
     jest-matcher-utils "^27.0.0"
     pretty-format "^27.0.0"
-
-"@types/katex@^0.11.1":
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/@types/katex/-/katex-0.11.1.tgz#34de04477dcf79e2ef6c8d23b41a3d81f9ebeaf5"
-  integrity sha512-DUlIj2nk0YnJdlWgsFuVKcX27MLW0KbKmGVoUHmFr+74FYYNUDAaj9ZqTADvsbE8rfxuVmSFc7KczYn5Y09ozg==
 
 "@types/marked@^4.0.1":
   version "4.0.3"
@@ -3971,6 +3974,14 @@ node-icons@^0.1.8:
     "@antfu/install-pkg" "^0.1.0"
     defu "^6.0.0"
 
+node-icons@^0.1.9:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/node-icons/-/node-icons-0.1.9.tgz#b0b5f6196508d102d85a959d411e60d6a6f198c3"
+  integrity sha512-6gGgR8ylK6gRN5vg6otlfHnlQZ+XS1c6r0T0aJBJJ7O6fBjfyLjqyIBZ9sgKmiLqIYBNrTEoDu4ulTj35Si3FA==
+  dependencies:
+    "@antfu/install-pkg" "^0.1.0"
+    defu "^6.0.0"
+
 node-int64@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
@@ -4389,11 +4400,6 @@ proxy-from-env@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
   integrity sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
-
-proxy-hookified@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/proxy-hookified/-/proxy-hookified-1.1.5.tgz#718a3a0fb42e01a6406f58e0e56c9781f5e1e460"
-  integrity sha512-3/X2+Bsl9ISDT1U0dJG3fyPq1QH8A/Q9uoOg+4ccQ2p5ib5IAws6FN85a7VfD0PbZ0bZ0n5/TbK4M8026Y5OJg==
 
 psl@^1.1.33:
   version "1.8.0"
