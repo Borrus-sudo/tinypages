@@ -4,29 +4,37 @@ import { normalizePath } from "vite";
 
 const regex1 = /\/\[(.*?)\]\//g;
 const regex2 = /\/\[(.*?)\]\./g;
+const regex3 = /\/\[\.\.\..*?\]/g;
 
-const transformDynamicArgs = (input: string) => {
-  if (regex1.test(input) || regex2.test(input)) {
+function transformDynamicArgs(input: string) {
+  if (!regex3.test(input) && (regex1.test(input) || regex2.test(input))) {
     const output = input.replace(regex1, "/:$1/").replace(regex2, "/:$1.");
     return [output, true];
   }
   return [input, false];
-};
+}
 
-const generateMockRoute = (input: string) => {
+function generateMockRoute(input: string) {
   const output = input.replace(regex1, "/$1/").replace(regex2, "/$1.");
   return output;
-};
+}
 
-export function generateTypes(): [
-  (props: Record<string, string | number>, url: string) => void,
-  () => string
-] {
+type addType = (
+  props: Record<string, string | number>,
+  url: string,
+  includeProps?: boolean
+) => void;
+
+export function generateTypes(): [addType, () => string] {
   let schema = `/*start*/`;
   let edited = false;
   return [
-    (props: Record<string, string | number>, url: string) => {
+    (props: Record<string, string | number>, url: string, include: boolean) => {
       edited = true;
+      if (!include) {
+        schema += `{url:"${url}";}|`;
+        return;
+      }
       let type = ` {url:"${url}";params:{ `;
       Object.keys(props).forEach((key) => {
         type += `${path.parse(key).name}:string;`;
@@ -54,7 +62,9 @@ export async function loadPaths(
       router.insert(output, { payload: filePath });
       if (generateFlag) {
         const { params } = router.lookup(generateMockRoute(url));
-        if (params) addType(params, url);
+        if (params) addType(params, url, true);
+      } else {
+        addType(null, url, false);
       }
     }
   }

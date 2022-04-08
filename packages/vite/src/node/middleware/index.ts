@@ -1,11 +1,10 @@
 import express from "express";
-import { ViteDevServer } from "vite";
 import errorMiddleware from "./error";
 import ssrMiddleware from "./ssr";
 
-export async function createMiddlewares(vite: ViteDevServer) {
+export async function createMiddlewares() {
   const router = express.Router();
-  router.use(await ssrMiddleware(vite));
+  router.use(await ssrMiddleware());
   router.use(errorMiddleware());
   return router;
 }

@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import compile from "../lib/index";
+import compile from "../out/index.js";
 
 describe("it tests the functionality", () => {
   it("tests the output html", async () => {

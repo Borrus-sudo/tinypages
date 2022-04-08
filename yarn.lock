@@ -827,11 +827,6 @@
     jest-matcher-utils "^27.0.0"
     pretty-format "^27.0.0"
 
-"@types/katex@^0.11.1":
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/@types/katex/-/katex-0.11.1.tgz#34de04477dcf79e2ef6c8d23b41a3d81f9ebeaf5"
-  integrity sha512-DUlIj2nk0YnJdlWgsFuVKcX27MLW0KbKmGVoUHmFr+74FYYNUDAaj9ZqTADvsbE8rfxuVmSFc7KczYn5Y09ozg==
-
 "@types/marked@^4.0.1":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@types/marked/-/marked-4.0.3.tgz#2098f4a77adaba9ce881c9e0b6baf29116e5acc4"
@@ -3963,10 +3958,10 @@ node-html-parser@^5.2.0:
     css-select "^4.2.1"
     he "1.2.0"
 
-node-icons@^0.1.8:
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/node-icons/-/node-icons-0.1.8.tgz#b5a03202ee6b263eae71d5621e332a992d7c084d"
-  integrity sha512-PCw/mLyL5Kfj6qjf+ITOwUPDM4LCyVvmxVD4qdBPCt003Yo5rqwn3UOH4QnDzToFe2i68UTfIZMNE0/JUz7OpA==
+node-icons@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/node-icons/-/node-icons-1.0.0.tgz#f955d4c1670548733881b8c38060780fe56b3648"
+  integrity sha512-nwkCC6TI3JgGzO4XDE2MuclJpb2eIsnNxlEPUtnLm0U8zOoEZSKr0zsWFY9E7Im7dXhhqFcB5Yn9C6JTk1X+4g==
   dependencies:
     "@antfu/install-pkg" "^0.1.0"
     defu "^6.0.0"
@@ -4389,11 +4384,6 @@ proxy-from-env@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
   integrity sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
-
-proxy-hookified@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/proxy-hookified/-/proxy-hookified-1.1.5.tgz#718a3a0fb42e01a6406f58e0e56c9781f5e1e460"
-  integrity sha512-3/X2+Bsl9ISDT1U0dJG3fyPq1QH8A/Q9uoOg+4ccQ2p5ib5IAws6FN85a7VfD0PbZ0bZ0n5/TbK4M8026Y5OJg==
 
 psl@^1.1.33:
   version "1.8.0"

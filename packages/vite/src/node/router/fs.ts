@@ -8,7 +8,7 @@ let router;
 const require = createRequire(import.meta.url);
 const typesPath = require.resolve("tinypages/types");
 
-const boilerplate = async (pagesDir: string) => {
+async function boilerplate(pagesDir: string) {
   router = createRouter();
   const [addType, returnType] = generateTypes();
   await loadPaths(pagesDir, router, pagesDir, addType);
@@ -20,7 +20,7 @@ const boilerplate = async (pagesDir: string) => {
     const regex = /\/\*start\*\/[\s\S]*\/\*end\*\//;
     await fs.writeFile(typesPath, prevTypes.replace(regex, newTypes));
   }
-};
+}
 
 export async function fsRouter(pagesDir: string) {
   if (existsSync(pagesDir)) {

@@ -27,7 +27,7 @@ export const presetViteConfig = {
     middlewareMode: "ssr",
     watch: {
       usePolling: true,
-      interval: 90,
+      interval: 100,
     },
   },
   esbuild: {
@@ -40,14 +40,7 @@ export const presetViteConfig = {
     include: ["million", "preact", "preact-iso", "preact/debug"],
   },
   ssr: {
-    externals: [
-      "preact-render-to-string",
-      "preact-iso",
-      "preact",
-      "ohash",
-      "ohmyfetch",
-      "preact-helmet",
-    ],
+    externals: ["preact", "ohmyfetch", "preact-helmet"],
   },
   resolve: {
     alias: {

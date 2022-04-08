@@ -2,10 +2,8 @@
   "compilerOptions": {
     "target": "es2020",
     "module": "esnext",
-    "outDir": "./out",
     "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "baseUrl": "."
+    "experimentalDecorators": true
   },
   "exclude": ["node_modules"]
 }

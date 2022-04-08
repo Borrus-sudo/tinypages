@@ -6,7 +6,7 @@
     "build": "tsup-node",
     "dev": "tsup-node --watch src"
   },
-  "main": "./out/node/cli.js",
+  "module": "./out/node/cli.mjs",
   "files": [
     "out",
     "bin",
@@ -40,7 +40,7 @@
     "defu": "^6.0.0",
     "express": "^4.17.3",
     "million": "^1.6.2",
-    "node-icons": "^0.1.8",
+    "node-icons": "^1.0.0",
     "ohash": "^0.1.0",
     "ohmyfetch": "^0.4.14",
     "ora": "^6.1.0",

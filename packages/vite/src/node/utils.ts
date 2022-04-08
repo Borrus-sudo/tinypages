@@ -1,9 +1,8 @@
 import consolaPkg from "consola";
 import { murmurHash } from "ohash";
-import { h } from "preact";
 import Helmet from "preact-helmet";
 import renderToString from "preact-render-to-string";
-import { Page } from "../types/types";
+import type { Page } from "../types/types";
 
 export function appendPrelude(content: string, page: Page) {
   const keys = Object.keys(page.global);
@@ -32,8 +31,7 @@ export function appendPrelude(content: string, page: Page) {
     });
   }
 
-  renderToString(h(Helmet, page.meta.head, null)); // renderToString the head to make Helmet.rewind work
-  const HelmetHead = Helmet.rewind();
+  const HelmetHead = Helmet.rewind().map(renderToString).join("");
   const html = String.raw`
       <!doctype html>
       <html${HelmetHead.htmlAttributes.toString()}>

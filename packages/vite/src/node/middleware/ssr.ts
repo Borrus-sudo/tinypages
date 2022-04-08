@@ -1,13 +1,14 @@
 import { promises as fs } from "fs";
-import { ViteDevServer } from "vite";
 import { presetPageConfig } from "../constants";
-import { useContext } from "../context";
+import { useContext, useVite } from "../context";
 import { fsRouter } from "../router/fs";
 import { deepCopy, normalizeUrl } from "../utils";
 
-export default async function (vite: ViteDevServer) {
+export default async function () {
   const { page, utils } = useContext();
+  const vite = useVite();
   const router = await fsRouter(utils.pageDir);
+
   return async (req, res, next) => {
     try {
       const url = normalizeUrl(req.originalUrl);
