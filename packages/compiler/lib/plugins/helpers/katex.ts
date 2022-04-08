@@ -1,6 +1,8 @@
+import katex from "katex";
+import { createRequire } from "module";
 import type { Config } from "../../../types/types";
-import * as katex from "katex";
 
+const require = createRequire(import.meta.url);
 export default function (
   content: string,
   ctx: { type: string; inlineRender: boolean; config: Config }

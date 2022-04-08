@@ -24,32 +24,25 @@
       "require": "./out/wrapObject.js",
       "import": "./out/wrapObject.mjs",
       "types": "./out/wrapObject.d.ts"
-    },
-    "./types": {
-      "require": "./types/types.d.ts",
-      "import": "./types/types.d.ts",
-      "types": "./types/types.d.ts"
     }
   },
   "devDependencies": {
     "@iconify/json": "^1.1.435",
-    "@types/katex": "^0.11.1",
     "@types/marked": "^4.0.1",
     "@types/node-emoji": "^1.8.1",
     "@unocss/preset-wind": "^0.22.6"
   },
   "dependencies": {
+    "headless-mermaid": "^1.2.1",
     "katex": "^0.15.1",
     "marked": "^4.0.12",
     "node-emoji": "^1.11.0",
     "node-html-parser": "^5.2.0",
-    "node-icons": "^0.1.8",
+    "node-icons": "^0.1.9",
     "param-case": "^3.0.4",
-    "proxy-hookified": "^1.1.5",
     "shiki": "^0.10.0"
   },
   "optionalDependencies": {
-    "@unocss/core": "^0.23.0",
-    "headless-mermaid": "^1.2.1"
+    "@unocss/core": "^0.23.0"
   }
 }

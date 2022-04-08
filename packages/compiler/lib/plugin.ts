@@ -6,16 +6,14 @@ export default async function createHandler(plugins: Plugin[], meta: Meta) {
   );
   return {
     methodReturn(info, payload) {
-      console.log("PLUGINS CALLED");
       plugins.forEach((plugin) => {
-        payload = plugin.transform(info.propName, payload, meta) || payload;
+        payload = plugin.transform(info, payload, meta) || payload;
       });
       return payload;
     },
     methodArguments(info, args) {
       plugins.forEach((plugin) => {
-        if (plugin.tapArgs)
-          args = plugin.tapArgs(info.propName, [...args]) || args;
+        if (plugin.tapArgs) args = plugin.tapArgs(info, [...args]) || args;
       });
       return args;
     },

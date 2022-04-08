@@ -1,5 +1,4 @@
 import { marked } from "marked";
-import Spy from "proxy-hookified";
 import type {
   Config,
   Head,
@@ -12,7 +11,7 @@ import type {
 import useHandler from "./plugin";
 import { PluginCode, PluginCSS, PluginHTML, PluginText } from "./plugins";
 import { analyze } from "./revealComponents";
-import { orderPlugins, postTransform } from "./utils";
+import { orderPlugins, postTransform, Spy } from "./utils";
 
 export default async function (
   input: string,
@@ -47,18 +46,18 @@ export default async function (
   config.plugins.forEach((plugin: Plugin) =>
     plugin.defineConfig ? plugin.defineConfig(config as Config) : 0
   );
-
   const Renderer = new marked.Renderer();
   const Handler = await useHandler(config.plugins, config.metaConstruct);
-  const [spiedRenderer] = Spy(Renderer, Handler);
-  marked.setOptions({
-    renderer: spiedRenderer,
-    ...(config.marked || {}),
-  });
+  const spiedRenderer = Spy(Renderer, Handler);
 
   const grayMatter = input.match(/---[\s\S]*---/)?.[0] ?? "";
   if (grayMatter) config.metaConstruct.grayMatter = grayMatter.slice(4, -3);
   input = grayMatter ? input.split(grayMatter)[1] : input;
+  marked.setOptions({
+    //@ts-ignore
+    renderer: spiedRenderer,
+    ...(config.marked || {}),
+  });
   let output = marked.parse(input);
 
   output = await postTransform(output, config.plugins, config.metaConstruct);

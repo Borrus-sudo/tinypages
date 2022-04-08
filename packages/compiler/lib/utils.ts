@@ -34,4 +34,26 @@ export async function postTransform(
   return payload;
 }
 
+export function Spy(
+  target: Object,
+  Handler: {
+    methodReturn: (key: string | symbol, n: any) => any;
+    methodArguments: (key: string | symbol, n: any[]) => any[];
+  }
+) {
+  const proto = Object.getPrototypeOf(target);
+  const keys = Reflect.ownKeys(proto);
+  const transformed = {};
+  keys.forEach((key) => {
+    const { value } = Reflect.getOwnPropertyDescriptor(proto, key);
+    transformed[key] = function (...n) {
+      const args = Handler.methodArguments(key, n);
+      const returnVal = value.apply(target, args);
+      return Handler.methodReturn(key, returnVal);
+    };
+  });
+  transformed["options"] = target["options"];
+  return transformed;
+}
+
 export { tags } from "./tags";

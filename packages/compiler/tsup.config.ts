@@ -10,7 +10,7 @@ const config: Options = {
     resolve: true,
   },
   outDir: "./out",
-  minify: false,
+  minify: true,
 };
 
 export default config;
