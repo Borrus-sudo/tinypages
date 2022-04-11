@@ -18,7 +18,6 @@ type ComponentRegistration = {
   [key: string]: {
     path: string;
     props: Record<string, any>;
-    error: boolean;
     lazy: boolean;
   };
 };

@@ -1,12 +1,12 @@
-import { hydrate } from "./hydrate";
+import { ComponentFactory } from "preact";
 import "./hmr";
-import type { ComponentFactory } from "preact";
+import { hydrate } from "./hydrate";
 
-const lazyLoad = (target, component, uid) => {
+const lazyLoad = (target, callback: Function) => {
   const io = new IntersectionObserver((entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        hydrate(target, component, uid);
+        callback();
         observer.disconnect();
       }
     });
@@ -14,30 +14,33 @@ const lazyLoad = (target, component, uid) => {
   io.observe(target);
 };
 
+let clientIdle = "client:idle";
+let mediaVisible = "media:visible";
+
 export default async function (componentMap: Map<string, ComponentFactory>) {
   for (let element of document.querySelectorAll("[preact]")) {
     const uid = element.getAttribute("uid");
-    const component = globals[uid];
-    if (component.props["client:idle"]) {
+    if (!globals[uid]) {
+      continue;
+    }
+    const { props } = globals[uid];
+    const componentMeta = {
+      props,
+      factoryFunction: componentMap[uid],
+    };
+    if (props.hasOwnProperty(clientIdle)) {
+      delete props[clientIdle];
       requestIdleCallback(() => {
-        delete component.props["client:idle"];
-        hydrate(
-          { ...component, factoryFunction: componentMap[uid] },
-          element,
-          uid
-        );
+        hydrate(componentMeta, element);
       });
-    } else if (component.props["media:visible"]) {
-      delete component.props["media:visible"];
-      lazyLoad(element, component, uid);
+    } else if (props.hasOwnProperty(mediaVisible)) {
+      lazyLoad(element, () => hydrate(componentMeta, element));
+    } else if (props.hasOwnProperty("client:only")) {
+      hydrate(componentMeta, element, true);
     } else {
-      hydrate(
-        { ...component, factoryFunction: componentMap[uid] },
-        element,
-        uid
-      );
+      hydrate(componentMeta, element);
     }
   }
 }
 
-export { lazy } from "preact-iso";
+export { Suspense } from "preact/compat";

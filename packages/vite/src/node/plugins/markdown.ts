@@ -44,19 +44,21 @@ export default function (): Plugin {
         page.global = {};
         page.prevHash = hashIt(meta.components);
         const renderedHtml = await utils.render(rawHtml);
-        const virtualModuleId = viteNormalizePath(
-          `/virtualModule${
-            pathToFileURL(page.pageCtx.url.replace(/\.md$/, ".js")).href
-          }`
-        );
-        page.meta.head.script.push({
-          type: "module",
-          src: virtualModuleId,
-        });
-        virtualModuleMap.set(
-          virtualModuleId,
-          generateVirtualEntryPoint(page.global, config.vite.root, isBuild)
-        );
+        if (true) {
+          const virtualModuleId = viteNormalizePath(
+            `/virtualModule${
+              pathToFileURL(page.pageCtx.url.replace(/\.md$/, ".js")).href
+            }`
+          );
+          page.meta.head.script.push({
+            type: "module",
+            src: virtualModuleId,
+          });
+          virtualModuleMap.set(
+            virtualModuleId,
+            generateVirtualEntryPoint(page.global, config.vite.root, isBuild)
+          );
+        }
         const appHtml = appendPrelude(renderedHtml, page);
         if (!addedModule.includes(page.pageCtx.url)) {
           ctx.server.moduleGraph.createFileOnlyEntry(page.pageCtx.url);

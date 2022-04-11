@@ -37,16 +37,22 @@ export const presetViteConfig = {
   },
   plugins: [],
   optimizeDeps: {
-    include: ["million", "preact", "preact-iso", "preact/debug"],
-  },
-  ssr: {
-    externals: ["preact", "ohmyfetch", "preact-helmet"],
+    include: [
+      "million",
+      "preact/compat",
+      "preact/compat/jsx-runtime",
+      "preact-render-to-string",
+      "preact-iso",
+      "preact/debug",
+      "preact/hooks",
+    ],
   },
   resolve: {
     alias: {
       react: "preact/compat",
       "react-dom": "preact/compat",
     },
+    dedupe: ["react", "react-dom"],
   },
 } as InlineConfig;
 

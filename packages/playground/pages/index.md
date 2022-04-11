@@ -23,6 +23,12 @@ hi
 
 <Counter/>
 
+<Counter client:idle/>
+<Counter client:only/>
+<Counter media:visible/>
+<Counter no:hydrate/>
+
+
 hihhi huhuh
 huhuhuh hi
 

@@ -22,7 +22,6 @@ export async function render(
   let componentRegistration: ComponentRegistration = {};
   let uid: number = 0;
   let payload: string;
-  let error = false;
 
   ctx.page.sources = [];
   for (let component of ctx.page.meta.components) {
@@ -36,39 +35,29 @@ export async function render(
 
     const hash = hashObj(component);
     ctx.page.sources.push(componentPath);
-    error = false;
 
     if (component.props["client:only"]) {
-      delete component.props["client:only"];
       if (map.has(hash)) {
         payload = map.get(hash).html.replace(/uid=\"\d\"/, `uid="${uid}"`);
       } else {
         payload = `<div preact uid="${uid}"></div>`;
-
         map.set(hash, { html: payload });
-
         if (hashComp.has(componentPath)) {
           hashComp.set(componentPath, [hash, ...hashComp.get(componentPath)]);
         } else {
           hashComp.set(componentPath, [hash]);
         }
-
-        componentRegistration[uid] = {
-          path: componentPath,
-          props: component.props,
-          error,
-          lazy: !!component.props["lazy:load"],
-        };
       }
+
+      componentRegistration[uid] = {
+        path: componentPath,
+        props: component.props,
+        lazy: !!component.props["lazy:load"],
+      };
     } else {
       if (map.has(hash)) {
         const cached = map.get(hash);
-
         payload = cached.html.replace(/uid=\"\d\"/, `uid="${uid}"`);
-        if (payload.includes(" preact-error ")) {
-          error = true;
-        }
-
         if (cached.ssrProps) {
           component.props["ssrProps"] = cached.ssrProps;
         }
@@ -96,12 +85,12 @@ export async function render(
               : null;
 
           let vnode = h(preactComponent, component.props, slotVnode); // the component in Vnode
-          let attrs = !component.props["no:hydrate"] ? 'uid="' + uid + '"' : "";
+          let uidAttr = !component.props["no:hydrate"] ? `uid="${uid}"` : "";
           let prerenderedHtml = (await prerender(vnode)).html;
-          payload = `<div preact ${attrs}>${prerenderedHtml}</div>`; // the component html
+
+          payload = `<div preact ${uidAttr}>${prerenderedHtml}</div>`; // the component html
         } catch (err) {
-          error = true;
-          payload = `<div preact preact-error uid="${uid}" ${errorCSS}>${err}</div>`;
+          payload = `<div preact uid="${uid}" ${errorCSS}> <div>${err}</div> </div>`;
         }
 
         map.set(hash, { html: payload, ssrProps: component.props["ssrProps"] });
@@ -113,12 +102,11 @@ export async function render(
         }
       }
 
-      if (!component.props["no:hydrate"]) {
+      if (!component.props.hasOwnProperty("no:hydrate")) {
         // hydrate and initalize the meta data needed for the client
         componentRegistration[uid] = {
           path: componentPath,
           props: component.props,
-          error,
           lazy: !!component.props["lazy:load"],
         };
       }

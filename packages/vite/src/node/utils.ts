@@ -3,6 +3,7 @@ import { murmurHash } from "ohash";
 import Helmet from "preact-helmet";
 import renderToString from "preact-render-to-string";
 import type { Page } from "../types/types";
+import { h } from "preact";
 
 export function appendPrelude(content: string, page: Page) {
   const keys = Object.keys(page.global);
@@ -12,12 +13,10 @@ export function appendPrelude(content: string, page: Page) {
 
     keys.forEach((key) => {
       // delete different tags which aren't needed on the server
-      delete clone[key].error;
       delete clone[key].path;
       delete clone[key].lazy;
-      delete clone[key].props["no:hydrate"];
-      delete clone[key].props["client:only"];
       delete clone[key].props["lazy:load"];
+      delete clone[key].props["no:hydrate"];
     });
 
     const scriptTag = `
@@ -30,8 +29,9 @@ export function appendPrelude(content: string, page: Page) {
       innerHTML: scriptTag,
     });
   }
+  renderToString(h(Helmet, page.meta.head, null)); // to make rewind work
 
-  const HelmetHead = Helmet.rewind().map(renderToString).join("");
+  const HelmetHead = Helmet.rewind();
   const html = String.raw`
       <!doctype html>
       <html${HelmetHead.htmlAttributes.toString()}>
