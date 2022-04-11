@@ -13,7 +13,7 @@ tinypages is a Vite based SSG, using markdown interpolated with Preact component
 
 - 👣  tiny client foot print (5kb)
 
-- ⚡️  Fast and granular HMR
+- ⚡️  Fast and granular HMR via million and prefresh!
 
 - 📂  Fast File based routing with auto type generation
 
