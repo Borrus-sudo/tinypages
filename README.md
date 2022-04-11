@@ -25,7 +25,7 @@ tinypages is a Vite based SSG, using markdown interpolated with Preact component
 
 - 🍱  Use any icon directly in markdown or in preact components!
 
-- 🔥  Suspense and easy component based code splitting!
+- 🔥  Suspense support and easy component based code splitting!
 
 - 🖨  Static-site generation (SSG) at build time
 
