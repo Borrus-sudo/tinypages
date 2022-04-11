@@ -21,7 +21,7 @@ tinypages is a Vite based SSG, using markdown interpolated with Preact component
 
 - 📲  PWA ready 
 
-- 🎨  UnoCSS - default integration with unocss with proper HMR dev tools support 
+- 🎨  UnoCSS - default integration with unocss with proper HMR and dev tools support 
 
 - 🍱  Use any icon directly in markdown or in preact components!
 
