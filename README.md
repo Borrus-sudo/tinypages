@@ -1,5 +1,5 @@
 # tinypages
-tinypages is a Vite based SSG, using markdown interpolated with Preact components to build MPA websites tiny and fast!
+tinypages is a Vite based SSG, using markdown interpolated with Preact components to build MPA websites tiny and fast! The main aim of this project is to leverage vitejs to provide a tight knit dev experience and optimize builds for prod
 
 
 ## Features
@@ -30,7 +30,7 @@ tinypages is a Vite based SSG, using markdown interpolated with Preact component
 
 - 🦔  Critical CSS via critters
 
-- 🦦  SEO goodies: on demand lighthouse score with unlighthouse, auto rss generation using schema
+- 🦦  SEO goodies: on demand lighthouse score with unlighthouse, auto rss generation by analysing schema 
 
 - ⚙️  Unit Testing with Vitest and Enzyme 
 
@@ -40,4 +40,4 @@ tinypages is a Vite based SSG, using markdown interpolated with Preact component
 
 - 🗜  Alpine like templating in markdown for preact components
 
-- 🦾 All batteries included: flexible build process, image optimization support, live debugging etc via vite ecosystem plugins  
+- 🦾 All batteries included: flexible build process, image optimization support, live debugging, component error boundaries during dev  
