@@ -44,4 +44,4 @@ tinypages is a Vite based SSG, using markdown interpolated with Preact component
 - 🦾 All batteries included: flexible build process, image optimization support, live debugging, component error boundaries during dev  
 
 ## Note 
-The framework is heavy with most of the features still being implemented, lookout for a beta version in the near future
+The framework is heavy WIP with most of the features still being implemented, lookout for a beta version in the near future
