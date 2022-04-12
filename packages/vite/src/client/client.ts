@@ -42,5 +42,3 @@ export default async function (componentMap: Map<string, ComponentFactory>) {
     }
   }
 }
-
-export { Suspense } from "preact/compat";

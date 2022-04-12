@@ -39,15 +39,21 @@ export default function (): Plugin {
       enforce: "pre",
       async transform(markdown: string, ctx) {
         const [rawHtml, meta] = await compile(markdown);
+        /**
+         * Initialize the page globals to make it ready for the new page
+         */
         page.meta = meta;
         page.sources = [];
         page.global = {};
         page.prevHash = hashIt(meta.components);
         const renderedHtml = await utils.render(rawHtml);
-        if (true) {
+        /**
+         * Initializes the virtual point for hydrating code
+         */
+        if (Object.keys(page.global).length > 0) {
           const virtualModuleId = viteNormalizePath(
             `/virtualModule${
-              pathToFileURL(page.pageCtx.url.replace(/\.md$/, ".js")).href
+              pathToFileURL(page.pageCtx.url.replace(/\.md$/, ".jsx")).href
             }`
           );
           page.meta.head.script.push({

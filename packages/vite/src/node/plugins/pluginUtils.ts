@@ -1,3 +1,4 @@
+import { existsSync } from "fs";
 import * as path from "path";
 import type { Logger, ModuleNode, ViteDevServer } from "vite";
 import { normalizePath as viteNormalizePath } from "vite";
@@ -39,7 +40,12 @@ export function generateVirtualEntryPoint(
   const importMap: Map<string, string> = new Map();
   const resolve = (p: string) => viteNormalizePath(path.relative(root, p));
   let usesLazy = false;
-  let imports = [isBuild ? "" : `import "preact/debug"`, `import "uno.css";`];
+  let hasLazyComponent = false;
+  let imports = [
+    isBuild ? "" : `import "preact/debug"`,
+    `import "uno.css";`,
+    `import hydrate from "tinypages/client";`,
+  ];
   let compImports = Object.keys(components).map((uid: string, idx) => {
     const mod = components[uid];
     if (components[uid].lazy) {
@@ -52,16 +58,29 @@ export function generateVirtualEntryPoint(
       }
     }
   });
-  imports.push(
-    `import ${usesLazy ? "{hydrate,lazy}" : "hydrate"} from "tinypages/client";`
-  );
+  if (usesLazy) {
+    imports.push(`import {lazy,Suspense} from "preact/compat"`);
+    if (existsSync(path.join(root, "components/Loading.jsx"))) {
+      hasLazyComponent = true;
+      imports.push(`import Loading from "/components/Loading.jsx";`);
+    }
+  }
   imports.push(...compImports);
 
   const moduleMapStr = Object.keys(components)
     .map((uid: string) => {
       const left = `'${uid}'`;
+      if (components[uid].lazy) {
+        imports.push(
+          `const CompLazy${uid}=lazy(()=>import("${resolve(
+            components[uid].path
+          )}"))`
+        );
+      }
       const right = components[uid].lazy
-        ? `lazy(()=>import("${resolve(components[uid].path)}"))`
+        ? `<Suspense fallback={${
+            hasLazyComponent ? "<Loading/>" : "<div>Loading ...</div>"
+          }}><CompLazy${uid}/></Suspense>`
         : importMap.get(uid);
 
       return `${left}: ${right}`;

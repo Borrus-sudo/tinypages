@@ -52,7 +52,7 @@ export async function render(
       componentRegistration[uid] = {
         path: componentPath,
         props: component.props,
-        lazy: !!component.props["lazy:load"],
+        lazy: component.props.hasOwnProperty("lazy:load"),
       };
     } else {
       if (map.has(hash)) {
@@ -103,11 +103,13 @@ export async function render(
       }
 
       if (!component.props.hasOwnProperty("no:hydrate")) {
-        // hydrate and initalize the meta data needed for the client
+        /**
+         * initalize metadata if no:hydrate property is not present
+         */
         componentRegistration[uid] = {
           path: componentPath,
           props: component.props,
-          lazy: !!component.props["lazy:load"],
+          lazy: component.props.hasOwnProperty("lazy:load"),
         };
       }
     }

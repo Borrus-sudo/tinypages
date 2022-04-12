@@ -2,7 +2,7 @@ import { Options } from "tsup";
 
 const config: Options = {
   target: "es2020",
-  splitting: false,
+  splitting: true,
   format: ["esm"],
   entry: [
     "src/node/cli.ts",

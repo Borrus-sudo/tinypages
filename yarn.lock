@@ -3958,10 +3958,10 @@ node-html-parser@^5.2.0:
     css-select "^4.2.1"
     he "1.2.0"
 
-node-icons@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/node-icons/-/node-icons-1.0.0.tgz#f955d4c1670548733881b8c38060780fe56b3648"
-  integrity sha512-nwkCC6TI3JgGzO4XDE2MuclJpb2eIsnNxlEPUtnLm0U8zOoEZSKr0zsWFY9E7Im7dXhhqFcB5Yn9C6JTk1X+4g==
+node-icons@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/node-icons/-/node-icons-1.0.1.tgz#b62b0ac0b4be05373b3afb3e2f7547feafab83a0"
+  integrity sha512-9DX2Dt3OEVt2HWl5KSp8yRb3fFojJY8JAEpT226h8DCTbik64AjRf+VB0W+hU8boDNQEcgfpetOPzqhG06V3Rg==
   dependencies:
     "@antfu/install-pkg" "^0.1.0"
     defu "^6.0.0"
@@ -4294,10 +4294,10 @@ preact-iso@^2.3.0:
   resolved "https://registry.yarnpkg.com/preact-iso/-/preact-iso-2.3.0.tgz#ab6c5de28df9e0f7a0589dd2175a83ba821f69ec"
   integrity sha512-taJmRidbWrjHEhoVoxXS2Kvxa6X3jXSsTtD7rSYeJuxnPNr1ghCu1JUzCrRxmZwTUNWIqwUpNi+AJoLtvCPN7g==
 
-preact-render-to-string@^5.1.21:
-  version "5.1.21"
-  resolved "https://registry.yarnpkg.com/preact-render-to-string/-/preact-render-to-string-5.1.21.tgz#7329a59191d2ca7a40635828c7058f64ffe17639"
-  integrity sha512-wbMtNU4JpfvbE04iCe7BZ1yLYN8i6NRrq+NhR0fUINjPXGu3ZIc4GM5ScOiwdIP1sPXv9SVETuud/tmQGMvdNQ==
+preact-render-to-string@5.1.12:
+  version "5.1.12"
+  resolved "https://registry.yarnpkg.com/preact-render-to-string/-/preact-render-to-string-5.1.12.tgz#3d258a177ef8947f768dd0f2c56629e7fda2dc39"
+  integrity sha512-nXVCOpvepSk9AfPwqS08rf9NDOCs8eeYYlG+7tE85iP5jVyjz+aYb1BYaP5SPdfVWVrzI9L5NzxozUvKaD96tA==
   dependencies:
     pretty-format "^3.8.0"
 
@@ -4306,10 +4306,10 @@ preact-side-effect@^1.3.0:
   resolved "https://registry.yarnpkg.com/preact-side-effect/-/preact-side-effect-1.3.0.tgz#74345d6c7c6aa48d0567b23e81e71d8fb7e47af9"
   integrity sha512-5KfRhUES56pFIPk4uVucxe6pOjVQO7ppbXvR/jYB9KInPjovTxzIU31VheS3DB7vfs05uFvowy0uE+fYx+/vUw==
 
-preact@^10.6.6:
-  version "10.6.6"
-  resolved "https://registry.yarnpkg.com/preact/-/preact-10.6.6.tgz#f1899bc8dab7c0788b858481532cb3b5d764a520"
-  integrity sha512-dgxpTFV2vs4vizwKohYKkk7g7rmp1wOOcfd4Tz3IB3Wi+ivZzsn/SpeKJhRENSE+n8sUfsAl4S3HiCVT923ABw==
+preact@10.5.12:
+  version "10.5.12"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.5.12.tgz#6a8ee8bf40a695c505df9abebacd924e4dd37704"
+  integrity sha512-r6siDkuD36oszwlCkcqDJCAKBQxGoeEGytw2DGMD5A/GGdu5Tymw+N2OBXwvOLxg6d1FeY8MgMV3cc5aVQo4Cg==
 
 prebuild-install@^7.0.0:
   version "7.0.1"
