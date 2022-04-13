@@ -909,10 +909,10 @@
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.30.8.tgz#a449e2a2213587aee09d0b785f9878d4ade2bf74"
   integrity sha512-qy9ZKl9wBS0qLEMIfkv6Z584OmrYm337WYqNwslnXEh6dazlr3YjQpLJi/bwICjoQEiix3tft8db/g12myxFQw==
 
-"@unocss/core@^0.23.0":
-  version "0.23.0"
-  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.23.0.tgz#525aadcdf33bb640912c3faefe24aaa45b5ed7c9"
-  integrity sha512-0Z1uH6nTb4xmolNiWOv9YncraY7mmMoIsBkuHhL+U5ONarMKhWzEFnX925ZJfU8SHo2QxhPRXlQCxhjfR0mozQ==
+"@unocss/core@^0.31.2":
+  version "0.31.2"
+  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.2.tgz#9b33dd47586962d43cde2103c8c1459dc5ec978a"
+  integrity sha512-IVwRa8vXdIZmIFmSrMWtbkClZvwpfuvGb70QP2YDRY15NZE2ZlvIAVDC5XiPU+w02qrqoi/n3Zlt4YnNJDg+4g==
 
 "@unocss/inspector@0.30.8":
   version "0.30.8"
@@ -4335,10 +4335,10 @@ prelude-ls@~1.1.2:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
   integrity sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
 
-prettier@^2.5.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.1.tgz#d472797e0d7461605c1609808e27b80c0f9cfe17"
-  integrity sha512-8UVbTBYGwN37Bs9LERmxCPjdvPxlEowx2urIL6urHzdb3SDq4B/Z6xLFCblrSnE4iKWcS6ziJ3aOYrc1kz/E2A==
+prettier@^2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.2.tgz#e26d71a18a74c3d0f0597f55f01fb6c06c206032"
+  integrity sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==
 
 pretty-format@^27.0.0, pretty-format@^27.5.1:
   version "27.5.1"
