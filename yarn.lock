@@ -4294,10 +4294,10 @@ preact-iso@^2.3.0:
   resolved "https://registry.yarnpkg.com/preact-iso/-/preact-iso-2.3.0.tgz#ab6c5de28df9e0f7a0589dd2175a83ba821f69ec"
   integrity sha512-taJmRidbWrjHEhoVoxXS2Kvxa6X3jXSsTtD7rSYeJuxnPNr1ghCu1JUzCrRxmZwTUNWIqwUpNi+AJoLtvCPN7g==
 
-preact-render-to-string@5.1.12:
-  version "5.1.12"
-  resolved "https://registry.yarnpkg.com/preact-render-to-string/-/preact-render-to-string-5.1.12.tgz#3d258a177ef8947f768dd0f2c56629e7fda2dc39"
-  integrity sha512-nXVCOpvepSk9AfPwqS08rf9NDOCs8eeYYlG+7tE85iP5jVyjz+aYb1BYaP5SPdfVWVrzI9L5NzxozUvKaD96tA==
+preact-render-to-string@5.1.21:
+  version "5.1.21"
+  resolved "https://registry.yarnpkg.com/preact-render-to-string/-/preact-render-to-string-5.1.21.tgz#7329a59191d2ca7a40635828c7058f64ffe17639"
+  integrity sha512-wbMtNU4JpfvbE04iCe7BZ1yLYN8i6NRrq+NhR0fUINjPXGu3ZIc4GM5ScOiwdIP1sPXv9SVETuud/tmQGMvdNQ==
   dependencies:
     pretty-format "^3.8.0"
 
