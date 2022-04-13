@@ -1,3 +1,7 @@
+---
+layout: ../layouts/BaseLayout.md
+---
+
 ## TSGandalf ::mdi:language-typescript:: [text-blue-500 text-center]
 
 <head>

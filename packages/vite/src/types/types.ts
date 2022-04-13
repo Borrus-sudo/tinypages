@@ -33,6 +33,7 @@ interface Page {
   global: ComponentRegistration;
   meta: Meta;
   prevHash: string;
+  layouts: string[];
 }
 
 interface Utils {

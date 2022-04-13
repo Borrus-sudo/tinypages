@@ -59,6 +59,7 @@ export const presetViteConfig = {
 export const presetPageConfig = {
   pageCtx: { url: "" },
   sources: [],
+  layouts: [],
   global: {},
   prevHash: "",
   meta: {
@@ -76,6 +77,6 @@ export const presetPageConfig = {
       title: "",
       titleAttributes: {},
     },
-    grayMatter: "",
+    grayMatter: {},
   },
 } as Page;

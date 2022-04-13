@@ -16,7 +16,7 @@ interface BaseMeta {
   }[];
   headTags: string[];
   head: Head;
-  grayMatter: string;
+  grayMatter: Record<string, any>;
 }
 
 interface Meta extends BaseMeta {

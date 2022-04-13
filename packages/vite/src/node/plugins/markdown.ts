@@ -1,4 +1,4 @@
-import compileMarkdown from "@tinypages/compiler";
+import { compile as compileMarkdown } from "@tinypages/compiler";
 import { promises as fs } from "fs";
 import * as path from "path";
 import { pathToFileURL } from "url";
@@ -15,13 +15,17 @@ import {
 
 export default function (): Plugin {
   const { config, page, utils } = useContext();
-  const cache: Map<string, [string, Meta]> = new Map();
-  const compile = async (input: string): Promise<[string, Meta]> => {
+  const cache: Map<string, [string, Meta, string[]]> = new Map();
+  const compile = async (input: string): Promise<[string, Meta, string[]]> => {
     const digest = hash(input).toString();
     if (cache.has(digest)) {
       return deepCopy(cache.get(digest));
     }
-    const result = await compileMarkdown(input, config.compiler);
+    const result = await compileMarkdown(
+      input,
+      config.compiler,
+      page.pageCtx.url
+    );
     cache.set(digest, deepCopy(result));
     return result;
   };
@@ -38,7 +42,7 @@ export default function (): Plugin {
     transformIndexHtml: {
       enforce: "pre",
       async transform(markdown: string, ctx) {
-        const [rawHtml, meta] = await compile(markdown);
+        const [rawHtml, meta, layouts] = await compile(markdown);
         /**
          * Initialize the page globals to make it ready for the new page
          */
@@ -46,6 +50,7 @@ export default function (): Plugin {
         page.sources = [];
         page.global = {};
         page.prevHash = hashIt(meta.components);
+        page.layouts = layouts;
         const renderedHtml = await utils.render(rawHtml);
         /**
          * Initializes the virtual point for hydrating code
@@ -64,6 +69,11 @@ export default function (): Plugin {
             virtualModuleId,
             generateVirtualEntryPoint(page.global, config.vite.root, isBuild)
           );
+        } else {
+          page.meta.head.script.push({
+            type: "module",
+            src: "uno:only",
+          });
         }
         const appHtml = appendPrelude(renderedHtml, page);
         if (!addedModule.includes(page.pageCtx.url)) {
@@ -75,17 +85,24 @@ export default function (): Plugin {
       },
     },
     resolveId(id: string) {
-      return virtualModuleMap.has(id) ? id : null;
+      return virtualModuleMap.has(id) || id === "uno:only" ? id : null;
     },
     load(id: string) {
       if (virtualModuleMap.has(id)) {
         return virtualModuleMap.get(id);
+      } else if (id === "uno:only") {
+        return `import "uno.css";`;
       }
     },
     async handleHotUpdate(ctx) {
       const toReturnModules: ModuleNode[] = [];
       for (let module of ctx.modules) {
         const fileId = path.normalize(module.file);
+        /**
+         * If the pageCtx is equal to the fileId then check if the components have changed,
+         * If the components have not changed then just re request the page and update it using million.js
+         * Else reload the page
+         */
         if (page.pageCtx.url === fileId) {
           const [, meta] = await compile(
             await fs.readFile(page.pageCtx.url, { encoding: "utf-8" })
@@ -102,6 +119,16 @@ export default function (): Plugin {
           ctx.server.ws.send({
             type: "custom",
             event: "new:page",
+          });
+        } else if (page.layouts.includes(fileId)) {
+          /**
+           *  Reload the page if layout changed;
+           *  TODO: improve this
+           */
+          reload(module.file, ctx.server, utils.logger);
+          utils.logger.info(`Page reload ${module.file}`, {
+            timestamp: true,
+            clear: true,
           });
         } else {
           toReturnModules.push(module);
