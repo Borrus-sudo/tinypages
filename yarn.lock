@@ -22,11 +22,6 @@
   resolved "https://registry.yarnpkg.com/@antfu/utils/-/utils-0.5.1.tgz#7eb6764878adb715daff20019e5a15fd63d93342"
   integrity sha512-8Afo0+xvYe1K8Wm4xHTymfTkpzy36aaqDvhXIayUwl+mecMG9Xzl3XjXa6swG6Bk8FBeQ646RyvmsYt6+2Be9g==
 
-"@antfu/utils@^0.5.1":
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/@antfu/utils/-/utils-0.5.1.tgz#7eb6764878adb715daff20019e5a15fd63d93342"
-  integrity sha512-8Afo0+xvYe1K8Wm4xHTymfTkpzy36aaqDvhXIayUwl+mecMG9Xzl3XjXa6swG6Bk8FBeQ646RyvmsYt6+2Be9g==
-
 "@astropub/webapi@^0.10.14":
   version "0.10.14"
   resolved "https://registry.yarnpkg.com/@astropub/webapi/-/webapi-0.10.14.tgz#f3e118718d1353170ec9ea0adc4a725796717a77"
@@ -899,11 +894,6 @@
     "@unocss/core" "0.31.2"
     unconfig "^0.3.3"
 
-"@unocss/core@0.22.7":
-  version "0.22.7"
-  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.22.7.tgz#5fb07871f43fcccf2c62005f05635331ea5056f8"
-  integrity sha512-cb51bsrtsYdiGiiY574rDtPw5gBLsOpJXZjgvmIrdKzS0Z8rmVf4VGF2FONloKBn6yJ4Hj2TNIfW/PnNX5ojxw==
-
 "@unocss/core@0.31.2", "@unocss/core@^0.31.2":
   version "0.31.2"
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.2.tgz#9b33dd47586962d43cde2103c8c1459dc5ec978a"
@@ -917,20 +907,20 @@
     gzip-size "^6.0.0"
     sirv "^2.0.2"
 
-"@unocss/preset-mini@0.22.7":
-  version "0.22.7"
-  resolved "https://registry.yarnpkg.com/@unocss/preset-mini/-/preset-mini-0.22.7.tgz#a6dcac8323ce666ccddb70436b1f45e003783edf"
-  integrity sha512-jl2slQ8zUjhocGI528o2yRjkvqoboSNICd+DjJZOi4+IhtjTL662zBwrOAiT7j85VJF1GpJVqkmrlEmfYfg56A==
+"@unocss/preset-mini@0.31.2":
+  version "0.31.2"
+  resolved "https://registry.yarnpkg.com/@unocss/preset-mini/-/preset-mini-0.31.2.tgz#78a024b7cc875edf553eec63cd1535f833607771"
+  integrity sha512-Nfd1wNqVGXPCg/9RVm4T+RZota2c0B1Gs13LLHKxdbFty9muR+8jUEkQ2QP3VCnay85YkSEzRDM6SZQ4bjOEVg==
   dependencies:
-    "@unocss/core" "0.22.7"
+    "@unocss/core" "0.31.2"
 
-"@unocss/preset-wind@^0.22.6":
-  version "0.22.7"
-  resolved "https://registry.yarnpkg.com/@unocss/preset-wind/-/preset-wind-0.22.7.tgz#0b7b75b80af46c67b664f3c7d4993b60611658d9"
-  integrity sha512-2O4Nx8nMHdpNk5sgRnKmWJUZTWOMEPOhdS2IOd7qksZaF/AbGf3tycJF/2+4eqtok4t4xlRCELS+5vqeNzZuqg==
+"@unocss/preset-wind@^0.31.2":
+  version "0.31.2"
+  resolved "https://registry.yarnpkg.com/@unocss/preset-wind/-/preset-wind-0.31.2.tgz#9c73bc4b678ab425e5b7b58e1fe3553749019a1d"
+  integrity sha512-A4+18tPsTc5ou4nSBwVdwm+K1o4bYh94XcA6cXqdV/C2ehpN64yulrRsXmV9SRzDtBGkZGMuoRSv8LIi9L6CCA==
   dependencies:
-    "@unocss/core" "0.22.7"
-    "@unocss/preset-mini" "0.22.7"
+    "@unocss/core" "0.31.2"
+    "@unocss/preset-mini" "0.31.2"
 
 "@unocss/scope@0.31.2":
   version "0.31.2"
@@ -5311,15 +5301,6 @@ unbzip2-stream@1.4.3:
   dependencies:
     buffer "^5.2.1"
     through "^2.3.8"
-
-unconfig@^0.3.3:
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/unconfig/-/unconfig-0.3.3.tgz#85497433243e8933f792ae8f5fc08ecdeb781404"
-  integrity sha512-BavyYUbMTk5s7jypXdcS5ZkoqFAzzVt1AT7T9xFjNDCizqdb0YI6yRYRCGBeNp8tK7xnLl2vo7enG+2GxN0+2Q==
-  dependencies:
-    "@antfu/utils" "^0.5.1"
-    defu "^6.0.0"
-    jiti "^1.13.0"
 
 unconfig@^0.3.3:
   version "0.3.3"
