@@ -475,10 +475,18 @@
   dependencies:
     "@cspotcode/source-map-consumer" "0.8.0"
 
-"@iconify/json@^1.1.435":
-  version "1.1.461"
-  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-1.1.461.tgz#9e76f2339292e1a89855f93e497439afeb642f11"
-  integrity sha512-9Y41Tk9s3LDt4WI20XySNhNX6qTJ/WOBeE3O2iyoV9LJ6gFEDjp0uTPzfRU9NUx7D6VkvQ/htJEuRe9LmyMqUA==
+"@iconify/json@^2.1.28":
+  version "2.1.28"
+  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-2.1.28.tgz#bd99616580eae38da554bb7609567c4cec1de96b"
+  integrity sha512-6n2SkdiW0DUpGpfq3nKM7V6nlmeLJAz4V3X/lrFOyyVu0cDVOHmtXe4A0/Ur/75NtTDMBtH17jODWHOKmsDz/Q==
+  dependencies:
+    "@iconify/types" "^1.1.0"
+    pathe "^0.2.0"
+
+"@iconify/types@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@iconify/types/-/types-1.1.0.tgz#dc15fc988b1b3fd558dd140a24ede7e0aac11280"
+  integrity sha512-Jh0llaK2LRXQoYsorIH8maClebsnzTcve+7U3rQUSnC11X4jtPnFuyatqFLvMxZ8MLG8dB4zfHsbPfuvxluONw==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
