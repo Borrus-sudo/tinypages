@@ -34,7 +34,7 @@
     "@astropub/webapi": "^0.10.14",
     "@prefresh/vite": "^2.2.8",
     "@tinypages/compiler": "^1.0.0",
-    "@unocss/vite": "^0.31.2",
+    "@unocss/vite": "^0.31.3",
     "cac": "^6.7.12",
     "consola": "^2.15.3",
     "defu": "^6.0.0",
