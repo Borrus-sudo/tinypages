@@ -1,8 +1,14 @@
-<div align="center">
-  <a href="https://millionjs.org">
-    <img src="https://media.discordapp.net/attachments/905145816539340810/964359408064802846/90309528.png" />
-  </a>
-</div>
+<p align="center">
+<img width="200px" src="https://media.discordapp.net/attachments/905145816539340810/964359408064802846/90309528.png" align="center" alt="awesome-stack hero icon" />
+<h1 align="center">tinypages</h1>
+<p align="center">⚡ At times you might wanna do something small with losing SEO, tinypages for the win!</p>
+  <p align="center">
+    <img src="https://img.shields.io/github/issues/Borrus-sudo/tinypages" align="center" alt="Issue Badge" />
+    <img src="https://img.shields.io/github/stars/Borrus-sudo/tinypages" align="center" alt="Stars Badge" />
+  </p>
+</p>
+
+<br/>
 
 # tinypages
 
