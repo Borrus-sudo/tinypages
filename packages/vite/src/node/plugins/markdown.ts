@@ -12,9 +12,11 @@ import {
   hash as hashIt,
   reload,
 } from "./pluginUtils";
+import { useUnlighthouse } from "@unlighthouse/core";
 
 export default function (): Plugin {
   const { config, page, utils } = useContext();
+  const ligthouse = useUnlighthouse();
   const cache: Map<string, [string, Meta, string[]]> = new Map();
   const compile = async (input: string): Promise<[string, Meta, string[]]> => {
     const digest = hash(input).toString();
@@ -81,6 +83,9 @@ export default function (): Plugin {
           addedModule.push(page.pageCtx.url);
         }
         ctx.filename = viteNormalizePath(page.pageCtx.url);
+        setTimeout(() => {
+          ligthouse?.setSiteUrl("http://localhost:3003/");
+        }, 0);
         return appHtml;
       },
     },

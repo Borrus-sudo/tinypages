@@ -9,6 +9,7 @@ import type {
   ImagePresets,
   Options as ImageOptions,
 } from "vite-plugin-image-presets";
+import type { UserConfig as UnlighthouseConfig } from "@unlighthouse/core";
 
 interface Modules {
   image: {
@@ -17,6 +18,7 @@ interface Modules {
   };
   unocss: UnoCSSConfig;
   icons: IconsConfig;
+  unlighthouse: UnlighthouseConfig;
 }
 
 interface Middlwares {

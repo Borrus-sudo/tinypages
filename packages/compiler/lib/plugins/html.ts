@@ -64,9 +64,11 @@ export function PluginHTML(): Plugin {
             }
             if (node && node.rawTagName) {
               const tagName = node.rawTagName.toLowerCase();
+              if (tagName === "slot:body") {
+                node.replaceWith("/REPLACE:THIS/");
+              }
               if (
                 tagName === "svg" ||
-                tagName === "slot:body" ||
                 node.classList.contains("katex-display") ||
                 node.classList.contains("katex")
               ) {

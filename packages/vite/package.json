@@ -13,7 +13,7 @@
     "types"
   ],
   "bin": {
-    "tinypages": "./bin/tinypage.js"
+    "tinypages": "./bin/tinypage.mjs"
   },
   "exports": {
     ".": {
@@ -34,6 +34,7 @@
     "@astropub/webapi": "^0.10.14",
     "@prefresh/vite": "^2.2.8",
     "@tinypages/compiler": "^1.0.0",
+    "@unlighthouse/vite": "^0.3.21",
     "@unocss/vite": "^0.31.2",
     "cac": "^6.7.12",
     "consola": "^2.15.3",

@@ -32,7 +32,7 @@ export async function resolveConfig(
           ? mergeConfig(presetViteConfig, mergeConfig(obj[key], cliViteConfig))
           : value;
       return true;
-    };
+    }
   });
 
   config = ext(config, {
@@ -46,6 +46,7 @@ export async function resolveConfig(
       image: {},
       icons: {},
       unocss: {},
+      unlightouse: {},
     },
   }); //@ts-ignore
   config.compiler.icons = config.modules.icons;
