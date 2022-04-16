@@ -1,3 +1,15 @@
+<p align="center">
+<img width="200px" src="https://media.discordapp.net/attachments/905145816539340810/964359408064802846/90309528.png" align="center" alt="awesome-stack hero icon" />
+<h1 align="center">tinypages</h1>
+<p align="center">⚡ At times you might wanna do something small with losing SEO, tinypages for the win!</p>
+  <p align="center">
+    <img src="https://img.shields.io/github/issues/Borrus-sudo/tinypages" align="center" alt="Issue Badge" />
+    <img src="https://img.shields.io/github/stars/Borrus-sudo/tinypages" align="center" alt="Stars Badge" />
+  </p>
+</p>
+
+<br/>
+
 # tinypages
 
 tinypages is a Vite based SSG, using markdown interpolated with Preact components to build MPA websites tiny and fast! The main aim of this project is to leverage vitejs to provide a tight knit dev experience and optimized builds for prod
