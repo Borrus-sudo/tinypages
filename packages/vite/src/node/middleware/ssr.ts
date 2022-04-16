@@ -49,7 +49,6 @@ export default async function () {
       const html = await vite.transformIndexHtml(pageCtx.url, markdown); // vite transformed html
       res.status(200).set({ "Content-type": "text/html" }).end(html);
     } catch (err) {
-      vite.ssrFixStacktrace(err);
       next(err);
     }
   };

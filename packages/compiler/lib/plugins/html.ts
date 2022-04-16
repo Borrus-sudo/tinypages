@@ -16,9 +16,6 @@ export function PluginHTML(): Plugin {
       if (id === "html") {
         const dom = parse(payload);
         const topLevelTag = dom?.childNodes[0]?.rawTagName.toLowerCase();
-        if (topLevelTag === "slot:body") {
-          return "/REPLACE:THIS/";
-        }
         if (topLevelTag === "head") {
           for (let node of dom.childNodes[0].childNodes) {
             switch (node?.rawTagName?.toLowerCase()) {
@@ -64,9 +61,6 @@ export function PluginHTML(): Plugin {
             }
             if (node && node.rawTagName) {
               const tagName = node.rawTagName.toLowerCase();
-              if (tagName === "slot:body") {
-                node.replaceWith("/REPLACE:THIS/");
-              }
               if (
                 tagName === "svg" ||
                 node.classList.contains("katex-display") ||

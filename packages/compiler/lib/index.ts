@@ -74,8 +74,13 @@ export async function compile(
       );
       layoutPaths.push(...nestedLayouts);
       config.metaConstruct = defu(config.metaConstruct, layoutMeta);
-      console.log(compiledLayout);
-      input = compiledLayout.replace("/REPLACE:THIS/", input);
+      /**
+       * TODO: hacky pls pls fix this
+       */
+      input = compiledLayout.replace(
+        `<a href="slot:body">slot:body</a>`,
+        input
+      );
     }
   }
   marked.setOptions({
