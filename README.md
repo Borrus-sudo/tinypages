@@ -57,3 +57,7 @@ tinypages is a Vite based SSG, using markdown interpolated with Preact component
 
 ## Note 
 The framework is heavy WIP with most of the features still being implemented, lookout for a beta version in the near future
+
+## Test
+- cd into vite and compiler and run `yarn build`
+- cd into playground and run `node index.mjs`
