@@ -17,10 +17,19 @@ import { useUnlighthouse } from "@unlighthouse/core";
 export default function (): Plugin {
   const { config, page, utils } = useContext();
   const cache: Map<string, [string, Meta, string[]]> = new Map();
+  let changedLayoutIndication = false;
+  /**
+   * The compile function takes something as input and caches it. In the case of changedLayouts we have to forcibly make it
+   * not take from the cache as the main markown remains unchanged but the layout needs to be recompiled
+   */
   const compile = async (input: string): Promise<[string, Meta, string[]]> => {
     const digest = hash(input).toString();
-    if (cache.has(digest)) {
-      return deepCopy(cache.get(digest));
+    if (changedLayoutIndication) {
+      changedLayoutIndication = false;
+    } else {
+      if (cache.has(digest)) {
+        return deepCopy(cache.get(digest));
+      }
     }
     const result = await compileMarkdown(
       input,
@@ -30,6 +39,7 @@ export default function (): Plugin {
     cache.set(digest, deepCopy(result));
     return result;
   };
+
   const virtualModuleMap = new Map();
   const addedModule = [];
   let isBuild = false;
@@ -49,25 +59,31 @@ export default function (): Plugin {
         /**
          * Initialize the page globals to make it ready for the new page
          */
+
         page.meta = meta;
         page.sources = [];
         page.global = {};
         page.prevHash = hashIt(meta.components);
         page.layouts = layouts;
+
         const renderedHtml = await utils.render(rawHtml);
+
         /**
          * Initializes the virtual point for hydrating code
          */
+
         if (Object.keys(page.global).length > 0) {
           const virtualModuleId = viteNormalizePath(
             `/virtualModule${
               pathToFileURL(page.pageCtx.url.replace(/\.md$/, ".jsx")).href
             }`
           );
+
           page.meta.head.script.push({
             type: "module",
             src: virtualModuleId,
           });
+
           virtualModuleMap.set(
             virtualModuleId,
             generateVirtualEntryPoint(page.global, config.vite.root, isBuild)
@@ -78,13 +94,17 @@ export default function (): Plugin {
             src: "uno:only",
           });
         }
+
         const appHtml = appendPrelude(renderedHtml, page);
-        if (!addedModule.includes(page.pageCtx.url)) {
-          ctx.server.moduleGraph.createFileOnlyEntry(page.pageCtx.url);
-          addedModule.push(page.pageCtx.url);
+        for (const toAdd of [page.pageCtx.url, ...page.layouts]) {
+          if (!addedModule.includes(toAdd)) {
+            ctx.server.moduleGraph.createFileOnlyEntry(toAdd);
+            addedModule.push(toAdd);
+          }
         }
+
         ctx.filename = viteNormalizePath(page.pageCtx.url);
-        ligthouse.setSiteUrl("http://localhost:3003/");
+        ligthouse?.setSiteUrl("http://localhost:3003/");
         return appHtml;
       },
     },
@@ -102,10 +122,11 @@ export default function (): Plugin {
       const toReturnModules: ModuleNode[] = [];
       for (let module of ctx.modules) {
         const fileId = path.normalize(module.file);
+
         /**
          * If the pageCtx is equal to the fileId then check if the components have changed,
          * If the components have not changed then just re request the page and update it using million.js
-         * Else reload the page
+         * Else reload the entire page to remove the previous module from the HMR system
          */
         if (page.pageCtx.url === fileId) {
           const [, meta] = await compile(
@@ -116,10 +137,12 @@ export default function (): Plugin {
             reload(module.file, ctx.server, utils.logger);
             return [];
           }
+
           utils.logger.info(`Page reload ${module.file}`, {
             timestamp: true,
             clear: true,
           });
+
           ctx.server.ws.send({
             type: "custom",
             event: "new:page",
@@ -129,7 +152,10 @@ export default function (): Plugin {
            *  Reload the page if layout changed;
            *  TODO: improve this
            */
+
+          changedLayoutIndication = true;
           reload(module.file, ctx.server, utils.logger);
+
           utils.logger.info(`Page reload ${module.file}`, {
             timestamp: true,
             clear: true,

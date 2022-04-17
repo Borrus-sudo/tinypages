@@ -8,16 +8,6 @@ layout: ../layouts/BaseLayout.md
 <title>hello hello</title>
 </head>
 
-hi 
-
-hi hi hi hi
-  
-hi huhuh
-jijij
-uihuh
-hello 
-
-hi
 
 <mdi-github/>
 <mdi-twitter/>
@@ -33,7 +23,6 @@ hi
 <Counter no:hydrate/>
 
 
-hihhi huhuh
-huhuhuh hi
-
 ## hello hi
+
+what the hell is this working?

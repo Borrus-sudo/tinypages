@@ -14,8 +14,6 @@ export async function createContext(
   config: TinyPagesConfig,
   source: string
 ): Promise<[ResolvedConfig, ViteDevServer]> {
-  // let render, invalidate;
-
   ctx = {
     config,
     page: deepCopy(presetPageConfig),
@@ -35,7 +33,9 @@ export async function createContext(
   ctx.config.vite = mergeConfig(ctx.config.vite, { plugins });
   vite = await createServer(ctx.config.vite);
 
+  // console.log("pre module");
   // const module = await vite.ssrLoadModule("tinypages/entry-server");
+  // console.log("post module");
   // render = module.render;
   // invalidate = module.invalidate;
 

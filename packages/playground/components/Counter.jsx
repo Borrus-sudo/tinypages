@@ -13,7 +13,7 @@ export const PreactCounter = (props) => {
       <pre>{count}</pre>
       <button onClick={add}>+</button>
       <Github />
-      change3
+      change
       {props.children}
     </div>
     </>

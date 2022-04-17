@@ -39,13 +39,15 @@ export const presetViteConfig = {
   optimizeDeps: {
     include: [
       "million",
+      "million/shared",
       "preact/compat",
       "preact/compat/jsx-runtime",
-      "preact-render-to-string",
-      "preact-iso",
       "preact/debug",
       "preact/hooks",
     ],
+  },
+  ssr: {
+    externals: ["preact-render-to-string", "preact-iso"],
   },
   resolve: {
     alias: {
