@@ -3,7 +3,6 @@ import { join } from "path";
 import * as Vite from "vite";
 import type { UserTinyPagesConfig } from "../types/types";
 import { resolveConfig } from "./resolveConfig";
-import { createDevServer } from "./dev";
 
 interface GlobalCLIOptions {
   "--"?: string[];
@@ -94,6 +93,7 @@ export function cli() {
             config: options.config,
           };
           const { config, filePath } = await resolveConfig(cliViteOptions);
+          const { createDevServer } = await import("./dev");
           await createDevServer(config, filePath);
         } catch (e) {
           process.exit(1);

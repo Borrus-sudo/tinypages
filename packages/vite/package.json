@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "tsup-node&&tsup-node ./src/node/entry-server.ts --no-config --out-dir out --format esm",
+    "build": "tsup-node",
     "dev": "tsup-node --watch src"
   },
   "module": "./out/node/cli.mjs",
@@ -19,9 +19,6 @@
     ".": {
       "import": "./out/node/cli.mjs",
       "types": "./out/node/cli.d.ts"
-    },
-    "./entry-server": {
-      "require": "./out/entry-server.js"
     },
     "./client": {
       "import": "./out/client/client.mjs",
