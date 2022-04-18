@@ -45,6 +45,6 @@
     "yaml": "^2.0.0"
   },
   "optionalDependencies": {
-    "@unocss/core": "^0.31.2"
+    "@unocss/core": "^0.31.5"
   }
 }
