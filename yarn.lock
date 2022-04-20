@@ -1231,12 +1231,12 @@
     "@unlighthouse/core" "0.3.21"
     "@unlighthouse/server" "0.3.21"
 
-"@unocss/config@0.31.5":
-  version "0.31.5"
-  resolved "https://registry.yarnpkg.com/@unocss/config/-/config-0.31.5.tgz#a0e7180f7be5c2add200f9bc8459c83542d06f03"
-  integrity sha512-qnMeIlz6V1ezMJu2fWOL12Tz51+X3dFrHZyOQXEj5KmPSpFWUtlRY+M++zadQeSabRMGK3fdhkjjiu8HcVnfYQ==
+"@unocss/config@0.31.8":
+  version "0.31.8"
+  resolved "https://registry.yarnpkg.com/@unocss/config/-/config-0.31.8.tgz#f564b7fcbd560ecfa620fb78bd9f3335e1e69008"
+  integrity sha512-nDLU8jM/oNhjJKeF6qNQU7aDFAR42+OLnIK5rBJMHoUxbyYFLdopX0fYn08DXIOqJk3yg63T81dGr7g7Avcykg==
   dependencies:
-    "@unocss/core" "0.31.5"
+    "@unocss/core" "0.31.8"
     unconfig "^0.3.3"
 
 "@unocss/core@0.31.3":
@@ -1244,20 +1244,15 @@
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.3.tgz#4d787f8ce1f71c8e20a6cb863f8154e25d72da02"
   integrity sha512-0xnRatssQzXs44qC9vuvJXBL6vDAEhTOuvH2Yp0cQhowsdrf6W6iC1fw/v8DNr6NJraBOwJIMKcD1nxoiXpNJA==
 
-"@unocss/core@0.31.5":
-  version "0.31.5"
-  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.5.tgz#4404e3d3431d8d66b1b441c4acf8e009ceda0528"
-  integrity sha512-3W/bqqa+xGvoVY+FdlyMikwflCJvKvUAGzQUxQtF+/c5y7iTzMiZDKdDLSDrRLqBZQrseViXXCWEx71UtCRXUg==
-
-"@unocss/core@^0.31.8":
+"@unocss/core@0.31.8", "@unocss/core@^0.31.8":
   version "0.31.8"
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.8.tgz#5254c6f71b93ba39717ec64f1a3df9c2c9736543"
   integrity sha512-UkTEf1upTf3s5U1RwQfk183Ymw4pIuatUEJyPgojnc4FYcApGDXsS22QHmWjTVFPVA/cwM4fgsowcRrJM5IZOw==
 
-"@unocss/inspector@0.31.5":
-  version "0.31.5"
-  resolved "https://registry.yarnpkg.com/@unocss/inspector/-/inspector-0.31.5.tgz#c4475846874ab97425be41de25e07e767a37c0a7"
-  integrity sha512-Qb7oL9rmQyUlf/7sv6C6VkN8InBvdAqrejI1ZeI95d82jOJInrsR8H7iunUKkMUXKXjZ+LY2dHbRV5LeQyPwHA==
+"@unocss/inspector@0.31.8":
+  version "0.31.8"
+  resolved "https://registry.yarnpkg.com/@unocss/inspector/-/inspector-0.31.8.tgz#0613762c65239b05af65b2570be415d23b8fbab3"
+  integrity sha512-7rdnvU32VBqYNE12o+l7ysr6SKzUan2gNXez5rBrUQw/9a85aUzlP+sfeL5Zoj+y9KqSul4VByYp+FZFHY36wQ==
   dependencies:
     gzip-size "^6.0.0"
     sirv "^2.0.2"
@@ -1277,30 +1272,30 @@
     "@unocss/core" "0.31.3"
     "@unocss/preset-mini" "0.31.3"
 
-"@unocss/scope@0.31.5":
-  version "0.31.5"
-  resolved "https://registry.yarnpkg.com/@unocss/scope/-/scope-0.31.5.tgz#94fee95708241f474752680e3d060707999e176c"
-  integrity sha512-l+ORpB1NFPqFUk+k1SElkrgzYh9YKCSnUEFlrABgCdCNue+JJKBvCNzkORkxWIa/9FaDwWErAP7f5uWbh1dVFg==
+"@unocss/scope@0.31.8":
+  version "0.31.8"
+  resolved "https://registry.yarnpkg.com/@unocss/scope/-/scope-0.31.8.tgz#c0ae4ec012a5f1ccd71db3c41b8653e2755ac916"
+  integrity sha512-qYktkY5P6/mODzQzpokcdtEpBzK02tRIasBy5nilil9fvWSBojZO11ApmxyYYPO05w8G2wXSb/N2Ls3aEbotrg==
 
-"@unocss/transformer-directives@0.31.5":
-  version "0.31.5"
-  resolved "https://registry.yarnpkg.com/@unocss/transformer-directives/-/transformer-directives-0.31.5.tgz#a82caf6dd3927289007a90e0e6e6da91803c80b8"
-  integrity sha512-xT0Ttk8ra1ckSUDy/kTTvs7+9KJ14scDB7T8X5qxPNlNJW2WSTmwe1PbnuikBtg1XYxzJSdbvcHey8TcgCzxWg==
+"@unocss/transformer-directives@0.31.8":
+  version "0.31.8"
+  resolved "https://registry.yarnpkg.com/@unocss/transformer-directives/-/transformer-directives-0.31.8.tgz#1233f6b34ab4414f34f4aca41fc2b53f53ea1d0c"
+  integrity sha512-rGbXeAPCYvrFnbwZq7o8IaA42YwqYyuajDwcqirtBzwBo4zAX/72HGxAM0daW+l7llXqnBCLGJWjcA2w0tKsNA==
   dependencies:
-    "@unocss/core" "0.31.5"
+    "@unocss/core" "0.31.8"
     css-tree "^2.1.0"
 
-"@unocss/vite@^0.31.5":
-  version "0.31.5"
-  resolved "https://registry.yarnpkg.com/@unocss/vite/-/vite-0.31.5.tgz#29af691c5ee1ac6136da2d8e7d9fbb4b75a52e81"
-  integrity sha512-mwgq4AewdZIjaA+hZ9MgsuYYw6TCiKYZYTFIlQ2NM8CEysTbR27Dg7A+VCVXSy8S7wLK00+L4mxuh8lyBTIg4Q==
+"@unocss/vite@^0.31.8":
+  version "0.31.8"
+  resolved "https://registry.yarnpkg.com/@unocss/vite/-/vite-0.31.8.tgz#57fc2e2041ffd46567a9e1f56a7ec9ec31e2a01e"
+  integrity sha512-VFYK2juYGrQGHKZDS2jr9pSrbF1MzLLRKCqdK4x1UaMMiqqa/umMdcULQ4ON5w/cfA2ypD4FJI1wfVrH9apcrw==
   dependencies:
     "@rollup/pluginutils" "^4.2.1"
-    "@unocss/config" "0.31.5"
-    "@unocss/core" "0.31.5"
-    "@unocss/inspector" "0.31.5"
-    "@unocss/scope" "0.31.5"
-    "@unocss/transformer-directives" "0.31.5"
+    "@unocss/config" "0.31.8"
+    "@unocss/core" "0.31.8"
+    "@unocss/inspector" "0.31.8"
+    "@unocss/scope" "0.31.8"
+    "@unocss/transformer-directives" "0.31.8"
     magic-string "^0.26.1"
 
 "@unrouted/core@0.4.15", "@unrouted/core@^0.4.15":
