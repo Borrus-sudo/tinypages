@@ -7,24 +7,27 @@ import { h } from "preact";
 
 export function appendPrelude(content: string, page: Page) {
   const clone = deepCopy(page.global);
+  const keys = Object.keys(clone);
 
-  Object.keys(clone).forEach((key) => {
-    // delete different tags which aren't needed on the server
-    delete clone[key].path;
-    delete clone[key].lazy;
-    delete clone[key].props["lazy:load"];
-    delete clone[key].props["no:hydrate"];
-  });
+  if (keys.length > 0) {
+    keys.forEach((key) => {
+      // delete different tags which aren't needed on the server
+      delete clone[key].path;
+      delete clone[key].lazy;
+      delete clone[key].props["lazy:load"];
+      delete clone[key].props["no:hydrate"];
+    });
 
-  const scriptTag = `
+    const scriptTag = `
     window.pageCtx=${JSON.stringify(page.pageCtx)};
     window.globals=${JSON.stringify(clone)};
     `;
 
-  page.meta.head.script.push({
-    type: "text/javascript",
-    innerHTML: scriptTag,
-  });
+    page.meta.head.script.push({
+      type: "text/javascript",
+      innerHTML: scriptTag,
+    });
+  }
   renderToString(h(Helmet, page.meta.head, null)); // to make rewind work
 
   const HelmetHead = Helmet.rewind();

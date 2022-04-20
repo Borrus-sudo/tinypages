@@ -51,6 +51,7 @@ export default function (): Plugin {
     configResolved(config) {
       isBuild = config.command === "build" || config.isProduction;
       ligthouse = useUnlighthouse();
+      console.log(ligthouse);
     },
     transformIndexHtml: {
       enforce: "pre",
@@ -91,7 +92,7 @@ export default function (): Plugin {
         } else {
           page.meta.head.script.push({
             type: "module",
-            src: "uno:only",
+            src: "/uno:only",
           });
         }
 
@@ -109,12 +110,12 @@ export default function (): Plugin {
       },
     },
     resolveId(id: string) {
-      return virtualModuleMap.has(id) || id === "uno:only" ? id : null;
+      return virtualModuleMap.has(id) || id === "/uno:only" ? id : null;
     },
     load(id: string) {
       if (virtualModuleMap.has(id)) {
         return virtualModuleMap.get(id);
-      } else if (id === "uno:only") {
+      } else if (id === "/uno:only") {
         return `import "uno.css";`;
       }
     },

@@ -2,16 +2,19 @@ import { promises as fs } from "fs";
 import * as path from "path";
 import { normalizePath } from "vite";
 
-const regex1 = /\/\[(.*?)\]\//g;
-const regex2 = /\/\[(.*?)\]\./g;
-const regex3 = /\/\[\.\.\..*?\]/g;
+const regex1 = /\/\[(.*)\]\//g;
+const regex2 = /\/\[(.*)\]\./g;
+const regex3 = /\/\[\.\.\..*\]\..*/g;
 
 function transformDynamicArgs(input: string) {
-  if (!regex3.test(input) && (regex1.test(input) || regex2.test(input))) {
-    const output = input.replace(regex1, "/:$1/").replace(regex2, "/:$1.");
-    return [output, true];
-  }
-  return [input, false];
+  const output = input
+    .replace(regex3, "/**")
+    .replace(regex1, "/:$1/")
+    .replace(regex2, "/:$1.");
+  return [
+    output,
+    !regex3.test(input) && (regex1.test(input) || regex2.test(input)),
+  ];
 }
 
 function generateMockRoute(input: string) {
@@ -52,9 +55,12 @@ export async function loadPaths(
   addType
 ): Promise<void> {
   const dirents = await fs.readdir(dir, { withFileTypes: true });
+  const promises = [];
   for (let dirent of dirents) {
     if (dirent.isDirectory()) {
-      await loadPaths(root, router, path.join(dir, dirent.name), addType);
+      promises.push(
+        loadPaths(root, router, path.join(dir, dirent.name), addType)
+      );
     } else {
       let filePath = path.join(dir, dirent.name);
       let url = normalizePath(filePath.split(root)[1]);
@@ -68,4 +74,5 @@ export async function loadPaths(
       }
     }
   }
+  await Promise.all(promises);
 }

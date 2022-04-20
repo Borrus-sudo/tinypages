@@ -28,14 +28,14 @@ export default async function (componentMap: Map<string, ComponentFactory>) {
       props,
       factoryFunction: componentMap[uid],
     };
-    if (props.hasOwnProperty(clientIdle)) {
+    if (clientIdle in props) {
       delete props[clientIdle];
       requestIdleCallback(() => {
         hydrate(componentMeta, element);
       });
-    } else if (props.hasOwnProperty(mediaVisible)) {
+    } else if (mediaVisible in props) {
       lazyLoad(element, () => hydrate(componentMeta, element));
-    } else if (props.hasOwnProperty("client:only")) {
+    } else if ("client:only" in props) {
       hydrate(componentMeta, element, true);
     } else {
       hydrate(componentMeta, element);
