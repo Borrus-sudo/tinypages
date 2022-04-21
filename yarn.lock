@@ -1239,20 +1239,15 @@
     "@unocss/core" "0.31.5"
     unconfig "^0.3.3"
 
-"@unocss/core@0.31.3":
-  version "0.31.3"
-  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.3.tgz#4d787f8ce1f71c8e20a6cb863f8154e25d72da02"
-  integrity sha512-0xnRatssQzXs44qC9vuvJXBL6vDAEhTOuvH2Yp0cQhowsdrf6W6iC1fw/v8DNr6NJraBOwJIMKcD1nxoiXpNJA==
+"@unocss/core@0.31.12", "@unocss/core@^0.31.8":
+  version "0.31.12"
+  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.12.tgz#f3eecbd5d298e1263b2b1036a271065a0867b4d4"
+  integrity sha512-2dOf0yYXXWi+bhS0x+3DppQtImUREVu7CSFkrPULOioImWHryLfiORAdHpPd4MnUqBFLqtC68+7un00HPJVx3g==
 
 "@unocss/core@0.31.5":
   version "0.31.5"
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.5.tgz#4404e3d3431d8d66b1b441c4acf8e009ceda0528"
   integrity sha512-3W/bqqa+xGvoVY+FdlyMikwflCJvKvUAGzQUxQtF+/c5y7iTzMiZDKdDLSDrRLqBZQrseViXXCWEx71UtCRXUg==
-
-"@unocss/core@^0.31.8":
-  version "0.31.8"
-  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.8.tgz#5254c6f71b93ba39717ec64f1a3df9c2c9736543"
-  integrity sha512-UkTEf1upTf3s5U1RwQfk183Ymw4pIuatUEJyPgojnc4FYcApGDXsS22QHmWjTVFPVA/cwM4fgsowcRrJM5IZOw==
 
 "@unocss/inspector@0.31.5":
   version "0.31.5"
@@ -1262,20 +1257,20 @@
     gzip-size "^6.0.0"
     sirv "^2.0.2"
 
-"@unocss/preset-mini@0.31.3":
-  version "0.31.3"
-  resolved "https://registry.yarnpkg.com/@unocss/preset-mini/-/preset-mini-0.31.3.tgz#5876ce80b9d111383b8e7aa880b3bd2a8d851fcd"
-  integrity sha512-c0TIoRYfU1OMGf9OVhaaYBfl+Wm8i9eW3QGlM6KKjFdKphkJ2TBL/5GXZsCUhomZLRBAm0Fs49Sc26bi218vmA==
+"@unocss/preset-mini@0.31.12":
+  version "0.31.12"
+  resolved "https://registry.yarnpkg.com/@unocss/preset-mini/-/preset-mini-0.31.12.tgz#219c6080a57e061624ea4d4f10102c56df3ecea2"
+  integrity sha512-l/Fd6Gog+l+IlB/NodQ5u32q+wIwRt7BmacIj7j0eQrc5iG/OCJxz5LAv4Wg1L8yWJORpo89j2v6Hy7ijD9YPw==
   dependencies:
-    "@unocss/core" "0.31.3"
+    "@unocss/core" "0.31.12"
 
-"@unocss/preset-wind@^0.31.3":
-  version "0.31.3"
-  resolved "https://registry.yarnpkg.com/@unocss/preset-wind/-/preset-wind-0.31.3.tgz#4c9f02d7f1da76f69d7f420c2a14dcb84c7489c8"
-  integrity sha512-UnfZXW8Gj5u2vZ77kx+OndAPMG9dFSX74vtbfspE5HQM74xURLLz+aF1zQKXnxNS+faLIOCoQoGaS98cZCaWuA==
+"@unocss/preset-wind@^0.31.12":
+  version "0.31.12"
+  resolved "https://registry.yarnpkg.com/@unocss/preset-wind/-/preset-wind-0.31.12.tgz#8ef05fb26f7b8f19685c2fa7c518688f4b55bc17"
+  integrity sha512-IQC6AFyqKA8v3hHH7klFEeEr/Odj+Eb7rce5UTZBUhKObpTHGQWBqbvnZiiUZOL5H2ZtyDKrTPUG+MBtIA239A==
   dependencies:
-    "@unocss/core" "0.31.3"
-    "@unocss/preset-mini" "0.31.3"
+    "@unocss/core" "0.31.12"
+    "@unocss/preset-mini" "0.31.12"
 
 "@unocss/scope@0.31.5":
   version "0.31.5"
