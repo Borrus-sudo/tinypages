@@ -42,7 +42,7 @@
     "node-icons": "^1.0.1",
     "param-case": "^3.0.4",
     "shiki": "^0.10.0",
-    "yaml": "^2.0.0"
+    "yaml": "^2.0.1"
   },
   "optionalDependencies": {
     "@unocss/core": "^0.31.8"
