@@ -1182,20 +1182,15 @@
     "@unocss/core" "0.31.5"
     unconfig "^0.3.3"
 
-"@unocss/core@0.31.3":
-  version "0.31.3"
-  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.3.tgz#4d787f8ce1f71c8e20a6cb863f8154e25d72da02"
-  integrity sha512-0xnRatssQzXs44qC9vuvJXBL6vDAEhTOuvH2Yp0cQhowsdrf6W6iC1fw/v8DNr6NJraBOwJIMKcD1nxoiXpNJA==
+"@unocss/core@0.31.13", "@unocss/core@^0.31.8":
+  version "0.31.13"
+  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.13.tgz#3f133c146bc08abc68593f03d05c71489a16a5f1"
+  integrity sha512-mrhFmnbSVgUDrSH22WEHwKPFXOSHe10lEsE++7VsnEKpVAlYYnk+LxEjCNCm7GhiikWGuWI8oPLg50qQoBW3XQ==
 
 "@unocss/core@0.31.5":
   version "0.31.5"
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.5.tgz#4404e3d3431d8d66b1b441c4acf8e009ceda0528"
   integrity sha512-3W/bqqa+xGvoVY+FdlyMikwflCJvKvUAGzQUxQtF+/c5y7iTzMiZDKdDLSDrRLqBZQrseViXXCWEx71UtCRXUg==
-
-"@unocss/core@^0.31.8":
-  version "0.31.8"
-  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.8.tgz#5254c6f71b93ba39717ec64f1a3df9c2c9736543"
-  integrity sha512-UkTEf1upTf3s5U1RwQfk183Ymw4pIuatUEJyPgojnc4FYcApGDXsS22QHmWjTVFPVA/cwM4fgsowcRrJM5IZOw==
 
 "@unocss/inspector@0.31.5":
   version "0.31.5"
@@ -1205,20 +1200,20 @@
     gzip-size "^6.0.0"
     sirv "^2.0.2"
 
-"@unocss/preset-mini@0.31.3":
-  version "0.31.3"
-  resolved "https://registry.yarnpkg.com/@unocss/preset-mini/-/preset-mini-0.31.3.tgz#5876ce80b9d111383b8e7aa880b3bd2a8d851fcd"
-  integrity sha512-c0TIoRYfU1OMGf9OVhaaYBfl+Wm8i9eW3QGlM6KKjFdKphkJ2TBL/5GXZsCUhomZLRBAm0Fs49Sc26bi218vmA==
+"@unocss/preset-mini@0.31.13":
+  version "0.31.13"
+  resolved "https://registry.yarnpkg.com/@unocss/preset-mini/-/preset-mini-0.31.13.tgz#c7e856e6f99db72c83ade722434702538e595e7c"
+  integrity sha512-SEvDjE7hOLLmi+kvGAafBJtQUicAZJOHMeHmnjvQBOUHkBRUaHf9Qd/JgRaiUFC3lyKyQnxhzOSBk+22uonMJg==
   dependencies:
-    "@unocss/core" "0.31.3"
+    "@unocss/core" "0.31.13"
 
-"@unocss/preset-wind@^0.31.3":
-  version "0.31.3"
-  resolved "https://registry.yarnpkg.com/@unocss/preset-wind/-/preset-wind-0.31.3.tgz#4c9f02d7f1da76f69d7f420c2a14dcb84c7489c8"
-  integrity sha512-UnfZXW8Gj5u2vZ77kx+OndAPMG9dFSX74vtbfspE5HQM74xURLLz+aF1zQKXnxNS+faLIOCoQoGaS98cZCaWuA==
+"@unocss/preset-wind@^0.31.13":
+  version "0.31.13"
+  resolved "https://registry.yarnpkg.com/@unocss/preset-wind/-/preset-wind-0.31.13.tgz#478094adba82fa75e0cbd73eb846c59ba874ab78"
+  integrity sha512-DT73rIGN/qYIyhY6qcmvw5bdlnsR53+o/gUKZiOWimkjUf9G/lRPL4ScDL3GUW/mcG6bl5lwkhb75np3NtVOfA==
   dependencies:
-    "@unocss/core" "0.31.3"
-    "@unocss/preset-mini" "0.31.3"
+    "@unocss/core" "0.31.13"
+    "@unocss/preset-mini" "0.31.13"
 
 "@unocss/scope@0.31.5":
   version "0.31.5"
@@ -4662,10 +4657,10 @@ micromatch@^4.0.4:
     braces "^3.0.2"
     picomatch "^2.3.1"
 
-million@^1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/million/-/million-1.8.1.tgz#dc8d796c0cbb290cd8f817a5d5db9218c4edc6e6"
-  integrity sha512-g6dIaBz896/F7NMXCxF3yzeC21ECLnLZo7WfbAngQo+vsz+4lD3ksGdy19A3vGglgXMrNwS5HDn5g+kipEsmCQ==
+million@^1.8.2:
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/million/-/million-1.8.2.tgz#0e9f622f3798caa228d213bd796760168d33e20b"
+  integrity sha512-W4DiFpg+vRu88sGWlL/mYg+3wwH6T9hZeaf+vrIZQ5sBq9dHPUGh1oZNqXwlLllloWkLYlf5+/v2F6Tsh+huBA==
 
 mime-db@1.52.0, "mime-db@>= 1.43.0 < 2":
   version "1.52.0"
@@ -6848,10 +6843,10 @@ yaml@^1.10.0, yaml@^1.10.2:
   resolved "https://registry.yarnpkg.com/yaml/-/yaml-1.10.2.tgz#2301c5ffbf12b467de8da2333a459e29e7920e4b"
   integrity sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==
 
-yaml@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.0.0.tgz#cbc588ad58e0cd924cd3f5f2b1a9485103048e25"
-  integrity sha512-JbfdlHKGP2Ik9IHylzWlGd4pPK++EU46/IxMykphS2ZKw7a7h+dHNmcXObLgpRDriBY+rpWslldikckX8oruWQ==
+yaml@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.0.1.tgz#71886d6021f3da28169dbefde78d4dd0f8d83650"
+  integrity sha512-1NpAYQ3wjzIlMs0mgdBmYzLkFgWBIWrzYVDYfrixhoFNNgJ444/jT2kUT2sicRbJES3oQYRZugjB6Ro8SjKeFg==
 
 yargs-parser@20.x, yargs-parser@^20.2.2, yargs-parser@^20.2.3:
   version "20.2.9"
