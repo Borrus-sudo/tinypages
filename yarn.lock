@@ -1174,23 +1174,28 @@
     "@unlighthouse/core" "0.3.26"
     "@unlighthouse/server" "0.3.26"
 
-"@unocss/config@0.31.13":
-  version "0.31.13"
-  resolved "https://registry.yarnpkg.com/@unocss/config/-/config-0.31.13.tgz#e1771d15846dbe5c9134bd660bcbacc2219c1019"
-  integrity sha512-VSxSHQe3SU3TqkRDGe65alAuBkWR1N7YHIVm6/sU05OWZDcFXWJQ6iGFxv6K+TMkYtg04MHmuqmNFMU9or638Q==
+"@unocss/config@0.31.15":
+  version "0.31.15"
+  resolved "https://registry.yarnpkg.com/@unocss/config/-/config-0.31.15.tgz#060922f50091831d7019a74f872f61485f66b14f"
+  integrity sha512-0iJcSOL1s1hjGbtrVetQbxA/ymEM9akPe+BJeJLE6fb1ufilNtVC9wATMutkiZu9E2QNO05NrawCvJQc0us75A==
   dependencies:
-    "@unocss/core" "0.31.13"
+    "@unocss/core" "0.31.15"
     unconfig "^0.3.3"
 
-"@unocss/core@0.31.13", "@unocss/core@^0.31.8":
+"@unocss/core@0.31.13":
   version "0.31.13"
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.13.tgz#3f133c146bc08abc68593f03d05c71489a16a5f1"
   integrity sha512-mrhFmnbSVgUDrSH22WEHwKPFXOSHe10lEsE++7VsnEKpVAlYYnk+LxEjCNCm7GhiikWGuWI8oPLg50qQoBW3XQ==
 
-"@unocss/inspector@0.31.13":
-  version "0.31.13"
-  resolved "https://registry.yarnpkg.com/@unocss/inspector/-/inspector-0.31.13.tgz#c88e98e2aa4ff2941fba710342c0634f4d182dcc"
-  integrity sha512-5XE86FnlXFJMnLhXd6zGt4rKXyZe8xo61zaMalcAq+Ecf7qbloJhbK+MnNJrIikg8lHHfX19LjI98DrXos8lrQ==
+"@unocss/core@0.31.15", "@unocss/core@^0.31.8":
+  version "0.31.15"
+  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.15.tgz#5db3d7f20b0c22fb9b41b02155f324bbf392ec4b"
+  integrity sha512-vJsQ7oVMAZJI5wD6QDbxuY3RpZ67ch/n9IiTp9HxqpvdxaK6ToKNsEUQVXhMjI/zNnmxNNuJ+29XIV+NyPkikw==
+
+"@unocss/inspector@0.31.15":
+  version "0.31.15"
+  resolved "https://registry.yarnpkg.com/@unocss/inspector/-/inspector-0.31.15.tgz#b36e0241408404cd0e3242413fad618f215b1dde"
+  integrity sha512-ltLAWd3dtK3esEiB1Sib8VUJqHhE4HjqIZCEwOsE3fuNnM3tRHknW0wUeMc2bxXpCfKFvPIR51bsNPumrxR1gg==
   dependencies:
     gzip-size "^6.0.0"
     sirv "^2.0.2"
@@ -1210,30 +1215,30 @@
     "@unocss/core" "0.31.13"
     "@unocss/preset-mini" "0.31.13"
 
-"@unocss/scope@0.31.13":
-  version "0.31.13"
-  resolved "https://registry.yarnpkg.com/@unocss/scope/-/scope-0.31.13.tgz#dacb450f390f0e83cb056f8f76b6b9e2d52b6710"
-  integrity sha512-jSMduUF7q/bHH9LYdoiEa0KEt49h/Xkco7DDLGbMdh0N5US8tuac0/sKmj5UsK19lTGz4ELfMwrxt8PVhkxFlg==
+"@unocss/scope@0.31.15":
+  version "0.31.15"
+  resolved "https://registry.yarnpkg.com/@unocss/scope/-/scope-0.31.15.tgz#40bcf3694f43e15991b041bfa1c63a7cf9bdfb91"
+  integrity sha512-Pi5Pzq3WiZELCMT0iJCtW759QJAv1WA7IaSKiTeFsGrdCH5u1LK9UJKFfc0R8spQAy4nQBASGAZlNgWnJtsbyQ==
 
-"@unocss/transformer-directives@0.31.13":
-  version "0.31.13"
-  resolved "https://registry.yarnpkg.com/@unocss/transformer-directives/-/transformer-directives-0.31.13.tgz#186c709d63dc9ea787530c2e2a341c3f2a4e36e9"
-  integrity sha512-XcrMjzjaTKtqTDjcAJSoKwKP0i1OPUilqkIJa/Kjpxou2SwkEU+PV+SrIB1jA5M2R4dsU4HGTgc3DA9loJu2mw==
+"@unocss/transformer-directives@0.31.15":
+  version "0.31.15"
+  resolved "https://registry.yarnpkg.com/@unocss/transformer-directives/-/transformer-directives-0.31.15.tgz#abe212a43bc974971999b673b12e07ac7cc92a98"
+  integrity sha512-ShrDLZ9u1cegTD9xW7dwZyH3ANd10sZAbnFM/C6peyTZX+6ULxUAB3DMLybiUwxA/h2/8eYlFBAQdsz3wNjZpQ==
   dependencies:
-    "@unocss/core" "0.31.13"
+    "@unocss/core" "0.31.15"
     css-tree "^2.1.0"
 
-"@unocss/vite@^0.31.13":
-  version "0.31.13"
-  resolved "https://registry.yarnpkg.com/@unocss/vite/-/vite-0.31.13.tgz#a441b2b5cd6796d02c217865aeb971eafd67db0e"
-  integrity sha512-TFDoCQd4RWxgs/5atCfAN8N18W4uEWgwZPDxTIv/qhWu3tBqGqYCotsOU7fm5pjM+1oaLcatOf4itn2iDg9FmQ==
+"@unocss/vite@^0.31.15":
+  version "0.31.15"
+  resolved "https://registry.yarnpkg.com/@unocss/vite/-/vite-0.31.15.tgz#ca67d371242eb6a9220619fbad42559d0b0a3136"
+  integrity sha512-brMV0U9m3GwoiztF8IYIwrG7CA1ibAUdhaQ3gjTq/bttIEDGLyJK6iWRVlm9L2eqoxfnU1AjTepFGKUApgBvoQ==
   dependencies:
     "@rollup/pluginutils" "^4.2.1"
-    "@unocss/config" "0.31.13"
-    "@unocss/core" "0.31.13"
-    "@unocss/inspector" "0.31.13"
-    "@unocss/scope" "0.31.13"
-    "@unocss/transformer-directives" "0.31.13"
+    "@unocss/config" "0.31.15"
+    "@unocss/core" "0.31.15"
+    "@unocss/inspector" "0.31.15"
+    "@unocss/scope" "0.31.15"
+    "@unocss/transformer-directives" "0.31.15"
     magic-string "^0.26.1"
 
 "@unrouted/core@0.4.15", "@unrouted/core@^0.4.15":

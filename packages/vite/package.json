@@ -33,7 +33,7 @@
     "@prefresh/vite": "^2.2.8",
     "@tinypages/compiler": "^1.0.0",
     "@unlighthouse/vite": "^0.3.26",
-    "@unocss/vite": "^0.31.13",
+    "@unocss/vite": "^0.31.15",
     "cac": "^6.7.12",
     "consola": "^2.15.3",
     "defu": "^6.0.0",
