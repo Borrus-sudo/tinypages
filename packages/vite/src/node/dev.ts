@@ -12,7 +12,7 @@ export async function createDevServer(
   const app = express();
 
   vite.watcher.add(ctx.utils.pageDir);
-  if (source) vite.moduleGraph.createFileOnlyEntry(source);
+  // if the config file is reloaded, the users need to manually restart now
 
   if ((config.middlewares.pre?.length ?? -1) > 0)
     app.use(config.middlewares.pre);

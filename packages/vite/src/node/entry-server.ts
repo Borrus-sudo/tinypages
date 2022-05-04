@@ -40,7 +40,8 @@ export async function render(
       if (map.has(hash)) {
         payload = map.get(hash).html.replace(/uid=\"\d\"/, `uid="${uid}"`);
       } else {
-        payload = `<div preact uid="${uid}"></div>`;
+        let loadingString = "lazy:load" in component.props ? "Loading ..." : "";
+        payload = `<div preact uid="${uid}">${loadingString}</div>`;
         map.set(hash, { html: payload });
         if (hashComp.has(componentPath)) {
           hashComp.set(componentPath, [hash, ...hashComp.get(componentPath)]);
@@ -85,7 +86,9 @@ export async function render(
               : null;
 
           let vnode = h(preactComponent, component.props, slotVnode); // the component in Vnode
-          let uidAttr = !component.props["no:hydrate"] ? `uid="${uid}"` : "";
+          let uidAttr = !("no:hydrate" in component.props)
+            ? `uid="${uid}"`
+            : "";
           let prerenderedHtml = (await prerender(vnode)).html;
 
           payload = `<div preact ${uidAttr}>${prerenderedHtml}</div>`; // the component html

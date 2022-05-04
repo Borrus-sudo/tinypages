@@ -1,8 +1,7 @@
 import { promises as fs } from "fs";
-import { presetPageConfig } from "../constants";
 import { useContext, useVite } from "../context";
 import { fsRouter } from "../router/fs";
-import { deepCopy, normalizeUrl } from "../utils";
+import { normalizeUrl } from "../utils";
 
 export default async function () {
   const { page, utils } = useContext();
@@ -33,11 +32,6 @@ export default async function () {
             res.redirect("/404.md");
           } else {
             res.send(`<h1> 404 url not found </h1>`);
-            page.pageCtx = deepCopy(presetPageConfig.pageCtx);
-            page.sources = [];
-            page.global = {};
-            page.meta = deepCopy(presetPageConfig.meta);
-            page.prevHash = "";
           }
           return;
         }

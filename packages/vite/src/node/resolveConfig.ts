@@ -44,12 +44,23 @@ export async function resolveConfig(
     },
     modules: {
       image: {},
-      icons: {},
+      icons: {
+        defaultIconsStyles: {
+          width: "1em",
+          height: "1em",
+          viewBox: "0 0 24 24",
+        },
+      },
       unocss: {},
       unlightouse: {},
     },
-  }); //@ts-ignore
+  });
+
   config.compiler.icons = config.modules.icons;
+  config.compiler.defaultIconsStyles = config.modules.icons.defaultIconsStyles;
+  config.compiler.defaultBase64IconsStyles =
+    config.modules.icons.defaultIconsStyles;
+
   return { config, filePath: sources[0] } as {
     config: TinyPagesConfig;
     filePath: string;

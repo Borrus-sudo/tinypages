@@ -1,4 +1,3 @@
-import { existsSync } from "fs";
 import * as path from "path";
 import type { Logger, ModuleNode, ViteDevServer } from "vite";
 import { normalizePath as viteNormalizePath } from "vite";
@@ -39,8 +38,6 @@ export function generateVirtualEntryPoint(
 ) {
   const importMap: Map<string, string> = new Map();
   const resolve = (p: string) => viteNormalizePath(path.relative(root, p));
-  let usesLazy = false;
-  let hasLazyComponent = false;
   let imports = [
     isBuild ? "" : `import "preact/debug"`,
     `import "uno.css";`,
@@ -48,9 +45,6 @@ export function generateVirtualEntryPoint(
   ];
   let compImports = Object.keys(components).map((uid: string, idx) => {
     const mod = components[uid];
-    if (components[uid].lazy) {
-      usesLazy = true;
-    }
     if (!importMap.has(uid)) {
       if (!components[uid].lazy) {
         importMap.set(uid, `comp${idx}`);
@@ -58,29 +52,14 @@ export function generateVirtualEntryPoint(
       }
     }
   });
-  if (usesLazy) {
-    imports.push(`import {lazy,Suspense} from "preact/compat"`);
-    if (existsSync(path.join(root, "components/Loading.jsx"))) {
-      hasLazyComponent = true;
-      imports.push(`import Loading from "/components/Loading.jsx";`);
-    }
-  }
+
   imports.push(...compImports);
 
   const moduleMapStr = Object.keys(components)
     .map((uid: string) => {
       const left = `'${uid}'`;
-      if (components[uid].lazy) {
-        imports.push(
-          `const CompLazy${uid}=lazy(()=>import("${resolve(
-            components[uid].path
-          )}"))`
-        );
-      }
       const right = components[uid].lazy
-        ? `<Suspense fallback={${
-            hasLazyComponent ? "<Loading/>" : "<div>Loading ...</div>"
-          }}><CompLazy${uid}/></Suspense>`
+        ? `import("${resolve(components[uid].path)}")`
         : importMap.get(uid);
 
       return `${left}: ${right}`;

@@ -24,12 +24,14 @@ export async function hydrate(
           },
         })
       : null;
-    const vnode = h(componentFactoryFunction, component.props, innerSlot);
-    if (clientOnly) {
-      render(vnode, element);
-    } else {
-      hydrativeRender(vnode, element);
+    let unRender = (vnode) =>
+      clientOnly ? render(vnode, element) : hydrativeRender(vnode, element);
+    if (componentFactoryFunction instanceof Promise) {
+      componentFactoryFunction.then((val) => {
+        unRender(h(val, component.props, innerSlot));
+      });
     }
+    unRender(h(componentFactoryFunction, component.props, innerSlot));
   } catch (err) {
     if (import.meta.env.DEV) {
       element.innerHTML = `<div style="color:red; background-color: lightpink;border: 2px dotted black;margin-bottom: 36px;">${err}</div>`;

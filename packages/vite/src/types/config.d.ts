@@ -17,7 +17,7 @@ interface Modules {
     options?: ImageOptions;
   };
   unocss: UnoCSSConfig;
-  icons: IconsConfig;
+  icons: IconsConfig & { defaultIconsStyles: Record<string, string> };
   unlighthouse: UnlighthouseConfig;
 }
 
@@ -34,7 +34,14 @@ interface TinyPagesConfig {
 }
 
 interface UserTinyPagesConfig {
-  compiler?: Omit<CompilerConfig, "unocss" | "icons" | "renderUnoCSS">;
+  compiler?: Omit<
+    CompilerConfig,
+    | "unocss"
+    | "icons"
+    | "renderUnoCSS"
+    | "defaultIconsStyles"
+    | "defaultBase64IconsStyles"
+  >;
   modules?: Partial<Modules>;
   vite?: ViteUserConfig;
   middlewares?: Middlwares;
