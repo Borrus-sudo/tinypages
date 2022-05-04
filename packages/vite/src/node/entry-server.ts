@@ -40,6 +40,10 @@ export async function render(
       if (map.has(hash)) {
         payload = map.get(hash).html.replace(/uid=\"\d\"/, `uid="${uid}"`);
       } else {
+        /**
+         * Loading state to be displayed for client:only and lazy:load attrs together as initial state will be displayed
+         * if ssged
+         */
         let loadingString = "lazy:load" in component.props ? "Loading ..." : "";
         payload = `<div preact uid="${uid}">${loadingString}</div>`;
         map.set(hash, { html: payload });
