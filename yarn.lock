@@ -1182,10 +1182,15 @@
     "@unocss/core" "0.31.13"
     unconfig "^0.3.3"
 
-"@unocss/core@0.31.13", "@unocss/core@^0.31.8":
+"@unocss/core@0.31.13":
   version "0.31.13"
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.13.tgz#3f133c146bc08abc68593f03d05c71489a16a5f1"
   integrity sha512-mrhFmnbSVgUDrSH22WEHwKPFXOSHe10lEsE++7VsnEKpVAlYYnk+LxEjCNCm7GhiikWGuWI8oPLg50qQoBW3XQ==
+
+"@unocss/core@^0.32.13":
+  version "0.32.13"
+  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.32.13.tgz#0200e799de64d53e497f651ede9c76d8e5225e3d"
+  integrity sha512-kAQQBO+3wWApkEG25miG32icCh53PNgDH0EJmbtkc7MRfSVRmH6ibj2YGgLV6nDOkRhfb39aJyIAOJXgEAe/9g==
 
 "@unocss/inspector@0.31.13":
   version "0.31.13"
