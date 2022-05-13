@@ -30,7 +30,7 @@
     "@iconify/json": "^1.1.435",
     "@types/marked": "^4.0.1",
     "@types/node-emoji": "^1.8.1",
-    "@unocss/preset-wind": "^0.31.13"
+    "@unocss/preset-wind": "^0.33.4"
   },
   "dependencies": {
     "defu": "^6.0.0",
