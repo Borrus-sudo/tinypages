@@ -1,5 +1,5 @@
 import * as path from "path";
-import type { Plugin } from "vite";
+import type { Plugin, ModuleNode } from "vite";
 import { useContext } from "../context";
 import { refreshRouter } from "../router/fs";
 import { isParentJSX, reload } from "./pluginUtils";
@@ -22,6 +22,13 @@ export default function (): Plugin {
       });
     },
     async handleHotUpdate(ctx) {
+      /**
+       * Because of the way how the framework works, the module graph is populated with many modules during ssg at dev time.
+       * So when files change, we filter out component files which are used by the browser and give vite to handle them (prefresh takes over
+       * these modules).
+       * We also revalidate caching based on components changed, so on the next reload, the ssged content is not stale
+       */
+      const toReturn: ModuleNode[] = [];
       for (let module of ctx.modules) {
         const fileId = path.normalize(module.file);
         if (module.url.startsWith("/component")) {
@@ -33,9 +40,10 @@ export default function (): Plugin {
               utils.invalidate(res[1]);
             }
           }
+          toReturn.push(module);
         }
       }
-      return ctx.modules;
+      return toReturn;
     },
   };
 }

@@ -40,6 +40,7 @@ export const presetViteConfig = {
     include: [
       "million",
       "million/shared",
+      "preact",
       "preact/compat",
       "preact/compat/jsx-runtime",
       "preact/debug",

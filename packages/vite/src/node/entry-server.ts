@@ -24,6 +24,7 @@ export async function render(
   let payload: string;
 
   ctx.page.sources = [];
+
   for (let component of ctx.page.meta.components) {
     const componentPath = resolve(
       path.join(
@@ -95,7 +96,7 @@ export async function render(
             : "";
           let prerenderedHtml = (await prerender(vnode)).html;
 
-          payload = `<div preact ${uidAttr}>${prerenderedHtml}</div>`; // the component html
+          payload = `<div preact ${uidAttr}><div>${prerenderedHtml}</div></div>`; // the component html
         } catch (err) {
           payload = `<div preact uid="${uid}" ${errorCSS}> <div>${err}</div> </div>`;
         }
@@ -109,7 +110,7 @@ export async function render(
         }
       }
 
-      if ("no:hydrate" in component.props) {
+      if (!("no:hydrate" in component.props)) {
         /**
          * initalize metadata if no:hydrate property is not present
          */

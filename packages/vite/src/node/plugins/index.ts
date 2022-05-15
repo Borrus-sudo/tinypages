@@ -6,14 +6,12 @@ import { useContext } from "../context";
 import IconPlugin from "./icons";
 import HmrPlugin from "./jsxHmr";
 import MarkdownPlugin from "./markdown";
-import DataFetchPlugin from "./ssrFetch";
 import UnlighthousePlugin from "@unlighthouse/vite";
 
 export async function createPlugins() {
   const { config } = useContext();
   return [
     InspectPlugin(),
-    DataFetchPlugin(),
     MarkdownPlugin(),
     UnoCSSPlugin(<{}>{
       inspector: true,

@@ -4,11 +4,11 @@ import { useContext } from "../context";
 
 export default function (): Plugin {
   const { config } = useContext();
-  const icons = Icons(config.compiler.icons);
+  const icons = Icons(config.modules.icons);
   const separator = config.modules.icons?.separator || ":";
   const moduleMap: Map<string, string> = new Map();
   const stringifiedDefaults = JSON.stringify(
-    config.compiler.defaultIconsStyles || {}
+    config.modules.icons.defaultIconsStyles || {}
   );
   return {
     name: "vite-tinypages-icons",

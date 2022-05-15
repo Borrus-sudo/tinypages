@@ -5,12 +5,14 @@ import { normalizePath } from "vite";
 const regex1 = /\/\[(.*)\]\//g;
 const regex2 = /\/\[(.*)\]\./g;
 const regex3 = /\/\[\.\.\..*\]\..*/g;
+const regex4 = /(\/\S)\./g;
 
 function transformDynamicArgs(input: string) {
   const output = input
     .replace(regex3, "/**")
     .replace(regex1, "/:$1/")
-    .replace(regex2, "/:$1.");
+    .replace(regex2, "/:$1.")
+    .replace(regex4, "$1/");
   return [
     output,
     !regex3.test(input) && (regex1.test(input) || regex2.test(input)),

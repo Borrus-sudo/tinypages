@@ -12,7 +12,7 @@ import {
   hash as hashIt,
   reload,
 } from "./pluginUtils";
-import { useUnlighthouse } from "@unlighthouse/core";
+// import { useUnlighthouse } from "@unlighthouse/core";
 
 export default function (): Plugin {
   const { config, page, utils } = useContext();
@@ -43,15 +43,14 @@ export default function (): Plugin {
   const virtualModuleMap = new Map();
   const addedModule = [];
   let isBuild = false;
-  let ligthouse;
+  // let worker;
 
   return {
     name: "vite-tinypages-markdown",
     enforce: "pre",
     configResolved(config) {
       isBuild = config.command === "build" || config.isProduction;
-      ligthouse = useUnlighthouse();
-      console.log(ligthouse);
+      // worker = useUnlighthouse().worker;
     },
     transformIndexHtml: {
       enforce: "pre",
@@ -103,9 +102,8 @@ export default function (): Plugin {
             addedModule.push(toAdd);
           }
         }
-
+        // worker.queueRoute(page.pageCtx.originalUrl);
         ctx.filename = viteNormalizePath(page.pageCtx.url);
-        ligthouse?.setSiteUrl("http://localhost:3003/");
         return appHtml;
       },
     },
@@ -148,6 +146,7 @@ export default function (): Plugin {
             type: "custom",
             event: "new:page",
           });
+          return;
         } else if (page.layouts.includes(fileId)) {
           /**
            *  Reload the page if layout changed;
@@ -161,6 +160,7 @@ export default function (): Plugin {
             timestamp: true,
             clear: true,
           });
+          return;
         } else {
           toReturnModules.push(module);
         }
