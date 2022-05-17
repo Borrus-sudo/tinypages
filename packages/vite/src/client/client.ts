@@ -20,10 +20,9 @@ let mediaVisible = "media:visible";
 export default async function (componentMap: Map<string, ComponentFactory>) {
   for (let element of document.querySelectorAll("[preact]")) {
     const uid = element.getAttribute("uid");
-    if (!globals[uid]) {
-      continue;
-    }
-    const { props } = globals[uid];
+    const props = JSON.parse(
+      (element.children.item(1) as HTMLScriptElement).textContent
+    );
     const componentMeta = {
       props,
       factoryFunction: componentMap[uid],

@@ -40,7 +40,9 @@ export default function (): Plugin {
     return result;
   };
 
-  const virtualModuleMap = new Map();
+  const virtualModuleMap: Map<string, string> = new Map([
+    ["\0/uno:only", `import "uno.css"`],
+  ]);
   const addedModule = [];
   let isBuild = false;
   // let worker;
@@ -74,7 +76,7 @@ export default function (): Plugin {
 
         if (Object.keys(page.global).length > 0) {
           const virtualModuleId = viteNormalizePath(
-            `/virtualModule${
+            `\0/virtualModule${
               pathToFileURL(page.pageCtx.url.replace(/\.md$/, ".jsx")).href
             }`
           );
@@ -88,11 +90,6 @@ export default function (): Plugin {
             virtualModuleId,
             generateVirtualEntryPoint(page.global, config.vite.root, isBuild)
           );
-        } else {
-          page.meta.head.script.push({
-            type: "module",
-            src: "/uno:only",
-          });
         }
 
         const appHtml = appendPrelude(renderedHtml, page);
@@ -108,13 +105,13 @@ export default function (): Plugin {
       },
     },
     resolveId(id: string) {
-      return virtualModuleMap.has(id) || id === "/uno:only" ? id : null;
+      if (virtualModuleMap.has("\0" + id)) {
+        return "\0" + id;
+      }
     },
     load(id: string) {
       if (virtualModuleMap.has(id)) {
         return virtualModuleMap.get(id);
-      } else if (id === "/uno:only") {
-        return `import "uno.css";`;
       }
     },
     async handleHotUpdate(ctx) {

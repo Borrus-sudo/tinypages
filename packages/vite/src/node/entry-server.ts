@@ -3,16 +3,25 @@ import { hash as hashObj } from "ohash";
 import * as path from "path";
 import { h } from "preact";
 import { prerender } from "preact-iso";
+import { v4 as uuid } from "@lukeed/uuid";
 import type { ViteDevServer } from "vite";
 import type { ComponentRegistration, ResolvedConfig } from "../types/types";
+import { createElement, deepCopy } from "./utils";
 
-const map: Map<string, { html: string; ssrProps?: Record<string, any> }> =
-  new Map();
+const map: Map<string, { html: string }> = new Map();
 const hashComp: Map<string, string[]> = new Map();
 const resolve = (fsPath: string) => {
   return fsPath + (fs.existsSync(fsPath + ".jsx") ? ".jsx" : ".tsx");
 };
-const errorCSS = `style="color:red; background-color: lightpink;border: 2px dotted black;margin-bottom: 36px;"`;
+const errorCSS =
+  "color:red; background-color: lightpink;border: 2px dotted black;margin-bottom: 36px;";
+const preact = undefined;
+const script = (cloneProps) =>
+  createElement(
+    "script",
+    { type: "application/json" },
+    JSON.stringify(cloneProps)
+  );
 
 export async function render(
   html: string,
@@ -20,7 +29,7 @@ export async function render(
   ctx: ResolvedConfig
 ) {
   let componentRegistration: ComponentRegistration = {};
-  let uid: number = 0;
+  let uid: string = uuid();
   let payload: string;
 
   ctx.page.sources = [];
@@ -37,6 +46,13 @@ export async function render(
     const hash = hashObj(component);
     ctx.page.sources.push(componentPath);
 
+    /**
+     * some prestuff which is not bound by any conditions
+     */
+    const cloneProps = deepCopy(component.props);
+    delete cloneProps["lazy:load"];
+    delete cloneProps["no:hydrate"];
+
     if (component.props["client:only"]) {
       if (map.has(hash)) {
         payload = map.get(hash).html.replace(/uid=\"\d\"/, `uid="${uid}"`);
@@ -46,7 +62,11 @@ export async function render(
          * if ssged
          */
         let loadingString = "lazy:load" in component.props ? "Loading ..." : "";
-        payload = `<div preact uid="${uid}">${loadingString}</div>`;
+        payload = createElement(
+          "div",
+          { preact, uid },
+          createElement("div", {}, loadingString) + "\n" + script(cloneProps)
+        );
         map.set(hash, { html: payload });
         if (hashComp.has(componentPath)) {
           hashComp.set(componentPath, [hash, ...hashComp.get(componentPath)]);
@@ -64,44 +84,48 @@ export async function render(
       if (map.has(hash)) {
         const cached = map.get(hash);
         payload = cached.html.replace(/uid=\"\d\"/, `uid="${uid}"`);
-        if (cached.ssrProps) {
-          component.props["ssrProps"] = cached.ssrProps;
-        }
       } else {
         try {
           const module = await vite.ssrLoadModule(componentPath);
           const preactComponent = module.default;
-          const pageProps = module.pageProps;
-
-          if (pageProps) {
-            // the client shall receive this as well because component.props
-            //  is passed by reference to componentRegistration
-            component.props["ssrProps"] = await pageProps(
-              JSON.parse(JSON.stringify(ctx.page.pageCtx))
-            );
-            ctx.utils.consola.success("Loaded page props!");
-          }
-
-          //children in the Vnode
-          let slotVnode =
+          const slotVnode =
             component.children.trim() !== ""
               ? h("tinypages-fragment", {
                   dangerouslySetInnerHTML: { __html: component.children },
                 })
               : null;
 
-          let vnode = h(preactComponent, component.props, slotVnode); // the component in Vnode
-          let uidAttr = !("no:hydrate" in component.props)
-            ? `uid="${uid}"`
-            : "";
-          let prerenderedHtml = (await prerender(vnode)).html;
+          const vnode = h(preactComponent, component.props, slotVnode); // the component in Vnode
+          const prerenderedHtml = (await prerender(vnode)).html;
 
-          payload = `<div preact ${uidAttr}><div>${prerenderedHtml}</div></div>`; // the component html
+          /**
+           * creatng the static html
+           */
+          let attrs = {};
+          if (!("no:hydrate" in component.props)) {
+            attrs["uid"] = uid;
+            attrs["preact"] = preact;
+          }
+
+          payload = createElement(
+            "div",
+            attrs,
+            createElement("div", {}, prerenderedHtml) +
+              "\n" +
+              script(cloneProps)
+          );
         } catch (err) {
-          payload = `<div preact uid="${uid}" ${errorCSS}> <div>${err}</div> </div>`;
+          /**
+           * creating the static html
+           */
+          payload = createElement(
+            "div",
+            { preact, uid, style: errorCSS },
+            createElement("div", {}, err) + "\n" + script(cloneProps)
+          );
         }
 
-        map.set(hash, { html: payload, ssrProps: component.props["ssrProps"] });
+        map.set(hash, { html: payload });
 
         if (hashComp.has(componentPath)) {
           hashComp.set(componentPath, [hash, ...hashComp.get(componentPath)]);
@@ -123,7 +147,7 @@ export async function render(
     }
 
     html = html.replace(component.componentLiteral, payload);
-    uid++;
+    uid = uuid();
   }
   ctx.page.global = componentRegistration;
   return html;

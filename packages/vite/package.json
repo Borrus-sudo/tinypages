@@ -7,6 +7,7 @@
     "dev": "tsup-node --watch src"
   },
   "module": "./out/node/cli.mjs",
+  "types": "./out/node/cli.d.ts",
   "files": [
     "out",
     "bin",
@@ -30,6 +31,7 @@
   },
   "dependencies": {
     "@astropub/webapi": "^0.10.14",
+    "@lukeed/uuid": "^2.0.0",
     "@prefresh/vite": "^2.2.8",
     "@tinypages/compiler": "^1.0.0",
     "@unlighthouse/vite": "^0.3.26",
