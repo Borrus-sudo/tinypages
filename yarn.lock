@@ -1199,6 +1199,11 @@
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.13.tgz#3f133c146bc08abc68593f03d05c71489a16a5f1"
   integrity sha512-mrhFmnbSVgUDrSH22WEHwKPFXOSHe10lEsE++7VsnEKpVAlYYnk+LxEjCNCm7GhiikWGuWI8oPLg50qQoBW3XQ==
 
+"@unocss/core@0.34.0":
+  version "0.34.0"
+  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.34.0.tgz#241ac4fa54ef1e7f6549965e0e8cb965f26a7e37"
+  integrity sha512-NYKiLMqjHiJPRfkMXD1EjF6SCw0USO2W0W8jKFHYqF/z+WV33p8GyTPHk78z6JT95yhhc7+u1y1ZWaHaePElAw==
+
 "@unocss/inspector@0.31.13":
   version "0.31.13"
   resolved "https://registry.yarnpkg.com/@unocss/inspector/-/inspector-0.31.13.tgz#c88e98e2aa4ff2941fba710342c0634f4d182dcc"
@@ -1207,20 +1212,20 @@
     gzip-size "^6.0.0"
     sirv "^2.0.2"
 
-"@unocss/preset-mini@0.31.13":
-  version "0.31.13"
-  resolved "https://registry.yarnpkg.com/@unocss/preset-mini/-/preset-mini-0.31.13.tgz#c7e856e6f99db72c83ade722434702538e595e7c"
-  integrity sha512-SEvDjE7hOLLmi+kvGAafBJtQUicAZJOHMeHmnjvQBOUHkBRUaHf9Qd/JgRaiUFC3lyKyQnxhzOSBk+22uonMJg==
+"@unocss/preset-mini@0.34.0":
+  version "0.34.0"
+  resolved "https://registry.yarnpkg.com/@unocss/preset-mini/-/preset-mini-0.34.0.tgz#3579ddf6245c1a64491c9c44c18980608125ebd0"
+  integrity sha512-oQX+k1lGg3vnrI5UjcteUIembov4kGapPMMgxzzTnEmIEBeDib3iJz8fljBaIB24tblqDT9x9CxX5YOPWbDtzg==
   dependencies:
-    "@unocss/core" "0.31.13"
+    "@unocss/core" "0.34.0"
 
-"@unocss/preset-wind@^0.31.13":
-  version "0.31.13"
-  resolved "https://registry.yarnpkg.com/@unocss/preset-wind/-/preset-wind-0.31.13.tgz#478094adba82fa75e0cbd73eb846c59ba874ab78"
-  integrity sha512-DT73rIGN/qYIyhY6qcmvw5bdlnsR53+o/gUKZiOWimkjUf9G/lRPL4ScDL3GUW/mcG6bl5lwkhb75np3NtVOfA==
+"@unocss/preset-wind@^0.34.0":
+  version "0.34.0"
+  resolved "https://registry.yarnpkg.com/@unocss/preset-wind/-/preset-wind-0.34.0.tgz#9123294983d17df9a025939c4560943abfc9e428"
+  integrity sha512-ZkH9vlJUyupMIgq3gtarMFVyR0sT7TpRbdiwmjUrexqsYSPRO9S93PXmUj6GJ69M296q91LdNPz3A4nR079Nkw==
   dependencies:
-    "@unocss/core" "0.31.13"
-    "@unocss/preset-mini" "0.31.13"
+    "@unocss/core" "0.34.0"
+    "@unocss/preset-mini" "0.34.0"
 
 "@unocss/scope@0.31.13":
   version "0.31.13"
