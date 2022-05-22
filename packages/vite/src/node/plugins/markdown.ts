@@ -2,7 +2,7 @@ import { compile as compileMarkdown } from "@tinypages/compiler";
 import { promises as fs, existsSync } from "fs";
 import * as path from "path";
 import { pathToFileURL } from "url";
-import type { ModuleNode, Plugin } from "vite";
+import type { ModuleNode, Plugin, ViteDevServer } from "vite";
 import { normalizePath as viteNormalizePath } from "vite";
 import type { Meta } from "../../../types/types";
 import { useContext, useVite } from "../context";

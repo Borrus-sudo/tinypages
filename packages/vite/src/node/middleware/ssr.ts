@@ -12,6 +12,7 @@ export default async function () {
     try {
       const url = normalizeUrl(req.originalUrl);
       const pageCtx = router(url.replace(/\.md$/, ""));
+
       if (!/\.md$/.test(url)) {
         if (pageCtx.url === "404") {
           utils.logger.info(`404 not found ${req.originalUrl}`, {
@@ -22,7 +23,6 @@ export default async function () {
           utils.logger.info(req.originalUrl, { timestamp: true });
           res.send(await fs.readFile(pageCtx.url, { encoding: "utf-8" }));
         }
-        return;
       } else {
         if (pageCtx.url === "404") {
           if (!url.endsWith("404.md")) {
@@ -33,15 +33,15 @@ export default async function () {
           } else {
             res.send(`<h1> 404 url not found </h1>`);
           }
-          return;
+        } else {
+          utils.logger.info(req.originalUrl, { timestamp: true });
+          page.pageCtx = pageCtx;
+          global.pageCtx = pageCtx; // globally assign pageCtx
+          const markdown = await fs.readFile(pageCtx.url, "utf-8");
+          const html = await vite.transformIndexHtml(pageCtx.url, markdown); // vite transformed html
+          res.status(200).set({ "Content-type": "text/html" }).end(html);
         }
       }
-      utils.logger.info(req.originalUrl, { timestamp: true });
-      page.pageCtx = pageCtx;
-      global.pageCtx = pageCtx; // globally assign pageCtx
-      const markdown = await fs.readFile(pageCtx.url, "utf-8");
-      const html = await vite.transformIndexHtml(pageCtx.url, markdown); // vite transformed html
-      res.status(200).set({ "Content-type": "text/html" }).end(html);
     } catch (err) {
       next(err);
     }

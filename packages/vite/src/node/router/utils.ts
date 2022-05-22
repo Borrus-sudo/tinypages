@@ -8,7 +8,7 @@ function transformDynamicArgs(input: string) {
     .replace(/\/\[(.*)\]\//g, "/:$1/")
     .replace(/\/\[(.*)\]\./g, "/:$1.")
     .replace(/\/\_\_.*?\//g, "$1/")
-    .replace(/\..*?$/, "");
+    .replace(/\.md$/, "");
   return output;
 }
 
@@ -22,7 +22,7 @@ export async function loadPaths(
   for (let dirent of dirents) {
     if (dirent.isDirectory()) {
       promises.push(loadPaths(root, router, path.join(dir, dirent.name)));
-    } else if (!/\.(j|t)s$/.test(dirent.name)) {
+    } else if (/\.md$/.test(dirent.name)) {
       let filePath = path.join(dir, dirent.name);
       let url = normalizePath(filePath.split(root)[1]);
       const output = transformDynamicArgs(url);
