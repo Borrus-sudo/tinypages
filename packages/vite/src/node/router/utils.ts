@@ -12,7 +12,8 @@ function transformDynamicArgs(input: string) {
     .replace(regex3, "/**")
     .replace(regex1, "/:$1/")
     .replace(regex2, "/:$1.")
-    .replace(regex4, "$1/");
+    .replace(regex4, "$1/")
+    .split(".md")[0];
   return [output, false];
 }
 

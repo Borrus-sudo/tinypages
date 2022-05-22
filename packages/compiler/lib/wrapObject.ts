@@ -1,1 +1,1 @@
-export { wrapObject } from "./utils";
+export { stringifyObject } from "./utils";

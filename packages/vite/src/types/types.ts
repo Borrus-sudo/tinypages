@@ -30,7 +30,10 @@ interface PageCtx {
 interface Page {
   pageCtx: PageCtx;
   sources: string[];
-  global: ComponentRegistration;
+  global: {
+    components: ComponentRegistration;
+    ssrProps: Record<any, any>;
+  };
   meta: Meta;
   prevHash: string;
   layouts: string[];

@@ -60,7 +60,10 @@ export const presetPageConfig = {
   sources: [],
   layouts: [],
   reloads: [],
-  global: {},
+  global: {
+    components: {},
+    ssrProps: {},
+  },
   prevHash: "",
   meta: {
     styles: "",

@@ -150,7 +150,7 @@ export async function render(
     html = html.replace(component.componentLiteral, payload);
     uid = uuid();
   }
-  ctx.page.global = componentRegistration;
+  ctx.page.global.components = componentRegistration;
   return html;
 }
 

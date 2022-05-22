@@ -8,7 +8,9 @@ import { h } from "preact";
 export function appendPrelude(content: string, page: Page) {
   page.meta.head.script.push({
     type: "text/javascript",
-    innerHTML: `window.pageCtx=${JSON.stringify(page.pageCtx)};`,
+    innerHTML: `window.pageCtx=${JSON.stringify(
+      page.pageCtx
+    )};window.ssrProps=${JSON.stringify(page.global.ssrProps)}`,
   });
   renderToString(h(Helmet, page.meta.head, null)); // to make rewind work
 

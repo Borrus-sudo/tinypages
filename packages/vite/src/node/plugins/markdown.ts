@@ -58,6 +58,7 @@ export default function (): Plugin {
     }
     const { default: loader } = await vite.ssrLoadModule(url);
     const data = await loader();
+    page.global.ssrProps = data?.ssrProps || {};
     const buildMarkdown = ejs.render(markdown, data);
     return buildMarkdown;
   };
@@ -79,8 +80,8 @@ export default function (): Plugin {
     transformIndexHtml: {
       enforce: "pre",
       async transform(markdown: string, ctx) {
-        const builtMustache = await buildRoute(page.pageCtx.url, markdown);
-        const [rawHtml, meta, layouts] = await compile(builtMustache);
+        const builtEjs = await buildRoute(page.pageCtx.url, markdown);
+        const [rawHtml, meta, layouts] = await compile(builtEjs);
         /**
          * Initialize the page globals to make it ready for the new page
          */
@@ -88,7 +89,10 @@ export default function (): Plugin {
         page.meta = meta;
         page.sources = [];
         page.reloads = [];
-        page.global = {};
+        page.global = {
+          components: {},
+          ssrProps: {},
+        };
         page.prevHash = hashIt(meta.components);
         page.layouts = layouts;
 
@@ -98,7 +102,7 @@ export default function (): Plugin {
          * Initializes the virtual point for hydrating code
          */
 
-        if (Object.keys(page.global).length > 0) {
+        if (Object.keys(page.global.components).length > 0) {
           const virtualModuleId = viteNormalizePath(
             `/virtualModule${
               pathToFileURL(page.pageCtx.url.replace(/\.md$/, ".jsx")).href
@@ -112,7 +116,11 @@ export default function (): Plugin {
 
           virtualModuleMap.set(
             virtualModuleId,
-            generateVirtualEntryPoint(page.global, config.vite.root, isBuild)
+            generateVirtualEntryPoint(
+              page.global.components,
+              config.vite.root,
+              isBuild
+            )
           );
         } else {
           page.meta.head.script.push({

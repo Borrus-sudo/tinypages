@@ -100,5 +100,4 @@ export async function compile(
   ];
 }
 
-export { analyze };
 export type { UserConfig, Meta, Plugin, Head, IconsConfig, UnoCSSConfig };

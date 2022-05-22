@@ -35,16 +35,9 @@ export default function (): Plugin {
         // preact js component
         return `
         import { h } from "preact";
-        import { wrapObject } from "@tinypages/compiler/utils";
+        import { stringifyObject } from "@tinypages/compiler/utils";
         export default function(props){
-          const str=(obj)=>{
-            let returnVal = "";
-            Object.values(obj).forEach(([key,val])=>{
-              returnVal +=\`\$\{key\}=\$\{val\} \`;
-            });
-             return returnVal;
-          }; 
-          const initial = "<svg "+ str(wrapObject(props||${stringifiedDefaults}));
+          const initial = "<svg "+ wrapObject(props||${stringifiedDefaults});
           return h("span", {
           dangerouslySetInnerHTML: { __html: ${
             "initial" + "+ `" + res.split("<svg")[1] + "`"

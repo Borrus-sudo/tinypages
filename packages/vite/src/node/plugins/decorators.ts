@@ -10,7 +10,7 @@ export default function (): Plugin {
       return /(j|t)sx\?hydrate/.test(id) ? id : "";
     },
     /**
-     * This is just boilerplate code for doing sub island partial hydration
+     * The extra boilerplate code will affect
      */
     load(id: string, options) {
       if (!/(j|t)sx\?hydrate/.test(id)) {
@@ -18,7 +18,7 @@ export default function (): Plugin {
       }
       const uid = uuid();
       const path = id.split("?hydrate")[0];
-      page.global[uid] = {
+      page.global.components[uid] = {
         lazy: id.includes("?hydrate=lazy"),
         path,
       };
