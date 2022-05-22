@@ -37,7 +37,7 @@ export default function (): Plugin {
         import { h } from "preact";
         import { stringifyObject } from "@tinypages/compiler/utils";
         export default function(props){
-          const initial = "<svg "+ wrapObject(props||${stringifiedDefaults});
+          const initial = "<svg "+ stringifyObject(props||${stringifiedDefaults});
           return h("span", {
           dangerouslySetInnerHTML: { __html: ${
             "initial" + "+ `" + res.split("<svg")[1] + "`"

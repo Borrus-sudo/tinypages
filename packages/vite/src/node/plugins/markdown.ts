@@ -18,9 +18,9 @@ import ejs from "ejs";
 
 export default function (): Plugin {
   const { config, page, utils } = useContext();
-  const vite = useVite();
   const cache: Map<string, [string, Meta, string[]]> = new Map();
   let changedLayoutIndication = false;
+  let vite: ViteDevServer;
   /**
    * The compile function takes something as input and caches it. In the case of changedLayouts we have to forcibly make it
    * not take from the cache as the main markown remains unchanged but the layout needs to be recompiled
@@ -79,6 +79,10 @@ export default function (): Plugin {
     transformIndexHtml: {
       enforce: "pre",
       async transform(markdown: string, ctx) {
+        if (!vite) {
+          vite = useVite();
+        }
+
         const builtEjs = await buildRoute(page.pageCtx.url, markdown);
         const [rawHtml, meta, layouts] = await compile(builtEjs);
         /**
