@@ -16,7 +16,6 @@ import ejs from "ejs";
 
 // import { useUnlighthouse } from "@unlighthouse/core";
 
-console.log(ejs);
 export default function (): Plugin {
   const { config, page, utils } = useContext();
   const vite = useVite();
