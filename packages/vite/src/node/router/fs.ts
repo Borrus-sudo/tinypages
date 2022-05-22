@@ -12,14 +12,16 @@ async function boilerplate(pagesDir: string) {
   router = createRouter();
   const [addType, returnType] = generateTypes();
   await loadPaths(pagesDir, router, pagesDir, addType);
-  const newTypes = returnType();
-  if (!!newTypes) {
-    const prevTypes = await fs.readFile(typesPath, {
-      encoding: "utf-8",
-    });
-    const regex = /\/\*start\*\/[\s\S]*\/\*end\*\//;
-    await fs.writeFile(typesPath, prevTypes.replace(regex, newTypes));
-  }
+  Promise.resolve().then(async () => {
+    const newTypes = returnType();
+    if (!!newTypes) {
+      const prevTypes = await fs.readFile(typesPath, {
+        encoding: "utf-8",
+      });
+      const regex = /\/\*start\*\/[\s\S]*\/\*end\*\//;
+      await fs.writeFile(typesPath, prevTypes.replace(regex, newTypes));
+    }
+  });
 }
 
 export async function fsRouter(pagesDir: string) {

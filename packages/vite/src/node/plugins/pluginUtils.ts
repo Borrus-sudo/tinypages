@@ -4,7 +4,7 @@ import { normalizePath as viteNormalizePath } from "vite";
 import type { ComponentRegistration, Page } from "../../types/types";
 
 export function isParentJSX(node: ModuleNode, page: Page) {
-  for (let module of node.importedModules) {
+  for (let module of node.importers) {
     const fileId = path.normalize(module.file);
     if (
       (module.file.endsWith(".jsx") || module.file.endsWith(".tsx")) &&

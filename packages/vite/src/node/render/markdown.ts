@@ -1,12 +1,12 @@
+import { v4 as uuid } from "@lukeed/uuid";
 import * as fs from "fs";
 import { hash as hashObj } from "ohash";
 import * as path from "path";
 import { h } from "preact";
 import { prerender } from "preact-iso";
-import { v4 as uuid } from "@lukeed/uuid";
 import type { ViteDevServer } from "vite";
-import type { ComponentRegistration, ResolvedConfig } from "../types/types";
-import { createElement, deepCopy } from "./utils";
+import type { ComponentRegistration, ResolvedConfig } from "../../types/types";
+import { createElement, deepCopy } from "../utils";
 
 const map: Map<string, { html: string }> = new Map();
 const hashComp: Map<string, string[]> = new Map();
@@ -61,7 +61,7 @@ export async function render(
          * Loading state to be displayed for client:only and lazy:load attrs together as initial state will be displayed
          * if ssged
          */
-        let loadingString = "lazy:load" in component.props ? "Loading ..." : "";
+        let loadingString = "lazy:load" in component.props ? "Loading ..." : ""; //TODO: improve, support a <Loading/>
         payload = createElement(
           "div",
           { preact, uid },
@@ -77,7 +77,6 @@ export async function render(
 
       componentRegistration[uid] = {
         path: componentPath,
-        props: component.props,
         lazy: "lazy:load" in component.props,
       };
     } else {
@@ -96,7 +95,7 @@ export async function render(
               : null;
 
           const vnode = h(preactComponent, component.props, slotVnode); // the component in Vnode
-          const prerenderedHtml = (await prerender(vnode)).html;
+          const { html: prerenderedHtml } = await prerender(vnode);
 
           /**
            * creatng the static html
@@ -120,8 +119,10 @@ export async function render(
            */
           payload = createElement(
             "div",
-            { preact, uid, style: errorCSS },
-            createElement("div", {}, err) + "\n" + script(cloneProps)
+            { preact, uid },
+            createElement("div", { style: errorCSS }, err) +
+              "\n" +
+              script(cloneProps)
           );
         }
 
@@ -140,7 +141,6 @@ export async function render(
          */
         componentRegistration[uid] = {
           path: componentPath,
-          props: component.props,
           lazy: "lazy:load" in component.props,
         };
       }

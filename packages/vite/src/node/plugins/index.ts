@@ -7,6 +7,7 @@ import IconPlugin from "./icons";
 import HmrPlugin from "./jsxHmr";
 import MarkdownPlugin from "./markdown";
 import UnlighthousePlugin from "@unlighthouse/vite";
+import DecoratorPlugin from "./decorators";
 
 export async function createPlugins() {
   const { config } = useContext();
@@ -19,6 +20,7 @@ export async function createPlugins() {
       ...(config.modules.unocss || {}),
     }),
     ImagePlugin(config.modules.image.presets, config.modules.image.options),
+    DecoratorPlugin(),
     IconPlugin(),
     HmrPlugin(),
     PrefreshPlugin(),

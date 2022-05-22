@@ -17,7 +17,6 @@ interface Consola {
 type ComponentRegistration = {
   [key: string]: {
     path: string;
-    props: Record<string, any>;
     lazy: boolean;
   };
 };

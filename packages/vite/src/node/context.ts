@@ -1,11 +1,16 @@
 import { polyfill } from "@astropub/webapi";
 import { join } from "path";
-import { createLogger, createServer, mergeConfig, ViteDevServer } from "vite";
+import {
+  createLogger,
+  createServer,
+  mergeConfig,
+  type ViteDevServer,
+} from "vite";
 import { ResolvedConfig, TinyPagesConfig } from "../types/types";
 import { presetPageConfig } from "./constants";
 import { createPlugins } from "./plugins";
-import { deepCopy, createConsola } from "./utils";
-import { render, invalidate } from "./entry-server";
+import { invalidate, render } from "./render/markdown";
+import { createConsola, deepCopy } from "./utils";
 
 let ctx: ResolvedConfig;
 let vite: ViteDevServer;

@@ -5,7 +5,7 @@ import { normalizePath } from "vite";
 const regex1 = /\/\[(.*)\]\//g;
 const regex2 = /\/\[(.*)\]\./g;
 const regex3 = /\/\[\.\.\..*\]\..*/g;
-const regex4 = /(\/\S)\./g;
+const regex4 = /\/\_\_.*?\//g;
 
 function transformDynamicArgs(input: string) {
   const output = input
@@ -13,10 +13,7 @@ function transformDynamicArgs(input: string) {
     .replace(regex1, "/:$1/")
     .replace(regex2, "/:$1.")
     .replace(regex4, "$1/");
-  return [
-    output,
-    !regex3.test(input) && (regex1.test(input) || regex2.test(input)),
-  ];
+  return [output, false];
 }
 
 function generateMockRoute(input: string) {
@@ -63,7 +60,7 @@ export async function loadPaths(
       promises.push(
         loadPaths(root, router, path.join(dir, dirent.name), addType)
       );
-    } else {
+    } else if (!/\.(j|t)s$/.test(dirent.name)) {
       let filePath = path.join(dir, dirent.name);
       let url = normalizePath(filePath.split(root)[1]);
       const [output, generateFlag] = transformDynamicArgs(url);

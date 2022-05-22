@@ -1,5 +1,5 @@
 import * as path from "path";
-import type { Plugin, ModuleNode } from "vite";
+import type { ModuleNode, Plugin } from "vite";
 import { useContext } from "../context";
 import { refreshRouter } from "../router/fs";
 import { isParentJSX, reload } from "./pluginUtils";
@@ -12,6 +12,7 @@ export default function (): Plugin {
     enforce: "pre",
     configureServer(server) {
       server.watcher.addListener("change", async (_, filePath) => {
+        console.log(_, filePath);
         if (
           typeof filePath === "string" &&
           path.normalize(filePath) === utils.pageDir
@@ -22,25 +23,37 @@ export default function (): Plugin {
       });
     },
     async handleHotUpdate(ctx) {
-      /**
-       * Because of the way how the framework works, the module graph is populated with many modules during ssg at dev time.
-       * So when files change, we filter out component files which are used by the browser and give vite to handle them (prefresh takes over
-       * these modules).
-       * We also revalidate caching based on components changed, so on the next reload, the ssged content is not stale
-       */
       const toReturn: ModuleNode[] = [];
+      const seen: Set<string> = new Set();
+      console.log(ctx.modules);
       for (let module of ctx.modules) {
         const fileId = path.normalize(module.file);
-        if (module.url.startsWith("/component")) {
-          if (page.sources.includes(fileId)) {
-            utils.invalidate(fileId);
-          } else {
-            const res = isParentJSX(module, page);
-            if (res[0]) {
-              utils.invalidate(res[1]);
-            }
+        /**
+         * The component is used in this page and need to be given to prefresh
+         */
+        if (
+          module.url.startsWith("/component") &&
+          page.sources.includes(fileId)
+        ) {
+          toReturn.push(module);
+          continue;
+        }
+        /**
+         * The component belongs to this page and is a ssr module
+         */
+        if (page.sources.includes(fileId)) {
+          utils.invalidate(fileId);
+        } else if (!seen.has(module.url)) {
+          /**
+           * Sees if the component is a descendant of a top level component.
+           * seen map is maintained to prevent duplicates between ssr and non ssr instances of top level components
+           */
+          const res = isParentJSX(module, page);
+          if (res[0]) {
+            utils.invalidate(res[1]);
           }
           toReturn.push(module);
+          seen.add(module.url);
         }
       }
       return toReturn;

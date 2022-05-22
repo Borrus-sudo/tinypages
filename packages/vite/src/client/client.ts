@@ -14,9 +14,6 @@ const lazyLoad = (target, callback: Function) => {
   io.observe(target);
 };
 
-let clientIdle = "client:idle";
-let mediaVisible = "media:visible";
-
 export default async function (componentMap: Map<string, ComponentFactory>) {
   for (let element of document.querySelectorAll("[preact]")) {
     const uid = element.getAttribute("uid");
@@ -27,12 +24,11 @@ export default async function (componentMap: Map<string, ComponentFactory>) {
       props,
       factoryFunction: componentMap[uid],
     };
-    if (clientIdle in props) {
-      delete props[clientIdle];
+    if ("client:idle" in props) {
       requestIdleCallback(() => {
         hydrate(componentMeta, element);
       });
-    } else if (mediaVisible in props) {
+    } else if ("media:visible" in props) {
       lazyLoad(element, () => hydrate(componentMeta, element));
     } else if ("client:only" in props) {
       hydrate(componentMeta, element, true);

@@ -1,17 +1,18 @@
+import type { Params } from "./params";
+
 type PageCtx = /*start*/
   | { url: "/404.md" }
   | { url: "/favicon.ico" }
   | { url: "/index.md" }
-  | { url: "/style.ts" }
+  | { url: "/newPage.md" }
+  | { url: "/Sample.md" }
   | { url: "/[...].md" }
-  | { url: "/[id].md"; params: { id: string } }
+  | { url: "/[id].md" }
   | { url: "/api/index.md" }
-  | { url: "/api/[blog].md"; params: { blog: string } }
-  | { url: "/api/[blog].ts"; params: { blog: string } }; /*end*/
+  | { url: "/api/[blog].md" }; /*end*/
 
 declare global {
   var pageCtx: PageCtx;
-  function pageProps(pageCtx: PageCtx): any;
 }
 
 export type { PageCtx };

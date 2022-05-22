@@ -1,5 +1,5 @@
 import express from "express";
-import type { ViteDevServer } from "vite";
+import { type ViteDevServer, normalizePath as viteNormalizePath } from "vite";
 import type { TinyPagesConfig } from "../types/types";
 import { createContext } from "./context";
 import { createMiddlewares } from "./middleware";
@@ -11,7 +11,7 @@ export async function createDevServer(
   const [ctx, vite] = await createContext(config, source);
   const app = express();
 
-  vite.watcher.add(ctx.utils.pageDir);
+  vite.watcher.add(viteNormalizePath(ctx.utils.pageDir));
   // if the config file is reloaded, the users need to manually restart now
 
   if ((config.middlewares.pre?.length ?? -1) > 0)
