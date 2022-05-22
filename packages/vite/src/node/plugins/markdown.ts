@@ -1,21 +1,25 @@
 import { compile as compileMarkdown } from "@tinypages/compiler";
-import { promises as fs } from "fs";
+import { promises as fs, existsSync } from "fs";
 import * as path from "path";
 import { pathToFileURL } from "url";
 import type { ModuleNode, Plugin } from "vite";
 import { normalizePath as viteNormalizePath } from "vite";
 import type { Meta } from "../../types/types";
-import { useContext } from "../context";
+import { useContext, useVite } from "../context";
 import { appendPrelude, deepCopy, hash } from "../utils";
 import {
   generateVirtualEntryPoint,
   hash as hashIt,
   reload,
 } from "./pluginUtils";
+import ejs from "ejs";
+
 // import { useUnlighthouse } from "@unlighthouse/core";
 
+console.log(ejs);
 export default function (): Plugin {
   const { config, page, utils } = useContext();
+  const vite = useVite();
   const cache: Map<string, [string, Meta, string[]]> = new Map();
   let changedLayoutIndication = false;
   /**
@@ -40,6 +44,24 @@ export default function (): Plugin {
     return result;
   };
 
+  const buildRoute = async (url: string, markdown: string) => {
+    let jsUrl = url.replace(/\.md$/, ".js");
+    if (!existsSync(jsUrl)) {
+      let tsUrl = url.replace(/\.md$/, ".ts");
+      if (existsSync(tsUrl)) {
+        url = tsUrl;
+      } else {
+        return markdown;
+      }
+    } else {
+      url = jsUrl;
+    }
+    const { default: loader } = await vite.ssrLoadModule(url);
+    const data = await loader();
+    const buildMarkdown = ejs.render(markdown, data);
+    return buildMarkdown;
+  };
+
   const virtualModuleMap: Map<string, string> = new Map([
     ["/uno:only", `import "uno.css"`],
   ]);
@@ -57,13 +79,15 @@ export default function (): Plugin {
     transformIndexHtml: {
       enforce: "pre",
       async transform(markdown: string, ctx) {
-        const [rawHtml, meta, layouts] = await compile(markdown);
+        const builtMustache = await buildRoute(page.pageCtx.url, markdown);
+        const [rawHtml, meta, layouts] = await compile(builtMustache);
         /**
          * Initialize the page globals to make it ready for the new page
          */
 
         page.meta = meta;
         page.sources = [];
+        page.reloads = [];
         page.global = {};
         page.prevHash = hashIt(meta.components);
         page.layouts = layouts;
@@ -123,13 +147,17 @@ export default function (): Plugin {
       const toReturnModules: ModuleNode[] = [];
       for (let module of ctx.modules) {
         const fileId = path.normalize(module.file);
-
         /**
-         * If the pageCtx is equal to the fileId then check if the components have changed,
-         * If the components have not changed then just re request the page and update it using million.js
-         * Else reload the entire page to remove the previous module from the HMR system
+         * Reload the page. (mainly for handling the loader files)
          */
-        if (page.pageCtx.url === fileId) {
+        if (page.reloads.includes(fileId)) {
+          reload(module.file, ctx.server, utils.logger);
+        } else if (page.pageCtx.url === fileId) {
+          /**
+           * If the pageCtx is equal to the fileId then check if the components have changed,
+           * If the components have not changed then just re request the page and update it using million.js
+           * Else reload the entire page to remove the previous module from the HMR system
+           */
           const [, meta] = await compile(
             await fs.readFile(page.pageCtx.url, { encoding: "utf-8" })
           );

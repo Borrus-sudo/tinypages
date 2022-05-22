@@ -59,6 +59,7 @@ export const presetPageConfig = {
   pageCtx: { url: "" },
   sources: [],
   layouts: [],
+  reloads: [],
   global: {},
   prevHash: "",
   meta: {

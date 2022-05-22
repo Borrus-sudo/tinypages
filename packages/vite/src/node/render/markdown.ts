@@ -85,8 +85,9 @@ export async function render(
         payload = cached.html.replace(/uid=\"\d\"/, `uid="${uid}"`);
       } else {
         try {
-          const module = await vite.ssrLoadModule(componentPath);
-          const preactComponent = module.default;
+          const { default: preactComponent } = await vite.ssrLoadModule(
+            componentPath
+          );
           const slotVnode =
             component.children.trim() !== ""
               ? h("tinypages-fragment", {

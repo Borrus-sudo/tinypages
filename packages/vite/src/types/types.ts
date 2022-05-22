@@ -34,6 +34,7 @@ interface Page {
   meta: Meta;
   prevHash: string;
   layouts: string[];
+  reloads: string[]; // an indication for the hmr system to blind reload in these scenarios
 }
 
 interface Utils {
