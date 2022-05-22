@@ -1,7 +1,7 @@
 import { createDefu } from "defu";
 import { loadConfig } from "unconfig";
 import { mergeConfig } from "vite";
-import type { TinyPagesConfig, UserTinyPagesConfig } from "../types/types";
+import type { TinyPagesConfig, UserTinyPagesConfig } from "../../types/types";
 import { presetCompilerConfig, presetViteConfig } from "./constants";
 
 export async function resolveConfig(

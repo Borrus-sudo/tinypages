@@ -4,7 +4,7 @@ import * as path from "path";
 import { pathToFileURL } from "url";
 import type { ModuleNode, Plugin } from "vite";
 import { normalizePath as viteNormalizePath } from "vite";
-import type { Meta } from "../../types/types";
+import type { Meta } from "../../../types/types";
 import { useContext, useVite } from "../context";
 import { appendPrelude, deepCopy, hash } from "../utils";
 import {

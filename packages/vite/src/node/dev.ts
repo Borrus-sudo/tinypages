@@ -1,6 +1,6 @@
 import express from "express";
 import { type ViteDevServer, normalizePath as viteNormalizePath } from "vite";
-import type { TinyPagesConfig } from "../types/types";
+import type { TinyPagesConfig } from "../../types/types";
 import { createContext } from "./context";
 import { createMiddlewares } from "./middleware";
 

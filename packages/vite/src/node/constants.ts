@@ -1,5 +1,5 @@
 import type { InlineConfig } from "vite";
-import type { Page } from "../types/types";
+import type { Page } from "../../types/types";
 
 export const presetCompilerConfig = {
   marked: { gfm: true, xhtml: true },

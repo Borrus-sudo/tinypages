@@ -2,7 +2,7 @@ import consolaPkg from "consola";
 import { murmurHash } from "ohash";
 import Helmet from "preact-helmet";
 import renderToString from "preact-render-to-string";
-import type { Page } from "../types/types";
+import type { Page } from "../../types/types";
 import { h } from "preact";
 
 export function appendPrelude(content: string, page: Page) {

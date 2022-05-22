@@ -1,7 +1,7 @@
 import cac from "cac";
 import { join } from "path";
 import * as Vite from "vite";
-import type { UserTinyPagesConfig } from "../types/types";
+import type { UserTinyPagesConfig } from "../../types/types";
 import { resolveConfig } from "./resolveConfig";
 
 interface GlobalCLIOptions {
@@ -110,4 +110,4 @@ export function defineConfig(config: UserTinyPagesConfig) {
   return config;
 }
 
-export type { Params } from "../types/params";
+export type { Params } from "../../types/params";

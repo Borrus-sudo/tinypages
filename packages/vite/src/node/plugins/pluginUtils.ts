@@ -1,7 +1,7 @@
 import * as path from "path";
 import type { Logger, ModuleNode, ViteDevServer } from "vite";
 import { normalizePath as viteNormalizePath } from "vite";
-import type { ComponentRegistration, Page } from "../../types/types";
+import type { ComponentRegistration, Page } from "../../../types/types";
 
 export function isParentJSX(node: ModuleNode, page: Page) {
   for (let module of node.importers) {

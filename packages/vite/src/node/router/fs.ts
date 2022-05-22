@@ -1,6 +1,6 @@
 import { existsSync } from "fs";
 import { createRouter } from "radix3";
-import type { PageCtx } from "../../types/types";
+import type { PageCtx } from "../../../types/types";
 import { loadPaths } from "./utils";
 
 let router;

@@ -6,7 +6,7 @@ import {
   mergeConfig,
   type ViteDevServer,
 } from "vite";
-import { ResolvedConfig, TinyPagesConfig } from "../types/types";
+import { ResolvedConfig, TinyPagesConfig } from "../../types/types";
 import { presetPageConfig } from "./constants";
 import { createPlugins } from "./plugins";
 import { invalidate, render } from "./render/markdown";

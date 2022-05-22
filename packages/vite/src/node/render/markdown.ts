@@ -5,7 +5,10 @@ import * as path from "path";
 import { h } from "preact";
 import { prerender } from "preact-iso";
 import type { ViteDevServer } from "vite";
-import type { ComponentRegistration, ResolvedConfig } from "../../types/types";
+import type {
+  ComponentRegistration,
+  ResolvedConfig,
+} from "../../../types/types";
 import { createElement, deepCopy } from "../utils";
 
 const map: Map<string, { html: string }> = new Map();
