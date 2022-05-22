@@ -6,7 +6,9 @@ const config: Options = {
   format: ["esm"],
   entry: ["src/node/cli.ts", "src/client/client.ts"],
   clean: true,
-  dts: true,
+  dts: {
+    resolve: true,
+  },
   outDir: "./out",
   minify: true,
 };

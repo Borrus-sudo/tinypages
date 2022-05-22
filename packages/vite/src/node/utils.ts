@@ -48,11 +48,8 @@ export function hash(content: string) {
 
 export function normalizeUrl(url: string) {
   let normalizedUrl = url.endsWith("/")
-    ? url + "index.md"
-    : !/\.(.*?)$/.test(url)
-    ? url + ".md"
-    : url;
-  normalizedUrl = normalizedUrl.replace(/\.html$/, ".md");
+    ? url + "index"
+    : url.replace(/\..*?$/, "");
   return normalizedUrl;
 }
 

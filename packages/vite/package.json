@@ -11,7 +11,7 @@
   "files": [
     "out",
     "bin",
-    "types"
+    "src/types"
   ],
   "bin": {
     "tinypages": "./bin/tinypage.mjs"

@@ -109,3 +109,5 @@ export function cli() {
 export function defineConfig(config: UserTinyPagesConfig) {
   return config;
 }
+
+export type { Params } from "../types/params";

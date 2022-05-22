@@ -17,7 +17,7 @@ interface Modules {
     options?: ImageOptions;
   };
   unocss: UnoCSSConfig;
-  icons: IconsConfig & { defaultIconsStyles: Record<string, string> };
+  icons: IconsConfig & { defaultIconsStyles?: Record<string, string> };
   unlighthouse: UnlighthouseConfig;
 }
 
