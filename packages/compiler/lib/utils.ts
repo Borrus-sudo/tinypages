@@ -1,5 +1,12 @@
 import type { Meta, Plugin } from "../types/types";
 
+export function wrapObject(styles: Record<string, string>) {
+  Object.keys(styles).forEach((key) => {
+    styles[key] = `"${styles[key]}"`;
+  });
+  return styles;
+}
+
 export function stringifyObject(obj) {
   let returnVal = "";
   Object.values(obj).forEach(([key, val]) => {
