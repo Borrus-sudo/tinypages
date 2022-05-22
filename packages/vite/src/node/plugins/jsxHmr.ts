@@ -11,11 +11,10 @@ export default function (): Plugin {
     apply: "serve",
     enforce: "pre",
     configureServer(server) {
-      server.watcher.addListener("change", async (_, filePath) => {
-        console.log(_, filePath);
+      server.watcher.addListener("change", async (filePath) => {
         if (
           typeof filePath === "string" &&
-          path.normalize(filePath) === utils.pageDir
+          path.normalize(filePath).startsWith(utils.pageDir)
         ) {
           await refreshRouter(utils.pageDir);
           reload("change in /pages dir", server, utils.logger);
@@ -25,7 +24,6 @@ export default function (): Plugin {
     async handleHotUpdate(ctx) {
       const toReturn: ModuleNode[] = [];
       const seen: Set<string> = new Set();
-      console.log(ctx.modules);
       for (let module of ctx.modules) {
         const fileId = path.normalize(module.file);
         /**
@@ -51,11 +49,12 @@ export default function (): Plugin {
           const res = isParentJSX(module, page);
           if (res[0]) {
             utils.invalidate(res[1]);
+            toReturn.push(module);
+            seen.add(module.url);
           }
-          toReturn.push(module);
-          seen.add(module.url);
         }
       }
+      console.log(toReturn);
       return toReturn;
     },
   };

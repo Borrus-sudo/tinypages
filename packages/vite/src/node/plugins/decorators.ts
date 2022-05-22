@@ -13,6 +13,9 @@ export default function (): Plugin {
      * This is just boilerplate code for doing sub island partial hydration
      */
     load(id: string, options) {
+      if (!/(j|t)sx\?hydrate/.test(id)) {
+        return;
+      }
       const uid = uuid();
       const path = id.split("?hydrate")[0];
       page.global[uid] = {
