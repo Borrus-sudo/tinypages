@@ -21,9 +21,9 @@
       "types": "./out/index.d.ts"
     },
     "./utils": {
-      "require": "./out/wrapObject.js",
-      "import": "./out/wrapObject.mjs",
-      "types": "./out/wrapObject.d.ts"
+      "require": "./out/wrap-object.js",
+      "import": "./out/wrap-object.mjs",
+      "types": "./out/wrap-object.d.ts"
     }
   },
   "devDependencies": {

@@ -8,7 +8,7 @@ import { useContext } from "../context";
 import AutoImportPluginOptions from "./auto-import";
 import DecoratorPlugin from "./decorators";
 import IconPlugin from "./icons";
-import HmrPlugin from "./jsxHmr";
+import HmrPlugin from "./jsx-hmr";
 import MarkdownPlugin from "./markdown";
 
 export async function createPlugins() {

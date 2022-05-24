@@ -14,7 +14,7 @@ import type {
 } from "../types/types";
 import useHandler from "./plugin";
 import { PluginCode, PluginCSS, PluginHTML, PluginText } from "./plugins";
-import { analyze } from "./revealComponents";
+import { analyze } from "./reveal-components";
 import { orderPlugins, postTransform, Spy } from "./utils";
 
 export async function compile(

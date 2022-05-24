@@ -4,7 +4,7 @@ const config: Options = {
   target: "es2020",
   splitting: false,
   format: ["esm", "cjs"],
-  entry: ["lib/index.ts", "lib/wrapObject.ts"],
+  entry: ["lib/index.ts", "lib/wrap-object.ts"],
   clean: true,
   dts: {
     resolve: true,
