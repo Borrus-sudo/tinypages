@@ -10,7 +10,7 @@ export default function (): Plugin {
       return /(j|t)sx\?hydrate/.test(id) ? id : "";
     },
     /**
-     * The extra boilerplate code will affect
+     * The extra boilerplate code will not affect prod
      */
     load(id: string, options) {
       if (!/(j|t)sx\?hydrate/.test(id)) {
