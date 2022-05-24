@@ -11,7 +11,7 @@ import {
   generateVirtualEntryPoint,
   hash as hashIt,
   reload,
-} from "./pluginUtils";
+} from "./plugin-utils";
 import ejs from "ejs";
 
 // import { useUnlighthouse } from "@unlighthouse/core";
@@ -55,6 +55,7 @@ export default function (): Plugin {
     } else {
       url = jsUrl;
     }
+    if (!page.reloads.includes(url)) page.reloads.push(url);
     const { default: loader } = await vite.ssrLoadModule(url);
     const data = await loader();
     page.global.ssrProps = data?.ssrProps || {};
@@ -88,7 +89,6 @@ export default function (): Plugin {
         /**
          * Initialize the page globals to make it ready for the new page
          */
-
         page.meta = meta;
         page.sources = [];
         page.reloads = [];

@@ -1,13 +1,15 @@
 import PrefreshPlugin from "@prefresh/vite";
+import UnlighthousePlugin from "@unlighthouse/vite";
 import UnoCSSPlugin from "@unocss/vite";
+import AutoImport from "unplugin-auto-import/vite";
 import ImagePlugin from "vite-plugin-image-presets";
 import InspectPlugin from "vite-plugin-inspect";
 import { useContext } from "../context";
+import AutoImportPluginOptions from "./auto-import";
+import DecoratorPlugin from "./decorators";
 import IconPlugin from "./icons";
 import HmrPlugin from "./jsxHmr";
 import MarkdownPlugin from "./markdown";
-import UnlighthousePlugin from "@unlighthouse/vite";
-import DecoratorPlugin from "./decorators";
 
 export async function createPlugins() {
   const { config } = useContext();
@@ -23,6 +25,7 @@ export async function createPlugins() {
     DecoratorPlugin(),
     IconPlugin(),
     HmrPlugin(),
+    AutoImport(AutoImportPluginOptions(config.vite.root)),
     PrefreshPlugin(),
     UnlighthousePlugin(config.modules.unlighthouse),
   ];

@@ -30,11 +30,12 @@ export async function hydrate(
       componentFactoryFunction.then((val) => {
         unRender(h(val, component.props, innerSlot));
       });
+    } else {
+      unRender(h(componentFactoryFunction, component.props, innerSlot));
     }
-    unRender(h(componentFactoryFunction, component.props, innerSlot));
   } catch (err) {
     if (import.meta.env.DEV) {
-      element.innerHTML = `<div style="color:red; background-color: lightpink;border: 2px dotted black;margin-bottom: 36px;">${err}</div>`;
+      element.outerHTML = `<div style="color:red; background-color: lightpink;border: 2px dotted black;margin-bottom: 36px;">${err}</div>`;
       console.error(err);
     }
   }

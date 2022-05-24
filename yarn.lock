@@ -22,6 +22,11 @@
   resolved "https://registry.yarnpkg.com/@antfu/utils/-/utils-0.5.1.tgz#7eb6764878adb715daff20019e5a15fd63d93342"
   integrity sha512-8Afo0+xvYe1K8Wm4xHTymfTkpzy36aaqDvhXIayUwl+mecMG9Xzl3XjXa6swG6Bk8FBeQ646RyvmsYt6+2Be9g==
 
+"@antfu/utils@^0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@antfu/utils/-/utils-0.5.2.tgz#8c2d931ff927be0ebe740169874a3d4004ab414b"
+  integrity sha512-CQkeV+oJxUazwjlHD0/3ZD08QWKuGQkhnrKo3e6ly5pd48VUpXbb77q0xMU4+vc2CkJnDS02Eq/M9ugyX20XZA==
+
 "@astropub/webapi@^0.10.14":
   version "0.10.14"
   resolved "https://registry.yarnpkg.com/@astropub/webapi/-/webapi-0.10.14.tgz#f3e118718d1353170ec9ea0adc4a725796717a77"
@@ -4601,6 +4606,13 @@ magic-string@^0.26.1:
   dependencies:
     sourcemap-codec "^1.4.8"
 
+magic-string@^0.26.2:
+  version "0.26.2"
+  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.26.2.tgz#5331700e4158cd6befda738bb6b0c7b93c0d4432"
+  integrity sha512-NzzlXpclt5zAbmo6h6jNc8zl2gNRGHvmsZW4IvZhTC4W7k4OlLP+S5YLussa/r3ixNT66KOQfNORlXHSOy/X4A==
+  dependencies:
+    sourcemap-codec "^1.4.8"
+
 make-dir@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-3.1.0.tgz#415e967046b3a7f1d185277d84aa58203726a13f"
@@ -4794,6 +4806,14 @@ mlly@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/mlly/-/mlly-0.5.1.tgz#bf15a1092d4e3e7f9fc303f6d9aa18f6a3fca58b"
   integrity sha512-0axKqxbYyQvaAfi6BNqDluCJqg6RkjdsdFxSDoiP6l5HplSTr3ie5Vkxvw9U9ogdj65x56amTnAn+xSoP727Rg==
+  dependencies:
+    pathe "^0.2.0"
+    pkg-types "^0.3.2"
+
+mlly@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/mlly/-/mlly-0.5.2.tgz#67b908e967cfcaee27e90bef8a84aaede599bd21"
+  integrity sha512-4GTELSSErv6ZZJYU98fZNuIBJcXSz+ktHdRrCYEqU1m6ZlebOCG0jwZ+IEd9vOrbpYsVBBMC5OTrEyLnKRcauQ==
   dependencies:
     pathe "^0.2.0"
     pkg-types "^0.3.2"
@@ -5240,6 +5260,11 @@ pathe@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/pathe/-/pathe-0.2.0.tgz#30fd7bbe0a0d91f0e60bae621f5d19e9e225c339"
   integrity sha512-sTitTPYnn23esFR3RlqYBWn4c45WGeLcsKzQiUpXJAyfcWkolvlYpV8FLo7JishK946oQwMFUCHXQ9AjGPKExw==
+
+pathe@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/pathe/-/pathe-0.3.0.tgz#fd95bc16208263fa6dc1c78c07b3907a528de6eb"
+  integrity sha512-3vUjp552BJzCw9vqKsO5sttHkbYqqsZtH0x1PNtItgqx8BXEXzoY1SYRKcL6BTyVh4lGJGLj0tM42elUDMvcYA==
 
 pend@~1.2.0:
   version "1.2.0"
@@ -6534,6 +6559,21 @@ unimport@^0.1.4:
     scule "^0.2.1"
     unplugin "^0.6.1"
 
+unimport@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/unimport/-/unimport-0.2.3.tgz#12d835e69cc4d6a60862f9a6b762a6c610b3d406"
+  integrity sha512-bgIGIaPgn+xZrsFZTQazzE7aLOmBzvYtvswoJtQRBI0dRbX2W5Y/G6Dd/gYEkCFPbpmNhxwZqewuAjT9hd3tcA==
+  dependencies:
+    "@rollup/pluginutils" "^4.2.1"
+    escape-string-regexp "^5.0.0"
+    fast-glob "^3.2.11"
+    local-pkg "^0.4.1"
+    magic-string "^0.26.2"
+    mlly "^0.5.2"
+    pathe "^0.3.0"
+    scule "^0.2.1"
+    unplugin "^0.6.3"
+
 unique-string@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/unique-string/-/unique-string-2.0.0.tgz#39c6451f81afb2749de2b233e3f7c5e8843bd89d"
@@ -6556,10 +6596,31 @@ unpipe@1.0.0, unpipe@~1.0.0:
   resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
   integrity sha1-sr9O6FFKrmFltIF4KdIbLvSZBOw=
 
+unplugin-auto-import@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/unplugin-auto-import/-/unplugin-auto-import-0.8.1.tgz#2a30c031577ac7e4996413f0148434d000426594"
+  integrity sha512-sUpiprf+GBtPaCCVZBVArM7caWO8Zr5WgaFdiB0hI5C68mSwRTO3We1u1Mq8akzo/Lx8blZ1RAx2iixoqvvUYg==
+  dependencies:
+    "@antfu/utils" "^0.5.2"
+    "@rollup/pluginutils" "^4.2.1"
+    local-pkg "^0.4.1"
+    magic-string "^0.26.2"
+    unimport "^0.2.3"
+    unplugin "^0.6.3"
+
 unplugin@^0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/unplugin/-/unplugin-0.6.1.tgz#86da55d7a0d67629734dbe5e25efa9951422e64e"
   integrity sha512-cQqRCgQ2v/Q4fPIWNVZ6sNIDdl5v8JXOnlsUOsGzT4fblTONoPWaytiYSpu5qJ9lvSDZYAQN6BRVo3XQoZMfUQ==
+  dependencies:
+    chokidar "^3.5.3"
+    webpack-sources "^3.2.3"
+    webpack-virtual-modules "^0.4.3"
+
+unplugin@^0.6.3:
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/unplugin/-/unplugin-0.6.3.tgz#b8721e2b163a410a7efed726e6a0fc6fbadf975a"
+  integrity sha512-CoW88FQfCW/yabVc4bLrjikN9HC8dEvMU4O7B6K2jsYMPK0l6iAnd9dpJwqGcmXJKRCU9vwSsy653qg+RK0G6A==
   dependencies:
     chokidar "^3.5.3"
     webpack-sources "^3.2.3"

@@ -56,7 +56,7 @@ export async function render(
     delete cloneProps["lazy:load"];
     delete cloneProps["no:hydrate"];
 
-    if (component.props["client:only"]) {
+    if ("client:only" in component.props) {
       if (map.has(hash)) {
         payload = map.get(hash).html.replace(/uid=\"\d\"/, `uid="${uid}"`);
       } else {
@@ -83,6 +83,7 @@ export async function render(
         lazy: "lazy:load" in component.props,
       };
     } else {
+      let noHydrate = "no:hydrate" in component.props;
       if (map.has(hash)) {
         const cached = map.get(hash);
         payload = cached.html.replace(/uid=\"\d\"/, `uid="${uid}"`);
@@ -104,15 +105,9 @@ export async function render(
           /**
            * creatng the static html
            */
-          let attrs = {};
-          if (!("no:hydrate" in component.props)) {
-            attrs["uid"] = uid;
-            attrs["preact"] = preact;
-          }
-
           payload = createElement(
             "div",
-            attrs,
+            noHydrate ? {} : { preact, uid },
             createElement("div", {}, prerenderedHtml) +
               "\n" +
               script(cloneProps)
@@ -123,7 +118,7 @@ export async function render(
            */
           payload = createElement(
             "div",
-            { preact, uid },
+            noHydrate ? {} : { preact, uid },
             createElement("div", { style: errorCSS }, err) +
               "\n" +
               script(cloneProps)

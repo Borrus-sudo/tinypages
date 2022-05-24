@@ -19,6 +19,7 @@ export async function resolveConfig(
           extensions: ["ts", "mts", "cts", "js", "mjs", "cjs", "json", ""],
         },
       ],
+      cwd: cliViteConfig.root,
     });
     (config = c), (sources = s);
   }

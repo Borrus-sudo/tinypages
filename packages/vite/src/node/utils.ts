@@ -65,6 +65,10 @@ export function createConsola() {
   return consola;
 }
 
+export function isUpperCase(input: string) {
+  return input.toUpperCase() === input;
+}
+
 export function createElement(
   tag: string,
   params: Record<string, any>,

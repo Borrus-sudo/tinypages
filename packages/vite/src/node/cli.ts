@@ -2,12 +2,12 @@ import cac from "cac";
 import { join } from "path";
 import * as Vite from "vite";
 import type { UserTinyPagesConfig } from "../../types/types";
-import { resolveConfig } from "./resolveConfig";
+import { resolveConfig } from "./resolve-config";
 
 interface GlobalCLIOptions {
   "--"?: string[];
   c?: boolean | string;
-  config?: string;
+  config?: boolean;
   base?: string;
   l?: Vite.LogLevel;
   logLevel?: Vite.LogLevel;
@@ -43,7 +43,7 @@ function cleanOptions<Options extends GlobalCLIOptions>(
 export function cli() {
   const cli = cac("tinypages");
   cli
-    .option("-c, --config <file>", `[string] use specified config file`)
+    .option("-c, --config <file>", `[boolean] use specified config file`)
     .option("--base <path>", `[string] public base path (default: /)`)
     .option("-l, --logLevel <level>", `[string] info | warn | error | silent`)
     .option(
@@ -79,7 +79,7 @@ export function cli() {
         options: Vite.ServerOptions & GlobalCLIOptions
       ) => {
         try {
-          if (root.startsWith(".")) {
+          if (root.startsWith("./")) {
             root = join(process.cwd(), root);
           }
           // hijack the configFileOption for tinypages' config system

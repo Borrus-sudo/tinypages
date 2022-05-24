@@ -17,7 +17,7 @@ export default function (): Plugin {
         return id;
       }
       if (id.startsWith("~icons/")) {
-        const parts = id.split("~icons/").slice(1)[0].split("/");
+        const parts = id.split("~icons/")[1].split("/");
         const res = icons.getIconsSync(
           parts[0] + separator + parts[1],
           {},

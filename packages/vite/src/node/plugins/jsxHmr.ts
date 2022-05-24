@@ -2,7 +2,7 @@ import * as path from "path";
 import type { ModuleNode, Plugin } from "vite";
 import { useContext } from "../context";
 import { refreshRouter } from "../router/fs";
-import { isParentJSX, reload } from "./pluginUtils";
+import { isParentJSX, reload } from "./plugin-utils";
 
 export default function (): Plugin {
   const { page, utils } = useContext();
@@ -11,7 +11,7 @@ export default function (): Plugin {
     apply: "serve",
     enforce: "pre",
     configureServer(server) {
-      server.watcher.addListener("change", async (filePath) => {
+      const eventHandler = async (filePath) => {
         if (
           typeof filePath === "string" &&
           path.normalize(filePath).startsWith(utils.pageDir)
@@ -19,7 +19,9 @@ export default function (): Plugin {
           await refreshRouter(utils.pageDir);
           reload("change in /pages dir", server, utils.logger);
         }
-      });
+      };
+      server.watcher.addListener("add", eventHandler);
+      server.watcher.addListener("unlink", eventHandler);
     },
     async handleHotUpdate(ctx) {
       const toReturn: ModuleNode[] = [];
@@ -54,7 +56,6 @@ export default function (): Plugin {
           }
         }
       }
-      console.log(toReturn);
       return toReturn;
     },
   };
