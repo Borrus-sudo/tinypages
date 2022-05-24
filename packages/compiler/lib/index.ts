@@ -29,7 +29,7 @@ export async function compile(
       components: [],
       headTags: UserConfig.headTags || [],
       head: {
-        base: {},
+        base: [],
         htmlAttributes: {},
         link: [],
         meta: [],
@@ -39,7 +39,7 @@ export async function compile(
         title: "",
         titleAttributes: {},
       },
-      grayMatter: "",
+      grayMatter: {},
     },
   });
   const layoutPaths = [];
@@ -52,9 +52,6 @@ export async function compile(
   config.plugins.forEach((plugin: Plugin) =>
     plugin.defineConfig ? plugin.defineConfig(config as Config) : 0
   );
-  const Renderer = new marked.Renderer();
-  const Handler = await useHandler(config.plugins, config.metaConstruct);
-  const spiedRenderer = Spy(Renderer, Handler);
 
   const grayMatter = input.match(/---[\s\S]*---/)?.[0] ?? "";
   if (grayMatter) {
@@ -83,16 +80,21 @@ export async function compile(
       );
     }
   }
+
+  const Renderer = new marked.Renderer();
+  const Handler = await useHandler(config.plugins, config.metaConstruct);
+  const spiedRenderer = Spy(Renderer, Handler);
+
   marked.setOptions({
     //@ts-ignore
     renderer: spiedRenderer,
     ...(config.marked || {}),
   });
+
   let output = marked.parse(input);
 
   output = await postTransform(output, config.plugins, config.metaConstruct);
   [output, config.metaConstruct.components] = analyze(output);
-
   return [
     output, //@ts-ignore
     config.metaConstruct,

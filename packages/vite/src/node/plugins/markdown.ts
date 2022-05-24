@@ -1,24 +1,24 @@
 import { compile as compileMarkdown } from "@tinypages/compiler";
-import { promises as fs, existsSync } from "fs";
+import ejs from "ejs";
+import { existsSync, promises as fs } from "fs";
 import * as path from "path";
 import { pathToFileURL } from "url";
 import type { ModuleNode, Plugin, ViteDevServer } from "vite";
 import { normalizePath as viteNormalizePath } from "vite";
 import type { Meta } from "../../../types/types";
 import { useContext, useVite } from "../context";
-import { appendPrelude, deepCopy, hash } from "../utils";
+import { appendPrelude, hash } from "../utils";
 import {
   generateVirtualEntryPoint,
   hash as hashIt,
   reload,
 } from "./plugin-utils";
-import ejs from "ejs";
 
 // import { useUnlighthouse } from "@unlighthouse/core";
 
 export default function (): Plugin {
   const { config, page, utils } = useContext();
-  const cache: Map<string, [string, Meta, string[]]> = new Map();
+  const cache: Map<string, string> = new Map();
   let changedLayoutIndication = false;
   let vite: ViteDevServer;
   /**
@@ -31,7 +31,7 @@ export default function (): Plugin {
       changedLayoutIndication = false;
     } else {
       if (cache.has(digest)) {
-        return deepCopy(cache.get(digest));
+        return JSON.parse(cache.get(digest));
       }
     }
     const result = await compileMarkdown(
@@ -39,11 +39,12 @@ export default function (): Plugin {
       config.compiler,
       page.pageCtx.url
     );
-    cache.set(digest, deepCopy(result));
+    cache.set(digest, JSON.stringify(result));
     return result;
   };
 
   const buildRoute = async (url: string, markdown: string) => {
+    page.reloads = [];
     let jsUrl = url.replace(/\.md$/, ".js");
     if (!existsSync(jsUrl)) {
       let tsUrl = url.replace(/\.md$/, ".ts");
@@ -87,11 +88,11 @@ export default function (): Plugin {
         const builtEjs = await buildRoute(page.pageCtx.url, markdown);
         const [rawHtml, meta, layouts] = await compile(builtEjs);
         /**
-         * Initialize the page globals to make it ready for the new page
+         * Initialize the page globals to make it ready for the new page.
+         * page.reloads=[] happens in buildRoute function.
          */
         page.meta = meta;
         page.sources = [];
-        page.reloads = [];
         page.global = {
           components: {},
           ssrProps: {},
@@ -115,6 +116,7 @@ export default function (): Plugin {
           page.meta.head.script.push({
             type: "module",
             src: virtualModuleId,
+            innerHTML: undefined,
           });
 
           virtualModuleMap.set(
@@ -129,6 +131,7 @@ export default function (): Plugin {
           page.meta.head.script.push({
             type: "module",
             src: "/uno:only",
+            innerHTML: undefined,
           });
         }
 
@@ -163,6 +166,7 @@ export default function (): Plugin {
          */
         if (page.reloads.includes(fileId)) {
           reload(module.file, ctx.server, utils.logger);
+          return;
         } else if (page.pageCtx.url === fileId) {
           /**
            * If the pageCtx is equal to the fileId then check if the components have changed,
@@ -175,7 +179,7 @@ export default function (): Plugin {
           const newHash = hashIt(meta.components);
           if (newHash !== page.prevHash) {
             reload(module.file, ctx.server, utils.logger);
-            return [];
+            return;
           }
 
           utils.logger.info(`Page reload ${module.file}`, {

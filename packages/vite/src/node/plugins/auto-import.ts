@@ -6,25 +6,25 @@ import { isUpperCase } from "../utils";
 export default (root: string): AutoImportOptions => ({
   include: [/\.[tj]sx?$/],
   imports: ["preact"],
-  dirs: ["./components"],
   resolvers: [
     (name: string) => {
       if (name.startsWith("Icon")) {
         const postfix = name
           .split("Icon")[1]
-          .replace(/[A-Z]/, (c) => "/" + c.toLowerCase())
-          .slice(1);
-        return `import ${name} from "~icons${postfix}"`;
+          .replace(/[A-Z]/g, (c) => "/" + c.toLowerCase());
+        return `~icons${postfix}`;
       } else if (isUpperCase(name.charAt(0))) {
         // time to import the component
         let baseUrl = `/components/${name}`;
         let baseExtension;
         if (existsSync(path.join(root, baseUrl) + ".jsx")) {
           baseExtension = "jsx";
+        } else if (existsSync(path.join(root, baseUrl) + ".tsx")) {
+          baseExtension = "tsx";
         } else {
-          baseExtension = "tsx"; // vite shall shout if the .tsx doesn't exist
+          return;
         }
-        return `import ${name} from "${baseUrl}.${baseExtension}"`;
+        return `${baseUrl}.${baseExtension}`;
       }
     },
   ],

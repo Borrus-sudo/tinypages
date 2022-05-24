@@ -11,7 +11,7 @@ export default async function () {
   return async (req, res, next) => {
     try {
       const url = normalizeUrl(req.originalUrl);
-      const pageCtx = router(url.replace(/\.md$/, ""));
+      const pageCtx = router(url.replace(/\.md$/, ""), req.originalUrl);
 
       if (!/\.md$/.test(url)) {
         if (pageCtx.url === "404") {

@@ -58,12 +58,12 @@ interface Head {
   title: string;
   meta: Array<Record<string, string>>;
   link: Array<{ rel: string } & Record<string, string>>;
-  script: Array<{ type: string } & ({ src: string } | { innerHTML: string })>;
+  script: Array<{ type: string; src: string; innerHTML: string }>;
   noscript: Array<{ innerHTML: string }>;
   style: Array<{ type: string; cssText: string }>;
   htmlAttributes: Record<string, string>;
   titleAttributes: Record<string, string>;
-  base: Record<string, string>;
+  base: Array<Record<string, string>>;
 }
 
 export { Config, Plugin, UserConfig, Meta, Head, UnoCSSConfig, IconsConfig };

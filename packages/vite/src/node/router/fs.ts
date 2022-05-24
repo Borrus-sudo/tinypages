@@ -13,12 +13,12 @@ async function boilerplate(pagesDir: string) {
 export async function fsRouter(pagesDir: string) {
   if (existsSync(pagesDir)) {
     await boilerplate(pagesDir);
-    return (url: string): PageCtx => {
+    return (url: string, originalUrl: string): PageCtx => {
       const result = router.lookup(url);
       if (!!result) {
         return { url: result.payload, params: result.params, originalUrl: url };
       }
-      return { url: "404", originalUrl: url };
+      return { url: "404", originalUrl };
     };
   }
   return (): PageCtx => ({

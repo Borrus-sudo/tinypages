@@ -20,7 +20,7 @@ export function PluginHTML(): Plugin {
           for (let node of dom.childNodes[0].childNodes) {
             switch (node?.rawTagName?.toLowerCase()) {
               case "base":
-                meta.head.base = { ...node.attrs };
+                meta.head.base.push({ ...node.attrs });
                 break;
               case "link":
                 meta.head.link.push({ ...node.attrs });

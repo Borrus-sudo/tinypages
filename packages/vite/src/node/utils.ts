@@ -1,40 +1,64 @@
+import { Head } from "@tinypages/compiler";
 import consolaPkg from "consola";
 import { murmurHash } from "ohash";
-import Helmet from "preact-helmet";
-import renderToString from "preact-render-to-string";
 import type { Page } from "../../types/types";
-import { h } from "preact";
+
+function renderHead(head: Head, headTags) {
+  const title = createElement("title", head.titleAttributes, head.title);
+  const metas = head.meta.map((meta) => createElement("meta", meta, ""));
+  const links = head.link.map((link) => createElement("link", link, ""));
+  const scripts = head.script.map((script) =>
+    createElement(
+      "script",
+      { type: script.type, src: script.src },
+      script.innerHTML
+    )
+  );
+  const noscripts = head.noscript.map((noscript) =>
+    createElement("noscript", {}, noscript.innerHTML)
+  );
+  const styles = head.style.map((style) =>
+    createElement("style", { type: style.type }, style.cssText)
+  );
+  const bases = head.base.map((base) => createElement("base", base, ""));
+  const renderedHead = createElement(
+    "head",
+    {},
+    `
+      ${title}
+      ${metas.join("\n")}
+      ${links.join("\n")}
+      ${scripts.join("\n")}
+      ${noscripts.join("\n")}
+      ${bases.join("\n")}
+      ${styles.join("\n")}
+      ${headTags.join("\n")}
+    `
+  );
+  return renderedHead;
+}
 
 export function appendPrelude(content: string, page: Page) {
   page.meta.head.script.push({
+    src: undefined,
     type: "text/javascript",
-    innerHTML: `window.pageCtx=${JSON.stringify(
-      page.pageCtx
-    )};window.ssrProps=${JSON.stringify(page.global.ssrProps)}`,
+    innerHTML: `
+    window.pageCtx=${JSON.stringify(page.pageCtx)};
+    window.ssrProps=${JSON.stringify(page.global.ssrProps)}
+    `,
   });
-  renderToString(h(Helmet, page.meta.head, null)); // to make rewind work
-
-  const HelmetHead = Helmet.rewind();
-  const html = String.raw`
-      <!doctype html>
-      <html${HelmetHead.htmlAttributes.toString()}>
-          <head>
-              ${HelmetHead.title.toString()}
-              ${HelmetHead.meta.toString()}
-              ${HelmetHead.link.toString()}
-              ${HelmetHead.script.toString()}
-              ${HelmetHead.noscript.toString()}
-              ${HelmetHead.base.toString()}
-              ${HelmetHead.style.toString()}
-              ${page.meta.headTags.join("\n")}
-          </head>
-          <body>
-              <div id="app">
-                  ${content}
-              </div>
-          </body>
-      </html>
-  `.trim();
+  const renderedHead = renderHead(page.meta.head, page.meta.headTags);
+  const pageHtml = createElement(
+    "html",
+    page.meta.head.htmlAttributes,
+    `${renderedHead}
+      <body>
+        <div id="app">
+            ${content}
+        </div>
+      </body>`
+  );
+  const html = `<!doctype html>\n${pageHtml}`;
   return html;
 }
 
@@ -74,12 +98,16 @@ export function createElement(
   params: Record<string, any>,
   content: string
 ) {
-  const paramsString = Object.keys(params).reduce(
-    (prev, curr) =>
-      `${prev} ${curr}${
-        typeof params[curr] !== "undefined" ? `="${params[curr]}"` : ""
-      }`,
-    ""
-  );
+  const paramsString = Object.keys(params).reduce((prev, curr) => {
+    if (typeof params[curr] === "undefined") {
+      return prev;
+    } else {
+      if (params[curr] === null) {
+        return `${prev} ${curr}`;
+      } else {
+        return `${prev} ${curr}="${params[curr]}"`;
+      }
+    }
+  }, "");
   return `<${tag} ${paramsString}>${content}</${tag}>`;
 }

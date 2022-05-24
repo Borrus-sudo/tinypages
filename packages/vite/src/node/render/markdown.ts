@@ -18,7 +18,7 @@ const resolve = (fsPath: string) => {
 };
 const errorCSS =
   "color:red; background-color: lightpink;border: 2px dotted black;margin-bottom: 36px;";
-const preact = undefined;
+const preact = null;
 const script = (cloneProps) =>
   createElement(
     "script",

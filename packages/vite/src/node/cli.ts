@@ -96,6 +96,7 @@ export function cli() {
           const { createDevServer } = await import("./dev");
           await createDevServer(config, filePath);
         } catch (e) {
+          console.error(e);
           process.exit(1);
         }
       }
