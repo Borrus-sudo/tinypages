@@ -39,6 +39,7 @@ interface UserConfig {
   renderUnoCSS?: boolean;
   renderMermaid?: boolean;
   renderKatex?: boolean;
+  renderTwemoji?: boolean;
   defaultIconsStyles?: Record<string, string>;
   defaultBase64IconsStyles?: Record<string, string>;
   plugins?: Plugin[];

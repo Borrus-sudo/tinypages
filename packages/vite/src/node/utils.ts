@@ -1,5 +1,6 @@
 import { Head } from "@tinypages/compiler";
 import consolaPkg from "consola";
+import { existsSync } from "fs";
 import { murmurHash } from "ohash";
 import type { Page } from "../../types/types";
 
@@ -47,6 +48,16 @@ export function appendPrelude(content: string, page: Page) {
     window.ssrProps=${JSON.stringify(page.global.ssrProps)}
     `,
   });
+  const cssUrl = page.pageCtx.url
+    .replace(/\.md$/, ".css")
+    .replace(/\/pages\//, "/styles/");
+
+  if (existsSync(cssUrl)) {
+    page.meta.head.link.push({
+      rel: "stylesheet",
+      href: cssUrl,
+    });
+  }
   const renderedHead = renderHead(page.meta.head, page.meta.headTags);
   const pageHtml = createElement(
     "html",
