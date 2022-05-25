@@ -43,7 +43,7 @@ export function generateVirtualEntryPoint(
     isBuild ? "" : `import "preact/debug"`,
     `import "uno.css";`,
     `import hydrate from "tinypages/client";`,
-    `import "tinypages/hmr";`,
+    isBuild ? "" : `import "tinypages/hmr";`,
   ];
   let compImports = Object.keys(components).map((uid: string, idx) => {
     const mod = components[uid];

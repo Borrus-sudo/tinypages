@@ -1,8 +1,7 @@
 import { v4 as uuid } from "@lukeed/uuid";
 import { compile as compileMarkdown } from "@tinypages/compiler";
-import ejs from "ejs";
 import { existsSync, promises as fs } from "fs";
-import * as path from "path";
+import path from "path";
 import type { ModuleNode, Plugin, ViteDevServer } from "vite";
 import { normalizePath as viteNormalizePath } from "vite";
 import type { Meta } from "../../../types/types";
@@ -15,7 +14,7 @@ import {
   hash as hashIt,
   reload,
 } from "./plugin-utils";
-
+import { Liquid } from "liquidjs";
 // import { useUnlighthouse } from "@unlighthouse/core";
 
 export default function (): Plugin {
@@ -36,7 +35,7 @@ export default function (): Plugin {
         return JSON.parse(cache.get(digest));
       }
     }
-
+    // compiled markdown
     const result = await compileMarkdown(
       input,
       config.compiler,
@@ -66,8 +65,12 @@ export default function (): Plugin {
     const { default: loader } = await vite.ssrLoadModule(url);
     const data = await loader(page.pageCtx.params || {});
     page.global.ssrProps = data?.ssrProps || {};
-    const buildMarkdown = ejs.render(markdown, data);
-    return buildMarkdown;
+    const engine = new Liquid({
+      cache: true,
+    });
+    // rendered liquidjs
+    const builtMarkdown = engine.parseAndRender(markdown, data);
+    return builtMarkdown;
   };
 
   const virtualModuleMap: Map<string, string> = new Map([
@@ -180,11 +183,12 @@ export default function (): Plugin {
       const toReturnModules: ModuleNode[] = [];
       for (let module of ctx.modules) {
         const fileId = path.normalize(module.file);
+        const fileBasename = path.basename(fileId);
         /**
          * Reload the page. (mainly for handling the loader files)
          */
         if (page.reloads.includes(fileId)) {
-          reload(module.file, ctx.server, utils.logger);
+          reload(fileBasename, ctx.server, utils.logger);
           seen = [];
           return;
         } else if (page.pageCtx.url === fileId) {
@@ -201,12 +205,12 @@ export default function (): Plugin {
             head: meta.head,
           });
           if (newHash !== page.prevHash) {
-            reload(module.file, ctx.server, utils.logger);
+            reload(fileBasename, ctx.server, utils.logger);
             seen = [];
             return;
           }
 
-          utils.logger.info(`Page reload ${module.file}`, {
+          utils.logger.info(`Page reload ${fileBasename}`, {
             timestamp: true,
             clear: true,
           });
@@ -223,7 +227,7 @@ export default function (): Plugin {
            */
 
           changedLayoutIndication = true;
-          reload(module.file, ctx.server, utils.logger);
+          reload(fileBasename, ctx.server, utils.logger);
           seen = [];
           return;
         } else {
