@@ -11,14 +11,14 @@ function renderHead(head: Head, headTags) {
     createElement(
       "script",
       { type: script.type, src: script.src },
-      script.innerHTML
+      script.innerHTML || ""
     )
   );
   const noscripts = head.noscript.map((noscript) =>
-    createElement("noscript", {}, noscript.innerHTML)
+    createElement("noscript", {}, noscript.innerHTML || "")
   );
   const styles = head.style.map((style) =>
-    createElement("style", { type: style.type }, style.cssText)
+    createElement("style", { type: style.type }, style.cssText || "")
   );
   const bases = head.base.map((base) => createElement("base", base, ""));
   const renderedHead = createElement(
@@ -109,5 +109,8 @@ export function createElement(
       }
     }
   }, "");
+  if (["meta", "link", "base"].includes(tag)) {
+    return `<${tag} ${paramsString}>`;
+  }
   return `<${tag} ${paramsString}>${content}</${tag}>`;
 }

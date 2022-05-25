@@ -16,7 +16,7 @@ export async function fsRouter(pagesDir: string) {
     return (url: string, originalUrl: string): PageCtx => {
       const result = router.lookup(url);
       if (!!result) {
-        return { url: result.payload, params: result.params, originalUrl: url };
+        return { url: result.payload, params: result.params, originalUrl };
       }
       return { url: "404", originalUrl };
     };

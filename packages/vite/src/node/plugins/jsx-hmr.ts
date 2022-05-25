@@ -1,8 +1,7 @@
 import * as path from "path";
 import type { ModuleNode, Plugin } from "vite";
 import { useContext } from "../context";
-import { refreshRouter } from "../router/fs";
-import { isParentJSX, reload } from "./plugin-utils";
+import { isParentJSX } from "./plugin-utils";
 
 export default function (): Plugin {
   const { page, utils } = useContext();
@@ -10,19 +9,6 @@ export default function (): Plugin {
     name: "vite-tinypages-hmr",
     apply: "serve",
     enforce: "pre",
-    configureServer(server) {
-      const eventHandler = async (filePath) => {
-        if (
-          typeof filePath === "string" &&
-          path.normalize(filePath).startsWith(utils.pageDir)
-        ) {
-          await refreshRouter(utils.pageDir);
-          reload("change in /pages dir", server, utils.logger);
-        }
-      };
-      server.watcher.addListener("add", eventHandler);
-      server.watcher.addListener("unlink", eventHandler);
-    },
     async handleHotUpdate(ctx) {
       const toReturn: ModuleNode[] = [];
       const seen: Set<string> = new Set();

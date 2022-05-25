@@ -6,6 +6,7 @@ import { isUpperCase } from "../utils";
 export default (root: string): AutoImportOptions => ({
   include: [/\.[tj]sx?$/],
   imports: ["preact"],
+  exclude: [/^Icon/],
   resolvers: [
     (name: string) => {
       if (name.startsWith("Icon")) {
@@ -15,7 +16,8 @@ export default (root: string): AutoImportOptions => ({
         return `~icons${postfix}`;
       } else if (isUpperCase(name.charAt(0))) {
         // time to import the component
-        let baseUrl = `/components/${name}`;
+        //TODO: improve this
+        let baseUrl = `./components/${name}`;
         let baseExtension;
         if (existsSync(path.join(root, baseUrl) + ".jsx")) {
           baseExtension = "jsx";

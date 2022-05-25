@@ -15,7 +15,7 @@ export function PluginHTML(): Plugin {
     transform(id: string, payload: string, meta: Meta) {
       if (id === "html") {
         const dom = parse(payload);
-        const topLevelTag = dom?.childNodes[0]?.rawTagName.toLowerCase();
+        const topLevelTag = dom?.childNodes[0]?.rawTagName?.toLowerCase();
         if (topLevelTag === "head") {
           for (let node of dom.childNodes[0].childNodes) {
             switch (node?.rawTagName?.toLowerCase()) {

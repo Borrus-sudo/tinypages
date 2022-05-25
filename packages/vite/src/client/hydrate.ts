@@ -35,7 +35,7 @@ export async function hydrate(
     }
   } catch (err) {
     if (import.meta.env.DEV) {
-      element.outerHTML = `<div style="color:red; background-color: lightpink;border: 2px dotted black;margin-bottom: 36px;">${err}</div>`;
+      // element.outerHTML = `<div style="color:red; background-color: lightpink;border: 2px dotted black;margin-bottom: 36px;">${err}</div>`;
       console.error(err);
     }
   }

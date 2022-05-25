@@ -43,7 +43,7 @@ function cleanOptions<Options extends GlobalCLIOptions>(
 export function cli() {
   const cli = cac("tinypages");
   cli
-    .option("-c, --config <file>", `[boolean] use specified config file`)
+    .option("-c, --config", `[boolean] use specified config file`)
     .option("--base <path>", `[string] public base path (default: /)`)
     .option("-l, --logLevel <level>", `[string] info | warn | error | silent`)
     .option(

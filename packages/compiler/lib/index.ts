@@ -74,10 +74,9 @@ export async function compile(
       /**
        * TODO: hacky pls pls fix this
        */
-      input = compiledLayout.replace(
-        `<a href="slot:body">slot:body</a>`,
-        input
-      );
+      input = compiledLayout
+        .replace(`<a href="slot:body">slot:body</a>`, input)
+        .replace("<slot:body></slot:body>", input);
     }
   }
 

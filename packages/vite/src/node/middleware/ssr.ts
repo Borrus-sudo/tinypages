@@ -12,8 +12,7 @@ export default async function () {
     try {
       const url = normalizeUrl(req.originalUrl);
       const pageCtx = router(url.replace(/\.md$/, ""), req.originalUrl);
-
-      if (!/\.md$/.test(url)) {
+      if (!/\.md$/.test(pageCtx.url)) {
         if (pageCtx.url === "404") {
           utils.logger.info(`404 not found ${req.originalUrl}`, {
             timestamp: true,

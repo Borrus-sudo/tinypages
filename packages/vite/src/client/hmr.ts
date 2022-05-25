@@ -13,18 +13,18 @@ if (import.meta.env.DEV) {
         const html = await fetch(window.location.href).then((res) =>
           res.text()
         );
-        const doc = parser.parseFromString(html, "text/html");
-        for (const root of doc.querySelectorAll("[preact]")) {
+        const newDoc = parser.parseFromString(html, "text/html");
+        for (const root of newDoc.querySelectorAll("[preact]")) {
           const uid = root.getAttribute("uid");
           const current = document.querySelector(`[uid="${uid}"]`);
           if (current) {
             root.innerHTML = current.innerHTML;
           }
         }
-        document.head.innerHTML = doc.head.innerHTML;
+        document.head.innerHTML = newDoc.head.innerHTML;
         patch(
           document.getElementById("app"),
-          fromDomNodeToVNode(doc.getElementById("app")),
+          fromDomNodeToVNode(newDoc.getElementById("app")),
           fromDomNodeToVNode(document.getElementById("app"))
         );
       });

@@ -58,7 +58,7 @@ export async function render(
 
     if ("client:only" in component.props) {
       if (map.has(hash)) {
-        payload = map.get(hash).html.replace(/uid=\"\d\"/, `uid="${uid}"`);
+        payload = map.get(hash).html.replace(/uid=\".*?\"/, `uid="${uid}"`);
       } else {
         /**
          * Loading state to be displayed for client:only and lazy:load attrs together as initial state will be displayed
@@ -86,7 +86,7 @@ export async function render(
       let noHydrate = "no:hydrate" in component.props;
       if (map.has(hash)) {
         const cached = map.get(hash);
-        payload = cached.html.replace(/uid=\"\d\"/, `uid="${uid}"`);
+        payload = cached.html.replace(/uid=\".*?\"/, `uid="${uid}"`);
       } else {
         try {
           const { default: preactComponent } = await vite.ssrLoadModule(

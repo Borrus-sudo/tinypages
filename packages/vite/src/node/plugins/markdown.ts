@@ -1,12 +1,13 @@
+import { v4 as uuid } from "@lukeed/uuid";
 import { compile as compileMarkdown } from "@tinypages/compiler";
 import ejs from "ejs";
 import { existsSync, promises as fs } from "fs";
 import * as path from "path";
-import { pathToFileURL } from "url";
 import type { ModuleNode, Plugin, ViteDevServer } from "vite";
 import { normalizePath as viteNormalizePath } from "vite";
 import type { Meta } from "../../../types/types";
 import { useContext, useVite } from "../context";
+import { refreshRouter } from "../router/fs";
 import { appendPrelude, hash } from "../utils";
 import {
   generateVirtualEntryPoint,
@@ -34,11 +35,13 @@ export default function (): Plugin {
         return JSON.parse(cache.get(digest));
       }
     }
+
     const result = await compileMarkdown(
       input,
       config.compiler,
       page.pageCtx.url
     );
+
     cache.set(digest, JSON.stringify(result));
     return result;
   };
@@ -56,9 +59,11 @@ export default function (): Plugin {
     } else {
       url = jsUrl;
     }
+
     if (!page.reloads.includes(url)) page.reloads.push(url);
+    utils.consola.info("Loading state...");
     const { default: loader } = await vite.ssrLoadModule(url);
-    const data = await loader();
+    const data = await loader(page.pageCtx.params || {});
     page.global.ssrProps = data?.ssrProps || {};
     const buildMarkdown = ejs.render(markdown, data);
     return buildMarkdown;
@@ -67,7 +72,7 @@ export default function (): Plugin {
   const virtualModuleMap: Map<string, string> = new Map([
     ["/uno:only", `import "uno.css"`],
   ]);
-  const addedModule = [];
+  let seen = [];
   let isBuild = false;
   // let worker;
 
@@ -77,6 +82,20 @@ export default function (): Plugin {
     configResolved(config) {
       isBuild = config.command === "build" || config.isProduction;
       // worker = useUnlighthouse().worker;
+    },
+    configureServer(server) {
+      const eventHandler = async (filePath) => {
+        if (
+          typeof filePath === "string" &&
+          path.normalize(filePath).startsWith(utils.pageDir)
+        ) {
+          await refreshRouter(utils.pageDir);
+          reload("change in /pages dir", server, utils.logger);
+          seen = [];
+        }
+      };
+      server.watcher.addListener("add", eventHandler);
+      server.watcher.addListener("unlink", eventHandler);
     },
     transformIndexHtml: {
       enforce: "pre",
@@ -107,11 +126,7 @@ export default function (): Plugin {
          */
 
         if (Object.keys(page.global.components).length > 0) {
-          const virtualModuleId = viteNormalizePath(
-            `/virtualModule${
-              pathToFileURL(page.pageCtx.url.replace(/\.md$/, ".jsx")).href
-            }`
-          );
+          const virtualModuleId = "/" + uuid() + ".js";
 
           page.meta.head.script.push({
             type: "module",
@@ -137,12 +152,12 @@ export default function (): Plugin {
 
         const appHtml = appendPrelude(renderedHtml, page);
         for (const toAdd of [page.pageCtx.url, ...page.layouts]) {
-          if (!addedModule.includes(toAdd)) {
+          if (!seen.includes(toAdd)) {
             ctx.server.moduleGraph.createFileOnlyEntry(toAdd);
-            addedModule.push(toAdd);
+            seen.push(toAdd);
           }
         }
-        // worker.queueRoute(page.pageCtx.originalUrl);
+
         ctx.filename = viteNormalizePath(page.pageCtx.url);
         return appHtml;
       },
@@ -166,6 +181,7 @@ export default function (): Plugin {
          */
         if (page.reloads.includes(fileId)) {
           reload(module.file, ctx.server, utils.logger);
+          seen = [];
           return;
         } else if (page.pageCtx.url === fileId) {
           /**
@@ -179,6 +195,7 @@ export default function (): Plugin {
           const newHash = hashIt(meta.components);
           if (newHash !== page.prevHash) {
             reload(module.file, ctx.server, utils.logger);
+            seen = [];
             return;
           }
 
@@ -200,6 +217,7 @@ export default function (): Plugin {
 
           changedLayoutIndication = true;
           reload(module.file, ctx.server, utils.logger);
+          seen = [];
 
           utils.logger.info(`Page reload ${module.file}`, {
             timestamp: true,
