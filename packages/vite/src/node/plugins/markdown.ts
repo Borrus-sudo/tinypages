@@ -8,7 +8,8 @@ import { normalizePath as viteNormalizePath } from "vite";
 import type { Meta } from "../../../types/types";
 import { useContext, useVite } from "../context";
 import { refreshRouter } from "../router/fs";
-import { appendPrelude, hash } from "../utils";
+import { hash } from "../utils";
+import { appendPrelude } from "../render/render-utils";
 import {
   generateVirtualEntryPoint,
   hash as hashIt,
@@ -70,7 +71,7 @@ export default function (): Plugin {
   };
 
   const virtualModuleMap: Map<string, string> = new Map([
-    ["/uno:only", `import "uno.css"`],
+    ["/uno:only", `import "uno.css";import "tinypages/hmr";`],
   ]);
   let seen = [];
   let isBuild = false;
@@ -116,7 +117,10 @@ export default function (): Plugin {
           components: {},
           ssrProps: {},
         };
-        page.prevHash = hashIt(meta.components);
+        page.prevHash = hashIt({
+          components: meta.components,
+          head: meta.head,
+        });
         page.layouts = layouts;
 
         const renderedHtml = await utils.render(rawHtml);
@@ -192,7 +196,10 @@ export default function (): Plugin {
           const [, meta] = await compile(
             await fs.readFile(page.pageCtx.url, { encoding: "utf-8" })
           );
-          const newHash = hashIt(meta.components);
+          const newHash = hashIt({
+            components: meta.components,
+            head: meta.head,
+          });
           if (newHash !== page.prevHash) {
             reload(module.file, ctx.server, utils.logger);
             seen = [];
@@ -218,11 +225,6 @@ export default function (): Plugin {
           changedLayoutIndication = true;
           reload(module.file, ctx.server, utils.logger);
           seen = [];
-
-          utils.logger.info(`Page reload ${module.file}`, {
-            timestamp: true,
-            clear: true,
-          });
           return;
         } else {
           toReturnModules.push(module);

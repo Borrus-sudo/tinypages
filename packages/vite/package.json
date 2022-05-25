@@ -24,6 +24,9 @@
     "./client": {
       "import": "./out/client/client.mjs",
       "types": "./out/client/client.d.ts"
+    },
+    "./hmr": {
+      "import": "./out/client/hmr.mjs"
     }
   },
   "dependencies": {

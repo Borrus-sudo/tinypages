@@ -45,6 +45,7 @@ interface Utils {
   render: (html: string) => Promise<string>;
   invalidate: (file: string) => void;
   pageDir: Readonly<string>;
+  stylesDir: Readonly<string>;
   configFile: Readonly<string>;
   consola: Consola;
 }

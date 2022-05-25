@@ -2,7 +2,7 @@ import type { InlineConfig } from "vite";
 import type { Page } from "../../types/types";
 
 export const presetCompilerConfig = {
-  marked: { gfm: true, xhtml: true },
+  marked: { gfm: true, xhtml: true, headerIds: false },
   katex: {
     macros: {
       "\\f": "#1f(#2)",

@@ -23,6 +23,7 @@ export function isParentJSX(node: ModuleNode, page: Page) {
 export function reload(file: string, server: ViteDevServer, logger: Logger) {
   logger.info(`Page reload: ${file}`, {
     timestamp: true,
+    clear: true,
   });
   server.moduleGraph.invalidateAll();
   server.ws.send({
@@ -42,6 +43,7 @@ export function generateVirtualEntryPoint(
     isBuild ? "" : `import "preact/debug"`,
     `import "uno.css";`,
     `import hydrate from "tinypages/client";`,
+    `import "tinypages/hmr";`,
   ];
   let compImports = Object.keys(components).map((uid: string, idx) => {
     const mod = components[uid];

@@ -29,6 +29,7 @@ export async function createContext(
       },
       invalidate: (input: string) => invalidate(input),
       pageDir: join(config.vite.root, "pages"),
+      stylesDir: join(config.vite.root, "styles"),
       configFile: source || "",
       consola: createConsola(),
     },

@@ -1,5 +1,4 @@
 import { ComponentFactory } from "preact";
-import "./hmr";
 import { hydrate } from "./hydrate";
 
 const lazyLoad = (target, callback: Function) => {

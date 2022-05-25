@@ -6,7 +6,7 @@ if (import.meta.env.DEV) {
       const parser = new DOMParser();
 
       import.meta.hot.on("reload:page", async () => {
-        import.meta.hot.invalidate();
+        location.reload();
       });
 
       import.meta.hot.on("new:page", async () => {
