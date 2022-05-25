@@ -27,7 +27,7 @@
     }
   },
   "devDependencies": {
-    "@iconify/json": "^1.1.435",
+    "@iconify/json": "^2.1.49",
     "@types/marked": "^4.0.1",
     "@types/node-emoji": "^1.8.1",
     "@unocss/preset-wind": "^0.31.13"
@@ -42,6 +42,7 @@
     "node-icons": "^1.0.1",
     "param-case": "^3.0.4",
     "shiki": "^0.10.0",
+    "twemoji": "^14.0.2",
     "yaml": "^2.0.1"
   },
   "optionalDependencies": {
