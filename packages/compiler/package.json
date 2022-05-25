@@ -38,11 +38,10 @@
     "katex": "^0.15.1",
     "marked": "^4.0.14",
     "node-emoji": "^1.11.0",
-    "node-html-parser": "^5.2.0",
+    "node-html-parser": "^5.3.3",
     "node-icons": "^1.0.1",
     "param-case": "^3.0.4",
     "shiki": "^0.10.0",
-    "twemoji": "^14.0.2",
     "yaml": "^2.0.1"
   },
   "optionalDependencies": {

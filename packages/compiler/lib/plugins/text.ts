@@ -1,7 +1,6 @@
 import type { Config, Plugin } from "../../types/types";
 import iconsRenderer from "./helpers/icons"; //@ts-ignore
 import emoji from "node-emoji";
-import twemoji from "twemoji";
 
 export function PluginText(): Plugin {
   let codeTransformer;
@@ -44,10 +43,6 @@ export function PluginText(): Plugin {
             return payload;
           }
         );
-    },
-    postTransform(payload: string) {
-      if (config.renderTwemoji) return twemoji.parse(payload);
-      else return payload;
     },
   };
 }
