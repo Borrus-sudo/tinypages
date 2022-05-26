@@ -17,6 +17,10 @@ interface BaseMeta {
   headTags: string[];
   head: Head;
   grayMatter: Record<string, any>;
+  feeds: {
+    rss: string;
+    atom: string;
+  };
 }
 
 interface Meta extends BaseMeta {

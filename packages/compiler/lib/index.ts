@@ -40,6 +40,10 @@ export async function compile(
         titleAttributes: {},
       },
       grayMatter: {},
+      feed: {
+        atom: "",
+        rss: "",
+      },
     },
   });
   const layoutPaths = [];

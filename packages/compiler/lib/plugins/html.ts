@@ -14,6 +14,13 @@ export function PluginHTML(): Plugin {
     },
     transform(id: string, payload: string, meta: Meta) {
       if (id === "html") {
+        if (payload.includes("<rss")) {
+          meta.feeds.rss = payload;
+          return "";
+        } else if (payload.includes("<atom")) {
+          meta.feeds.atom = payload;
+          return "";
+        }
         const dom = parse(payload);
         const topLevelTag = dom?.childNodes[0]?.rawTagName?.toLowerCase();
         if (topLevelTag === "head") {
