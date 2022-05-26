@@ -42,7 +42,7 @@
     "defu": "^6.0.0",
     "express": "^4.17.3",
     "liquidjs": "^9.37.0",
-    "million": "^1.8.2",
+    "million": "^1.8.8",
     "node-icons": "^1.0.1",
     "ohash": "^0.1.0",
     "ora": "^6.1.0",

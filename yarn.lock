@@ -4760,10 +4760,10 @@ micromatch@^4.0.4:
     braces "^3.0.2"
     picomatch "^2.3.1"
 
-million@^1.8.2:
-  version "1.8.2"
-  resolved "https://registry.yarnpkg.com/million/-/million-1.8.2.tgz#0e9f622f3798caa228d213bd796760168d33e20b"
-  integrity sha512-W4DiFpg+vRu88sGWlL/mYg+3wwH6T9hZeaf+vrIZQ5sBq9dHPUGh1oZNqXwlLllloWkLYlf5+/v2F6Tsh+huBA==
+million@^1.8.8:
+  version "1.8.8"
+  resolved "https://registry.yarnpkg.com/million/-/million-1.8.8.tgz#9ae41cd0fc2622d05ee134eb499ed090154f94fc"
+  integrity sha512-Nixn5HVHufWmfKGRUO9Hnnh69lYvFW2XpXbaywibKJ6cSjcCWPvu3qrHmCEIRH6MJV3q0LDtccKXPR36KnRuEw==
 
 mime-db@1.52.0, "mime-db@>= 1.43.0 < 2":
   version "1.52.0"
