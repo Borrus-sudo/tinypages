@@ -68,7 +68,7 @@ export async function render(
         payload = createElement(
           "div",
           { preact, uid },
-          createElement("div", {}, loadingString) + "\n" + script(cloneProps)
+          loadingString + "\n" + script(cloneProps)
         );
         map.set(hash, { html: payload });
         if (hashComp.has(componentPath)) {
@@ -108,9 +108,7 @@ export async function render(
           payload = createElement(
             "div",
             noHydrate ? {} : { preact, uid },
-            createElement("div", {}, prerenderedHtml) +
-              "\n" +
-              script(cloneProps)
+            prerenderedHtml + "\n" + script(cloneProps)
           );
         } catch (err) {
           /**
@@ -118,8 +116,8 @@ export async function render(
            */
           payload = createElement(
             "div",
-            noHydrate ? {} : { preact, uid },
-            createElement("div", { style: errorCSS }, err) +
+            noHydrate ? {} : { preact, uid, style: errorCSS },
+            createElement("div", { id: "error-block" }, err) +
               "\n" +
               script(cloneProps)
           );

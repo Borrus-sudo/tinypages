@@ -6,7 +6,6 @@ import { isUpperCase } from "../utils";
 export default (root: string): AutoImportOptions => ({
   include: [/\.[tj]sx?$/],
   imports: ["preact"],
-  exclude: [/^Icon/],
   resolvers: [
     (name: string) => {
       if (name.startsWith("Icon")) {

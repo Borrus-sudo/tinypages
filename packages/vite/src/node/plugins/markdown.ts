@@ -177,7 +177,8 @@ export default function (): Plugin {
 
         if (Object.keys(page.global.components).length > 0) {
           const virtualModuleId =
-            "/entryPoint" + viteNormalizePath(page.pageCtx.url) + ".js";
+            "/entryPoint" +
+            viteNormalizePath(page.pageCtx.url).replace(/\.md$/, ".js");
 
           page.meta.head.script.push({
             type: "module",

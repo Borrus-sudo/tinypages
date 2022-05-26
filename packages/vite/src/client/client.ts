@@ -1,4 +1,4 @@
-import { ComponentFactory } from "preact";
+import type { ComponentFactory } from "preact";
 import { hydrate } from "./hydrate";
 
 const lazyLoad = (target, callback: Function) => {
@@ -17,7 +17,7 @@ export default async function (componentMap: Map<string, ComponentFactory>) {
   for (let element of document.querySelectorAll("[preact]")) {
     const uid = element.getAttribute("uid");
     const props = JSON.parse(
-      (element.children.item(1) as HTMLScriptElement).textContent
+      (element.lastChild as HTMLScriptElement).textContent
     );
     const componentMeta = {
       props,
