@@ -11,8 +11,9 @@ export default async function () {
   return async (req, res, next) => {
     try {
       const url = normalizeUrl(req.originalUrl);
-      const pageCtx = router(url, req.originalUrl);
+      const pageCtx = router(url.replace(/\.md$/, ""), req.originalUrl);
 
+      res.set("Cache-Control", "no-store"); // so that hmr works
       if (!/\.md$/.test(url)) {
         if (pageCtx.url === "404") {
           utils.logger.info(`404 not found ${req.originalUrl}`, {

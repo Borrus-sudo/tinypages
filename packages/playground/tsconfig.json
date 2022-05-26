@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "types": ["tinypages/types"]
+    "incremental": true,
+    "types": ["tinypages/types/global"]
   },
-  "include": ["./components/**/*"]
+  "include": ["./components/**/*", "./pages/**/*"]
 }

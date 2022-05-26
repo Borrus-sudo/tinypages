@@ -7,31 +7,36 @@ export default function (): Plugin {
   return {
     name: "vite-tinypages-sub-island-hydration",
     async resolveId(id: string) {
-      return /(j|t)sx\?hydrate/.test(id) ? id : "";
+      return /\?(hydrate|lazy)/.test(id) ? id : "";
     },
     /**
      * The extra boilerplate code will not affect prod
      */
     load(id: string, options) {
-      if (!/(j|t)sx\?hydrate/.test(id)) {
-        return;
-      }
-      const uid = uuid();
-      const path = id.split("?hydrate")[0];
-      page.global.components[uid] = {
-        lazy: id.includes("?hydrate=lazy"),
-        path,
-      };
-      if (options.ssr) {
-        return `
-        import {h} from "preact";
+      if (/\?hydrate/.test(id)) {
+        const uid = uuid();
+        const path = id.split("?hydrate")[0];
+        page.global.components[uid] = {
+          lazy: id.includes("?hydrate=lazy"),
+          path,
+        };
+        if (options.ssr) {
+          return `
+        import { h } from "preact";
         import component from "${path}"
-        export default (props)=>{
-          return  h("div", {preact:undefined,uid:"${uid}"}, [
+        export default (props) => {
+          return  h("div", {preact:null,uid:"${uid}"}, [
               h('script', {type: 'application/json',dangerouslySetInnerHTML: { __html: JSON.stringify(props) },}),
               h(component, props),
           ]);
         };
+        `;
+        }
+      } else if (/\?lazy/.test(id)) {
+        const path = id.split("?lazy")[0];
+        return `
+      import { lazy } from "preact/compat";
+      export default lazy(()=>import("${path}"));
         `;
       }
     },

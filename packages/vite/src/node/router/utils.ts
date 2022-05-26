@@ -7,7 +7,8 @@ function transformDynamicArgs(input: string) {
     .replace(/\/\[\.\.\..*\]\..*/g, "/**")
     .replace(/\/\[(.*)\]\//g, "/:$1/")
     .replace(/\/\[(.*)\]\./g, "/:$1.")
-    .replace(/\/\_\_.*?\//g, "$1/");
+    .replace(/\/\_\_.*?\//g, "$1/")
+    .replace(/\.md$/, "");
   return output;
 }
 

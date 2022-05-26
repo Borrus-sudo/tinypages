@@ -1,4 +1,3 @@
-import { v4 as uuid } from "@lukeed/uuid";
 import { compile as compileMarkdown } from "@tinypages/compiler";
 import { existsSync, promises as fs } from "fs";
 import path from "path";
@@ -15,13 +14,18 @@ import {
   reload,
 } from "./plugin-utils";
 import { Liquid } from "liquidjs";
-// import { useUnlighthouse } from "@unlighthouse/core";
 
 export default function (): Plugin {
   const { config, page, utils } = useContext();
   const cache: Map<string, string> = new Map();
+  const virtualModuleMap: Map<string, string> = new Map([
+    ["/uno:only", `import "uno.css";import "tinypages/hmr";`],
+  ]);
+  let seen = [];
   let changedLayoutIndication = false;
   let vite: ViteDevServer;
+  let isBuild = false;
+
   /**
    * The compile function takes something as input and caches it. In the case of changedLayouts we have to forcibly make it
    * not take from the cache as the main markown remains unchanged but the layout needs to be recompiled
@@ -46,6 +50,18 @@ export default function (): Plugin {
     return result;
   };
 
+  /**
+   * Loads the entry point and builds the page
+   */
+
+  // constants needed
+  const ssrTimestampCache = new Map();
+  const propsCache = new Map();
+  const engine = new Liquid({
+    cache: true,
+  });
+
+  // main function
   const buildRoute = async (url: string, markdown: string) => {
     page.reloads = [];
     let jsUrl = url.replace(/\.md$/, ".js");
@@ -61,24 +77,51 @@ export default function (): Plugin {
     }
 
     if (!page.reloads.includes(url)) page.reloads.push(url);
-    utils.consola.info("Loading state...");
-    const { default: loader } = await vite.ssrLoadModule(url);
-    const data = await loader(page.pageCtx.params || {});
+    let data;
+
+    /**
+     * caching strategy for better hmr during dev
+     */
+    let originalUrl = page.pageCtx.originalUrl;
+    let currTimestamp = new Date().getTime();
+
+    if (isBuild || !ssrTimestampCache.has(originalUrl)) {
+      // it is imperative to use originalUr
+
+      //boilerplate stuff
+      const { default: loader } = await vite.ssrLoadModule(url);
+      data = await loader(page.pageCtx.params || {});
+      utils.consola.success("State loaded!");
+
+      if (!isBuild) {
+        ssrTimestampCache.set(originalUrl, currTimestamp);
+        propsCache.set(originalUrl, data);
+      }
+    } else {
+      const prevTimestamp = ssrTimestampCache.get(originalUrl) ?? 0;
+      let offset = 120 * 1000;
+
+      // cache expired
+      if (currTimestamp - prevTimestamp > offset) {
+        // boilerplate stuff
+        const { default: loader } = await vite.ssrLoadModule(url);
+        data = await loader(page.pageCtx.params || {});
+        utils.consola.success("State loaded!");
+
+        ssrTimestampCache.set(originalUrl, currTimestamp);
+        propsCache.set(originalUrl, data);
+      } else {
+        utils.consola.success("State loaded from cache!");
+        data = propsCache.get(originalUrl);
+      }
+    }
+
     page.global.ssrProps = data?.ssrProps || {};
-    const engine = new Liquid({
-      cache: true,
-    });
-    // rendered liquidjs
+
+    //Liquidjs stuff
     const builtMarkdown = engine.parseAndRender(markdown, data);
     return builtMarkdown;
   };
-
-  const virtualModuleMap: Map<string, string> = new Map([
-    ["/uno:only", `import "uno.css";import "tinypages/hmr";`],
-  ]);
-  let seen = [];
-  let isBuild = false;
-  // let worker;
 
   return {
     name: "vite-tinypages-markdown",
@@ -133,7 +176,8 @@ export default function (): Plugin {
          */
 
         if (Object.keys(page.global.components).length > 0) {
-          const virtualModuleId = "/" + uuid() + ".js";
+          const virtualModuleId =
+            "/entryPoint" + viteNormalizePath(page.pageCtx.url) + ".js";
 
           page.meta.head.script.push({
             type: "module",

@@ -1,28 +1,12 @@
----
-layout: ../layouts/BaseLayout.md
----
-
-## TSGandalf here 3 ::mdi:language-typescript:: [text-blue-500 text-center]
-
 <head>
-<title>hello hello</title>
+<title>My blog!</title>
 </head>
 
-
-<mdi-github/>
-<mdi-twitter/>
+## (JS/TS)Gandalf's blog!
 
 
-![hello pls](~images/crap/pls/load.jpg)
-
-<Counter/>
-
-<Counter client:idle/>
-<Counter client:only/>
-<Counter media:visible/>
-<Counter no:hydrate/>
+{% for blog in data %}
+ [{{blog.meta}}](/{{blog._id}})
+{% endfor %}
 
 
-## hello hi
-
-what the hell is this working?
