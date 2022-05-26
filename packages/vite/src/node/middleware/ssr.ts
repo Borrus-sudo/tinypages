@@ -13,7 +13,6 @@ export default async function () {
       const url = normalizeUrl(req.originalUrl);
       const pageCtx = router(url.replace(/\.md$/, ""), req.originalUrl);
 
-      res.set("Cache-Control", "no-store"); // so that hmr works
       if (!/\.md$/.test(url)) {
         if (pageCtx.url === "404") {
           utils.logger.info(`404 not found ${req.originalUrl}`, {
@@ -25,6 +24,7 @@ export default async function () {
           res.send(await fs.readFile(pageCtx.url, { encoding: "utf-8" }));
         }
       } else {
+        res.set("Cache-Control", "no-store"); // so that hmr works
         if (pageCtx.url === "404") {
           if (!url.endsWith("404.md")) {
             utils.logger.info(`404 not found ${req.originalUrl}`, {

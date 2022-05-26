@@ -47,13 +47,14 @@ interface Utils {
   pageDir: Readonly<string>;
   stylesDir: Readonly<string>;
   configFile: Readonly<string>;
+  unlighthouseUrl: string;
   consola: Consola;
 }
 
 interface ResolvedConfig {
   page: Page;
   config: Readonly<TinyPagesConfig>;
-  utils: Readonly<Utils>;
+  utils: Utils;
 }
 
 export {

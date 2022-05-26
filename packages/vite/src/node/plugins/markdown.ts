@@ -9,12 +9,12 @@ import { refreshRouter } from "../router/fs";
 import { hash } from "../utils";
 import { appendPrelude } from "../render/render-utils";
 import {
-  generateStats,
   generateVirtualEntryPoint,
   hash as hashIt,
   reload,
 } from "./plugin-utils";
 import { Liquid } from "liquidjs";
+import { v4 as uuid } from "@lukeed/uuid";
 
 export default function (): Plugin {
   const { config, page, utils } = useContext();
@@ -129,7 +129,6 @@ export default function (): Plugin {
     enforce: "pre",
     configResolved(config) {
       isBuild = config.command === "build" || config.isProduction;
-      // worker = useUnlighthouse().worker;
     },
     configureServer(server) {
       const eventHandler = async (filePath) => {
@@ -178,9 +177,7 @@ export default function (): Plugin {
          */
 
         if (Object.keys(page.global.components).length > 0) {
-          const virtualModuleId =
-            "/entryPoint" +
-            viteNormalizePath(page.pageCtx.url).replace(/\.md$/, ".js");
+          const virtualModuleId = "/" + uuid() + ".js";
 
           page.meta.head.script.push({
             type: "module",
@@ -211,9 +208,7 @@ export default function (): Plugin {
             seen.push(toAdd);
           }
         }
-        Promise.resolve().then(async () => {
-          await generateStats(page);
-        });
+
         ctx.filename = viteNormalizePath(page.pageCtx.url);
         return appHtml;
       },
