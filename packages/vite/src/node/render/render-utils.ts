@@ -46,7 +46,9 @@ export function appendPrelude(content: string, page: Page) {
     src: undefined,
     type: "text/javascript",
     innerHTML: `
-    window.pageCtx=${JSON.stringify(page.pageCtx)};
+    window.pageCtx=${JSON.stringify(page.pageCtx, (key, val) =>
+      key === "url" ? undefined : val
+    )};
     window.ssrProps=${JSON.stringify(page.global.ssrProps)}
     `,
   });

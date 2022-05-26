@@ -9,6 +9,7 @@ import { refreshRouter } from "../router/fs";
 import { hash } from "../utils";
 import { appendPrelude } from "../render/render-utils";
 import {
+  generateStats,
   generateVirtualEntryPoint,
   hash as hashIt,
   reload,
@@ -90,7 +91,7 @@ export default function (): Plugin {
 
       //boilerplate stuff
       const { default: loader } = await vite.ssrLoadModule(url);
-      data = await loader(page.pageCtx.params || {});
+      data = await loader(page.pageCtx.params);
       utils.consola.success("State loaded!");
 
       if (!isBuild) {
@@ -105,7 +106,7 @@ export default function (): Plugin {
       if (currTimestamp - prevTimestamp > offset) {
         // boilerplate stuff
         const { default: loader } = await vite.ssrLoadModule(url);
-        data = await loader(page.pageCtx.params || {});
+        data = await loader(page.pageCtx.params);
         utils.consola.success("State loaded!");
 
         ssrTimestampCache.set(originalUrl, currTimestamp);
@@ -166,6 +167,7 @@ export default function (): Plugin {
         page.prevHash = hashIt({
           components: meta.components,
           head: meta.head,
+          feed: meta.feeds,
         });
         page.layouts = layouts;
 
@@ -209,7 +211,9 @@ export default function (): Plugin {
             seen.push(toAdd);
           }
         }
-
+        Promise.resolve().then(async () => {
+          await generateStats(page);
+        });
         ctx.filename = viteNormalizePath(page.pageCtx.url);
         return appHtml;
       },
@@ -248,6 +252,7 @@ export default function (): Plugin {
           const newHash = hashIt({
             components: meta.components,
             head: meta.head,
+            feed: meta.feeds,
           });
           if (newHash !== page.prevHash) {
             reload(fileBasename, ctx.server, utils.logger);

@@ -24,7 +24,7 @@ type ComponentRegistration = {
 interface PageCtx {
   url: string;
   originalUrl: string;
-  params?: Record<string, string>;
+  params: Record<string, string>;
 }
 
 interface Page {

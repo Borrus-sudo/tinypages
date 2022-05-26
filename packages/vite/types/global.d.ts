@@ -1,8 +1,10 @@
-interface PageCtx {
-  url: string;
-  originalUrl: string;
-  params?: Record<string, string>;
-}
+export {};
 
-declare var pageCtx: PageCtx;
-declare var ssrProps: Record<any, any>;
+interface PageCtx {
+  originalUrl: string;
+  params: Record<string, string>;
+}
+declare global {
+  const pageCtx: PageCtx;
+  const ssrProps: Record<any, any>;
+}

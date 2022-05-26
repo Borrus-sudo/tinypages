@@ -1,5 +1,4 @@
 import PrefreshPlugin from "@prefresh/vite";
-import UnlighthousePlugin from "@unlighthouse/vite";
 import UnoCSSPlugin from "@unocss/vite";
 import AutoImport from "unplugin-auto-import/vite";
 import ImagePlugin from "vite-plugin-image-presets";
@@ -27,6 +26,5 @@ export async function createPlugins() {
     HmrPlugin(),
     AutoImport(AutoImportPluginOptions(config.vite.root)),
     PrefreshPlugin(),
-    UnlighthousePlugin(config.modules.unlighthouse),
   ];
 }

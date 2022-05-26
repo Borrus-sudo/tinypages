@@ -18,12 +18,13 @@ export async function fsRouter(pagesDir: string) {
       if (!!result) {
         return { url: result.payload, params: result.params, originalUrl };
       }
-      return { url: "404", originalUrl };
+      return { url: "404", originalUrl, params: {} };
     };
   }
   return (): PageCtx => ({
     url: "404",
     originalUrl: "",
+    params: {},
   });
 }
 

@@ -53,7 +53,6 @@ export async function resolveConfig(
         },
       },
       unocss: {},
-      unlightouse: {},
     },
   });
 

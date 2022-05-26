@@ -36,7 +36,7 @@ export default async function () {
           }
         } else {
           utils.logger.info(req.originalUrl, { timestamp: true });
-          page.pageCtx = pageCtx;
+          page.pageCtx = pageCtx; //@ts-ignore
           global.pageCtx = pageCtx; // globally assign pageCtx
           const markdown = await fs.readFile(pageCtx.url, "utf-8");
           const html = await vite.transformIndexHtml(pageCtx.url, markdown); // vite transformed html
