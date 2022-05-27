@@ -8,7 +8,7 @@ import AutoImportPluginOptions from "./isomorphic/auto-import";
 import DecoratorPlugin from "./dev/decorators";
 import IconPlugin from "./isomorphic/icons";
 import HmrPlugin from "./dev/hmr";
-import MarkdownPlugin from "./dev/markdown";
+import MarkdownPlugin from "./dev/markdown-dev";
 
 export async function createDevPlugins() {
   const { config } = useContext("dev");

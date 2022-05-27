@@ -6,6 +6,7 @@ export default function (): Plugin {
   const { page } = useContext("dev");
   return {
     name: "vite-tinypages-sub-island-hydration",
+    apply: "serve",
     async resolveId(id: string) {
       return /\?(hydrate|lazy)/.test(id) ? id : "";
     },

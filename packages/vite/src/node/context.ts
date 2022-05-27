@@ -12,8 +12,6 @@ import type {
   BuildContext,
 } from "../../types/types";
 import { presetPageConfig } from "./constants";
-import { createDevPlugins } from "./plugins";
-import { createBuildPlugins } from "./plugins";
 import { invalidate, render } from "./render/markdown";
 import { createConsola, deepCopy } from "./utils";
 
@@ -40,7 +38,7 @@ export async function createDevContext(
       consola: createConsola(),
     },
   };
-
+  const { createDevPlugins } = await import("./plugins/dev");
   const plugins = await createDevPlugins(); //@ts-ignore
   devCtx.config.vite = mergeConfig(devCtx.config.vite, { plugins });
   vite = await createServer(devCtx.config.vite);
@@ -55,8 +53,10 @@ export async function createDevContext(
 export async function createBuildContext(
   config: TinyPagesConfig
 ): Promise<[BuildContext, ViteDevServer]> {
+  const { createBuildPlugins } = await import("./plugins/build");
   const buildPlugins = await createBuildPlugins();
   let resolvedBuildConfig = mergeConfig(config, { plugins: buildPlugins });
+
   vite = await createServer(resolvedBuildConfig);
   return [
     {
@@ -90,8 +90,13 @@ export function useContext<T extends DevOrIso>(type: T): BuildOrDev<T> {
     //@ts-ignore
     return devCtx;
   } else {
-    //@ts-ignore
-    return buildCtx;
+    if (buildCtx) {
+      //@ts-ignore
+      return buildCtx;
+    } else {
+      //@ts-ignore
+      return devCtx;
+    }
   }
 }
 

@@ -165,9 +165,9 @@ export function cli() {
             config: true,
           };
           const { config } = await resolveConfig(cliViteOptions);
-          await build(config);
+          await build(config, []);
         } catch (e) {
-          console.log(e);
+          console.error(e);
           process.exit(1);
         }
       }

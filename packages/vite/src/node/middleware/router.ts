@@ -26,14 +26,7 @@ export default async function () {
       } else {
         res.set("Cache-Control", "no-store"); // so that hmr works
         if (pageCtx.url === "404") {
-          if (!url.endsWith("404.md")) {
-            utils.logger.info(`404 not found ${req.originalUrl}`, {
-              timestamp: true,
-            });
-            res.redirect("/404.md");
-          } else {
-            res.send(`<h1> 404 url not found </h1>`);
-          }
+          res.send(`<h1> 404 url not found </h1>`);
         } else {
           utils.logger.info(req.originalUrl, { timestamp: true });
           page.pageCtx = pageCtx; //@ts-ignore

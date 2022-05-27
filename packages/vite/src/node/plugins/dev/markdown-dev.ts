@@ -87,7 +87,7 @@ export default function (): Plugin {
     let currTimestamp = new Date().getTime();
 
     if (isBuild || !ssrTimestampCache.has(originalUrl)) {
-      // it is imperative to use originalUr
+      // it is imperative to use originalUrl
 
       //boilerplate stuff
       const { default: loader } = await vite.ssrLoadModule(url);
@@ -127,6 +127,7 @@ export default function (): Plugin {
   return {
     name: "vite-tinypages-markdown",
     enforce: "pre",
+    apply: "serve",
     configResolved(config) {
       isBuild = config.command === "build" || config.isProduction;
     },
