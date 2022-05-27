@@ -47,7 +47,6 @@ interface Utils {
   pageDir: Readonly<string>;
   stylesDir: Readonly<string>;
   configFile: Readonly<string>;
-  unlighthouseUrl: string;
   consola: Consola;
 }
 

@@ -51,7 +51,7 @@ export const presetViteConfig = {
       react: "preact/compat",
       "react-dom": "preact/compat",
     },
-    dedupe: ["react", "react-dom"],
+    dedupe: ["react", "react-dom", "preact/hooks"],
   },
 } as InlineConfig;
 

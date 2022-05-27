@@ -31,7 +31,6 @@ export async function createContext(
       pageDir: join(config.vite.root, "pages"),
       stylesDir: join(config.vite.root, "styles"),
       configFile: source || "",
-      unlighthouseUrl: "",
       consola: createConsola(),
     },
   };

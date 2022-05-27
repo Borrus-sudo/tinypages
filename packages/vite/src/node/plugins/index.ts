@@ -9,14 +9,12 @@ import DecoratorPlugin from "./decorators";
 import IconPlugin from "./icons";
 import HmrPlugin from "./hmr";
 import MarkdownPlugin from "./markdown";
-import UnlighthousePlugin from "./unlighthouse";
 
 export async function createPlugins() {
   const { config } = useContext();
   return [
     InspectPlugin(),
     MarkdownPlugin(),
-    UnlighthousePlugin(),
     UnoCSSPlugin(<{}>{
       inspector: true,
       mode: "global",
