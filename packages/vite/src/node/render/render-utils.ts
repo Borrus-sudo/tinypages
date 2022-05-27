@@ -41,7 +41,7 @@ function renderHead(head: Head, headTags) {
 }
 
 export function appendPrelude(content: string, page: Page) {
-  const { utils } = useContext();
+  const { utils } = useContext("iso");
   page.meta.head.script.push({
     src: undefined,
     type: "text/javascript",

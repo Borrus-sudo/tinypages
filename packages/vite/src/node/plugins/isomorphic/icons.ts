@@ -3,7 +3,7 @@ import type { Plugin } from "vite";
 import { useContext } from "../../context";
 
 export default function (): Plugin {
-  const { config } = useContext();
+  const { config } = useContext("iso");
   const icons = Icons(config.modules.icons);
   const separator = config.modules.icons?.separator || ":";
   const moduleMap: Map<string, string> = new Map();

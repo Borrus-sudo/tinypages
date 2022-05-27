@@ -17,7 +17,7 @@ import { Liquid } from "liquidjs";
 import { v4 as uuid } from "@lukeed/uuid";
 
 export default function (): Plugin {
-  const { config, page, utils } = useContext();
+  const { config, page, utils } = useContext("dev");
   const cache: Map<string, string> = new Map();
   const virtualModuleMap: Map<string, string> = new Map([
     ["/uno:only", `import "uno.css";import "tinypages/hmr";`],

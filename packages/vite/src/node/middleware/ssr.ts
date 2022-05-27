@@ -4,7 +4,7 @@ import { fsRouter } from "../router/fs";
 import { normalizeUrl } from "../utils";
 
 export default async function () {
-  const { page, utils } = useContext();
+  const { page, utils } = useContext("dev");
   const vite = useVite();
   const router = await fsRouter(utils.pageDir);
 

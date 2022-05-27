@@ -4,7 +4,7 @@ import { useContext } from "../../context";
 import { isParentJSX } from "../plugin-utils";
 
 export default function (): Plugin {
-  const { page, utils } = useContext();
+  const { page, utils } = useContext("dev");
   return {
     name: "vite-tinypages-hmr",
     apply: "serve",

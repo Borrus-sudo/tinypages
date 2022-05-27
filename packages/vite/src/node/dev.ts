@@ -1,14 +1,14 @@
 import express from "express";
 import { type ViteDevServer, normalizePath as viteNormalizePath } from "vite";
 import type { TinyPagesConfig } from "../../types/types";
-import { createContext } from "./context";
+import { createDevContext } from "./context";
 import { createMiddlewares } from "./middleware";
 
 export async function createDevServer(
   config: TinyPagesConfig,
   source: string
 ): Promise<ViteDevServer> {
-  const [ctx, vite] = await createContext(config, source);
+  const [ctx, vite] = await createDevContext(config, source);
   const app = express();
 
   vite.watcher.add(viteNormalizePath(ctx.utils.pageDir));

@@ -3,7 +3,7 @@ import { useContext } from "../../context";
 import { v4 as uuid } from "@lukeed/uuid";
 
 export default function (): Plugin {
-  const { page } = useContext();
+  const { page } = useContext("dev");
   return {
     name: "vite-tinypages-sub-island-hydration",
     async resolveId(id: string) {

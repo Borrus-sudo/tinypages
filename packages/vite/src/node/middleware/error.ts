@@ -2,7 +2,7 @@ import { useContext, useVite } from "../context";
 
 export default function () {
   const vite = useVite();
-  const { utils } = useContext();
+  const { utils } = useContext("dev");
   return (err: Error, _req, res) => {
     if (err) {
       utils.consola.error(err);

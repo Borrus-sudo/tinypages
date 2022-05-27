@@ -1,6 +1,6 @@
 import { useContext } from "../context";
 export default function () {
-  const { config, page } = useContext();
+  const { config, page } = useContext("dev");
   return async (req, res, next) => {
     if (req.originalUrl === "/__seo") {
       const { default: lighthouse } = await import("./lazy-unlighthouse");

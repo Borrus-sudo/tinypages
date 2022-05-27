@@ -6,26 +6,32 @@ import {
   mergeConfig,
   type ViteDevServer,
 } from "vite";
-import { ResolvedConfig, TinyPagesConfig } from "../../types/types";
+import type {
+  ResolvedConfig,
+  TinyPagesConfig,
+  BuildContext,
+} from "../../types/types";
 import { presetPageConfig } from "./constants";
-import { createPlugins } from "./plugins";
+import { createDevPlugins } from "./plugins";
+import { createBuildPlugins } from "./plugins";
 import { invalidate, render } from "./render/markdown";
 import { createConsola, deepCopy } from "./utils";
 
-let ctx: ResolvedConfig;
+let devCtx: ResolvedConfig;
 let vite: ViteDevServer;
+let buildCtx: BuildContext;
 
-export async function createContext(
+export async function createDevContext(
   config: TinyPagesConfig,
   source?: string
 ): Promise<[ResolvedConfig, ViteDevServer]> {
-  ctx = {
+  devCtx = {
     config,
     page: deepCopy(presetPageConfig),
     utils: {
       logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
       async render(html: string) {
-        return await render(html, vite, ctx);
+        return await render(html, vite, devCtx);
       },
       invalidate: (input: string) => invalidate(input),
       pageDir: join(config.vite.root, "pages"),
@@ -35,18 +41,58 @@ export async function createContext(
     },
   };
 
-  const plugins = await createPlugins(); //@ts-ignore
-  ctx.config.vite = mergeConfig(ctx.config.vite, { plugins });
-  vite = await createServer(ctx.config.vite);
+  const plugins = await createDevPlugins(); //@ts-ignore
+  devCtx.config.vite = mergeConfig(devCtx.config.vite, { plugins });
+  vite = await createServer(devCtx.config.vite);
 
   polyfill(global, {
     exclude: "window document",
   });
 
-  return [ctx, vite];
+  return [devCtx, vite];
 }
-export function useContext(): ResolvedConfig {
-  return ctx;
+
+export async function createBuildContext(
+  config: TinyPagesConfig
+): Promise<[BuildContext, ViteDevServer]> {
+  const buildPlugins = await createBuildPlugins();
+  let resolvedBuildConfig = mergeConfig(config, { plugins: buildPlugins });
+  vite = await createServer(resolvedBuildConfig);
+  return [
+    {
+      utils: {
+        logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
+        async render(html: string) {
+          return html;
+        },
+        invalidate: (input: string) => invalidate(input),
+        pageDir: join(config.vite.root, "pages"),
+        stylesDir: join(config.vite.root, "styles"),
+        consola: createConsola(),
+      },
+      config,
+      pages: {
+        uriToBuiltHTML: new Map(),
+        virtualEntryPoint: new Map(),
+      },
+    },
+    vite,
+  ];
+}
+
+type DevOrIso = "dev" | "iso";
+type BuildOrDev<T extends DevOrIso> = T extends "dev"
+  ? ResolvedConfig
+  : BuildContext;
+
+export function useContext<T extends DevOrIso>(type: T): BuildOrDev<T> {
+  if (type === "dev") {
+    //@ts-ignore
+    return devCtx;
+  } else {
+    //@ts-ignore
+    return buildCtx;
+  }
 }
 
 export function useVite(): ViteDevServer {

@@ -51,10 +51,20 @@ interface Utils {
 }
 
 interface ResolvedConfig {
-  [x: string]: any;
   page: Page;
   config: Readonly<TinyPagesConfig>;
   utils: Utils;
+}
+
+interface BuildPages {
+  uriToBuiltHTML: Map<string, string>;
+  virtualEntryPoint: Map<string, string>;
+}
+
+interface BuildContext {
+  config: Readonly<TinyPagesConfig>;
+  utils: Omit<Utils, "configFile">;
+  pages: BuildPages;
 }
 
 export {
@@ -66,4 +76,5 @@ export {
   ResolvedConfig,
   RenderFunction,
   ComponentRegistration,
+  BuildContext,
 };
