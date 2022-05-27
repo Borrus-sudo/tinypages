@@ -600,10 +600,18 @@
   resolved "https://registry.yarnpkg.com/@headlessui/vue/-/vue-1.6.3.tgz#c1fe5d088a903eaac2e9929cfe126f095ccc43eb"
   integrity sha512-9wVPPKS0f5ue26/cml+/ZlyHFPna3eJL/gEuWib8e1IBRhh2jUUKr7urmgIB87G1A2sRAK7GiF0VDdZoLEtFQw==
 
-"@iconify/json@^1.1.435":
-  version "1.1.461"
-  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-1.1.461.tgz#9e76f2339292e1a89855f93e497439afeb642f11"
-  integrity sha512-9Y41Tk9s3LDt4WI20XySNhNX6qTJ/WOBeE3O2iyoV9LJ6gFEDjp0uTPzfRU9NUx7D6VkvQ/htJEuRe9LmyMqUA==
+"@iconify/json@^2.1.51":
+  version "2.1.51"
+  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-2.1.51.tgz#2cef28eccc989511949dd93205a8d083b72a23a1"
+  integrity sha512-FX9CeVl6O9tP3R/jmXyc8lgt0wuadSpNmGADNfFIDCg9j2+3qC5/Fyfmf0X+85UGDWGyycGu0kbsmgEr8EM6Nw==
+  dependencies:
+    "@iconify/types" "^1.1.0"
+    pathe "^0.2.0"
+
+"@iconify/types@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@iconify/types/-/types-1.1.0.tgz#dc15fc988b1b3fd558dd140a24ede7e0aac11280"
+  integrity sha512-Jh0llaK2LRXQoYsorIH8maClebsnzTcve+7U3rQUSnC11X4jtPnFuyatqFLvMxZ8MLG8dB4zfHsbPfuvxluONw==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
