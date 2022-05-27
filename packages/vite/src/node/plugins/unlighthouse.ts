@@ -8,16 +8,13 @@ export default function (): Plugin {
     name: "vite-tinypages-unlighthouse",
     apply: "serve",
     async configureServer() {
-      const { createUnlighthouse, useUnlighthouse } = await import(
-        "@unlighthouse/core"
-      );
-      const { createServer } = await import("@unlighthouse/server");
-      unlighthouse =
-        useUnlighthouse() ||
-        (await createUnlighthouse(
+      Promise.resolve().then(async () => {
+        const { createUnlighthouse } = await import("@unlighthouse/core");
+        const { createServer } = await import("@unlighthouse/server");
+        unlighthouse = await createUnlighthouse(
           {
             root: config.vite.root,
-            routerPrefix: "/__seo",
+            routerPrefix: "/",
             scanner: {
               skipJavascript: false,
             },
@@ -25,11 +22,12 @@ export default function (): Plugin {
           {
             name: "tinypages",
           }
-        ));
-      const ctx = await createServer();
-      server = ctx.server;
-      app = ctx.app;
-      utils.unlighthouseUrl = server.url;
+        );
+        const ctx = await createServer();
+        server = ctx.server;
+        app = ctx.app;
+        utils.unlighthouseUrl = server.url;
+      });
     },
     transformIndexHtml: {
       enforce: "pre",
