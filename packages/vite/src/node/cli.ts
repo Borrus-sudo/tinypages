@@ -78,6 +78,7 @@ export function cli() {
         root: string = process.cwd(),
         options: Vite.ServerOptions & GlobalCLIOptions
       ) => {
+        const { createDevServer } = await import("./dev");
         try {
           if (root.startsWith("./")) {
             root = join(process.cwd(), root);
@@ -93,10 +94,80 @@ export function cli() {
             config: options.config,
           };
           const { config, filePath } = await resolveConfig(cliViteOptions);
-          const { createDevServer } = await import("./dev");
           await createDevServer(config, filePath);
         } catch (e) {
           console.error(e);
+          process.exit(1);
+        }
+      }
+    );
+
+  cli
+    .command("build [root]", "build for production")
+    .option(
+      "--target <target>",
+      `[string] transpile target (default: 'modules')`
+    )
+    .option("--outDir <dir>", `[string] output directory (default: dist)`)
+    .option(
+      "--assetsDir <dir>",
+      `[string] directory under outDir to place assets in (default: assets)`
+    )
+    .option(
+      "--assetsInlineLimit <number>",
+      `[number] static asset base64 inline threshold in bytes (default: 4096)`
+    )
+    .option(
+      "--ssr [entry]",
+      `[string] build specified entry for server-side rendering`
+    )
+    .option(
+      "--sourcemap",
+      `[boolean] output source maps for build (default: false)`
+    )
+    .option(
+      "--minify [minifier]",
+      `[boolean | "terser" | "esbuild"] enable/disable minification, ` +
+        `or specify minifier to use (default: esbuild)`
+    )
+    .option("--manifest [name]", `[boolean | string] emit build manifest json`)
+    .option("--ssrManifest [name]", `[boolean | string] emit ssr manifest json`)
+    .option(
+      "--force",
+      `[boolean] force the optimizer to ignore the cache and re-bundle (experimental)`
+    )
+    .option(
+      "--emptyOutDir",
+      `[boolean] force empty outDir when it's outside of root`
+    )
+    .option(
+      "-w, --watch",
+      `[boolean] rebuilds when modules have changed on disk`
+    )
+    .action(
+      async (
+        root: string = process.cwd(),
+        options: Vite.BuildOptions & GlobalCLIOptions
+      ) => {
+        const { build } = await import("./build");
+        try {
+          if (root.startsWith("./")) {
+            root = join(process.cwd(), root);
+          }
+          // hijack the configFileOption for tinypages' config system
+          const cliViteOptions = {
+            root,
+            base: options.base,
+            mode: options.mode,
+            logLevel: options.logLevel,
+            clearScreen: options.clearScreen,
+            build: cleanOptions(options),
+            config: true,
+          };
+          const { config } = await resolveConfig(cliViteOptions);
+          await build(config);
+        } catch (e) {
+          console.log(e);
           process.exit(1);
         }
       }

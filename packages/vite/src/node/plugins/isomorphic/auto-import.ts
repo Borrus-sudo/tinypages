@@ -1,7 +1,7 @@
 import { existsSync } from "fs";
 import path from "path";
 import type { Options as AutoImportOptions } from "unplugin-auto-import/types";
-import { isUpperCase } from "../utils";
+import { isUpperCase } from "../../utils";
 
 export default (root: string): AutoImportOptions => ({
   include: [/\.[tj]sx?$/],

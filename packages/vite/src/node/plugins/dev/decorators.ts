@@ -1,5 +1,5 @@
 import type { Plugin } from "vite";
-import { useContext } from "../context";
+import { useContext } from "../../context";
 import { v4 as uuid } from "@lukeed/uuid";
 
 export default function (): Plugin {

@@ -51,6 +51,7 @@ interface Utils {
 }
 
 interface ResolvedConfig {
+  [x: string]: any;
   page: Page;
   config: Readonly<TinyPagesConfig>;
   utils: Utils;

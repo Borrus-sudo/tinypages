@@ -1,7 +1,7 @@
 import * as path from "path";
 import type { ModuleNode, Plugin } from "vite";
-import { useContext } from "../context";
-import { isParentJSX } from "./plugin-utils";
+import { useContext } from "../../context";
+import { isParentJSX } from "../plugin-utils";
 
 export default function (): Plugin {
   const { page, utils } = useContext();

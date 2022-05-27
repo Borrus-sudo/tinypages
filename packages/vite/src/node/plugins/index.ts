@@ -4,11 +4,11 @@ import AutoImport from "unplugin-auto-import/vite";
 import ImagePlugin from "vite-plugin-image-presets";
 import InspectPlugin from "vite-plugin-inspect";
 import { useContext } from "../context";
-import AutoImportPluginOptions from "./auto-import";
-import DecoratorPlugin from "./decorators";
-import IconPlugin from "./icons";
-import HmrPlugin from "./hmr";
-import MarkdownPlugin from "./markdown";
+import AutoImportPluginOptions from "./isomorphic/auto-import";
+import DecoratorPlugin from "./dev/decorators";
+import IconPlugin from "./isomorphic/icons";
+import HmrPlugin from "./dev/hmr";
+import MarkdownPlugin from "./dev/markdown";
 
 export async function createPlugins() {
   const { config } = useContext();

@@ -17,7 +17,7 @@ let vite: ViteDevServer;
 
 export async function createContext(
   config: TinyPagesConfig,
-  source: string
+  source?: string
 ): Promise<[ResolvedConfig, ViteDevServer]> {
   ctx = {
     config,

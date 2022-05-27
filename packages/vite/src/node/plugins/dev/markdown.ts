@@ -3,16 +3,16 @@ import { existsSync, promises as fs } from "fs";
 import path from "path";
 import type { ModuleNode, Plugin, ViteDevServer } from "vite";
 import { normalizePath as viteNormalizePath } from "vite";
-import type { Meta } from "../../../types/types";
-import { useContext, useVite } from "../context";
-import { refreshRouter } from "../router/fs";
-import { hash } from "../utils";
-import { appendPrelude } from "../render/render-utils";
+import type { Meta } from "../../../../types/types";
+import { useContext, useVite } from "../../context";
+import { refreshRouter } from "../../router/fs";
+import { hash } from "../../utils";
+import { appendPrelude } from "../../render/render-utils";
 import {
   generateVirtualEntryPoint,
   hash as hashIt,
   reload,
-} from "./plugin-utils";
+} from "../plugin-utils";
 import { Liquid } from "liquidjs";
 import { v4 as uuid } from "@lukeed/uuid";
 
