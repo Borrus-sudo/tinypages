@@ -52,7 +52,7 @@
     "radix3": "^0.1.0",
     "unconfig": "^0.3.4",
     "unplugin-auto-import": "^0.8.1",
-    "vite": "^2.9.5",
+    "vite": "^2.9.9",
     "vite-plugin-image-presets": "^0.3.1",
     "vite-plugin-inspect": "^0.5.0"
   },
