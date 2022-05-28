@@ -147,7 +147,7 @@ export default function (): Plugin {
     },
     transformIndexHtml: {
       enforce: "pre",
-      async transform(markdown: string, ctx) {
+      async transform(markdown: string, context) {
         if (!vite) {
           vite = useVite();
         }
@@ -205,12 +205,12 @@ export default function (): Plugin {
         const appHtml = appendPrelude(renderedHtml, page);
         for (const toAdd of [page.pageCtx.url, ...page.layouts]) {
           if (!seen.includes(toAdd)) {
-            ctx.server.moduleGraph.createFileOnlyEntry(toAdd);
+            context.server.moduleGraph.createFileOnlyEntry(toAdd);
             seen.push(toAdd);
           }
         }
 
-        ctx.filename = viteNormalizePath(page.pageCtx.url);
+        context.filename = viteNormalizePath(page.pageCtx.url);
         return appHtml;
       },
     },
@@ -224,16 +224,16 @@ export default function (): Plugin {
         return virtualModuleMap.get(id);
       }
     },
-    async handleHotUpdate(ctx) {
+    async handleHotUpdate(context) {
       const toReturnModules: ModuleNode[] = [];
-      for (let module of ctx.modules) {
+      for (let module of context.modules) {
         const fileId = path.normalize(module.file);
         const fileBasename = path.basename(fileId);
         /**
          * Reload the page. (mainly for handling the loader files)
          */
         if (page.reloads.includes(fileId)) {
-          reload(fileBasename, ctx.server, utils.logger);
+          reload(fileBasename, context.server, utils.logger);
           seen = [];
           return;
         } else if (page.pageCtx.url === fileId) {
@@ -251,7 +251,7 @@ export default function (): Plugin {
             feed: meta.feeds,
           });
           if (newHash !== page.prevHash) {
-            reload(fileBasename, ctx.server, utils.logger);
+            reload(fileBasename, context.server, utils.logger);
             seen = [];
             return;
           }
@@ -261,7 +261,7 @@ export default function (): Plugin {
             clear: true,
           });
 
-          ctx.server.ws.send({
+          context.server.ws.send({
             type: "custom",
             event: "new:page",
           });
@@ -273,7 +273,7 @@ export default function (): Plugin {
            */
 
           changedLayoutIndication = true;
-          reload(fileBasename, ctx.server, utils.logger);
+          reload(fileBasename, context.server, utils.logger);
           seen = [];
           return;
         } else {

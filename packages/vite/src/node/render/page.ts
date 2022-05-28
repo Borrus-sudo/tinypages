@@ -6,10 +6,10 @@ import { h } from "preact";
 import { prerender } from "preact-iso";
 import type { ViteDevServer } from "vite";
 import type {
-  BuildContext,
+  BuildContext as Build,
   ComponentRegistration,
   ReducedPage,
-  ResolvedConfig,
+  DevContext,
 } from "../../../types/types";
 import { createElement as $, deepCopy } from "../utils";
 
@@ -24,27 +24,28 @@ const preact = null;
 const script = (cloneProps) =>
   $("script", { type: "application/json" }, JSON.stringify(cloneProps));
 
-interface ReducedResolveConfig {
+interface BuildContext {
   page: ReducedPage;
-  utils: BuildContext["utils"];
-  config: BuildContext["config"];
+  utils: Build["utils"];
+  config: Build["config"];
 }
+
 export async function render(
   html: string,
   vite: ViteDevServer,
-  ctx: ReducedResolveConfig | ResolvedConfig
+  context: BuildContext | DevContext
 ) {
   let componentRegistration: ComponentRegistration = {};
   let uid: string = uuid();
   let payload: string;
 
   //@ts-ignore
-  if (ctx.page.sources) ctx.page.sources = [];
+  if (context.page.sources) context.page.sources = [];
 
-  for (let component of ctx.page.meta.components) {
+  for (let component of context.page.meta.components) {
     const componentPath = resolve(
       path.join(
-        ctx.config.vite.root,
+        context.config.vite.root,
         "./components",
         component.componentName.replace(/\./g, "/")
       )
@@ -53,7 +54,7 @@ export async function render(
     const hash = hashObj(component);
 
     //@ts-ignore
-    if (ctx.page.sources) ctx.page.sources.push(componentPath);
+    if (context.page.sources) context.page.sources.push(componentPath);
 
     /**
      * some prestuff which is not bound by any conditions
@@ -79,7 +80,7 @@ export async function render(
             component.props[slicedKey] = value;
           }
         } catch (e) {
-          ctx.utils.consola.error(
+          context.utils.consola.error(
             new Error(
               `"Error: parsing of the value of ${key} failed as type ${type}`
             )
@@ -134,7 +135,7 @@ export async function render(
 
           const vnode = h(
             preactComponent,
-            { ...component.props, pageContext: ctx.page.pageCtx },
+            { ...component.props, pageContext: context.page.pageCtx },
             slotVnode
           ); // the component in Vnode
           const { html: prerenderedHtml } = await prerender(vnode);
@@ -181,7 +182,7 @@ export async function render(
     html = html.replace(component.componentLiteral, payload);
     uid = uuid();
   }
-  ctx.page.global.components = componentRegistration;
+  context.page.global.components = componentRegistration;
   return html;
 }
 

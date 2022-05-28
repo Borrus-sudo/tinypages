@@ -5,14 +5,14 @@ import type { Config } from "../../../types/types";
 const require = createRequire(import.meta.url);
 export default function (
   content: string,
-  ctx: { type: string; inlineRender: boolean; config: Config }
+  context: { type: string; inlineRender: boolean; config: Config }
 ): string {
-  if (ctx.type === "katex-mhcem") {
+  if (context.type === "katex-mhcem") {
     require("katex/contrib/mhchem");
   } //@ts-ignore
-  ctx.config.katex.displayMode = !ctx.inlineRender;
+  context.config.katex.displayMode = !context.inlineRender;
   return katex.renderToString(
     content,
-    ctx.config.katex || { throwOnError: false }
+    context.config.katex || { throwOnError: false }
   );
 }

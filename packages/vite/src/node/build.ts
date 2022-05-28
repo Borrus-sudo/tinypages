@@ -13,13 +13,16 @@ import { generateVirtualEntryPoint } from "./plugins/plugin-utils";
 import { readFile } from "fs/promises";
 
 export async function build(config: TinyPagesConfig, urls: string[]) {
-  const [ctx, vite] = await createBuildContext(config, createBuildPlugins);
-  const router = await fsRouter(ctx.utils.pageDir);
+  const [buildContext, vite] = await createBuildContext(
+    config,
+    createBuildPlugins
+  );
+  const router = await fsRouter(buildContext.utils.pageDir);
   const fileToLoaderMap: Map<string, { default: Function } | boolean> =
     new Map();
   const engine = new Liquid();
 
-  async function performOp(pageCtx) {
+  async function performOperation(pageCtx: PageCtx) {
     let { url, params } = pageCtx;
     let compileThis = "";
     let fileLoader = fileToLoaderMap.get(url);
@@ -69,9 +72,9 @@ export async function build(config: TinyPagesConfig, urls: string[]) {
     };
 
     const appHtml = await render(rawHtml, vite, {
-      utils: ctx.utils,
+      utils: buildContext.utils,
       page: page,
-      config: ctx.config,
+      config: buildContext.config,
     });
 
     if (Object.keys(page.global.components).length > 0) {
@@ -84,7 +87,7 @@ export async function build(config: TinyPagesConfig, urls: string[]) {
         innerHTML: undefined,
       });
 
-      ctx.virtualModuleMap.set(
+      buildContext.virtualModuleMap.set(
         virtualModuleId,
         generateVirtualEntryPoint(
           page.global.components,
@@ -100,7 +103,7 @@ export async function build(config: TinyPagesConfig, urls: string[]) {
       });
     }
     const output = appendPrelude(appHtml, page);
-    ctx.fileToHtmlMap.set(url, output);
+    buildContext.fileToHtmlMap.set(url, output);
   }
 
   let doAll = [];
@@ -108,12 +111,12 @@ export async function build(config: TinyPagesConfig, urls: string[]) {
     const normalizedUrl = normalizeUrl(url);
     const res = router(normalizedUrl.replace(/\.md$/, ""), url);
     if (res.url === "404") {
-      ctx.utils.consola.error(new Error(`404 ${url} not found`));
+      buildContext.utils.consola.error(new Error(`404 ${url} not found`));
     } else {
-      doAll.push(performOp(res));
+      doAll.push(performOperation(res));
     }
   });
 
-  await Promise.all(doAll);
-  console.log(ctx.fileToHtmlMap);
+  await Promise.allSettled(doAll);
+  await Vite.build(buildContext.config.vite);
 }

@@ -9,10 +9,10 @@ export default function (): Plugin {
     name: "vite-tinypages-hmr",
     apply: "serve",
     enforce: "pre",
-    async handleHotUpdate(ctx) {
+    async handleHotUpdate(context) {
       const toReturn: ModuleNode[] = [];
       const seen: Set<string> = new Set();
-      for (let module of ctx.modules) {
+      for (let module of context.modules) {
         // css modules are treated as normal [jt]sx? files
         if (/\.css$/.test(module.file) && !/\.module\.css/.test(module.file)) {
           toReturn.push(module);

@@ -9,11 +9,13 @@ export async function createDevServer(
   config: TinyPagesConfig,
   source: string
 ): Promise<ViteDevServer> {
-  const [ctx, vite] = await createDevContext(config, createDevPlugins, source);
-  const app = express();
+  const [context, vite] = await createDevContext(
+    config,
+    createDevPlugins,
+    source
+  );
 
-  vite.watcher.add(viteNormalizePath(ctx.utils.pageDir));
-  // if the config file is reloaded, the users need to manually restart now
+  const app = express();
 
   if ((config.middlewares.pre?.length ?? -1) > 0)
     app.use(config.middlewares.pre);
@@ -25,8 +27,10 @@ export async function createDevServer(
     app.use(config.middlewares.post);
 
   app.listen(3003, () => {
-    ctx.utils.consola.info("Server running at http://localhost:3003");
+    context.utils.consola.info("Server running at http://localhost:3003");
   });
+
+  vite.watcher.add(viteNormalizePath(context.utils.pageDir));
 
   return vite;
 }

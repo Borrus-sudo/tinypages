@@ -1,4 +1,4 @@
-let ctx;
+let context;
 export default async function (root: string, currUrl: string) {
   const { createUnlighthouse, useUnlighthouse } = await import(
     "@unlighthouse/core"
@@ -18,13 +18,13 @@ export default async function (root: string, currUrl: string) {
         name: "tinypages",
       }
     ));
-  if (!ctx) ctx = await createServer();
+  if (!context) context = await createServer();
   // will be the prev url as the ssr middleware will update it after the next step
   unlighthouse.setSiteUrl(`http://localhost:3003${currUrl}`);
   await unlighthouse.setServerContext({
-    url: ctx.server.url,
-    server: ctx.server,
-    app: ctx.app,
+    url: context.server.url,
+    server: context.server,
+    app: context.app,
   });
-  return ctx.server.url;
+  return context.server.url;
 }

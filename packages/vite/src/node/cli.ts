@@ -188,4 +188,4 @@ export function defineConfig(config: UserTinyPagesConfig) {
 }
 
 export type { Params } from "../../types/params";
-export type { PageContext } from "../../types/types";
+export type { UserPageContext } from "../../types/types";

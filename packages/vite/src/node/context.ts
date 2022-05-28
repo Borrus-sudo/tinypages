@@ -2,7 +2,7 @@ import { polyfill } from "@astropub/webapi";
 import { join } from "path";
 import { createLogger, createServer, type ViteDevServer } from "vite";
 import type {
-  ResolvedConfig,
+  DevContext,
   TinyPagesConfig,
   BuildContext,
 } from "../../types/types";
@@ -10,22 +10,22 @@ import { presetPageConfig } from "./constants";
 import { invalidate, render } from "./render/page";
 import { createConsola, deepCopy } from "./utils";
 
-let devCtx: ResolvedConfig;
+let devContext: DevContext;
 let vite: ViteDevServer;
-let buildCtx: BuildContext;
+let buildContext: BuildContext;
 
 export async function createDevContext(
   config: TinyPagesConfig,
   createDevPlugins,
   source?: string
-): Promise<[ResolvedConfig, ViteDevServer]> {
-  devCtx = {
+): Promise<[DevContext, ViteDevServer]> {
+  devContext = {
     config,
     page: deepCopy(presetPageConfig),
     utils: {
       logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
       async render(html: string) {
-        return await render(html, vite, devCtx);
+        return await render(html, vite, devContext);
       },
       invalidate: (input: string) => invalidate(input),
       pageDir: join(config.vite.root, "pages"),
@@ -37,11 +37,11 @@ export async function createDevContext(
 
   const plugins = await createDevPlugins();
 
-  if (devCtx.config.vite.plugins) {
-    devCtx.config.vite.plugins.push(plugins);
-    vite = await createServer({ ...devCtx.config.vite });
+  if (devContext.config.vite.plugins) {
+    devContext.config.vite.plugins.push(plugins);
+    vite = await createServer({ ...devContext.config.vite });
   } else {
-    vite = await createServer({ ...devCtx.config.vite, plugins });
+    vite = await createServer({ ...devContext.config.vite, plugins });
   }
 
   setTimeout(() => {
@@ -50,14 +50,14 @@ export async function createDevContext(
     });
   }, 0);
 
-  return [devCtx, vite];
+  return [devContext, vite];
 }
 
 export async function createBuildContext(
   config: TinyPagesConfig,
   createBuildPlugins
 ): Promise<[BuildContext, ViteDevServer]> {
-  buildCtx = {
+  buildContext = {
     utils: {
       logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
       invalidate: (input: string) => invalidate(input),
@@ -72,32 +72,32 @@ export async function createBuildContext(
 
   let plugins = await createBuildPlugins();
 
-  if (buildCtx.config.vite.plugins) {
-    buildCtx.config.vite.plugins.push(plugins);
-    vite = await createServer({ ...buildCtx.config.vite });
+  if (buildContext.config.vite.plugins) {
+    buildContext.config.vite.plugins.push(plugins);
+    vite = await createServer({ ...buildContext.config.vite });
   } else {
-    vite = await createServer({ ...buildCtx.config.vite, plugins });
+    vite = await createServer({ ...buildContext.config.vite, plugins });
   }
 
-  return [buildCtx, vite];
+  return [buildContext, vite];
 }
 
 type DevOrIso = "dev" | "iso";
 type BuildOrDev<T extends DevOrIso> = T extends "dev"
-  ? ResolvedConfig
+  ? DevContext
   : BuildContext;
 
 export function useContext<T extends DevOrIso>(type: T): BuildOrDev<T> {
   if (type === "dev") {
     //@ts-ignore
-    return devCtx;
+    return devContext;
   } else {
-    if (buildCtx) {
+    if (buildContext) {
       //@ts-ignore
-      return buildCtx;
+      return buildContext;
     } else {
       //@ts-ignore
-      return devCtx;
+      return devContext;
     }
   }
 }

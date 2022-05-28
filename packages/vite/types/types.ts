@@ -5,7 +5,7 @@ import type { TinyPagesConfig, UserTinyPagesConfig } from "./config";
 type RenderFunction = (
   html: string,
   vite: ViteDevServer,
-  ctx: ResolvedConfig
+  context: DevContext
 ) => Promise<string>;
 
 interface Consola {
@@ -27,7 +27,7 @@ interface PageCtx {
   params: Record<string, string>;
 }
 
-interface PageContext {
+interface UserPageContext {
   // PageContext and not PageCtx as the api for the user is PageContext. (on server url property is also passed along, but it should not matter)
   originalUrl: string;
   params: Record<string, string>;
@@ -65,7 +65,7 @@ interface Utils {
   consola: Consola;
 }
 
-interface ResolvedConfig {
+interface DevContext {
   page: Page;
   config: Readonly<TinyPagesConfig>;
   utils: Utils;
@@ -80,13 +80,13 @@ interface BuildContext {
 
 export {
   PageCtx,
-  PageContext,
+  UserPageContext,
   Meta,
   Page,
   ReducedPage,
   TinyPagesConfig,
   UserTinyPagesConfig,
-  ResolvedConfig,
+  DevContext,
   RenderFunction,
   ComponentRegistration,
   BuildContext,
