@@ -70,7 +70,7 @@ typings/
 .nuxt
 
 # unlightouse build output
-.unligthouse
+.unlighthouse
 
 # vuepress build output
 .vuepress/dist
