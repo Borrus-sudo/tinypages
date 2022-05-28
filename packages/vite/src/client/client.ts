@@ -13,6 +13,10 @@ const lazyLoad = (target, callback: Function) => {
   io.observe(target);
 };
 
+// the pageCtx is globally given to the page. We pass it off as a prop in a similar way the server does
+// for consistency
+declare var pageCtx;
+
 export default async function (componentMap: Map<string, ComponentFactory>) {
   for (let element of document.querySelectorAll("[preact]")) {
     const uid = element.getAttribute("uid");
@@ -20,7 +24,7 @@ export default async function (componentMap: Map<string, ComponentFactory>) {
       (element.lastChild as HTMLScriptElement).textContent
     );
     const componentMeta = {
-      props,
+      props: { ...props, pageContext: pageCtx },
       factoryFunction: componentMap[uid],
     };
     if ("client:idle" in props) {

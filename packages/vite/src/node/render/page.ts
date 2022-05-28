@@ -6,7 +6,9 @@ import { h } from "preact";
 import { prerender } from "preact-iso";
 import type { ViteDevServer } from "vite";
 import type {
+  BuildContext,
   ComponentRegistration,
+  ReducedPage,
   ResolvedConfig,
 } from "../../../types/types";
 import { createElement as $, deepCopy } from "../utils";
@@ -22,16 +24,22 @@ const preact = null;
 const script = (cloneProps) =>
   $("script", { type: "application/json" }, JSON.stringify(cloneProps));
 
+interface ReducedResolveConfig {
+  page: ReducedPage;
+  utils: BuildContext["utils"];
+  config: BuildContext["config"];
+}
 export async function render(
   html: string,
   vite: ViteDevServer,
-  ctx: ResolvedConfig
+  ctx: ReducedResolveConfig | ResolvedConfig
 ) {
   let componentRegistration: ComponentRegistration = {};
   let uid: string = uuid();
   let payload: string;
 
-  ctx.page.sources = [];
+  //@ts-ignore
+  if (ctx.page.sources) ctx.page.sources = [];
 
   for (let component of ctx.page.meta.components) {
     const componentPath = resolve(
@@ -43,7 +51,9 @@ export async function render(
     );
 
     const hash = hashObj(component);
-    ctx.page.sources.push(componentPath);
+
+    //@ts-ignore
+    if (ctx.page.sources) ctx.page.sources.push(componentPath);
 
     /**
      * some prestuff which is not bound by any conditions
@@ -122,7 +132,11 @@ export async function render(
                 })
               : null;
 
-          const vnode = h(preactComponent, component.props, slotVnode); // the component in Vnode
+          const vnode = h(
+            preactComponent,
+            { ...component.props, pageContext: ctx.page.pageCtx },
+            slotVnode
+          ); // the component in Vnode
           const { html: prerenderedHtml } = await prerender(vnode);
 
           /**

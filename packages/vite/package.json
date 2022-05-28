@@ -46,7 +46,6 @@
     "node-icons": "^1.0.1",
     "ohash": "^0.1.0",
     "ora": "^6.1.0",
-    "piscina": "^3.2.0",
     "preact": "10.7.2",
     "preact-iso": "^2.3.0",
     "preact-render-to-string": "5.1.21",

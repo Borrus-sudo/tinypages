@@ -27,6 +27,12 @@ interface PageCtx {
   params: Record<string, string>;
 }
 
+interface PageContext {
+  // PageContext and not PageCtx as the api for the user is PageContext. (on server url property is also passed along, but it should not matter)
+  originalUrl: string;
+  params: Record<string, string>;
+}
+
 interface Page {
   pageCtx: PageCtx;
   sources: string[];
@@ -38,6 +44,15 @@ interface Page {
   prevHash: string;
   layouts: string[];
   reloads: string[]; // an indication for the hmr system to blind reload in these scenarios
+}
+
+interface ReducedPage {
+  pageCtx: PageCtx;
+  global: {
+    components: ComponentRegistration;
+    ssrProps: Record<any, any>;
+  };
+  meta: Meta;
 }
 
 interface Utils {
@@ -56,21 +71,19 @@ interface ResolvedConfig {
   utils: Utils;
 }
 
-interface BuildPages {
-  uriToBuiltHTML: Map<string, string>;
-  virtualEntryPoint: Map<string, string>;
-}
-
 interface BuildContext {
   config: Readonly<TinyPagesConfig>;
-  utils: Omit<Utils, "configFile">;
-  pages: BuildPages;
+  utils: Omit<Utils, "configFile" | "render">;
+  virtualModuleMap: Map<string, string>;
+  fileToHtmlMap: Map<string, string>;
 }
 
 export {
   PageCtx,
+  PageContext,
   Meta,
   Page,
+  ReducedPage,
   TinyPagesConfig,
   UserTinyPagesConfig,
   ResolvedConfig,

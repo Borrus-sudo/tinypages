@@ -29,8 +29,7 @@ export default async function () {
           res.send(`<h1> 404 url not found </h1>`);
         } else {
           utils.logger.info(req.originalUrl, { timestamp: true });
-          page.pageCtx = pageCtx; //@ts-ignore
-          global.pageCtx = pageCtx; // globally assign pageCtx
+          page.pageCtx = pageCtx;
           const markdown = await fs.readFile(pageCtx.url, "utf-8");
           const html = await vite.transformIndexHtml(pageCtx.url, markdown); // vite transformed html
           res.status(200).set({ "Content-type": "text/html" }).end(html);

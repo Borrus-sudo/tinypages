@@ -1,7 +1,7 @@
 import type { Head } from "@tinypages/compiler";
 import { existsSync } from "fs";
 import path from "path";
-import type { Page } from "../../../types/types";
+import type { Page, ReducedPage } from "../../../types/types";
 import { createElement } from "../utils";
 import { useContext } from "../context";
 
@@ -40,7 +40,7 @@ function renderHead(head: Head, headTags) {
   return renderedHead;
 }
 
-export function appendPrelude(content: string, page: Page) {
+export function appendPrelude(content: string, page: ReducedPage) {
   const { utils } = useContext("iso");
   page.meta.head.script.push({
     src: undefined,

@@ -7,7 +7,7 @@ import type {
   BuildContext,
 } from "../../types/types";
 import { presetPageConfig } from "./constants";
-import { invalidate, render } from "./render/markdown";
+import { invalidate, render } from "./render/page";
 import { createConsola, deepCopy } from "./utils";
 
 let devCtx: ResolvedConfig;
@@ -60,19 +60,14 @@ export async function createBuildContext(
   buildCtx = {
     utils: {
       logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
-      async render(html: string) {
-        return html;
-      },
       invalidate: (input: string) => invalidate(input),
       pageDir: join(config.vite.root, "pages"),
       stylesDir: join(config.vite.root, "styles"),
       consola: createConsola(),
     },
     config,
-    pages: {
-      uriToBuiltHTML: new Map(),
-      virtualEntryPoint: new Map(),
-    },
+    virtualModuleMap: new Map([["/uno:only", `import "uno.css"`]]),
+    fileToHtmlMap: new Map(),
   };
 
   let plugins = await createBuildPlugins();

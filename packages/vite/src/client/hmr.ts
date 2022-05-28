@@ -1,6 +1,6 @@
 if (import.meta.env.DEV) {
   (async () => {
-    const { fromDomNodeToVNode } = await import("million/shared");
+    const { fromDomNodeToVNode } = await import("million");
     const { patch } = await import("million");
     if (import.meta.hot) {
       const parser = new DOMParser();

@@ -169,7 +169,7 @@ export function cli() {
             config: true,
           };
           const { config } = await resolveConfig(cliViteOptions);
-          await build(config, []);
+          await build(config, ["/", "/qEWtDHOhuYyafXk6"]);
         } catch (e) {
           console.log(reportString);
           console.error(e);
@@ -188,3 +188,4 @@ export function defineConfig(config: UserTinyPagesConfig) {
 }
 
 export type { Params } from "../../types/params";
+export type { PageContext } from "../../types/types";
