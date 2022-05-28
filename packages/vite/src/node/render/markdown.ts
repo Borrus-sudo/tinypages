@@ -9,7 +9,7 @@ import type {
   ComponentRegistration,
   ResolvedConfig,
 } from "../../../types/types";
-import { createElement, deepCopy } from "../utils";
+import { createElement as $, deepCopy } from "../utils";
 
 const map: Map<string, { html: string }> = new Map();
 const hashComp: Map<string, string[]> = new Map();
@@ -20,11 +20,7 @@ const errorCSS =
   "color:red; background-color: lightpink;border: 2px dotted black;margin-bottom: 36px;";
 const preact = null;
 const script = (cloneProps) =>
-  createElement(
-    "script",
-    { type: "application/json" },
-    JSON.stringify(cloneProps)
-  );
+  $("script", { type: "application/json" }, JSON.stringify(cloneProps));
 
 export async function render(
   html: string,
@@ -56,6 +52,33 @@ export async function render(
     delete cloneProps["lazy:load"];
     delete cloneProps["no:hydrate"];
 
+    Object.keys(component.props).forEach((key) => {
+      if (key.startsWith(":")) {
+        const value = component.props[key];
+        const slicedKey = key.slice(1);
+        let type = "";
+        try {
+          if (Number.isFinite(key)) {
+            type = "number";
+            component.props[slicedKey] = +value;
+          } else if (/\{.*?\}/.test(value)) {
+            type = "object";
+            component.props[slicedKey] = JSON.parse(value);
+          } else {
+            type = "string";
+            component.props[slicedKey] = value;
+          }
+        } catch (e) {
+          ctx.utils.consola.error(
+            new Error(
+              `"Error: parsing of the value of ${key} failed as type ${type}`
+            )
+          );
+        }
+      }
+      delete component.props[key];
+    });
+
     if ("client:only" in component.props) {
       if (map.has(hash)) {
         payload = map.get(hash).html.replace(/uid=\".*?\"/, `uid="${uid}"`);
@@ -65,7 +88,7 @@ export async function render(
          * if ssged
          */
         let loadingString = "lazy:load" in component.props ? "Loading ..." : ""; //TODO: improve, support a <Loading/>
-        payload = createElement(
+        payload = $(
           "div",
           { preact, uid },
           loadingString + "\n" + script(cloneProps)
@@ -105,7 +128,7 @@ export async function render(
           /**
            * creatng the static html
            */
-          payload = createElement(
+          payload = $(
             "div",
             noHydrate ? {} : { preact, uid },
             prerenderedHtml + "\n" + script(cloneProps)
@@ -114,12 +137,10 @@ export async function render(
           /**
            * creating the static html
            */
-          payload = createElement(
+          payload = $(
             "div",
             noHydrate ? {} : { preact, uid, style: errorCSS },
-            createElement("div", { id: "error-block" }, err) +
-              "\n" +
-              script(cloneProps)
+            $("div", { id: "error-block" }, err) + "\n" + script(cloneProps)
           );
         }
 

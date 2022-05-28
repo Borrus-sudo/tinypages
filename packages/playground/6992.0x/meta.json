@@ -1,0 +1,1013 @@
+{
+  "_": ["index.mjs"],
+  "open": false,
+  "o": false,
+  "version": false,
+  "v": false,
+  "help": false,
+  "h": false,
+  "quiet": false,
+  "q": false,
+  "silent": false,
+  "s": false,
+  "treeDebug": false,
+  "tree-debug": false,
+  "kernelTracingDebug": false,
+  "kernel-tracing-debug": false,
+  "kernelTracing": false,
+  "kernel-tracing": false,
+  "collectOnly": false,
+  "collect-only": false,
+  "writeTicks": false,
+  "write-ticks": false,
+  "--": [],
+  "workingDir": "E:\\JDev\\tinypages\\packages\\playground",
+  "argv": ["index.mjs"],
+  "pathToNodeBinary": "C:\\Program Files\\nodejs\\node.exe",
+  "name": "flamegraph",
+  "collectDelay": 0,
+  "title": "node index.mjs",
+  "pid": 6992,
+  "inlined": {
+    "isPathSeparator path.js": [
+      {
+        "file": "path.js",
+        "fn": "isPathSeparator",
+        "id": "0",
+        "ix": "0",
+        "pos": "1553",
+        "caller": {
+          "file": "path.js",
+          "fn": "normalizeString",
+          "id": "0",
+          "ix": "-1",
+          "pos": "1985",
+          "key": "normalizeString path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isPathSeparator",
+        "id": "0",
+        "ix": "0",
+        "pos": "1553",
+        "caller": {
+          "file": "path.js",
+          "fn": "normalizeString",
+          "id": "0",
+          "ix": "-1",
+          "pos": "1985",
+          "key": "normalizeString path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isPathSeparator",
+        "id": "5",
+        "ix": "0",
+        "pos": "1553",
+        "caller": {
+          "file": "path.js",
+          "fn": "resolve",
+          "id": "5",
+          "ix": "-1",
+          "pos": "4586",
+          "key": "resolve path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isPathSeparator",
+        "id": "5",
+        "ix": "0",
+        "pos": "1553",
+        "caller": {
+          "file": "path.js",
+          "fn": "resolve",
+          "id": "5",
+          "ix": "-1",
+          "pos": "4586",
+          "key": "resolve path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isPathSeparator",
+        "id": "5",
+        "ix": "0",
+        "pos": "1553",
+        "caller": {
+          "file": "path.js",
+          "fn": "resolve",
+          "id": "5",
+          "ix": "-1",
+          "pos": "4586",
+          "key": "resolve path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isPathSeparator",
+        "id": "5",
+        "ix": "0",
+        "pos": "1553",
+        "caller": {
+          "file": "path.js",
+          "fn": "resolve",
+          "id": "5",
+          "ix": "-1",
+          "pos": "4586",
+          "key": "resolve path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isPathSeparator",
+        "id": "15",
+        "ix": "0",
+        "pos": "1553",
+        "caller": {
+          "file": "path.js",
+          "fn": "dirname",
+          "id": "15",
+          "ix": "-1",
+          "pos": "19709",
+          "key": "dirname path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isPathSeparator",
+        "id": "15",
+        "ix": "0",
+        "pos": "1553",
+        "caller": {
+          "file": "path.js",
+          "fn": "dirname",
+          "id": "15",
+          "ix": "-1",
+          "pos": "19709",
+          "key": "dirname path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isPathSeparator",
+        "id": "15",
+        "ix": "0",
+        "pos": "1553",
+        "caller": {
+          "file": "path.js",
+          "fn": "dirname",
+          "id": "15",
+          "ix": "-1",
+          "pos": "19709",
+          "key": "dirname path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isPathSeparator",
+        "id": "19",
+        "ix": "0",
+        "pos": "1553",
+        "caller": {
+          "file": "path.js",
+          "fn": "basename",
+          "id": "19",
+          "ix": "-1",
+          "pos": "22222",
+          "key": "basename path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isPathSeparator",
+        "id": "24",
+        "ix": "0",
+        "pos": "1553",
+        "caller": {
+          "file": "path.js",
+          "fn": "resolve",
+          "id": "24",
+          "ix": "-1",
+          "pos": "4586",
+          "key": "resolve path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isPathSeparator",
+        "id": "24",
+        "ix": "0",
+        "pos": "1553",
+        "caller": {
+          "file": "path.js",
+          "fn": "resolve",
+          "id": "24",
+          "ix": "-1",
+          "pos": "4586",
+          "key": "resolve path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isPathSeparator",
+        "id": "24",
+        "ix": "0",
+        "pos": "1553",
+        "caller": {
+          "file": "path.js",
+          "fn": "resolve",
+          "id": "24",
+          "ix": "-1",
+          "pos": "4586",
+          "key": "resolve path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isPathSeparator",
+        "id": "24",
+        "ix": "0",
+        "pos": "1553",
+        "caller": {
+          "file": "path.js",
+          "fn": "resolve",
+          "id": "24",
+          "ix": "-1",
+          "pos": "4586",
+          "key": "resolve path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isPathSeparator",
+        "id": "26",
+        "ix": "0",
+        "pos": "1553",
+        "caller": {
+          "file": "path.js",
+          "fn": "basename",
+          "id": "26",
+          "ix": "-1",
+          "pos": "22222",
+          "key": "basename path.js"
+        }
+      }
+    ],
+    "get internal/url.js": [
+      {
+        "file": "internal/url.js",
+        "fn": "get",
+        "id": "4",
+        "ix": "0",
+        "pos": "17116",
+        "caller": {
+          "file": "internal/url.js",
+          "fn": "getPathFromURLWin32",
+          "id": "4",
+          "ix": "-1",
+          "pos": "36701",
+          "key": "getPathFromURLWin32 internal/url.js"
+        }
+      },
+      {
+        "file": "internal/url.js",
+        "fn": "get",
+        "id": "4",
+        "ix": "1",
+        "pos": "18069",
+        "caller": {
+          "file": "internal/url.js",
+          "fn": "getPathFromURLWin32",
+          "id": "4",
+          "ix": "-1",
+          "pos": "36701",
+          "key": "getPathFromURLWin32 internal/url.js"
+        }
+      }
+    ],
+    "isWindowsDeviceRoot path.js": [
+      {
+        "file": "path.js",
+        "fn": "isWindowsDeviceRoot",
+        "id": "5",
+        "ix": "1",
+        "pos": "1750",
+        "caller": {
+          "file": "path.js",
+          "fn": "resolve",
+          "id": "5",
+          "ix": "-1",
+          "pos": "4586",
+          "key": "resolve path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isWindowsDeviceRoot",
+        "id": "9",
+        "ix": "0",
+        "pos": "1750",
+        "caller": {
+          "file": "path.js",
+          "fn": "toNamespacedPath",
+          "id": "9",
+          "ix": "-1",
+          "pos": "18587",
+          "key": "toNamespacedPath path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isWindowsDeviceRoot",
+        "id": "14",
+        "ix": "1",
+        "pos": "1750",
+        "caller": {
+          "file": "internal/modules/cjs/loader.js",
+          "fn": "stat",
+          "id": "14",
+          "ix": "-1",
+          "pos": "4402",
+          "key": "stat internal/modules/cjs/loader.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isWindowsDeviceRoot",
+        "id": "15",
+        "ix": "1",
+        "pos": "1750",
+        "caller": {
+          "file": "path.js",
+          "fn": "dirname",
+          "id": "15",
+          "ix": "-1",
+          "pos": "19709",
+          "key": "dirname path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isWindowsDeviceRoot",
+        "id": "16",
+        "ix": "7",
+        "pos": "1750",
+        "caller": {
+          "file": "fs.js",
+          "fn": "realpathSync",
+          "id": "16",
+          "ix": "-1",
+          "pos": "48889",
+          "key": "realpathSync fs.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isWindowsDeviceRoot",
+        "id": "19",
+        "ix": "1",
+        "pos": "1750",
+        "caller": {
+          "file": "path.js",
+          "fn": "basename",
+          "id": "19",
+          "ix": "-1",
+          "pos": "22222",
+          "key": "basename path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isWindowsDeviceRoot",
+        "id": "24",
+        "ix": "1",
+        "pos": "1750",
+        "caller": {
+          "file": "path.js",
+          "fn": "resolve",
+          "id": "24",
+          "ix": "-1",
+          "pos": "4586",
+          "key": "resolve path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isWindowsDeviceRoot",
+        "id": "26",
+        "ix": "1",
+        "pos": "1750",
+        "caller": {
+          "file": "path.js",
+          "fn": "basename",
+          "id": "26",
+          "ix": "-1",
+          "pos": "22222",
+          "key": "basename path.js"
+        }
+      }
+    ],
+    "validateString internal/validators.js": [
+      {
+        "file": "internal/validators.js",
+        "fn": "validateString",
+        "id": "5",
+        "ix": "2",
+        "pos": "3562",
+        "caller": {
+          "file": "path.js",
+          "fn": "resolve",
+          "id": "5",
+          "ix": "-1",
+          "pos": "4586",
+          "key": "resolve path.js"
+        }
+      },
+      {
+        "file": "internal/validators.js",
+        "fn": "validateString",
+        "id": "15",
+        "ix": "2",
+        "pos": "3562",
+        "caller": {
+          "file": "path.js",
+          "fn": "dirname",
+          "id": "15",
+          "ix": "-1",
+          "pos": "19709",
+          "key": "dirname path.js"
+        }
+      },
+      {
+        "file": "internal/validators.js",
+        "fn": "validateString",
+        "id": "19",
+        "ix": "2",
+        "pos": "3562",
+        "caller": {
+          "file": "path.js",
+          "fn": "basename",
+          "id": "19",
+          "ix": "-1",
+          "pos": "22222",
+          "key": "basename path.js"
+        }
+      },
+      {
+        "file": "internal/validators.js",
+        "fn": "validateString",
+        "id": "23",
+        "ix": "0",
+        "pos": "3562",
+        "caller": {
+          "file": "path.js",
+          "fn": "relative",
+          "id": "23",
+          "ix": "-1",
+          "pos": "14987",
+          "key": "relative path.js"
+        }
+      },
+      {
+        "file": "internal/validators.js",
+        "fn": "validateString",
+        "id": "23",
+        "ix": "0",
+        "pos": "3562",
+        "caller": {
+          "file": "path.js",
+          "fn": "relative",
+          "id": "23",
+          "ix": "-1",
+          "pos": "14987",
+          "key": "relative path.js"
+        }
+      },
+      {
+        "file": "internal/validators.js",
+        "fn": "validateString",
+        "id": "24",
+        "ix": "2",
+        "pos": "3562",
+        "caller": {
+          "file": "path.js",
+          "fn": "resolve",
+          "id": "24",
+          "ix": "-1",
+          "pos": "4586",
+          "key": "resolve path.js"
+        }
+      },
+      {
+        "file": "internal/validators.js",
+        "fn": "validateString",
+        "id": "26",
+        "ix": "2",
+        "pos": "3562",
+        "caller": {
+          "file": "path.js",
+          "fn": "basename",
+          "id": "26",
+          "ix": "-1",
+          "pos": "22222",
+          "key": "basename path.js"
+        }
+      },
+      {
+        "file": "internal/validators.js",
+        "fn": "validateString",
+        "id": "27",
+        "ix": "1",
+        "pos": "3562",
+        "caller": {
+          "file": "path.js",
+          "fn": "relative",
+          "id": "27",
+          "ix": "-1",
+          "pos": "34510",
+          "key": "relative path.js"
+        }
+      },
+      {
+        "file": "internal/validators.js",
+        "fn": "validateString",
+        "id": "27",
+        "ix": "1",
+        "pos": "3562",
+        "caller": {
+          "file": "path.js",
+          "fn": "relative",
+          "id": "27",
+          "ix": "-1",
+          "pos": "34510",
+          "key": "relative path.js"
+        }
+      }
+    ],
+    "normalizeString path.js": [
+      {
+        "file": "path.js",
+        "fn": "normalizeString",
+        "id": "5",
+        "ix": "3",
+        "pos": "1985",
+        "caller": {
+          "file": "path.js",
+          "fn": "resolve",
+          "id": "5",
+          "ix": "-1",
+          "pos": "4586",
+          "key": "resolve path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "normalizeString",
+        "id": "24",
+        "ix": "3",
+        "pos": "1985",
+        "caller": {
+          "file": "path.js",
+          "fn": "resolve",
+          "id": "24",
+          "ix": "-1",
+          "pos": "4586",
+          "key": "resolve path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "normalizeString",
+        "id": "27",
+        "ix": "2",
+        "pos": "1985",
+        "caller": {
+          "file": "path.js",
+          "fn": "relative",
+          "id": "27",
+          "ix": "-1",
+          "pos": "34510",
+          "key": "relative path.js"
+        }
+      }
+    ],
+    "toNamespacedPath path.js": [
+      {
+        "file": "path.js",
+        "fn": "toNamespacedPath",
+        "id": "14",
+        "ix": "0",
+        "pos": "18587",
+        "caller": {
+          "file": "internal/modules/cjs/loader.js",
+          "fn": "stat",
+          "id": "14",
+          "ix": "-1",
+          "pos": "4402",
+          "key": "stat internal/modules/cjs/loader.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "toNamespacedPath",
+        "id": "16",
+        "ix": "6",
+        "pos": "18587",
+        "caller": {
+          "file": "fs.js",
+          "fn": "realpathSync",
+          "id": "16",
+          "ix": "-1",
+          "pos": "48889",
+          "key": "realpathSync fs.js"
+        }
+      }
+    ],
+    "toPathIfFileURL internal/url.js": [
+      {
+        "file": "internal/url.js",
+        "fn": "toPathIfFileURL",
+        "id": "16",
+        "ix": "0",
+        "pos": "41635",
+        "caller": {
+          "file": "fs.js",
+          "fn": "realpathSync",
+          "id": "16",
+          "ix": "-1",
+          "pos": "48889",
+          "key": "realpathSync fs.js"
+        }
+      }
+    ],
+    "isURLInstance internal/url.js": [
+      {
+        "file": "internal/url.js",
+        "fn": "isURLInstance",
+        "id": "16",
+        "ix": "1",
+        "pos": "41508",
+        "caller": {
+          "file": "fs.js",
+          "fn": "realpathSync",
+          "id": "16",
+          "ix": "-1",
+          "pos": "48889",
+          "key": "realpathSync fs.js"
+        }
+      }
+    ],
+    "splitRoot fs.js": [
+      {
+        "file": "fs.js",
+        "fn": "splitRoot",
+        "id": "16",
+        "ix": "2",
+        "pos": "47799",
+        "caller": {
+          "file": "fs.js",
+          "fn": "realpathSync",
+          "id": "16",
+          "ix": "-1",
+          "pos": "48889",
+          "key": "realpathSync fs.js"
+        }
+      }
+    ],
+    "nextPart fs.js": [
+      {
+        "file": "fs.js",
+        "fn": "nextPart",
+        "id": "16",
+        "ix": "3",
+        "pos": "48508",
+        "caller": {
+          "file": "fs.js",
+          "fn": "realpathSync",
+          "id": "16",
+          "ix": "-1",
+          "pos": "48889",
+          "key": "realpathSync fs.js"
+        }
+      }
+    ],
+    "isFileType fs.js": [
+      {
+        "file": "fs.js",
+        "fn": "isFileType",
+        "id": "16",
+        "ix": "4",
+        "pos": "5479",
+        "caller": {
+          "file": "fs.js",
+          "fn": "realpathSync",
+          "id": "16",
+          "ix": "-1",
+          "pos": "48889",
+          "key": "realpathSync fs.js"
+        }
+      },
+      {
+        "file": "fs.js",
+        "fn": "isFileType",
+        "id": "16",
+        "ix": "4",
+        "pos": "5479",
+        "caller": {
+          "file": "fs.js",
+          "fn": "realpathSync",
+          "id": "16",
+          "ix": "-1",
+          "pos": "48889",
+          "key": "realpathSync fs.js"
+        }
+      },
+      {
+        "file": "fs.js",
+        "fn": "isFileType",
+        "id": "16",
+        "ix": "4",
+        "pos": "5479",
+        "caller": {
+          "file": "fs.js",
+          "fn": "realpathSync",
+          "id": "16",
+          "ix": "-1",
+          "pos": "48889",
+          "key": "realpathSync fs.js"
+        }
+      }
+    ],
+    "handleErrorFromBinding internal/fs/utils.js": [
+      {
+        "file": "internal/fs/utils.js",
+        "fn": "handleErrorFromBinding",
+        "id": "16",
+        "ix": "5",
+        "pos": "7193",
+        "caller": {
+          "file": "fs.js",
+          "fn": "realpathSync",
+          "id": "16",
+          "ix": "-1",
+          "pos": "48889",
+          "key": "realpathSync fs.js"
+        }
+      }
+    ],
+    "hidden internal/errors.js": [
+      {
+        "file": "internal/errors.js",
+        "fn": "hidden",
+        "id": "16",
+        "ix": "8",
+        "pos": "8034",
+        "caller": {
+          "file": "fs.js",
+          "fn": "realpathSync",
+          "id": "16",
+          "ix": "-1",
+          "pos": "48889",
+          "key": "realpathSync fs.js"
+        }
+      }
+    ],
+    "getOptions internal/fs/utils.js": [
+      {
+        "file": "internal/fs/utils.js",
+        "fn": "getOptions",
+        "id": "16",
+        "ix": "9",
+        "pos": "6514",
+        "caller": {
+          "file": "fs.js",
+          "fn": "realpathSync",
+          "id": "16",
+          "ix": "-1",
+          "pos": "48889",
+          "key": "realpathSync fs.js"
+        }
+      }
+    ],
+    "assertEncoding internal/fs/utils.js": [
+      {
+        "file": "internal/fs/utils.js",
+        "fn": "assertEncoding",
+        "id": "16",
+        "ix": "11",
+        "pos": "2722",
+        "caller": {
+          "file": "fs.js",
+          "fn": "realpathSync",
+          "id": "16",
+          "ix": "-1",
+          "pos": "48889",
+          "key": "realpathSync fs.js"
+        }
+      }
+    ],
+    "getOwn internal/bootstrap/loaders.js": [
+      {
+        "file": "internal/bootstrap/loaders.js",
+        "fn": "getOwn",
+        "id": "17",
+        "ix": "0",
+        "pos": "5026",
+        "caller": {
+          "file": "internal/bootstrap/loaders.js",
+          "fn": "syncExports",
+          "id": "17",
+          "ix": "-1",
+          "pos": "8702",
+          "key": "syncExports internal/bootstrap/loaders.js"
+        }
+      }
+    ],
+    "initSearchParams internal/url.js": [
+      {
+        "file": "internal/url.js",
+        "fn": "initSearchParams",
+        "id": "18",
+        "ix": "0",
+        "pos": "20610",
+        "caller": {
+          "file": "internal/url.js",
+          "fn": "onParseComplete",
+          "id": "18",
+          "ix": "-1",
+          "pos": "7470",
+          "key": "onParseComplete internal/url.js"
+        }
+      }
+    ],
+    "readPackage internal/modules/cjs/loader.js": [
+      {
+        "file": "internal/modules/cjs/loader.js",
+        "fn": "readPackage",
+        "id": "21",
+        "ix": "0",
+        "pos": "7013",
+        "caller": {
+          "file": "internal/modules/cjs/loader.js",
+          "fn": "readPackageScope",
+          "id": "21",
+          "ix": "-1",
+          "pos": "7861",
+          "key": "readPackageScope internal/modules/cjs/loader.js"
+        }
+      }
+    ],
+    "read internal/modules/package_json_reader.js": [
+      {
+        "file": "internal/modules/package_json_reader.js",
+        "fn": "read",
+        "id": "21",
+        "ix": "2",
+        "pos": "307",
+        "caller": {
+          "file": "internal/modules/cjs/loader.js",
+          "fn": "readPackageScope",
+          "id": "21",
+          "ix": "-1",
+          "pos": "7861",
+          "key": "readPackageScope internal/modules/cjs/loader.js"
+        }
+      }
+    ],
+    "nativeModuleRequire internal/bootstrap/loaders.js": [
+      {
+        "file": "internal/bootstrap/loaders.js",
+        "fn": "nativeModuleRequire",
+        "id": "21",
+        "ix": "3",
+        "pos": "9895",
+        "caller": {
+          "file": "internal/modules/cjs/loader.js",
+          "fn": "readPackageScope",
+          "id": "21",
+          "ix": "-1",
+          "pos": "7861",
+          "key": "readPackageScope internal/modules/cjs/loader.js"
+        }
+      }
+    ],
+    "resolve path.js": [
+      {
+        "file": "path.js",
+        "fn": "resolve",
+        "id": "27",
+        "ix": "0",
+        "pos": "32107",
+        "caller": {
+          "file": "path.js",
+          "fn": "relative",
+          "id": "27",
+          "ix": "-1",
+          "pos": "34510",
+          "key": "relative path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "resolve",
+        "id": "27",
+        "ix": "0",
+        "pos": "32107",
+        "caller": {
+          "file": "path.js",
+          "fn": "relative",
+          "id": "27",
+          "ix": "-1",
+          "pos": "34510",
+          "key": "relative path.js"
+        }
+      }
+    ],
+    "isPosixPathSeparator path.js": [
+      {
+        "file": "path.js",
+        "fn": "isPosixPathSeparator",
+        "id": "27",
+        "ix": "3",
+        "pos": "1668",
+        "caller": {
+          "file": "path.js",
+          "fn": "relative",
+          "id": "27",
+          "ix": "-1",
+          "pos": "34510",
+          "key": "relative path.js"
+        }
+      },
+      {
+        "file": "path.js",
+        "fn": "isPosixPathSeparator",
+        "id": "27",
+        "ix": "3",
+        "pos": "1668",
+        "caller": {
+          "file": "path.js",
+          "fn": "relative",
+          "id": "27",
+          "ix": "-1",
+          "pos": "34510",
+          "key": "relative path.js"
+        }
+      }
+    ],
+    "getModulesByFile E:\\JDev\\tinypages\\node_modules\\vite\\dist\\node\\chunks\\dep-27bc1ab8.js": [
+      {
+        "file": "E:\\JDev\\tinypages\\node_modules\\vite\\dist\\node\\chunks\\dep-27bc1ab8.js",
+        "fn": "getModulesByFile",
+        "id": "30",
+        "ix": "0",
+        "pos": "1718599",
+        "caller": {
+          "file": "E:\\JDev\\tinypages\\node_modules\\vite\\dist\\node\\chunks\\dep-27bc1ab8.js",
+          "fn": "handleHMRUpdate",
+          "id": "30",
+          "ix": "-1",
+          "pos": "1723990",
+          "key": "handleHMRUpdate E:\\JDev\\tinypages\\node_modules\\vite\\dist\\node\\chunks\\dep-27bc1ab8.js"
+        }
+      }
+    ],
+    "getShortName E:\\JDev\\tinypages\\node_modules\\vite\\dist\\node\\chunks\\dep-27bc1ab8.js": [
+      {
+        "file": "E:\\JDev\\tinypages\\node_modules\\vite\\dist\\node\\chunks\\dep-27bc1ab8.js",
+        "fn": "getShortName",
+        "id": "30",
+        "ix": "3",
+        "pos": "1723853",
+        "caller": {
+          "file": "E:\\JDev\\tinypages\\node_modules\\vite\\dist\\node\\chunks\\dep-27bc1ab8.js",
+          "fn": "handleHMRUpdate",
+          "id": "30",
+          "ix": "-1",
+          "pos": "1723990",
+          "key": "handleHMRUpdate E:\\JDev\\tinypages\\node_modules\\vite\\dist\\node\\chunks\\dep-27bc1ab8.js"
+        }
+      }
+    ],
+    "debug E:\\JDev\\tinypages\\node_modules\\vite\\dist\\node\\chunks\\dep-27bc1ab8.js": [
+      {
+        "file": "E:\\JDev\\tinypages\\node_modules\\vite\\dist\\node\\chunks\\dep-27bc1ab8.js",
+        "fn": "debug",
+        "id": "30",
+        "ix": "4",
+        "pos": "11226",
+        "caller": {
+          "file": "E:\\JDev\\tinypages\\node_modules\\vite\\dist\\node\\chunks\\dep-27bc1ab8.js",
+          "fn": "handleHMRUpdate",
+          "id": "30",
+          "ix": "-1",
+          "pos": "1723990",
+          "key": "handleHMRUpdate E:\\JDev\\tinypages\\node_modules\\vite\\dist\\node\\chunks\\dep-27bc1ab8.js"
+        }
+      }
+    ]
+  }
+}

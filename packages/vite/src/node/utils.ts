@@ -23,7 +23,7 @@ export function createConsola() {
     consolaPkg as unknown as typeof import("consola");
 
   const consola = new Consola({
-    level: LogLevel.Debug,
+    level: LogLevel.Info,
     reporters: [new FancyReporter()],
   });
 

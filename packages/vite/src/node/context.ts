@@ -36,7 +36,13 @@ export async function createDevContext(
   };
 
   const plugins = await createDevPlugins();
-  vite = await createServer({ ...devCtx.config.vite, plugins });
+
+  if (devCtx.config.vite.plugins) {
+    devCtx.config.vite.plugins.push(plugins);
+    vite = await createServer({ ...devCtx.config.vite });
+  } else {
+    vite = await createServer({ ...devCtx.config.vite, plugins });
+  }
 
   setTimeout(() => {
     polyfill(global, {
@@ -70,7 +76,13 @@ export async function createBuildContext(
   };
 
   let plugins = await createBuildPlugins();
-  vite = await createServer({ ...buildCtx.config.vite, plugins });
+
+  if (buildCtx.config.vite.plugins) {
+    buildCtx.config.vite.plugins.push(plugins);
+    vite = await createServer({ ...buildCtx.config.vite });
+  } else {
+    vite = await createServer({ ...buildCtx.config.vite, plugins });
+  }
 
   return [buildCtx, vite];
 }

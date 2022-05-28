@@ -8,6 +8,17 @@ export default defineConfig({
       presets: [presetWind()],
     },
   },
+  vite: {
+    build: {
+      write: true,
+      emptyOutDir: true,
+      outDir: "dist",
+      rollupOptions: {
+        input: "./pages/index.md",
+        output: {},
+      },
+    },
+  },
   compiler: {
     renderKatex: false,
   },

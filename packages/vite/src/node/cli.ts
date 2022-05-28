@@ -40,6 +40,9 @@ function cleanOptions<Options extends GlobalCLIOptions>(
   return ret;
 }
 
+const reportString =
+  "Internal server error: This is an internal server error. Please report it at: https://github.com/Borrus-sudo/tinypages/issues ";
+
 export function cli() {
   const cli = cac("tinypages");
   cli
@@ -96,6 +99,7 @@ export function cli() {
           const { config, filePath } = await resolveConfig(cliViteOptions);
           await createDevServer(config, filePath);
         } catch (e) {
+          console.log(reportString);
           console.error(e);
           process.exit(1);
         }
@@ -167,6 +171,7 @@ export function cli() {
           const { config } = await resolveConfig(cliViteOptions);
           await build(config, []);
         } catch (e) {
+          console.log(reportString);
           console.error(e);
           process.exit(1);
         }

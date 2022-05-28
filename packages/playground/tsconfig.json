@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "moduleResolution": "NodeNext",
     "incremental": true,
     "types": ["tinypages/types/global"]
   },
