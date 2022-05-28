@@ -3,12 +3,13 @@ import { type ViteDevServer, normalizePath as viteNormalizePath } from "vite";
 import type { TinyPagesConfig } from "../../types/types";
 import { createDevContext } from "./context";
 import { createMiddlewares } from "./middleware";
+import { createDevPlugins } from "./plugins/dev";
 
 export async function createDevServer(
   config: TinyPagesConfig,
   source: string
 ): Promise<ViteDevServer> {
-  const [ctx, vite] = await createDevContext(config, source);
+  const [ctx, vite] = await createDevContext(config, createDevPlugins, source);
   const app = express();
 
   vite.watcher.add(viteNormalizePath(ctx.utils.pageDir));
@@ -26,5 +27,6 @@ export async function createDevServer(
   app.listen(3003, () => {
     ctx.utils.consola.info("Server running at http://localhost:3003");
   });
+
   return vite;
 }

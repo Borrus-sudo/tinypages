@@ -3,9 +3,11 @@ import type { PageCtx, TinyPagesConfig } from "../../types/types";
 import { createBuildContext } from "./context";
 import { fsRouter } from "./router/fs";
 import { normalizeUrl } from "./utils";
+import { createBuildPlugins } from "./plugins/build";
+import Piscina from "piscina";
 
 export async function build(config: TinyPagesConfig, urls: string[]) {
-  const [ctx, vite] = await createBuildContext(config);
+  const [ctx, vite] = await createBuildContext(config, createBuildPlugins);
   const router = await fsRouter(ctx.utils.pageDir);
   const urlPageCtxMap: Map<string, PageCtx> = new Map();
   const fileToUrlMap: Map<string, Set<string>> = new Map();

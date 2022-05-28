@@ -1,4 +1,3 @@
-import { existsSync } from "fs";
 import { createRouter } from "radix3";
 import type { PageCtx } from "../../../types/types";
 import { loadPaths } from "./utils";
@@ -11,21 +10,14 @@ async function boilerplate(pagesDir: string) {
 }
 
 export async function fsRouter(pagesDir: string) {
-  if (existsSync(pagesDir)) {
-    await boilerplate(pagesDir);
-    return (url: string, originalUrl: string): PageCtx => {
-      const result = router.lookup(url);
-      if (!!result) {
-        return { url: result.payload, params: result.params, originalUrl };
-      }
-      return { url: "404", originalUrl, params: {} };
-    };
-  }
-  return (): PageCtx => ({
-    url: "404",
-    originalUrl: "",
-    params: {},
-  });
+  await boilerplate(pagesDir);
+  return (url: string, originalUrl: string): PageCtx => {
+    const result = router.lookup(url);
+    if (!!result) {
+      return { url: result.payload, params: result.params, originalUrl };
+    }
+    return { url: "404", originalUrl, params: {} };
+  };
 }
 
 export async function refreshRouter(pagesDir: string) {

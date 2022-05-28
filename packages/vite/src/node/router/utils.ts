@@ -18,13 +18,13 @@ export async function loadPaths(
   router,
   dir: string
 ): Promise<void> {
-  const dirents = await fs.readdir(dir, { withFileTypes: true });
+  const dirents = await fs.readdir(dir);
   const promises = [];
   for (let dirent of dirents) {
-    if (dirent.isDirectory()) {
-      promises.push(loadPaths(root, router, path.join(dir, dirent.name)));
-    } else if (/\.md$/.test(dirent.name)) {
-      let filePath = path.join(dir, dirent.name);
+    if (!/\..*?/.test(dirent)) {
+      promises.push(loadPaths(root, router, path.join(dir, dirent)));
+    } else if (/\.md$/.test(dirent)) {
+      let filePath = path.join(dir, dirent);
       let url = normalizePath(filePath.split(root)[1]);
       const output = transformDynamicArgs(url);
       router.insert(output, { payload: filePath });

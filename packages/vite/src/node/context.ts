@@ -1,11 +1,6 @@
 import { polyfill } from "@astropub/webapi";
 import { join } from "path";
-import {
-  createLogger,
-  createServer,
-  mergeConfig,
-  type ViteDevServer,
-} from "vite";
+import { createLogger, createServer, type ViteDevServer } from "vite";
 import type {
   ResolvedConfig,
   TinyPagesConfig,
@@ -21,6 +16,7 @@ let buildCtx: BuildContext;
 
 export async function createDevContext(
   config: TinyPagesConfig,
+  createDevPlugins,
   source?: string
 ): Promise<[ResolvedConfig, ViteDevServer]> {
   devCtx = {
@@ -38,46 +34,45 @@ export async function createDevContext(
       consola: createConsola(),
     },
   };
-  const { createDevPlugins } = await import("./plugins/dev");
-  const plugins = await createDevPlugins(); //@ts-ignore
-  devCtx.config.vite = mergeConfig(devCtx.config.vite, { plugins });
-  vite = await createServer(devCtx.config.vite);
 
-  polyfill(global, {
-    exclude: "window document",
-  });
+  const plugins = await createDevPlugins();
+  vite = await createServer({ ...devCtx.config.vite, plugins });
+
+  setTimeout(() => {
+    polyfill(global, {
+      exclude: "window document",
+    });
+  }, 0);
 
   return [devCtx, vite];
 }
 
 export async function createBuildContext(
-  config: TinyPagesConfig
+  config: TinyPagesConfig,
+  createBuildPlugins
 ): Promise<[BuildContext, ViteDevServer]> {
-  const { createBuildPlugins } = await import("./plugins/build");
-  const buildPlugins = await createBuildPlugins();
-  let resolvedBuildConfig = mergeConfig(config, { plugins: buildPlugins });
-
-  vite = await createServer(resolvedBuildConfig);
-  return [
-    {
-      utils: {
-        logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
-        async render(html: string) {
-          return html;
-        },
-        invalidate: (input: string) => invalidate(input),
-        pageDir: join(config.vite.root, "pages"),
-        stylesDir: join(config.vite.root, "styles"),
-        consola: createConsola(),
+  buildCtx = {
+    utils: {
+      logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
+      async render(html: string) {
+        return html;
       },
-      config,
-      pages: {
-        uriToBuiltHTML: new Map(),
-        virtualEntryPoint: new Map(),
-      },
+      invalidate: (input: string) => invalidate(input),
+      pageDir: join(config.vite.root, "pages"),
+      stylesDir: join(config.vite.root, "styles"),
+      consola: createConsola(),
     },
-    vite,
-  ];
+    config,
+    pages: {
+      uriToBuiltHTML: new Map(),
+      virtualEntryPoint: new Map(),
+    },
+  };
+
+  let plugins = await createBuildPlugins();
+  vite = await createServer({ ...buildCtx.config.vite, plugins });
+
+  return [buildCtx, vite];
 }
 
 type DevOrIso = "dev" | "iso";
