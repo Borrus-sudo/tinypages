@@ -4814,10 +4814,10 @@ micromatch@^4.0.4:
     braces "^3.0.2"
     picomatch "^2.3.1"
 
-million@^1.8.2:
-  version "1.8.2"
-  resolved "https://registry.yarnpkg.com/million/-/million-1.8.2.tgz#0e9f622f3798caa228d213bd796760168d33e20b"
-  integrity sha512-W4DiFpg+vRu88sGWlL/mYg+3wwH6T9hZeaf+vrIZQ5sBq9dHPUGh1oZNqXwlLllloWkLYlf5+/v2F6Tsh+huBA==
+million@^1.9.6:
+  version "1.9.6"
+  resolved "https://registry.yarnpkg.com/million/-/million-1.9.6.tgz#7c04aca9c4f95ff0aefbcdbb337ae2d985313228"
+  integrity sha512-jnuWPcubR0eig4VfeSG98WXYFm9iROBKcTK9A+CMyeQTWjLPNabKTg+x9+AfGDBxaZOgAokBNn5vkQ80Ur1pbA==
 
 mime-db@1.52.0, "mime-db@>= 1.43.0 < 2":
   version "1.52.0"
