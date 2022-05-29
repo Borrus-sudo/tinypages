@@ -6,6 +6,6 @@
   },
   "devDependencies": {
     "tinypages": "^1.0.0",
-    "@unocss/preset-wind": "^0.34.1"
+    "@unocss/preset-wind": "^0.35.4"
   }
 }
