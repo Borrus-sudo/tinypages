@@ -8,7 +8,6 @@ export default function (): Plugin {
     enforce: "pre",
     apply: "build",
     resolveId(id: string) {
-      console.log(id);
       return virtualModuleMap.has(id) ? id : undefined;
     },
     load(id: string) {
