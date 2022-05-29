@@ -2,11 +2,17 @@ import type { Plugin } from "vite";
 import { useContext } from "../../context";
 
 export default function (): Plugin {
-  const { config, virtualModuleMap, fileToHtmlMap } = useContext("iso");
+  const { virtualModuleMap } = useContext("iso");
   return {
     name: "vite-tinypages-icons",
-    buildStart() {
-      console.log("Build started");
+    enforce: "pre",
+    apply: "build",
+    resolveId(id: string) {
+      console.log(id);
+      return virtualModuleMap.has(id) ? id : undefined;
+    },
+    load(id: string) {
+      return virtualModuleMap.get(id);
     },
   };
 }

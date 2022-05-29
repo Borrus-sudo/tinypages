@@ -11,8 +11,14 @@ import { render } from "./render/page";
 import { appendPrelude } from "./render/render-utils";
 import { generateVirtualEntryPoint } from "./plugins/plugin-utils";
 import { readFile } from "fs/promises";
+import path from "path";
+import { v4 as uuid } from "@lukeed/uuid";
 
-export async function build(config: TinyPagesConfig, urls: string[]) {
+export async function build(
+  config: TinyPagesConfig,
+  urls: string[],
+  isGrammerCheck: boolean
+) {
   const [buildContext, vite] = await createBuildContext(
     config,
     createBuildPlugins
@@ -77,6 +83,14 @@ export async function build(config: TinyPagesConfig, urls: string[]) {
       config: buildContext.config,
     });
 
+    if (isGrammerCheck) {
+      buildContext.fileToHtmlMap.set(
+        { filePath: url, url: pageCtx.originalUrl },
+        appHtml
+      );
+      return;
+    }
+
     if (Object.keys(page.global.components).length > 0) {
       const virtualModuleId =
         "/" + Vite.normalizePath(url).replace(/\.md$/, ".js");
@@ -103,7 +117,10 @@ export async function build(config: TinyPagesConfig, urls: string[]) {
       });
     }
     const output = appendPrelude(appHtml, page);
-    buildContext.fileToHtmlMap.set(url, output);
+    buildContext.fileToHtmlMap.set(
+      { filePath: url, url: pageCtx.originalUrl },
+      output
+    );
   }
 
   let buildsOps = [];
@@ -118,5 +135,25 @@ export async function build(config: TinyPagesConfig, urls: string[]) {
   });
 
   await Promise.allSettled(buildsOps);
-  await Vite.build(buildContext.config.vite);
+  await vite.close();
+
+  if (!isGrammerCheck) {
+    let inputOptions = {};
+    buildContext.fileToHtmlMap.forEach((html, { url }) => {
+      const normalizedUrl = normalizeUrl(url).replace(/\.md$/, ".html");
+      const resolvedUrl = path.join(
+        buildContext.config.vite.root,
+        normalizedUrl
+      );
+      inputOptions[uuid()] = resolvedUrl;
+      buildContext.virtualModuleMap.set(resolvedUrl, html);
+    });
+    if (!buildContext.config.vite.build.rollupOptions) {
+      buildContext.config.vite.build.rollupOptions = {};
+    }
+    buildContext.config.vite.build.rollupOptions.input = inputOptions;
+    await Vite.build(buildContext.config.vite);
+  }
+
+  return buildContext.fileToHtmlMap;
 }

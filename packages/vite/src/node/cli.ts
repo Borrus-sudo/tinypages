@@ -169,7 +169,7 @@ export function cli() {
             config: true,
           };
           const { config } = await resolveConfig(cliViteOptions);
-          await build(config, ["/", "/qEWtDHOhuYyafXk6"]);
+          await build(config, ["/", "/qEWtDHOhuYyafXk6"], false);
         } catch (e) {
           console.log(reportString);
           console.error(e);
@@ -178,7 +178,25 @@ export function cli() {
       }
     );
 
-  cli.command("check").action(() => {});
+  cli.command("check [root]").action(async (root: string = process.cwd()) => {
+    const [{ reporter }, { html }, { build }] = await Promise.all([
+      import("vfile-reporter"),
+      import("alex"),
+      import("./build"),
+    ]);
+
+    const { config } = await resolveConfig({ root });
+    const builtHTML = await build(config, ["/", "/qEWtDHOhuYyafXk6"], true);
+
+    builtHTML.forEach((userHtml, { filePath }) => {
+      const res = html({
+        value: userHtml,
+        path: filePath,
+        messages: [],
+      });
+      console.error(reporter(res));
+    });
+  });
 
   cli.help();
   cli.version("1.0.0");

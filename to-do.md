@@ -20,3 +20,4 @@
 - Liquidjs stuff
 - Preactjs stuff (profiling, devToolsInProd)
 - Rollup build optimizations
+- Graph component

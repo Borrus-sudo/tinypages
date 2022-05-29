@@ -80,7 +80,7 @@ interface DevContext extends Context {
 
 interface BuildContext extends Context {
   virtualModuleMap: Map<string, string>;
-  fileToHtmlMap: Map<string, string>;
+  fileToHtmlMap: Map<{ filePath: string; url: string }, string>;
 }
 
 export {
