@@ -57,23 +57,28 @@ interface ReducedPage {
 
 interface Utils {
   logger: Logger;
-  render: (html: string) => Promise<string>;
   invalidate: (file: string) => void;
   pageDir: Readonly<string>;
   stylesDir: Readonly<string>;
-  configFile: Readonly<string>;
   consola: Consola;
 }
 
-interface DevContext {
-  page: Page;
+interface DevUtils extends Utils {
+  render: (html: string) => Promise<string>;
+  configFile: Readonly<string>;
+}
+
+interface Context {
   config: Readonly<TinyPagesConfig>;
   utils: Utils;
 }
 
-interface BuildContext {
-  config: Readonly<TinyPagesConfig>;
-  utils: Omit<Utils, "configFile" | "render">;
+interface DevContext extends Context {
+  page: Page;
+  utils: DevUtils;
+}
+
+interface BuildContext extends Context {
   virtualModuleMap: Map<string, string>;
   fileToHtmlMap: Map<string, string>;
 }
@@ -87,6 +92,8 @@ export {
   TinyPagesConfig,
   UserTinyPagesConfig,
   DevContext,
+  Utils,
+  Context,
   RenderFunction,
   ComponentRegistration,
   BuildContext,

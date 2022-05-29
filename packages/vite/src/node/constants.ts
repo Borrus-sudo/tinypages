@@ -35,7 +35,7 @@ export const presetViteConfig = {
   optimizeDeps: {
     include: [
       "million",
-      "million/shared",
+      "million/utils",
       "preact",
       "preact/compat",
       "preact/compat/jsx-runtime",

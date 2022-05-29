@@ -178,6 +178,8 @@ export function cli() {
       }
     );
 
+  cli.command("check").action(() => {});
+
   cli.help();
   cli.version("1.0.0");
   cli.parse();

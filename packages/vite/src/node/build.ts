@@ -72,8 +72,8 @@ export async function build(config: TinyPagesConfig, urls: string[]) {
     };
 
     const appHtml = await render(rawHtml, vite, {
-      utils: buildContext.utils,
-      page: page,
+      utils: buildContext.utils, //@ts-ignore
+      page,
       config: buildContext.config,
     });
 
@@ -106,17 +106,17 @@ export async function build(config: TinyPagesConfig, urls: string[]) {
     buildContext.fileToHtmlMap.set(url, output);
   }
 
-  let doAll = [];
+  let buildsOps = [];
   urls.forEach((url) => {
     const normalizedUrl = normalizeUrl(url);
     const res = router(normalizedUrl.replace(/\.md$/, ""), url);
     if (res.url === "404") {
       buildContext.utils.consola.error(new Error(`404 ${url} not found`));
     } else {
-      doAll.push(performOperation(res));
+      buildsOps.push(performOperation(res));
     }
   });
 
-  await Promise.allSettled(doAll);
+  await Promise.allSettled(buildsOps);
   await Vite.build(buildContext.config.vite);
 }

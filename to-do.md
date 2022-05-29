@@ -10,7 +10,13 @@
 
 - Support build process
 - Add PWA via the vite plugin
-- Remove preact-head 
-- Fix error boundaries
-- Add auto imports in preact components
-- Schema and rss generation
+- Seo components
+- Fast read dir
+- Schema
+- Graph component
+- Link crawler
+- Incremental builds
+- Grammer check
+- Liquidjs stuff
+- Preactjs stuff (profiling, devToolsInProd)
+- Rollup build optimizations

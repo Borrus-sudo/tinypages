@@ -6,10 +6,10 @@ import { h } from "preact";
 import { prerender } from "preact-iso";
 import type { ViteDevServer } from "vite";
 import type {
-  BuildContext as Build,
   ComponentRegistration,
-  ReducedPage,
-  DevContext,
+  Page,
+  TinyPagesConfig,
+  Utils,
 } from "../../../types/types";
 import { createElement as $, deepCopy } from "../utils";
 
@@ -24,22 +24,20 @@ const preact = null;
 const script = (cloneProps) =>
   $("script", { type: "application/json" }, JSON.stringify(cloneProps));
 
-interface BuildContext {
-  page: ReducedPage;
-  utils: Build["utils"];
-  config: Build["config"];
+interface NeededContext {
+  utils: Utils;
+  page: Page;
+  config: Readonly<TinyPagesConfig>;
 }
-
 export async function render(
   html: string,
   vite: ViteDevServer,
-  context: BuildContext | DevContext
+  context: NeededContext
 ) {
   let componentRegistration: ComponentRegistration = {};
   let uid: string = uuid();
   let payload: string;
 
-  //@ts-ignore
   if (context.page.sources) context.page.sources = [];
 
   for (let component of context.page.meta.components) {
@@ -53,7 +51,6 @@ export async function render(
 
     const hash = hashObj(component);
 
-    //@ts-ignore
     if (context.page.sources) context.page.sources.push(componentPath);
 
     /**
