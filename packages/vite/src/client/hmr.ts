@@ -1,7 +1,6 @@
 if (import.meta.env.DEV) {
   (async () => {
-    const { fromDomNodeToVNode } = await import("million/utils");
-    const { patch } = await import("million");
+    const { morph } = await import("million/morph");
     if (import.meta.hot) {
       const parser = new DOMParser();
 
@@ -22,11 +21,7 @@ if (import.meta.env.DEV) {
           }
         }
         document.head.innerHTML = newDoc.head.innerHTML;
-        patch(
-          document.getElementById("app"),
-          fromDomNodeToVNode(newDoc.getElementById("app")),
-          fromDomNodeToVNode(document.getElementById("app"))
-        );
+        morph(newDoc.getElementById("app"), document.getElementById("app"));
       });
     }
   })();
