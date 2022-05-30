@@ -1206,12 +1206,7 @@
   resolved "https://registry.yarnpkg.com/@types/node-emoji/-/node-emoji-1.8.1.tgz#689cb74fdf6e84309bcafce93a135dfecd01de3f"
   integrity sha512-0fRfA90FWm6KJfw6P9QGyo0HDTCmthZ7cWaBQndITlaWLTZ6njRyKwrwpzpg+n6kBXBIGKeUHEQuBx7bphGJkA==
 
-"@types/node@*", "@types/node@>=12", "@types/node@^17.0.36":
-  version "17.0.36"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.36.tgz#c0d5f2fe76b47b63e0e0efc3d2049a9970d68794"
-  integrity sha512-V3orv+ggDsWVHP99K3JlwtH20R7J4IhI1Kksgc+64q5VxgfRkQG8Ws3MFm/FZOKDYGy9feGFlZ70/HpCNe9QaA==
-
-"@types/node@^17.0.0":
+"@types/node@*", "@types/node@>=12", "@types/node@^17.0.0", "@types/node@^17.0.36":
   version "17.0.36"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.36.tgz#c0d5f2fe76b47b63e0e0efc3d2049a9970d68794"
   integrity sha512-V3orv+ggDsWVHP99K3JlwtH20R7J4IhI1Kksgc+64q5VxgfRkQG8Ws3MFm/FZOKDYGy9feGFlZ70/HpCNe9QaA==
@@ -1353,15 +1348,15 @@
     "@unocss/core" "0.34.1"
     unconfig "^0.3.4"
 
-"@unocss/core@0.31.13":
-  version "0.31.13"
-  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.31.13.tgz#3f133c146bc08abc68593f03d05c71489a16a5f1"
-  integrity sha512-mrhFmnbSVgUDrSH22WEHwKPFXOSHe10lEsE++7VsnEKpVAlYYnk+LxEjCNCm7GhiikWGuWI8oPLg50qQoBW3XQ==
-
 "@unocss/core@0.34.1", "@unocss/core@^0.34.1":
   version "0.34.1"
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.34.1.tgz#90a019d152f0d6e94df0ea52f5992c5188c48df0"
   integrity sha512-h2AeTLAiBWu6IZzR1tN2H/ypuCbc9CK7t8H/o2ncG22Jfoh6FO09jQPoiRZr72PcpDf2/0snN94iZLnjvPGZOg==
+
+"@unocss/core@0.36.0":
+  version "0.36.0"
+  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.36.0.tgz#6f654c6833701d876b40c0b4e73dcffb11c552fd"
+  integrity sha512-EtojrboUEp1NJ9ZFHibc1NUuazL9IzGfuKlkQu3ciaC1jGqwFlOUlvZxAWJlX0+m1VbcAo15+PQx3yPPTbo4sw==
 
 "@unocss/inspector@0.34.1":
   version "0.34.1"
@@ -1371,35 +1366,20 @@
     gzip-size "^6.0.0"
     sirv "^2.0.2"
 
-"@unocss/preset-mini@0.31.13":
-  version "0.31.13"
-  resolved "https://registry.yarnpkg.com/@unocss/preset-mini/-/preset-mini-0.31.13.tgz#c7e856e6f99db72c83ade722434702538e595e7c"
-  integrity sha512-SEvDjE7hOLLmi+kvGAafBJtQUicAZJOHMeHmnjvQBOUHkBRUaHf9Qd/JgRaiUFC3lyKyQnxhzOSBk+22uonMJg==
+"@unocss/preset-mini@0.36.0":
+  version "0.36.0"
+  resolved "https://registry.yarnpkg.com/@unocss/preset-mini/-/preset-mini-0.36.0.tgz#6825f1dc8c10255fb396ce43bce961f0a23ea0a3"
+  integrity sha512-vmpt2u4CHldAgwRvdey8U2C03JaShbAXyeY5/BFkuYuA9XuZ9DK1x0SsCqYcsrzzpCCVHzbwLQz85RjPHhYRxw==
   dependencies:
-    "@unocss/core" "0.31.13"
+    "@unocss/core" "0.36.0"
 
-"@unocss/preset-mini@0.34.1":
-  version "0.34.1"
-  resolved "https://registry.yarnpkg.com/@unocss/preset-mini/-/preset-mini-0.34.1.tgz#0a4058a6cd0646cd8beb083d0f6fa8910e9cf504"
-  integrity sha512-pEL+/55RfRTfpUplCVzC1l0gLy5cGR1lRSduNz91+FqHmxmyw/rzEoZl0+KhlcNTKWGJY6pM/UYQ3AcbNu5n9w==
+"@unocss/preset-wind@^0.36.0":
+  version "0.36.0"
+  resolved "https://registry.yarnpkg.com/@unocss/preset-wind/-/preset-wind-0.36.0.tgz#5ab57d48084bf5997128a8fe473a089afb84eb6b"
+  integrity sha512-I0oH2b62dQh8+8hGgczwNFFKXGVY39P2FurXt6d+kY1FfcwUxLqafKoLwlpH0nSA9rqrj6DYaWfQ6H88wMGQgg==
   dependencies:
-    "@unocss/core" "0.34.1"
-
-"@unocss/preset-wind@^0.31.13":
-  version "0.31.13"
-  resolved "https://registry.yarnpkg.com/@unocss/preset-wind/-/preset-wind-0.31.13.tgz#478094adba82fa75e0cbd73eb846c59ba874ab78"
-  integrity sha512-DT73rIGN/qYIyhY6qcmvw5bdlnsR53+o/gUKZiOWimkjUf9G/lRPL4ScDL3GUW/mcG6bl5lwkhb75np3NtVOfA==
-  dependencies:
-    "@unocss/core" "0.31.13"
-    "@unocss/preset-mini" "0.31.13"
-
-"@unocss/preset-wind@^0.34.1":
-  version "0.34.1"
-  resolved "https://registry.yarnpkg.com/@unocss/preset-wind/-/preset-wind-0.34.1.tgz#660af90416f93cd3294fe78209d278e0061f55de"
-  integrity sha512-NDDIdtPv6tX0scNx4o9oF6GPz2U6ufI9uhbqacWhZX43aolJaNM0W5WsEOnw8GrO7RXOlgtChn0r79Uc91Ip0g==
-  dependencies:
-    "@unocss/core" "0.34.1"
-    "@unocss/preset-mini" "0.34.1"
+    "@unocss/core" "0.36.0"
+    "@unocss/preset-mini" "0.36.0"
 
 "@unocss/scope@0.34.1":
   version "0.34.1"
