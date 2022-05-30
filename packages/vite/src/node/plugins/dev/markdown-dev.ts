@@ -132,12 +132,12 @@ export default function (): Plugin {
       isBuild = config.command === "build" || config.isProduction;
     },
     configureServer(server) {
-      const eventHandler = async (filePath) => {
+      const eventHandler = (filePath) => {
         if (
           typeof filePath === "string" &&
           path.normalize(filePath).startsWith(utils.pageDir)
         ) {
-          await refreshRouter(utils.pageDir);
+          refreshRouter(utils.pageDir);
           reload("change in /pages dir", server, utils.logger);
           seen = [];
         }

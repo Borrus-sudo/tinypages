@@ -1,4 +1,3 @@
-import { polyfill } from "@astropub/webapi";
 import { join } from "path";
 import { createLogger, createServer, type ViteDevServer } from "vite";
 import type {
@@ -43,12 +42,6 @@ export async function createDevContext(
   } else {
     vite = await createServer({ ...devContext.config.vite, plugins });
   }
-
-  setTimeout(() => {
-    polyfill(global, {
-      exclude: "window document",
-    });
-  }, 0);
 
   return [devContext, vite];
 }

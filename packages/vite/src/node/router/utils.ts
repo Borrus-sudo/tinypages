@@ -1,4 +1,4 @@
-import { promises as fs } from "fs";
+import { readdirSync } from "fs";
 import * as path from "path";
 import { normalizePath } from "vite";
 
@@ -13,22 +13,16 @@ function transformDynamicArgs(input: string) {
   return output;
 }
 
-export async function loadPaths(
-  root: string,
-  router,
-  dir: string
-): Promise<void> {
-  const dirents = await fs.readdir(dir);
-  const promises = [];
+export function loadPaths(root: string, router, dir: string) {
+  const dirents = readdirSync(dir);
   for (let dirent of dirents) {
     if (!/\..*?/.test(dirent)) {
-      promises.push(loadPaths(root, router, path.join(dir, dirent)));
-    } else if (/\.md$/.test(dirent)) {
+      loadPaths(root, router, path.join(dir, dirent));
+    } else if (dirent.endsWith(".md")) {
       let filePath = path.join(dir, dirent);
       let url = normalizePath(filePath.split(root)[1]);
       const output = transformDynamicArgs(url);
       router.insert(output, { payload: filePath });
     }
   }
-  await Promise.all(promises);
 }

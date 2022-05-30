@@ -4,13 +4,13 @@ import { loadPaths } from "./utils";
 
 let router;
 
-async function boilerplate(pagesDir: string) {
+function boilerplate(pagesDir: string) {
   router = createRouter();
-  await loadPaths(pagesDir, router, pagesDir);
+  loadPaths(pagesDir, router, pagesDir);
 }
 
-export async function fsRouter(pagesDir: string) {
-  await boilerplate(pagesDir);
+export function fsRouter(pagesDir: string) {
+  boilerplate(pagesDir);
   return (url: string, originalUrl: string): PageCtx => {
     const result = router.lookup(url);
     if (!!result) {
@@ -20,6 +20,6 @@ export async function fsRouter(pagesDir: string) {
   };
 }
 
-export async function refreshRouter(pagesDir: string) {
-  await boilerplate(pagesDir);
+export function refreshRouter(pagesDir: string) {
+  boilerplate(pagesDir);
 }

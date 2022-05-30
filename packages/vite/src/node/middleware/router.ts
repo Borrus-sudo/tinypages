@@ -3,10 +3,10 @@ import { useContext, useVite } from "../context";
 import { fsRouter } from "../router/fs";
 import { normalizeUrl } from "../utils";
 
-export default async function () {
+export default function () {
   const { page, utils } = useContext("dev");
   const vite = useVite();
-  const router = await fsRouter(utils.pageDir);
+  const router = fsRouter(utils.pageDir);
 
   return async (req, res, next) => {
     try {

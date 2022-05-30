@@ -10,9 +10,10 @@ import { compile } from "@tinypages/compiler";
 import { render } from "./render/page";
 import { appendPrelude } from "./render/render-utils";
 import { generateVirtualEntryPoint } from "./plugins/plugin-utils";
-import { readFile } from "fs/promises";
+import { readFileSync } from "fs";
 import path from "path";
 import { v4 as uuid } from "@lukeed/uuid";
+import { polyfill } from "@astropub/webapi";
 
 export async function build(
   config: TinyPagesConfig,
@@ -33,7 +34,7 @@ export async function build(
     let compileThis = "";
     let fileLoader = fileToLoaderMap.get(url);
     let loader;
-    let markdown = await readFile(url, { encoding: "utf-8" });
+    let markdown = readFileSync(url, { encoding: "utf-8" });
 
     if (typeof fileLoader === "boolean") {
       // does not exist
@@ -122,6 +123,10 @@ export async function build(
       output
     );
   }
+
+  polyfill(global, {
+    exclude: "window document",
+  });
 
   let buildsOps = [];
   urls.forEach((url) => {

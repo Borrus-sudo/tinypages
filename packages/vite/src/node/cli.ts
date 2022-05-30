@@ -101,7 +101,6 @@ export function cli() {
         } catch (e) {
           console.log(reportString);
           console.error(e);
-          process.exit(1);
         }
       }
     );
@@ -173,7 +172,6 @@ export function cli() {
         } catch (e) {
           console.log(reportString);
           console.error(e);
-          process.exit(1);
         }
       }
     );

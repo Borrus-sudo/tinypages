@@ -35,7 +35,7 @@ export const presetViteConfig = {
   optimizeDeps: {
     include: [
       "million",
-      "million/utils",
+      "million/morph",
       "preact",
       "preact/compat",
       "preact/compat/jsx-runtime",

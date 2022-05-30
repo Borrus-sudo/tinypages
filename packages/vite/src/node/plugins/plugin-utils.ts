@@ -2,8 +2,6 @@ import * as path from "path";
 import type { Logger, ModuleNode, ViteDevServer } from "vite";
 import { normalizePath as viteNormalizePath } from "vite";
 import type { ComponentRegistration, Page } from "../../../types/types";
-import lighthouse from "lighthouse";
-import chromeLauncher from "chrome-launcher";
 
 export function isParentJSX(node: ModuleNode, page: Page) {
   for (let module of node.importers) {
@@ -78,21 +76,6 @@ export function generateVirtualEntryPoint(
     });
   })();
   `;
-}
-
-export async function generateStats(page: Page) {
-  const chrome = await chromeLauncher.launch({ chromeFlags: ["--headless"] });
-  const options = {
-    logLevel: "info",
-    output: "json",
-    onlyCategories: ["performance"],
-    port: chrome.port,
-  };
-  const runnerResult = await lighthouse(
-    `http://localhost:3003${page.pageCtx.originalUrl}`,
-    options
-  );
-  console.log(runnerResult);
 }
 
 export { hash } from "ohash";
