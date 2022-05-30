@@ -44,6 +44,7 @@ export function generateVirtualEntryPoint(
     `import "uno.css";`,
     `import hydrate from "tinypages/client";`,
     isBuild ? "" : `import "tinypages/hmr";`,
+    isBuild ? `import {router} from "million/router"` : "",
   ];
   let compImports = Object.keys(components).map((uid: string, idx) => {
     const mod = components[uid];
@@ -70,6 +71,7 @@ export function generateVirtualEntryPoint(
 
   return `
   ${imports.join("\n")}
+  router("body");
   (async()=>{
     await hydrate({
      ${moduleMapStr}

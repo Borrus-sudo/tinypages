@@ -4,7 +4,7 @@ import ImagePlugin from "vite-plugin-image-presets";
 import { useContext } from "../context";
 import AutoImportPluginOptions from "./isomorphic/auto-import";
 import IconPlugin from "./isomorphic/icons";
-import MarkdownBuildPlugin from "./build/markdown-build";
+import MarkdownBuildPlugin from "./build/build-meta";
 
 export async function createBuildPlugins() {
   const { config } = useContext("iso");
@@ -13,7 +13,7 @@ export async function createBuildPlugins() {
     UnoCSSPlugin(<{}>{
       inspector: true,
       mode: "global",
-      ...(config.modules.unocss || {}),
+      ...config.modules.unocss,
     }),
     ImagePlugin(config.modules.image.presets, config.modules.image.options),
     IconPlugin(),

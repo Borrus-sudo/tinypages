@@ -7,10 +7,13 @@ export function wrapObject(styles: Record<string, string>) {
   return styles;
 }
 
-export function stringifyObject(obj) {
+export function stringifyObject(obj, separator = "=", addSemicolon = false) {
   let returnVal = "";
   Object.values(obj).forEach(([key, val]) => {
-    returnVal += `${key}="${val}"`;
+    returnVal += ` ${key}${separator}"${val}" `;
+    if (addSemicolon) {
+      returnVal += ";";
+    }
   });
   return returnVal;
 }

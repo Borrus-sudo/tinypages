@@ -35,7 +35,6 @@ export async function createDevContext(
   };
 
   const plugins = await createDevPlugins();
-
   if (devContext.config.vite.plugins) {
     devContext.config.vite.plugins.push(plugins);
     vite = await createServer({ ...devContext.config.vite });

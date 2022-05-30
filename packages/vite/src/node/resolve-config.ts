@@ -58,8 +58,6 @@ export async function resolveConfig(
 
   config.compiler.icons = config.modules.icons;
   config.compiler.defaultIconsStyles = config.modules.icons.defaultIconsStyles;
-  config.compiler.defaultBase64IconsStyles =
-    config.modules.icons.defaultIconsStyles;
 
   return { config, filePath: sources[0] } as {
     config: TinyPagesConfig;

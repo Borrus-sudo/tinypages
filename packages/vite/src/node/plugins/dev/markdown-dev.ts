@@ -128,9 +128,6 @@ export default function (): Plugin {
     name: "vite-tinypages-markdown",
     enforce: "pre",
     apply: "serve",
-    configResolved(config) {
-      isBuild = config.command === "build" || config.isProduction;
-    },
     configureServer(server) {
       const eventHandler = (filePath) => {
         if (

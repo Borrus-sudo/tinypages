@@ -153,10 +153,11 @@ export async function build(
       inputOptions[uuid()] = resolvedUrl;
       buildContext.virtualModuleMap.set(resolvedUrl, html);
     });
-    if (!buildContext.config.vite.build.rollupOptions) {
-      buildContext.config.vite.build.rollupOptions = {};
+    const build = buildContext.config.vite.build;
+    if (!build.rollupOptions) {
+      build.rollupOptions = {};
     }
-    buildContext.config.vite.build.rollupOptions.input = inputOptions;
+    build.rollupOptions.input = inputOptions;
     await Vite.build(buildContext.config.vite);
   }
 

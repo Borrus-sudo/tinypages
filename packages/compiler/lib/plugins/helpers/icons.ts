@@ -1,45 +1,41 @@
 import Icons from "node-icons";
 import { paramCase } from "param-case";
 import type { Config } from "../../../types/types";
-import { wrapObject } from "../../utils";
+import { wrapObject, stringifyObject } from "../../utils";
 
 let icons;
 export default function (
-  rawStr: string,
+  svgId: string,
   context: { attrs?: Record<string, string>; config: Config }
 ): string {
   if (!icons) {
     icons = Icons(context.config.icons);
   }
   const seperator = context.config?.icons?.separator ?? ":";
-  let base64: boolean = false;
-  let iconName = rawStr;
-  let defaultStyles = {};
+  let iconName = svgId;
+  let defaultStyles = context.config.defaultIconsStyles || {};
   let styles = {};
+
+  const imgSrc = (svgId) => {
+    const newId = svgId.split(seperator).join("/");
+    const style = stringifyObject(defaultStyles, ":", true);
+    return `<img src="~icons/${newId}" alt="${svgId}" style="${style}">`;
+  };
+
+  if (!svgId.endsWith(".inline")) {
+    return imgSrc(svgId);
+  }
+
   if (context.attrs) {
     //iconName passed as a component
-    iconName = paramCase(rawStr).replace(/\-/g, seperator);
-    base64 = typeof context.attrs["base64"] !== "undefined";
-    if (base64) {
-      delete context.attrs["base64"];
-      defaultStyles = context.config.defaultBase64IconsStyles || {};
-    } else {
-      defaultStyles = context.config.defaultIconsStyles || {};
-    }
+    iconName = paramCase(svgId).replace(/\-/g, seperator);
     styles = { ...context.attrs, ...defaultStyles };
   } else {
-    if (rawStr.startsWith("base64" + seperator)) {
-      iconName = rawStr.split(seperator).slice(1).join(seperator);
-      base64 = true;
-      defaultStyles = context.config.defaultBase64IconsStyles || {};
-    } else {
-      defaultStyles = context.config.defaultIconsStyles || {};
-    }
     styles = defaultStyles;
   }
-  return icons.getIconsSync(
-    iconName,
-    base64 ? styles : wrapObject({ ...styles }),
-    base64
+
+  return (
+    icons.getIconsSync(iconName, wrapObject({ ...styles }), false) ||
+    imgSrc(svgId)
   );
 }

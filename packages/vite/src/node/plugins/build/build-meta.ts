@@ -4,7 +4,7 @@ import { useContext } from "../../context";
 export default function (): Plugin {
   const { virtualModuleMap } = useContext("iso");
   return {
-    name: "vite-tinypages-icons",
+    name: "vite-tinypages-markdown-build",
     enforce: "pre",
     apply: "build",
     resolveId(id: string) {

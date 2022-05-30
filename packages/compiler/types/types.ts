@@ -44,7 +44,6 @@ interface UserConfig {
   renderMermaid?: boolean;
   renderKatex?: boolean;
   defaultIconsStyles?: Record<string, string>;
-  defaultBase64IconsStyles?: Record<string, string>;
   plugins?: Plugin[];
 }
 

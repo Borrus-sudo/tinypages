@@ -3,18 +3,29 @@ import type { Plugin } from "vite";
 import { useContext } from "../../context";
 
 export default function (): Plugin {
-  const { config } = useContext("iso");
+  const { config, virtualModuleMap } = useContext("iso");
   const icons = Icons(config.modules.icons);
   const separator = config.modules.icons?.separator || ":";
-  const moduleMap: Map<string, string> = new Map();
+  const svgMap: Map<string, string> = new Map();
   const stringifiedDefaults = JSON.stringify(
     config.modules.icons.defaultIconsStyles || {}
   );
+  let isBuild;
   return {
     name: "vite-tinypages-icons",
+    configResolved(config) {
+      isBuild = config.command === "build" || config.isProduction;
+    },
     async resolveId(id: string) {
-      if (moduleMap.has(id)) {
+      if (svgMap.has(id)) {
         return id;
+      }
+      if (config.modules.icons.load) {
+        const res = config.modules.icons.load(id);
+        if (res) {
+          svgMap.set(id, res);
+          return id;
+        }
       }
       if (id.startsWith("~icons/")) {
         const parts = id.split("~icons/")[1].split("/");
@@ -24,16 +35,17 @@ export default function (): Plugin {
           false
         );
         if (res) {
-          moduleMap.set(id, res);
+          svgMap.set(id, res);
           return id;
         }
       }
     },
     load(id: string) {
-      const res = moduleMap.get(id);
+      const res = svgMap.get(id);
       if (res) {
         // preact js component
-        return `
+        if (!isBuild) {
+          return `
         import { h } from "preact";
         import { stringifyObject } from "@tinypages/compiler/utils";
         export default function(props){
@@ -45,6 +57,25 @@ export default function (): Plugin {
           });
         }
         `;
+        } else {
+          const svgId =
+            id.split("~icons/")[1].replace(/\//g, "-") + "[hash]" + ".svg";
+          const emitFileId = this.emitFile({
+            type: "asset",
+            source: res,
+            fileName: svgId,
+          });
+          virtualModuleMap.set(
+            svgId,
+            `export default import.meta.import.meta.ROLLUP_FILE_URL_${emitFileId};`
+          );
+          return `
+          import svg from "${svgId}";
+          export default (props) => {
+            return h("img", {src:svg, style:stringifyObject(props||${stringifiedDefaults}) });
+          }
+          `;
+        }
       }
     },
   };

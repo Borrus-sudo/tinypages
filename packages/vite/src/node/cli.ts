@@ -3,6 +3,7 @@ import { join } from "path";
 import * as Vite from "vite";
 import type { UserTinyPagesConfig } from "../../types/types";
 import { resolveConfig } from "./resolve-config";
+import * as fs from "fs/promises";
 
 interface GlobalCLIOptions {
   "--"?: string[];
@@ -168,7 +169,10 @@ export function cli() {
             config: true,
           };
           const { config } = await resolveConfig(cliViteOptions);
-          await build(config, ["/", "/qEWtDHOhuYyafXk6"], false);
+          const { urls } = JSON.parse(
+            await fs.readFile(join(root, "urls.json"), { encoding: "utf-8" })
+          );
+          await build(config, urls, false);
         } catch (e) {
           console.log(reportString);
           console.error(e);

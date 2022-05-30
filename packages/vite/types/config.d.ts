@@ -10,13 +10,18 @@ import type {
   Options as ImageOptions,
 } from "vite-plugin-image-presets";
 
+interface IconsModules extends IconsConfig {
+  defaultIconsStyles?: Record<string, string>;
+  load?: (id: string) => string | void;
+}
+
 interface Modules {
   image: {
     presets?: ImagePresets;
     options?: ImageOptions;
   };
   unocss: UnoCSSConfig;
-  icons: IconsConfig & { defaultIconsStyles?: Record<string, string> };
+  icons: IconsModules;
 }
 
 interface Middlwares {
