@@ -1,7 +1,6 @@
 import Icons from "node-icons";
-import { paramCase } from "param-case";
 import type { Config } from "../../../types/types";
-import { wrapObject, stringifyObject } from "../../utils";
+import { wrapObject, stringifyImageStyle, delimiter } from "../../utils";
 
 let icons;
 export default function (
@@ -11,31 +10,39 @@ export default function (
   if (!icons) {
     icons = Icons(context.config.icons);
   }
+
+  if (!svgId.startsWith("i-")) {
+    return;
+  }
+  svgId = svgId.slice(2);
+
   const seperator = context.config?.icons?.separator ?? ":";
-  let iconName = svgId;
   let defaultStyles = context.config.defaultIconsStyles || {};
   let styles = {};
 
-  const imgSrc = (svgId) => {
-    const newId = svgId.split(seperator).join("/");
-    const style = stringifyObject(defaultStyles, ":", true);
-    return `<img src="~icons/${newId}" alt="${svgId}" style="${style}">`;
-  };
-
-  if (!svgId.endsWith(".inline")) {
-    return imgSrc(svgId);
-  }
-
   if (context.attrs) {
     //iconName passed as a component
-    iconName = paramCase(svgId).replace(/\-/g, seperator);
+    svgId = svgId.replace(/\-/g, seperator);
     styles = { ...context.attrs, ...defaultStyles };
   } else {
     styles = defaultStyles;
   }
 
+  const imgSrc = (svgId, edit = true) => {
+    let srcId = svgId;
+    if (edit) srcId = "~icons/" + svgId.split(seperator).join("/");
+    const style = stringifyImageStyle(defaultStyles);
+    return `<img src="${srcId}" alt="${svgId}" style="${style}">`;
+  };
+
+  if (!svgId.endsWith(`${delimiter}inline`)) {
+    return imgSrc(svgId);
+  }
+
+  svgId = svgId.split(`${delimiter}inline`)[0];
+
   return (
-    icons.getIconsSync(iconName, wrapObject({ ...styles }), false) ||
-    imgSrc(svgId)
+    icons.getIconsSync(svgId, wrapObject({ ...styles }), false) ||
+    imgSrc(svgId.replace(seperator, "/"), false)
   );
 }

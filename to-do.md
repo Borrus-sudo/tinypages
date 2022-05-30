@@ -16,7 +16,7 @@
 - Graph component
 - Link crawler
 - Incremental builds
-- Grammer check
+- Grammar check
 - Liquidjs stuff
 - Preactjs stuff (profiling, devToolsInProd)
 - Rollup build optimizations

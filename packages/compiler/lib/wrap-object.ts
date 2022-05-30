@@ -1,1 +1,1 @@
-export { stringifyObject } from "./utils";
+export { stringifyObject, stringifyImageStyle } from "./utils";

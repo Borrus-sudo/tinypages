@@ -12,6 +12,7 @@ import type {
   Utils,
 } from "../../../types/types";
 import { createElement as $, deepCopy } from "../utils";
+import { delimiter } from "@tinypages/compiler";
 
 const map: Map<string, { html: string }> = new Map();
 const hashComp: Map<string, string[]> = new Map();
@@ -45,7 +46,7 @@ export async function render(
       path.join(
         context.config.vite.root,
         "./components",
-        component.componentName.replace(/\./g, "/")
+        component.componentName.replace(new RegExp(delimiter, "g"), "/")
       )
     );
 

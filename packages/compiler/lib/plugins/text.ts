@@ -1,6 +1,7 @@
 import type { Config, Plugin } from "../../types/types";
 import iconsRenderer from "./helpers/icons"; //@ts-ignore
 import emoji from "node-emoji";
+import { delimiter } from "../utils";
 
 export function PluginText(): Plugin {
   let codeTransformer;
@@ -26,9 +27,12 @@ export function PluginText(): Plugin {
             }
             if (payload.startsWith("::")) {
               payload =
-                iconsRenderer(payload.slice(2, -2), {
-                  config,
-                }) || payload;
+                iconsRenderer(
+                  "i-" + payload.slice(2, -2).replace(/\./g, delimiter),
+                  {
+                    config,
+                  }
+                ) || payload;
             } else if (payload.startsWith("```")) {
               const [lang, ...code] = payload.slice(3, -3).split("\n");
               codeTransformer.tapArgs("code", [code.join("\n"), lang]);

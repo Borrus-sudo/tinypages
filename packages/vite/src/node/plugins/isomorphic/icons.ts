@@ -71,8 +71,9 @@ export default function (): Plugin {
           );
           return `
           import svg from "${svgId}";
+          import { stringifyImageStyle } from "@tinypages/compiler/utils";
           export default (props) => {
-            return h("img", {src:svg, style:stringifyObject(props||${stringifiedDefaults}) });
+            return h("img", {src:svg, style:stringifyImageStyle(props||${stringifiedDefaults}) });
           }
           `;
         }

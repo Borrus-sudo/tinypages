@@ -94,7 +94,9 @@ export async function compile(
     ...(config.marked || {}),
   });
 
-  let output = marked.parse(input);
+  let output = marked.parse(
+    input.replace(/<.*?>/g, (r) => r.replace(/\./g, "__"))
+  );
 
   output = await postTransform(output, config.plugins, config.metaConstruct);
   [output, config.metaConstruct.components] = analyze(output);
@@ -104,5 +106,5 @@ export async function compile(
     layoutPaths,
   ];
 }
-
+export { delimiter } from "./utils";
 export type { UserConfig, Meta, Plugin, Head, IconsConfig, UnoCSSConfig };

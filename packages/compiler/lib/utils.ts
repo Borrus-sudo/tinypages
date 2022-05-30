@@ -7,13 +7,20 @@ export function wrapObject(styles: Record<string, string>) {
   return styles;
 }
 
-export function stringifyObject(obj, separator = "=", addSemicolon = false) {
+export function stringifyObject(obj) {
   let returnVal = "";
-  Object.values(obj).forEach(([key, val]) => {
-    returnVal += ` ${key}${separator}"${val}" `;
-    if (addSemicolon) {
-      returnVal += ";";
-    }
+  Object.keys(obj).forEach((key) => {
+    let val = obj[key];
+    returnVal += ` ${key}="${val}" `;
+  });
+  return returnVal;
+}
+
+export function stringifyImageStyle(obj) {
+  let returnVal = "";
+  Object.keys(obj).forEach((key) => {
+    let val = obj[key];
+    returnVal += ` ${key}:${val}; `;
   });
   return returnVal;
 }
@@ -66,5 +73,7 @@ export function Spy(
   transformed["options"] = target["options"];
   return transformed;
 }
+
+export const delimiter = "__";
 
 export { tags } from "./tags";

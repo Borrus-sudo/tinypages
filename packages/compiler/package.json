@@ -40,7 +40,6 @@
     "node-emoji": "^1.11.0",
     "node-html-parser": "^5.3.3",
     "node-icons": "^1.0.1",
-    "param-case": "^3.0.4",
     "shiki": "^0.10.0",
     "yaml": "^2.0.1"
   },
