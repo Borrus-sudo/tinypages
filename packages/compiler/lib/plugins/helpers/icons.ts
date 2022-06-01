@@ -18,6 +18,7 @@ export default function (
 
   const seperator = context.config?.icons?.separator ?? ":";
   let defaultStyles = context.config.defaultIconsStyles || {};
+  const originalId = svgId;
   let styles = {};
 
   if (context.attrs) {
@@ -28,9 +29,9 @@ export default function (
     styles = defaultStyles;
   }
 
-  const imgSrc = (svgId, edit = true) => {
-    let srcId = svgId;
-    if (edit) srcId = "~icons/" + svgId.split(seperator).join("/");
+  const imgSrc = (svgId, notCustom = true) => {
+    let srcId = "~/icons/" + svgId;
+    if (notCustom) srcId = "~/icons/" + svgId.split(seperator).join("/");
     const style = stringifyImageStyle(defaultStyles);
     return `<img src="${srcId}" alt="${svgId}" style="${style}">`;
   };
@@ -43,6 +44,6 @@ export default function (
 
   return (
     icons.getIconsSync(svgId, wrapObject({ ...styles }), false) ||
-    imgSrc(svgId.replace(seperator, "/"), false)
+    imgSrc(originalId, false)
   );
 }

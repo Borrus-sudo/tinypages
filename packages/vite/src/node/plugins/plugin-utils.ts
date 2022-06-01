@@ -62,7 +62,7 @@ export function generateVirtualEntryPoint(
     .map((uid: string) => {
       const left = `'${uid}'`;
       const right = components[uid].lazy
-        ? `import("${resolve(components[uid].path)}")`
+        ? `import("/${resolve(components[uid].path)}")`
         : importMap.get(uid);
 
       return `${left}: ${right}`;
@@ -71,7 +71,7 @@ export function generateVirtualEntryPoint(
 
   return `
   ${imports.join("\n")}
-  router("body");
+  ${isBuild ? "router('body');" : ""}
   (async()=>{
     await hydrate({
      ${moduleMapStr}

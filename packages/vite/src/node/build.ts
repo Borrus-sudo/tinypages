@@ -18,7 +18,7 @@ import { polyfill } from "@astropub/webapi";
 export async function build(
   config: TinyPagesConfig,
   urls: string[],
-  isGrammerCheck: boolean
+  isGrammarCheck: boolean
 ) {
   const [buildContext, vite] = await createBuildContext(
     config,
@@ -84,7 +84,7 @@ export async function build(
       config: buildContext.config,
     });
 
-    if (isGrammerCheck) {
+    if (isGrammarCheck) {
       buildContext.fileToHtmlMap.set(
         { filePath: url, url: pageCtx.originalUrl },
         appHtml
@@ -142,7 +142,7 @@ export async function build(
   await Promise.allSettled(buildsOps);
   await vite.close();
 
-  if (!isGrammerCheck) {
+  if (!isGrammarCheck) {
     let inputOptions = {};
     buildContext.fileToHtmlMap.forEach((html, { url }) => {
       const normalizedUrl = normalizeUrl(url).replace(/\.md$/, ".html");

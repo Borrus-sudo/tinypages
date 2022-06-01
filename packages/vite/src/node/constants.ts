@@ -30,6 +30,7 @@ export const presetViteConfig = {
     jsxInject: "import {h,Fragment} from 'preact';",
     jsxFactory: "h",
     jsxFragment: "Fragment",
+    target: "es2020",
   },
   plugins: [],
   optimizeDeps: {
@@ -51,7 +52,7 @@ export const presetViteConfig = {
       react: "preact/compat",
       "react-dom": "preact/compat",
     },
-    dedupe: ["react", "react-dom", "preact/hooks"],
+    dedupe: ["react", "react-dom", "preact/hooks", "preact"],
   },
 } as InlineConfig;
 

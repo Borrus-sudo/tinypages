@@ -106,5 +106,5 @@ export async function compile(
     layoutPaths,
   ];
 }
-export { delimiter } from "./utils";
+
 export type { UserConfig, Meta, Plugin, Head, IconsConfig, UnoCSSConfig };

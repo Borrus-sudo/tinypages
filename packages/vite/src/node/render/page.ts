@@ -12,7 +12,6 @@ import type {
   Utils,
 } from "../../../types/types";
 import { createElement as $, deepCopy } from "../utils";
-import { delimiter } from "@tinypages/compiler";
 
 const map: Map<string, { html: string }> = new Map();
 const hashComp: Map<string, string[]> = new Map();
@@ -46,7 +45,7 @@ export async function render(
       path.join(
         context.config.vite.root,
         "./components",
-        component.componentName.replace(new RegExp(delimiter, "g"), "/")
+        component.componentName.replace(/\./g, "/")
       )
     );
 
@@ -67,7 +66,7 @@ export async function render(
         const slicedKey = key.slice(1);
         let type = "";
         try {
-          if (Number.isFinite(key)) {
+          if (!Number.isNaN(key)) {
             type = "number";
             component.props[slicedKey] = +value;
           } else if (/\{.*?\}/.test(value)) {
@@ -84,8 +83,8 @@ export async function render(
             )
           );
         }
+        delete component.props[key];
       }
-      delete component.props[key];
     });
 
     if ("client:only" in component.props) {

@@ -5,18 +5,20 @@ import { useContext } from "../context";
 import AutoImportPluginOptions from "./isomorphic/auto-import";
 import IconPlugin from "./isomorphic/icons";
 import MarkdownBuildPlugin from "./build/build-meta";
+import SvgResolverPlugin from "./build/svg-resolver";
 
 export async function createBuildPlugins() {
   const { config } = useContext("iso");
   return [
+    SvgResolverPlugin(),
     MarkdownBuildPlugin(),
     UnoCSSPlugin(<{}>{
       inspector: true,
       mode: "global",
       ...config.modules.unocss,
     }),
-    ImagePlugin(config.modules.image.presets, config.modules.image.options),
     IconPlugin(),
+    ImagePlugin(config.modules.image.presets, config.modules.image.options),
     AutoImport(AutoImportPluginOptions(config.vite.root)),
   ];
 }

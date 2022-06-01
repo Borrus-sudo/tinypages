@@ -26,7 +26,7 @@ export function analyze(input: string): [
         if (!tags.includes(tagName) && tagName !== "slot:body") {
           const compStr = node.toString().trim();
           components.push({
-            componentName: node.rawTagName,
+            componentName: node.rawTagName.replace(/__/g, "."),
             componentLiteral: compStr,
             props: node.attrs || {},
             children: node.innerHTML,

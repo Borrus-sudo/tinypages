@@ -9,5 +9,5 @@
  [{{blog.meta}}](/{{blog._id}})
 {% endfor %}
 
-
-<Counter/>
+<i-mdi-github/>
+<Counter client:only/>

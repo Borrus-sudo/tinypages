@@ -39,7 +39,10 @@ export async function createDevContext(
     devContext.config.vite.plugins.push(plugins);
     vite = await createServer({ ...devContext.config.vite });
   } else {
-    vite = await createServer({ ...devContext.config.vite, plugins });
+    vite = await createServer({
+      ...devContext.config.vite,
+      plugins,
+    });
   }
 
   return [devContext, vite];
