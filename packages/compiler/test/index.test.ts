@@ -1,6 +1,7 @@
+import { describe, it, expect } from "vitest";
 import * as fs from "fs";
-import { compile } from "../out/index.js";
-
+import { compile } from "../out/index.js"; // This is running compiled code that doesnt exist per se.
+// Test should either compile the code or have part of the script run a precompile step.
 describe("it tests the functionality", () => {
   it("tests the output html", async () => {
     const [html] = await compile(
