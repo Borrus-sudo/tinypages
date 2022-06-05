@@ -4,7 +4,8 @@
   "license": "MIT",
   "private": "true",
   "scripts": {
-    "test": "jest",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
     "prepare": "husky install"
   },
   "workspaces": [
