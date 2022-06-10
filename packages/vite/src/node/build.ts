@@ -157,6 +157,7 @@ export async function build(
     if (!build.rollupOptions) {
       build.rollupOptions = {};
     }
+    build.target = "es2020";
     build.rollupOptions.input = inputOptions;
     await Vite.build(buildContext.config.vite);
   }

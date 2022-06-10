@@ -27,6 +27,9 @@
     },
     "./hmr": {
       "import": "./out/client/hmr.mjs"
+    },
+    "./package.json": {
+      "import": "./package.json"
     }
   },
   "dependencies": {

@@ -9,6 +9,7 @@ import DecoratorPlugin from "./dev/decorators";
 import IconPlugin from "./isomorphic/icons";
 import HmrPlugin from "./dev/hmr";
 import MarkdownPlugin from "./dev/markdown-dev";
+import SvgResolverPlugin from "./isomorphic/svg-resolver";
 
 export async function createDevPlugins() {
   const { config } = useContext("dev");
@@ -20,6 +21,7 @@ export async function createDevPlugins() {
       mode: "global",
       ...config.modules.unocss,
     }),
+    SvgResolverPlugin(),
     IconPlugin(),
     ImagePlugin(config.modules.image.presets, config.modules.image.options),
     DecoratorPlugin(),

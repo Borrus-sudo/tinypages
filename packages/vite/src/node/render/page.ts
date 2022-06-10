@@ -134,11 +134,11 @@ export async function render(
             preactComponent,
             { ...component.props, pageContext: context.page.pageCtx },
             slotVnode
-          ); // the component in Vnode
+          ); // the component in vnode
           const { html: prerenderedHtml } = await prerender(vnode);
 
           /**
-           * creatng the static html
+           * creating the static html
            */
           payload = $(
             "div",

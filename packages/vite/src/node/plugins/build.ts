@@ -5,7 +5,7 @@ import { useContext } from "../context";
 import AutoImportPluginOptions from "./isomorphic/auto-import";
 import IconPlugin from "./isomorphic/icons";
 import MarkdownBuildPlugin from "./build/build-meta";
-import SvgResolverPlugin from "./build/svg-resolver";
+import SvgResolverPlugin from "./isomorphic/svg-resolver";
 
 export async function createBuildPlugins() {
   const { config } = useContext("iso");

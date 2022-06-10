@@ -187,8 +187,11 @@ export function cli() {
       import("./build"),
     ]);
 
+    const { urls } = JSON.parse(
+      await fs.readFile(join(root, "urls.json"), { encoding: "utf-8" })
+    );
     const { config } = await resolveConfig({ root });
-    const builtHTML = await build(config, ["/", "/qEWtDHOhuYyafXk6"], true);
+    const builtHTML = await build(config, urls, true);
 
     builtHTML.forEach((userHtml, { filePath }) => {
       const res = html({

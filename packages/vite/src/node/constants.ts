@@ -43,6 +43,9 @@ export const presetViteConfig = {
       "preact/debug",
       "preact/hooks",
     ],
+    esbuildOptions: {
+      target: "es2020",
+    },
   },
   ssr: {
     externals: ["preact-render-to-string", "preact-iso"],
