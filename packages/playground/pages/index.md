@@ -2,7 +2,7 @@
 <title>(JS/TS)Gandalf's blog!</title>
 </head>
 
-## (JS/TS)Gandalf's blog!!!!
+## (JS/TS)Gandalf's blog!
 
 
 {% for blog in data %}

@@ -14,8 +14,9 @@ export default defineConfig({
       emptyOutDir: true,
       outDir: "dist",
       rollupOptions: {
-        input: "./pages/index.md",
-        output: {},
+        input: {
+          "": "",
+        },
       },
     },
   },

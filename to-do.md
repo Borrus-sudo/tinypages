@@ -3,20 +3,18 @@
 ## Markdown compiler
 
 - Add API support for i18n
-- Add support for twemoji, circuits
+- Add support circuits
 
 ## Vite plugin
 
-- Support build process
+- Support build process [done]
 - Add PWA via the vite plugin
-- SEO components
-- Fast read dir
+- SEO components 
+- Fast read dir [done]
 - Schema
-- Graph component
-- Link crawler
-- Incremental builds
-- Grammar check
+- Graph component [dropped_feature]
+- Link crawler [done]
+- Incremental builds [done]
+- Grammar check [done]
 - Liquidjs stuff
-- Preactjs stuff (profiling, devToolsInProd)
 - Rollup build optimizations
-- Graph component
