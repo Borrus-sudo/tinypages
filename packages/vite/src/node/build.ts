@@ -14,22 +14,40 @@ import { readFileSync } from "fs";
 import path from "path";
 import { v4 as uuid } from "@lukeed/uuid";
 import { polyfill } from "@astropub/webapi";
+import ora from "ora";
+
+function analyzeUrls(html: string) {
+  const res = [];
+  html.replace(/\<a href\=\"(.*?)\"/gi, (_, url) => {
+    //TODO: improve this? seems hacky
+    res.push(url);
+    return "";
+  });
+  return res;
+}
 
 export async function build(
   config: TinyPagesConfig,
   urls: string[],
-  isGrammarCheck: boolean
+  isGrammarCheck: boolean,
+  zeroJS: boolean
 ) {
   const [buildContext, vite] = await createBuildContext(
     config,
     createBuildPlugins
   );
+  const spinner = ora();
+  spinner.text = "Building pages!";
+  spinner.color = "yellow";
+
   const router = await fsRouter(buildContext.utils.pageDir);
   const fileToLoaderMap: Map<string, { default: Function } | boolean> =
     new Map();
-  const engine = new Liquid();
+  const engine = new Liquid({
+    extname: ".md",
+  });
 
-  async function performOperation(pageCtx: PageCtx) {
+  async function buildPage(pageCtx: PageCtx) {
     let { url, params } = pageCtx;
     let compileThis = "";
     let fileLoader = fileToLoaderMap.get(url);
@@ -84,12 +102,14 @@ export async function build(
       config: buildContext.config,
     });
 
+    const newlyFoundUrls = analyzeUrls(appHtml);
+
     if (isGrammarCheck) {
       buildContext.fileToHtmlMap.set(
         { filePath: url, url: pageCtx.originalUrl },
         appHtml
       );
-      return;
+      return newlyFoundUrls;
     }
 
     if (Object.keys(page.global.components).length > 0) {
@@ -117,32 +137,48 @@ export async function build(
         innerHTML: undefined,
       });
     }
+
     const output = appendPrelude(appHtml, page);
     buildContext.fileToHtmlMap.set(
       { filePath: url, url: pageCtx.originalUrl },
       output
     );
+    return newlyFoundUrls;
   }
 
   polyfill(global, {
     exclude: "window document",
   });
 
-  let buildsOps = [];
-  urls.forEach((url) => {
-    const normalizedUrl = normalizeUrl(url);
-    const res = router(normalizedUrl.replace(/\.md$/, ""), url);
-    if (res.url === "404") {
-      buildContext.utils.consola.error(new Error(`404 ${url} not found`));
-    } else {
-      buildsOps.push(performOperation(res));
-    }
-  });
+  async function buildPages(urls) {
+    let buildsOps = [];
+    urls.forEach((url) => {
+      const normalizedUrl = normalizeUrl(url);
+      const res = router(normalizedUrl.replace(/\.md$/, ""), url);
+      if (res.url === "404") {
+        buildContext.utils.consola.error(new Error(`404 ${url} not found`));
+      } else {
+        buildsOps.push(buildPage(res));
+      }
+    });
 
-  await Promise.allSettled(buildsOps);
+    const output = await Promise.allSettled(buildsOps);
+    const moarUrls = [];
+    output.forEach((curr) =>
+      curr.status === "fulfilled" ? moarUrls.push(...curr.value) : 0
+    );
+
+    if (moarUrls.length > 0) {
+      await buildPages(moarUrls);
+    }
+  }
+
+  spinner.start();
+  await buildPages(urls);
+  spinner.succeed("Pages built!");
   await vite.close();
 
-  if (!isGrammarCheck) {
+  if (!isGrammarCheck && !zeroJS) {
     let inputOptions = {};
     buildContext.fileToHtmlMap.forEach((html, { url }) => {
       const normalizedUrl = normalizeUrl(url).replace(/\.md$/, ".html");

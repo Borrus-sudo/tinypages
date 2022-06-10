@@ -60,6 +60,7 @@ export default function (): Plugin {
   const propsCache = new Map();
   const engine = new Liquid({
     cache: true,
+    extname: ".md",
   });
 
   // main function

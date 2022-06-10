@@ -4,6 +4,8 @@ import * as Vite from "vite";
 import type { UserTinyPagesConfig } from "../../types/types";
 import { resolveConfig } from "./resolve-config";
 import * as fs from "fs/promises";
+import { writeFileSync } from "fs";
+import { normalizeUrl } from "./utils";
 
 interface GlobalCLIOptions {
   "--"?: string[];
@@ -172,7 +174,7 @@ export function cli() {
           const { urls } = JSON.parse(
             await fs.readFile(join(root, "urls.json"), { encoding: "utf-8" })
           );
-          await build(config, urls, false);
+          await build(config, urls, false, false);
         } catch (e) {
           console.log(reportString);
           console.error(e);
@@ -191,7 +193,7 @@ export function cli() {
       await fs.readFile(join(root, "urls.json"), { encoding: "utf-8" })
     );
     const { config } = await resolveConfig({ root });
-    const builtHTML = await build(config, urls, true);
+    const builtHTML = await build(config, urls, true, false);
 
     builtHTML.forEach((userHtml, { filePath }) => {
       const res = html({
@@ -200,6 +202,21 @@ export function cli() {
         messages: [],
       });
       console.error(reporter(res));
+    });
+  });
+
+  cli.command("rebuild [root]").action(async (root: string = process.cwd()) => {
+    const { urls } = JSON.parse(
+      await fs.readFile(join(root, "changed_urls.json"), { encoding: "utf-8" })
+    );
+    const { build } = await import("./build");
+    const { config } = await resolveConfig({ root });
+    const builtHTML = await build(config, urls, false, true);
+
+    builtHTML.forEach((updatedHtml, { url }) => {
+      const normalizedUrl = normalizeUrl(url).replace(/\.md$/, ".html");
+      const toWritePath = join(root, "dist", normalizedUrl);
+      writeFileSync(toWritePath, updatedHtml);
     });
   });
 
