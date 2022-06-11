@@ -62,7 +62,6 @@ export const presetViteConfig = {
 export const presetPageConfig = {
   pageCtx: { url: "" },
   sources: [],
-  layouts: [],
   reloads: [],
   global: {
     components: {},

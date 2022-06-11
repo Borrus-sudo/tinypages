@@ -54,7 +54,7 @@ export async function render(
     if (context.page.sources) context.page.sources.push(componentPath);
 
     /**
-     * some prestuff which is not bound by any conditions
+     * some pre-stuff which is not bound by any conditions
      */
     const cloneProps = deepCopy(component.props);
     delete cloneProps["lazy:load"];

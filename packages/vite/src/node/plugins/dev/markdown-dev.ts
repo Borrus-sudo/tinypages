@@ -23,30 +23,18 @@ export default function (): Plugin {
     ["/uno:only", `import "uno.css";import "tinypages/hmr";`],
   ]);
   let seen = [];
-  let changedLayoutIndication = false;
   let vite: ViteDevServer;
   let isBuild = false;
 
   /**
-   * The compile function takes something as input and caches it. In the case of changedLayouts we have to forcibly make it
-   * not take from the cache as the main markown remains unchanged but the layout needs to be recompiled
+   * The compile function takes something as input and caches it.
    */
-  const compile = async (input: string): Promise<[string, Meta, string[]]> => {
+  const compile = async (input: string): Promise<[string, Meta]> => {
     const digest = hash(input).toString();
-    if (changedLayoutIndication) {
-      changedLayoutIndication = false;
-    } else {
-      if (cache.has(digest)) {
-        return JSON.parse(cache.get(digest));
-      }
+    if (cache.has(digest)) {
+      return JSON.parse(cache.get(digest));
     }
-    // compiled markdown
-    const result = await compileMarkdown(
-      input,
-      config.compiler,
-      page.pageCtx.url
-    );
-
+    const result = await compileMarkdown(input, config.compiler);
     cache.set(digest, JSON.stringify(result));
     return result;
   };
@@ -61,6 +49,8 @@ export default function (): Plugin {
   const engine = new Liquid({
     cache: true,
     extname: ".md",
+    root: path.join(config.vite.root, "pages"),
+    layouts: path.join(config.vite.root, "layouts"),
   });
 
   // main function
@@ -101,7 +91,7 @@ export default function (): Plugin {
       }
     } else {
       const prevTimestamp = ssrTimestampCache.get(originalUrl) ?? 0;
-      let offset = 120 * 1000;
+      const offset = 120 * 1000;
 
       // cache expired
       if (currTimestamp - prevTimestamp > offset) {
@@ -121,7 +111,15 @@ export default function (): Plugin {
     page.global.ssrProps = data?.ssrProps || {};
 
     //Liquidjs stuff
-    const builtMarkdown = engine.parseAndRender(markdown, data);
+    markdown.replace(/\{.*?layout.*?\"(.*?)\".*?\}/, (_, needle) => {
+      const layout = path.resolve(
+        path.dirname(page.pageCtx.url),
+        needle.endsWith(".md") ? needle : needle + ".md"
+      );
+      page.reloads.push(layout);
+      return _;
+    });
+    const builtMarkdown = await engine.parseAndRender(markdown, data);
     return builtMarkdown;
   };
 
@@ -150,8 +148,8 @@ export default function (): Plugin {
           vite = useVite();
         }
 
-        const builtEjs = await buildRoute(page.pageCtx.url, markdown);
-        const [rawHtml, meta, layouts] = await compile(builtEjs);
+        const builtLiquid = await buildRoute(page.pageCtx.url, markdown);
+        const [rawHtml, meta] = await compile(builtLiquid);
         /**
          * Initialize the page globals to make it ready for the new page.
          * page.reloads=[] happens in buildRoute function.
@@ -167,7 +165,6 @@ export default function (): Plugin {
           head: meta.head,
           feed: meta.feeds,
         });
-        page.layouts = layouts;
 
         const renderedHtml = await utils.render(rawHtml);
 
@@ -201,7 +198,10 @@ export default function (): Plugin {
         }
 
         const appHtml = appendPrelude(renderedHtml, page);
-        for (const toAdd of [page.pageCtx.url, ...page.layouts]) {
+        for (const toAdd of [
+          page.pageCtx.url,
+          ...page.reloads.filter((p) => p.endsWith(".md")),
+        ]) {
           if (!seen.includes(toAdd)) {
             context.server.moduleGraph.createFileOnlyEntry(toAdd);
             seen.push(toAdd);
@@ -228,7 +228,7 @@ export default function (): Plugin {
         const fileId = path.normalize(module.file);
         const fileBasename = path.basename(fileId);
         /**
-         * Reload the page. (mainly for handling the loader files)
+         * Reload the page. (mainly for handling the loader and layout files)
          */
         if (page.reloads.includes(fileId)) {
           reload(fileBasename, context.server, utils.logger);
@@ -263,16 +263,6 @@ export default function (): Plugin {
             type: "custom",
             event: "new:page",
           });
-          return;
-        } else if (page.layouts.includes(fileId)) {
-          /**
-           *  Reload the page if layout changed;
-           *  TODO: improve this
-           */
-
-          changedLayoutIndication = true;
-          reload(fileBasename, context.server, utils.logger);
-          seen = [];
           return;
         } else {
           toReturnModules.push(module);

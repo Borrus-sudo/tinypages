@@ -37,7 +37,10 @@ export default function (): Plugin {
   };
 
   const transformToSvgId = (id: string) => {
-    return id.replace("/~/icons/", "").replace("~icons/", "");
+    return id
+      .replace("/~/icons/", "")
+      .replace("~icons/", "")
+      .replace("svg:", "");
   };
   let isBuild;
 
@@ -51,7 +54,7 @@ export default function (): Plugin {
       if (seen.has(id)) {
         return seen.get(id);
       }
-      if (id.endsWith(".svg")) {
+      if (id.endsWith(".svg") || id.startsWith("svg:")) {
         const svgId = transformToSvgId(id);
         const res = loadIcons(svgId.replace(".svg", "")).replace(
           "<svg >",
@@ -66,7 +69,7 @@ export default function (): Plugin {
       }
     },
     load(id: string) {
-      if (!id.endsWith(".svg")) {
+      if (!id.endsWith(".svg") && !id.startsWith("svg:")) {
         return;
       }
       if (isBuild) {

@@ -19,9 +19,8 @@ import { orderPlugins, postTransform, Spy } from "./utils";
 
 export async function compile(
   input: string,
-  UserConfig: UserConfig,
-  filePath?: string
-): Promise<[string, Meta, string[]]> {
+  UserConfig: UserConfig
+): Promise<[string, Meta]> {
   //@ts-ignore
   let config: Config = Object.assign({}, UserConfig, {
     metaConstruct: {
@@ -46,7 +45,6 @@ export async function compile(
       },
     },
   });
-  const layoutPaths = [];
 
   config.plugins = orderPlugins(
     [PluginCSS(), PluginCode(), PluginText(), PluginHTML()],
@@ -61,27 +59,6 @@ export async function compile(
   if (grayMatter) {
     config.metaConstruct.grayMatter = parseYaml(grayMatter.slice(4, -3));
     input = input.split(grayMatter)[1];
-    if (config.metaConstruct.grayMatter.layout && filePath) {
-      const readThis = path.resolve(
-        path.basename(filePath),
-        config.metaConstruct.grayMatter.layout
-      );
-      layoutPaths.push(readThis);
-      const layout = await fs.readFile(readThis, { encoding: "utf-8" });
-      const [compiledLayout, layoutMeta, nestedLayouts] = await compile(
-        layout,
-        UserConfig,
-        filePath
-      );
-      layoutPaths.push(...nestedLayouts);
-      config.metaConstruct = defu(config.metaConstruct, layoutMeta);
-      /**
-       * TODO: hacky pls pls fix this
-       */
-      input = compiledLayout
-        .replace(`<a href="slot:body">slot:body</a>`, input)
-        .replace("<slot:body></slot:body>", input);
-    }
   }
 
   const Renderer = new marked.Renderer();
@@ -103,7 +80,6 @@ export async function compile(
   return [
     output, //@ts-ignore
     config.metaConstruct,
-    layoutPaths,
   ];
 }
 

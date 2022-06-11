@@ -52,6 +52,7 @@ export async function resolveConfig(
           viewBox: "0 0 24 24",
         },
       },
+      preact: {},
       unocss: {},
     },
   });

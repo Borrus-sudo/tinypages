@@ -44,7 +44,6 @@ export async function createDevContext(
       plugins,
     });
   }
-
   return [devContext, vite];
 }
 

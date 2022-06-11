@@ -29,7 +29,7 @@ export default function (): Plugin {
           `;
         else {
           `import { h } from "preact";
-           import svg from "${id}.svg";
+           import svg from "svg:${id}";
            export default (props) => {
               return h("span", {}, [
                          h("svg", {
@@ -37,8 +37,8 @@ export default function (): Plugin {
                             html: svg,
                           },
                         ...props,
-                    }),
-                ]);
+                        }),
+                    ]);
           };
          `;
         }

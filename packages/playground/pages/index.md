@@ -1,9 +1,8 @@
-<head>
-<title>(JS/TS)Gandalf's blog!</title>
-</head>
 
+{% layout "../layouts/BaseLayout.md" %}
+
+{% block content %}
 ## (JS/TS)Gandalf's blog!
-
 
 {% for blog in data %}
  [{{blog.meta}}](/{{blog._id}})
@@ -11,3 +10,5 @@
 
 <i-mdi-github/>
 <Counter client:only/>
+
+{% endblock %}

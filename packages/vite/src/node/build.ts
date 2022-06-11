@@ -45,6 +45,8 @@ export async function build(
     new Map();
   const engine = new Liquid({
     extname: ".md",
+    root: path.join(config.vite.root, "pages"),
+    layouts: path.join(config.vite.root, "layouts"),
   });
 
   async function buildPage(pageCtx: PageCtx) {
@@ -86,7 +88,7 @@ export async function build(
       ssrProps = data?.ssrProps ?? {};
     }
 
-    const [rawHtml, meta] = await compile(compileThis, config.compiler, url);
+    const [rawHtml, meta] = await compile(compileThis, config.compiler);
     const page: ReducedPage = {
       meta,
       pageCtx,
@@ -150,7 +152,7 @@ export async function build(
     exclude: "window document",
   });
 
-  async function buildPages(urls) {
+  async function buildPages(urls: string[], history: string[]) {
     let buildsOps = [];
     urls.forEach((url) => {
       const normalizedUrl = normalizeUrl(url);
@@ -167,14 +169,18 @@ export async function build(
     output.forEach((curr) =>
       curr.status === "fulfilled" ? moarUrls.push(...curr.value) : 0
     );
+    const newHistory = [...history, ...urls];
 
     if (moarUrls.length > 0) {
-      await buildPages(moarUrls);
+      await buildPages(
+        moarUrls.filter((currUrl) => !newHistory.includes(currUrl)),
+        newHistory
+      );
     }
   }
 
   spinner.start();
-  await buildPages(urls);
+  await buildPages(urls, []);
   spinner.succeed("Pages built!");
   await vite.close();
 

@@ -14,12 +14,7 @@ interface Consola {
   success: (input: string) => void;
 }
 
-type ComponentRegistration = {
-  [key: string]: {
-    path: string;
-    lazy: boolean;
-  };
-};
+type ComponentRegistration = Record<string, { path: string; lazy: boolean }>;
 
 interface PageCtx {
   url: string;
@@ -42,7 +37,6 @@ interface Page {
   };
   meta: Meta;
   prevHash: string;
-  layouts: string[];
   reloads: string[]; // an indication for the hmr system to blind reload in these scenarios
 }
 
