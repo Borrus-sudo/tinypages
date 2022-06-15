@@ -39,7 +39,7 @@ export async function compile(
         titleAttributes: {},
       },
       grayMatter: {},
-      feed: {
+      feeds: {
         atom: "",
         rss: "",
       },

@@ -174,7 +174,7 @@ export function cli() {
           const { urls } = JSON.parse(
             await fs.readFile(join(root, "urls.json"), { encoding: "utf-8" })
           );
-          await build(config, urls, false, false);
+          await build({ config, urls, isGrammarCheck: false, zeroJS: false });
         } catch (e) {
           console.log(reportString);
           console.error(e);
@@ -193,9 +193,14 @@ export function cli() {
       await fs.readFile(join(root, "urls.json"), { encoding: "utf-8" })
     );
     const { config } = await resolveConfig({ root });
-    const builtHTML = await build(config, urls, true, false);
+    const payload = await build({
+      config,
+      urls,
+      isGrammarCheck: true,
+      zeroJS: false,
+    });
 
-    builtHTML.forEach((userHtml, { filePath }) => {
+    payload.forEach((userHtml, { filePath }) => {
       const res = html({
         value: userHtml,
         path: filePath,
@@ -211,9 +216,14 @@ export function cli() {
     );
     const { build } = await import("./build");
     const { config } = await resolveConfig({ root });
-    const builtHTML = await build(config, urls, false, true);
+    const payload = await build({
+      config,
+      urls,
+      isGrammarCheck: false,
+      zeroJS: true,
+    });
 
-    builtHTML.forEach((updatedHtml, { url }) => {
+    payload.forEach((updatedHtml, { url }) => {
       const normalizedUrl = normalizeUrl(url).replace(/\.md$/, ".html");
       const toWritePath = join(root, "dist", normalizedUrl);
       writeFileSync(toWritePath, updatedHtml);

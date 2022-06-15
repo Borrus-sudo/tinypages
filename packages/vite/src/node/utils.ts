@@ -9,15 +9,6 @@ export function hash(content: string) {
   return murmurHash(content);
 }
 
-export function normalizeUrl(url: string) {
-  let normalizedUrl = url.endsWith("/")
-    ? url + "index.md"
-    : /\..*?$/.test(url)
-    ? url
-    : url + ".md";
-  return normalizedUrl.replace(/\.html$/, ".md");
-}
-
 export function createConsola() {
   const { Consola, FancyReporter, LogLevel } =
     consolaPkg as unknown as typeof import("consola");
@@ -55,3 +46,5 @@ export function createElement(
   }
   return `<${tag} ${paramsString}>${content}</${tag}>`;
 }
+
+export { normalizeUrl } from "./router/fs";

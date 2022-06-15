@@ -100,7 +100,7 @@ export default function (): Plugin {
         data = await loader(page.pageCtx.params);
         utils.consola.success("State loaded!");
 
-        ssrTimestampCache.set(originalUrl, currTimestamp);
+        ssrTimestampCache.set(originalUrl, new Date().getTime()); // for better accuracy this is being done
         propsCache.set(originalUrl, data);
       } else {
         utils.consola.success("State loaded from cache!");
@@ -147,7 +147,7 @@ export default function (): Plugin {
         if (!vite) {
           vite = useVite();
         }
-
+        page.reloads = [];
         const builtLiquid = await buildRoute(page.pageCtx.url, markdown);
         const [rawHtml, meta] = await compile(builtLiquid);
         /**
@@ -163,7 +163,6 @@ export default function (): Plugin {
         page.prevHash = hashIt({
           components: meta.components,
           head: meta.head,
-          feed: meta.feeds,
         });
 
         const renderedHtml = await utils.render(rawHtml);
@@ -246,7 +245,6 @@ export default function (): Plugin {
           const newHash = hashIt({
             components: meta.components,
             head: meta.head,
-            feed: meta.feeds,
           });
           if (newHash !== page.prevHash) {
             reload(fileBasename, context.server, utils.logger);

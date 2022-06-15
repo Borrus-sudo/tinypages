@@ -1,4 +1,4 @@
-export default function Counter() {
+export default function Counter(props) {
   return (
     <>
       Hello

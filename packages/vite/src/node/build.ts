@@ -5,14 +5,13 @@ import { fsRouter } from "./router/fs";
 import { normalizeUrl } from "./utils";
 import { createBuildPlugins } from "./plugins/build";
 import { Liquid } from "liquidjs";
-import { existsSync } from "fs";
+import { existsSync, writeFileSync } from "fs";
 import { compile } from "@tinypages/compiler";
 import { render } from "./render/page";
 import { appendPrelude } from "./render/render-utils";
 import { generateVirtualEntryPoint } from "./plugins/plugin-utils";
 import { readFileSync } from "fs";
 import path from "path";
-import { v4 as uuid } from "@lukeed/uuid";
 import { polyfill } from "@astropub/webapi";
 import ora from "ora";
 
@@ -26,16 +25,19 @@ function analyzeUrls(html: string) {
   return res;
 }
 
-export async function build(
-  config: TinyPagesConfig,
-  urls: string[],
-  isGrammarCheck: boolean,
-  zeroJS: boolean
-) {
+type Params = {
+  config: TinyPagesConfig;
+  urls: string[];
+  isGrammarCheck: boolean;
+  zeroJS: boolean;
+};
+
+export async function build({ config, urls, isGrammarCheck, zeroJS }: Params) {
   const [buildContext, vite] = await createBuildContext(
     config,
     createBuildPlugins
   );
+  const postFs = {};
   const spinner = ora();
   spinner.text = "Building pages!";
   spinner.color = "yellow";
@@ -52,15 +54,15 @@ export async function build(
   async function buildPage(pageCtx: PageCtx) {
     let { url, params } = pageCtx;
     let compileThis = "";
-    let fileLoader = fileToLoaderMap.get(url);
+    let cachedLoader = fileToLoaderMap.get(url);
     let loader;
     let markdown = readFileSync(url, { encoding: "utf-8" });
 
-    if (typeof fileLoader === "boolean") {
+    if (typeof cachedLoader === "boolean") {
       // does not exist
       compileThis = markdown;
     } else {
-      if (typeof fileLoader === "undefined") {
+      if (typeof cachedLoader === "undefined") {
         let jsUrl = url.replace(/\.md$/, ".js");
         if (!existsSync(jsUrl)) {
           let tsUrl = url.replace(/\.md$/, ".ts");
@@ -68,6 +70,7 @@ export async function build(
             loader = (await vite.ssrLoadModule(tsUrl)) as {
               default: Function;
             };
+            fileToLoaderMap.set(url, loader);
           } else {
             fileToLoaderMap.set(url, false);
             compileThis = markdown;
@@ -76,13 +79,15 @@ export async function build(
           loader = (await vite.ssrLoadModule(jsUrl)) as {
             default: Function;
           };
+          fileToLoaderMap.set(url, loader);
         }
+      } else {
+        loader = cachedLoader;
       }
     }
 
     let ssrProps = {};
     if (loader) {
-      fileToLoaderMap.set(url, loader);
       const data = await loader.default(params);
       compileThis = await engine.parseAndRender(markdown, data);
       ssrProps = data?.ssrProps ?? {};
@@ -112,6 +117,43 @@ export async function build(
         appHtml
       );
       return newlyFoundUrls;
+    }
+
+    if (page.meta.feeds.atom) {
+      const atomUrl = normalizeUrl(pageCtx.originalUrl).replace(
+        /\.md$/,
+        "ATOM.xml"
+      );
+      const atomFSPath = path.join(
+        buildContext.config.vite.root,
+        "dist",
+        atomUrl
+      );
+      postFs[atomFSPath] = page.meta.feeds.atom;
+      page.meta.head.link.push({
+        rel: "alternate",
+        type: "application/rss+xml",
+        title: "Subscribe to What's New!",
+        href: atomUrl,
+      });
+    }
+    if (page.meta.feeds.rss) {
+      const rssUrl = normalizeUrl(pageCtx.originalUrl).replace(
+        /\.md$/,
+        "RSS.xml"
+      );
+      const rssFSPath = path.join(
+        buildContext.config.vite.root,
+        "dist",
+        rssUrl
+      );
+      postFs[rssFSPath] = page.meta.feeds.atom;
+      page.meta.head.link.push({
+        rel: "alternate",
+        type: "application/rss+xml",
+        title: "Subscribe to What's New!",
+        href: rssUrl,
+      });
     }
 
     if (Object.keys(page.global.components).length > 0) {
@@ -192,7 +234,7 @@ export async function build(
         buildContext.config.vite.root,
         normalizedUrl
       );
-      inputOptions[uuid()] = resolvedUrl;
+      inputOptions[normalizedUrl.replace(/\//g, "-").slice(1)] = resolvedUrl;
       buildContext.virtualModuleMap.set(resolvedUrl, html);
     });
     const build = buildContext.config.vite.build;
@@ -203,6 +245,8 @@ export async function build(
     build.rollupOptions.input = inputOptions;
     await Vite.build(buildContext.config.vite);
   }
-
+  Object.keys(postFs).forEach((path) => {
+    writeFileSync(path, postFs[path]);
+  });
   return buildContext.fileToHtmlMap;
 }
