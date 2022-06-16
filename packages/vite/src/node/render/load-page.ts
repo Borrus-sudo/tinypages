@@ -3,6 +3,7 @@ import { useVite, useContext } from "../context";
 import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import { Liquid } from "liquidjs";
+import * as Filters from "@11ty/eleventy-plugin-rss";
 
 const { utils } = useContext("iso");
 const ssrTimestampCache = new Map();
@@ -10,6 +11,19 @@ const propsCache = new Map();
 const engine = new Liquid({
   cache: true,
 });
+const fileLoader: Map<string, Function> = new Map();
+
+engine.filters.create("dateToRfc3339", Filters.dateToRfc3339);
+engine.filters.create("dateToRfc822", Filters.dateToRfc822);
+engine.filters.create(
+  "getNewestCollectionItemDate",
+  Filters.getNewestCollectionItemDate
+);
+engine.filters.create("absoluteUrl", Filters.absoluteUrl);
+engine.filters.create(
+  "convertHtmlToAbsoluteUrls",
+  Filters.convertHtmlToAbsoluteUrls
+);
 
 async function buildRoute({ fileURL, markdown, page, isBuild }) {
   const vite = useVite();
@@ -38,7 +52,17 @@ async function buildRoute({ fileURL, markdown, page, isBuild }) {
     // it is imperative to use originalUrl
 
     //boilerplate stuff
-    const { default: loader } = await vite.ssrLoadModule(fileURL);
+    let loader;
+    if (isBuild) {
+      if (fileLoader.has(fileURL)) {
+        loader = fileLoader.get(fileURL);
+      } else {
+        loader = (await vite.ssrLoadModule(fileURL)).default;
+        fileLoader.set(fileURL, loader);
+      }
+    } else {
+      loader = (await vite.ssrLoadModule(fileURL)).default;
+    }
     data = await loader(page.pageCtx.params);
 
     if (!isBuild) {
@@ -71,29 +95,25 @@ async function buildRoute({ fileURL, markdown, page, isBuild }) {
   return builtMarkdown;
 }
 
-export async function loadPage(
-  fileURL: string,
-  page = {
-    global: {},
-    reloads: [],
-  },
-  isBuild: boolean
-): Promise<string[]> {
-  const vite = useVite();
-  const toReload = []; // for dev hmr
+export async function loadPage(fileURL: string, page, isBuild: boolean) {
   const ops = [];
   do {
-    const parentPath = path.dirname(fileURL) + ".md";
-    if (!existsSync(parentPath)) {
-      break;
-    }
+    page.reloads.push(fileURL);
     const markdown = await readFile(fileURL);
     ops.push(buildRoute({ fileURL, page, markdown, isBuild }));
-    fileURL = parentPath;
-  } while (path.dirname(fileURL) !== utils.pageDir);
-  if (existsSync(path.join(utils.pageDir, "root.md"))) {
-    const markdown = await readFile(path.join(utils.pageDir, "root.md"));
-    ops.push(buildRoute({ fileURL, page, markdown, isBuild }));
-  }
-  return toReload;
+    if (path.dirname(fileURL) === utils.pageDir) {
+      fileURL = path.join(utils.pageDir, "root.md");
+    } else {
+      fileURL = path.dirname(fileURL) + ".md";
+    }
+  } while (existsSync(fileURL));
+  const output: string[] = await Promise.all(ops);
+  const result = output
+    .reverse()
+    .slice(1)
+    .reduce(
+      (prevValue, thisValue) => prevValue.replace("<Outlet/>", thisValue),
+      output[0]
+    );
+  return result;
 }

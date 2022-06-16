@@ -1,5 +1,5 @@
 import { compile as compileMarkdown } from "@tinypages/compiler";
-import { existsSync, promises as fs } from "fs";
+import { promises as fs } from "fs";
 import path from "path";
 import type { ModuleNode, Plugin, ViteDevServer } from "vite";
 import { normalizePath as viteNormalizePath } from "vite";
@@ -13,7 +13,6 @@ import {
   hash as hashIt,
   reload,
 } from "../plugin-utils";
-import { Liquid } from "liquidjs";
 import { v4 as uuid } from "@lukeed/uuid";
 
 export default function (): Plugin {
@@ -39,90 +38,6 @@ export default function (): Plugin {
     return result;
   };
 
-  /**
-   * Loads the entry point and builds the page
-   */
-
-  // constants needed
-  const ssrTimestampCache = new Map();
-  const propsCache = new Map();
-  const engine = new Liquid({
-    cache: true,
-    extname: ".md",
-    root: path.join(config.vite.root, "pages"),
-    layouts: path.join(config.vite.root, "layouts"),
-  });
-
-  // main function
-  const buildRoute = async (url: string, markdown: string) => {
-    page.reloads = [];
-    let jsUrl = url.replace(/\.md$/, ".js");
-    if (!existsSync(jsUrl)) {
-      let tsUrl = url.replace(/\.md$/, ".ts");
-      if (existsSync(tsUrl)) {
-        url = tsUrl;
-      } else {
-        return markdown;
-      }
-    } else {
-      url = jsUrl;
-    }
-
-    if (!page.reloads.includes(url)) page.reloads.push(url);
-    let data;
-
-    /**
-     * caching strategy for better hmr during dev
-     */
-    let originalUrl = page.pageCtx.originalUrl;
-    let currTimestamp = new Date().getTime();
-
-    if (isBuild || !ssrTimestampCache.has(originalUrl)) {
-      // it is imperative to use originalUrl
-
-      //boilerplate stuff
-      const { default: loader } = await vite.ssrLoadModule(url);
-      data = await loader(page.pageCtx.params);
-      utils.consola.success("State loaded!");
-
-      if (!isBuild) {
-        ssrTimestampCache.set(originalUrl, currTimestamp);
-        propsCache.set(originalUrl, data);
-      }
-    } else {
-      const prevTimestamp = ssrTimestampCache.get(originalUrl) ?? 0;
-      const offset = 120 * 1000;
-
-      // cache expired
-      if (currTimestamp - prevTimestamp > offset) {
-        // boilerplate stuff
-        const { default: loader } = await vite.ssrLoadModule(url);
-        data = await loader(page.pageCtx.params);
-        utils.consola.success("State loaded!");
-
-        ssrTimestampCache.set(originalUrl, new Date().getTime()); // for better accuracy this is being done
-        propsCache.set(originalUrl, data);
-      } else {
-        utils.consola.success("State loaded from cache!");
-        data = propsCache.get(originalUrl);
-      }
-    }
-
-    page.global.ssrProps = data?.ssrProps || {};
-
-    //Liquidjs stuff
-    markdown.replace(/\{.*?layout.*?\"(.*?)\".*?\}/, (_, needle) => {
-      const layout = path.resolve(
-        path.dirname(page.pageCtx.url),
-        needle.endsWith(".md") ? needle : needle + ".md"
-      );
-      page.reloads.push(layout);
-      return _;
-    });
-    const builtMarkdown = await engine.parseAndRender(markdown, data);
-    return builtMarkdown;
-  };
-
   return {
     name: "vite-tinypages-markdown",
     enforce: "pre",
@@ -143,16 +58,17 @@ export default function (): Plugin {
     },
     transformIndexHtml: {
       enforce: "pre",
-      async transform(markdown: string, context) {
+      /**
+       * The compiled markdown by liquidjs following the remix layout system and ssred loader function
+       */
+      async transform(builtLiquid: string, context) {
         if (!vite) {
           vite = useVite();
         }
-        page.reloads = [];
-        const builtLiquid = await buildRoute(page.pageCtx.url, markdown);
         const [rawHtml, meta] = await compile(builtLiquid);
         /**
          * Initialize the page globals to make it ready for the new page.
-         * page.reloads=[] happens in buildRoute function.
+         * page.reloads=[] happens in middleware/router.
          */
         page.meta = meta;
         page.sources = [];
@@ -197,10 +113,7 @@ export default function (): Plugin {
         }
 
         const appHtml = appendPrelude(renderedHtml, page);
-        for (const toAdd of [
-          page.pageCtx.url,
-          ...page.reloads.filter((p) => p.endsWith(".md")),
-        ]) {
+        for (const toAdd of page.reloads.filter((p) => p.endsWith(".md"))) {
           if (!seen.includes(toAdd)) {
             context.server.moduleGraph.createFileOnlyEntry(toAdd);
             seen.push(toAdd);

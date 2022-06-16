@@ -4,16 +4,15 @@ import { createBuildContext } from "./context";
 import { fsRouter } from "./router/fs";
 import { normalizeUrl } from "./utils";
 import { createBuildPlugins } from "./plugins/build";
-import { Liquid } from "liquidjs";
-import { existsSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import { compile } from "@tinypages/compiler";
 import { render } from "./render/page";
 import { appendPrelude } from "./render/render-utils";
 import { generateVirtualEntryPoint } from "./plugins/plugin-utils";
-import { readFileSync } from "fs";
 import path from "path";
 import { polyfill } from "@astropub/webapi";
 import ora from "ora";
+import { loadPage } from "./render/load-page";
 
 function analyzeUrls(html: string) {
   const res = [];
@@ -43,64 +42,23 @@ export async function build({ config, urls, isGrammarCheck, zeroJS }: Params) {
   spinner.color = "yellow";
 
   const router = await fsRouter(buildContext.utils.pageDir);
-  const fileToLoaderMap: Map<string, { default: Function } | boolean> =
-    new Map();
-  const engine = new Liquid({
-    extname: ".md",
-    root: path.join(config.vite.root, "pages"),
-    layouts: path.join(config.vite.root, "layouts"),
-  });
 
   async function buildPage(pageCtx: PageCtx) {
-    let { url, params } = pageCtx;
-    let compileThis = "";
-    let cachedLoader = fileToLoaderMap.get(url);
-    let loader;
-    let markdown = readFileSync(url, { encoding: "utf-8" });
-
-    if (typeof cachedLoader === "boolean") {
-      // does not exist
-      compileThis = markdown;
-    } else {
-      if (typeof cachedLoader === "undefined") {
-        let jsUrl = url.replace(/\.md$/, ".js");
-        if (!existsSync(jsUrl)) {
-          let tsUrl = url.replace(/\.md$/, ".ts");
-          if (existsSync(tsUrl)) {
-            loader = (await vite.ssrLoadModule(tsUrl)) as {
-              default: Function;
-            };
-            fileToLoaderMap.set(url, loader);
-          } else {
-            fileToLoaderMap.set(url, false);
-            compileThis = markdown;
-          }
-        } else {
-          loader = (await vite.ssrLoadModule(jsUrl)) as {
-            default: Function;
-          };
-          fileToLoaderMap.set(url, loader);
-        }
-      } else {
-        loader = cachedLoader;
-      }
-    }
-
-    let ssrProps = {};
-    if (loader) {
-      const data = await loader.default(params);
-      compileThis = await engine.parseAndRender(markdown, data);
-      ssrProps = data?.ssrProps ?? {};
-    }
-
-    const [rawHtml, meta] = await compile(compileThis, config.compiler);
+    const { url } = pageCtx;
+    const global = {
+      ssrProps: {},
+      components: {},
+    };
+    const buildLiquid = await loadPage(
+      url,
+      { reloads: [], global, pageCtx }, // quick workaround to make build and dev to be compatible
+      true
+    );
+    const [rawHtml, meta] = await compile(buildLiquid, config.compiler);
     const page: ReducedPage = {
       meta,
       pageCtx,
-      global: {
-        components: {},
-        ssrProps,
-      },
+      global,
     };
 
     const appHtml = await render(rawHtml, vite, {
@@ -227,22 +185,6 @@ export async function build({ config, urls, isGrammarCheck, zeroJS }: Params) {
   await vite.close();
 
   if (!isGrammarCheck && !zeroJS) {
-    let inputOptions = {};
-    buildContext.fileToHtmlMap.forEach((html, { url }) => {
-      const normalizedUrl = normalizeUrl(url).replace(/\.md$/, ".html");
-      const resolvedUrl = path.join(
-        buildContext.config.vite.root,
-        normalizedUrl
-      );
-      inputOptions[normalizedUrl.replace(/\//g, "-").slice(1)] = resolvedUrl;
-      buildContext.virtualModuleMap.set(resolvedUrl, html);
-    });
-    const build = buildContext.config.vite.build;
-    if (!build.rollupOptions) {
-      build.rollupOptions = {};
-    }
-    build.target = "es2020";
-    build.rollupOptions.input = inputOptions;
     await Vite.build(buildContext.config.vite);
   }
   Object.keys(postFs).forEach((path) => {

@@ -132,7 +132,11 @@ export async function render(
 
           const vnode = h(
             preactComponent,
-            { ...component.props, pageContext: context.page.pageCtx },
+            {
+              ...component.props,
+              pageContext: context.page.pageCtx,
+              ssrProps: context.page.global.ssrProps,
+            },
             slotVnode
           ); // the component in vnode
           const { html: prerenderedHtml } = await prerender(vnode);

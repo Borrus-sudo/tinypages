@@ -2,6 +2,7 @@ import { promises as fs } from "fs";
 import { useContext, useVite } from "../context";
 import { fsRouter } from "../router/fs";
 import { normalizeUrl } from "../utils";
+import { loadPage } from "../render/load-page";
 
 export default function () {
   const { page, utils } = useContext("dev");
@@ -30,7 +31,8 @@ export default function () {
         } else {
           utils.logger.info(req.originalUrl, { timestamp: true });
           page.pageCtx = pageCtx;
-          const markdown = await fs.readFile(pageCtx.url, "utf-8");
+          page.reloads = [];
+          const markdown = await loadPage(pageCtx.url, page, false);
           const html = await vite.transformIndexHtml(pageCtx.url, markdown); // vite transformed html
           res.status(200).set({ "Content-type": "text/html" }).end(html);
         }

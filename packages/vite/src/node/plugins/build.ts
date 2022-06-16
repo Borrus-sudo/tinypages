@@ -6,10 +6,12 @@ import AutoImportPluginOptions from "./isomorphic/auto-import";
 import IconPlugin from "./isomorphic/icons";
 import MarkdownBuildPlugin from "./build/build-meta";
 import SvgResolverPlugin from "./isomorphic/svg-resolver";
+import GenConfigPlugin from "./build/gen-config";
 
 export async function createBuildPlugins() {
   const { config } = useContext("iso");
   return [
+    GenConfigPlugin(),
     SvgResolverPlugin(),
     MarkdownBuildPlugin(),
     UnoCSSPlugin(<{}>{
