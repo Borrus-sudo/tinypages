@@ -24,6 +24,7 @@ export default function (): Plugin {
           rollupOptions: {
             input,
           },
+          target: "es2020",
         },
       };
     },
