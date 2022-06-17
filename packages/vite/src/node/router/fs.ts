@@ -1,4 +1,3 @@
-import path from "path";
 import { createRouter } from "radix3";
 import type { PageCtx } from "../../../types/types";
 import { loadPaths } from "./utils";
@@ -29,24 +28,16 @@ export function normalizeUrl(url: string): string {
     : url + ".md";
   normalizedUrl = normalizedUrl.replace(/\.html$/, ".md");
   const result = router.lookup(normalizedUrl);
-  if (!!result) {
-    return normalizedUrl;
-  } else {
-    // time to do some checking.
-    let newUrlToCheck;
-    if (normalizedUrl.endsWith("index.md")) {
-      // if the url is /page/index.md, we check if /page.md exists
-      newUrlToCheck = path.dirname(normalizedUrl) + ".md";
-    } else {
-      // if the url is /page.md, we check if /page/index.md exists.
-      newUrlToCheck = normalizedUrl.split(".md")[0] + "/index.md";
-    }
-    const doesItExist = router.lookup(newUrlToCheck); // if it does, return the new URL
-    if (!!doesItExist) {
-      return newUrlToCheck;
+  if (!!!result) {
+    if (!normalizedUrl.endsWith("index.md")) {
+      let newUrlToCheck = normalizedUrl.split(".md")[0] + "/index.md";
+      const result = router.lookup(newUrlToCheck);
+      if (!!result) {
+        return newUrlToCheck;
+      }
     }
   }
-  return normalizedUrl; //normal fallback situation. 404 handles ahead
+  return normalizedUrl;
 }
 
 export function refreshRouter(pagesDir: string) {

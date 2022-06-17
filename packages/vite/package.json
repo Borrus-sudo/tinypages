@@ -10,8 +10,7 @@
   "types": "./out/node/cli.d.ts",
   "files": [
     "out",
-    "bin",
-    "types"
+    "bin"
   ],
   "bin": {
     "tinypages": "./bin/tinypage.mjs"

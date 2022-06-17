@@ -72,6 +72,9 @@ export async function render(
           } else if (/\{.*?\}/.test(value)) {
             type = "object";
             component.props[slicedKey] = JSON.parse(value);
+          } else if (/\[.*?\]/.test(value)) {
+            type = "array";
+            component.props[slicedKey] = JSON.parse(value);
           } else {
             type = "string";
             component.props[slicedKey] = value;

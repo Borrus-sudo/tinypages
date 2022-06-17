@@ -25,6 +25,7 @@ export default function (): Plugin {
             input,
           },
           target: "es2020",
+          cssCodeSplit: true,
         },
       };
     },
