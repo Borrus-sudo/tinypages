@@ -13,6 +13,7 @@ import path from "path";
 import { polyfill } from "@astropub/webapi";
 import ora from "ora";
 import { loadPage } from "./render/load-page";
+import htmlMinifier from "html-minifier";
 
 function analyzeUrls(html: string) {
   const res = [];
@@ -61,11 +62,16 @@ export async function build({ config, urls, isGrammarCheck, zeroJS }: Params) {
       global,
     };
 
-    const appHtml = await render(rawHtml, vite, {
-      utils: buildContext.utils, //@ts-ignore
-      page,
-      config: buildContext.config,
-    });
+    const appHtml = await render(
+      rawHtml,
+      vite,
+      {
+        utils: buildContext.utils, //@ts-ignore
+        page,
+        config: buildContext.config,
+      },
+      buildContext.frequencyTable
+    );
 
     const newlyFoundUrls = analyzeUrls(appHtml);
 
@@ -143,7 +149,13 @@ export async function build({ config, urls, isGrammarCheck, zeroJS }: Params) {
     const output = appendPrelude(appHtml, page);
     buildContext.fileToHtmlMap.set(
       { filePath: url, url: pageCtx.originalUrl },
-      output
+      htmlMinifier.minify(output, {
+        collapseWhitespace: true,
+        caseSensitive: true,
+        collapseInlineTagWhitespace: false,
+        minifyJS: true,
+        minifyCSS: true,
+      })
     );
     return newlyFoundUrls;
   }

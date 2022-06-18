@@ -10,6 +10,7 @@ import IconPlugin from "./isomorphic/icons";
 import HmrPlugin from "./dev/hmr";
 import MarkdownPlugin from "./dev/markdown-dev";
 import SvgResolverPlugin from "./isomorphic/svg-resolver";
+import LazyDecoratorPlugin from "./isomorphic/lazy-decorator";
 
 export async function createDevPlugins() {
   const { config } = useContext("dev");
@@ -24,6 +25,7 @@ export async function createDevPlugins() {
     SvgResolverPlugin(),
     IconPlugin(),
     ImagePlugin(config.modules.image.presets, config.modules.image.options),
+    LazyDecoratorPlugin(),
     DecoratorPlugin(),
     HmrPlugin(),
     AutoImport(AutoImportPluginOptions(config.vite.root)),

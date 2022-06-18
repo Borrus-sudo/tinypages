@@ -7,7 +7,6 @@ export default function (): Plugin {
   const { page, utils } = useContext("dev");
   return {
     name: "vite-tinypages-hmr",
-    apply: "serve",
     enforce: "pre",
     async handleHotUpdate(context) {
       const toReturn: ModuleNode[] = [];

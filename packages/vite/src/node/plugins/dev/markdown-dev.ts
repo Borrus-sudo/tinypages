@@ -41,7 +41,6 @@ export default function (): Plugin {
   return {
     name: "vite-tinypages-markdown",
     enforce: "pre",
-    apply: "serve",
     configureServer(server) {
       const eventHandler = (filePath) => {
         if (

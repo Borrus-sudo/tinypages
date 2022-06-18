@@ -6,12 +6,12 @@ export default function (): Plugin {
   const { page } = useContext("dev");
   return {
     name: "vite-tinypages-sub-island-hydration",
-    apply: "serve",
     async resolveId(id: string) {
-      return /\?(hydrate|lazy)/.test(id) ? id : "";
+      return /\?hydrate/.test(id) ? id : "";
     },
     /**
      * The extra boilerplate code will not affect prod
+     * vite.ssrLoadModule
      */
     load(id: string, options) {
       if (/\?hydrate/.test(id)) {
@@ -27,18 +27,12 @@ export default function (): Plugin {
         import component from "${path}"
         export default (props) => {
           return  h("div", {preact:null,uid:"${uid}"}, [
-              h('script', {type: 'application/json',dangerouslySetInnerHTML: { __html: JSON.stringify(props) },}),
               h(component, props),
+              h('script', {type: 'application/json',dangerouslySetInnerHTML: { __html: JSON.stringify(props) },}),
           ]);
         };
         `;
         }
-      } else if (/\?lazy/.test(id)) {
-        const path = id.split("?lazy")[0];
-        return `
-      import { lazy } from "preact/compat";
-      export default lazy(()=>import("${path}"));
-        `;
       }
     },
   };

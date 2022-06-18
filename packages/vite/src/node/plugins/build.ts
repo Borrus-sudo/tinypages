@@ -7,6 +7,7 @@ import IconPlugin from "./isomorphic/icons";
 import MarkdownBuildPlugin from "./build/build-meta";
 import SvgResolverPlugin from "./isomorphic/svg-resolver";
 import GenConfigPlugin from "./build/gen-config";
+import LazyDecoratorPlugin from "./isomorphic/lazy-decorator";
 
 export async function createBuildPlugins() {
   const { config } = useContext("iso");
@@ -21,6 +22,7 @@ export async function createBuildPlugins() {
     }),
     IconPlugin(),
     ImagePlugin(config.modules.image.presets, config.modules.image.options),
+    LazyDecoratorPlugin(),
     AutoImport(AutoImportPluginOptions(config.vite.root)),
   ];
 }

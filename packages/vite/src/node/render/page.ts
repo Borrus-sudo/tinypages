@@ -29,10 +29,52 @@ interface NeededContext {
   page: Page;
   config: Readonly<TinyPagesConfig>;
 }
+
+function handlePropsParse(props: Record<any, any>, context: NeededContext) {
+  Object.keys(props).forEach((key) => {
+    if (key.startsWith(":")) {
+      const value = props[key];
+      const slicedKey = key.slice(1);
+      let type = "";
+      try {
+        if (!Number.isNaN(key)) {
+          type = "number";
+          props[slicedKey] = +value;
+        } else if (/\{.*?\}/.test(value)) {
+          type = "object";
+          props[slicedKey] = JSON.parse(value);
+        } else if (/\[.*?\]/.test(value)) {
+          type = "array";
+          props[slicedKey] = JSON.parse(value);
+        } else {
+          type = "string";
+          props[slicedKey] = value;
+        }
+      } catch (e) {
+        context.utils.consola.error(
+          new Error(
+            `"Error: parsing of the value of ${key} failed as type ${type}`
+          )
+        );
+      }
+      delete props[key];
+    }
+  });
+  return props;
+}
+
+function cleanProps(props) {
+  const cloneProps = deepCopy(props);
+  delete cloneProps["lazy:load"];
+  delete cloneProps["no:hydrate"];
+  return cloneProps;
+}
+
 export async function render(
   html: string,
   vite: ViteDevServer,
-  context: NeededContext
+  context: NeededContext,
+  frequencyTable: Map<string, number> = new Map()
 ) {
   let componentRegistration: ComponentRegistration = {};
   let uid: string = uuid();
@@ -49,46 +91,23 @@ export async function render(
       )
     );
 
-    const hash = hashObj(component);
-
-    if (context.page.sources) context.page.sources.push(componentPath);
+    if (frequencyTable.has(componentPath)) {
+      frequencyTable.set(componentPath, frequencyTable.get(componentPath) + 1);
+    } else {
+      frequencyTable.set(componentPath, 1);
+    }
 
     /**
-     * some pre-stuff which is not bound by any conditions
+     *  TO-DO: decide if context.page.global.ssrProps should be included in the hash. Rn we are assuming that
+     *  result won't change with subsequent network reqs to save on valuable time (Problematic!)
      */
-    const cloneProps = deepCopy(component.props);
-    delete cloneProps["lazy:load"];
-    delete cloneProps["no:hydrate"];
 
-    Object.keys(component.props).forEach((key) => {
-      if (key.startsWith(":")) {
-        const value = component.props[key];
-        const slicedKey = key.slice(1);
-        let type = "";
-        try {
-          if (!Number.isNaN(key)) {
-            type = "number";
-            component.props[slicedKey] = +value;
-          } else if (/\{.*?\}/.test(value)) {
-            type = "object";
-            component.props[slicedKey] = JSON.parse(value);
-          } else if (/\[.*?\]/.test(value)) {
-            type = "array";
-            component.props[slicedKey] = JSON.parse(value);
-          } else {
-            type = "string";
-            component.props[slicedKey] = value;
-          }
-        } catch (e) {
-          context.utils.consola.error(
-            new Error(
-              `"Error: parsing of the value of ${key} failed as type ${type}`
-            )
-          );
-        }
-        delete component.props[key];
-      }
+    const hash = hashObj({
+      component,
+      componentPath,
     });
+
+    if (context.page.sources) context.page.sources.push(componentPath);
 
     if ("client:only" in component.props) {
       if (map.has(hash)) {
@@ -98,11 +117,13 @@ export async function render(
          * Loading state to be displayed for client:only and lazy:load attrs together as initial state will be displayed
          * if ssged
          */
+
         let loadingString = "lazy:load" in component.props ? "Loading ..." : ""; //TODO: improve, support a <Loading/>
+        handlePropsParse(component.props, context);
         payload = $(
           "div",
           { preact, uid },
-          loadingString + "\n" + script(cloneProps)
+          loadingString + "\n" + script(cleanProps(component.props))
         );
         map.set(hash, { html: payload });
         if (hashComp.has(componentPath)) {
@@ -136,7 +157,7 @@ export async function render(
           const vnode = h(
             preactComponent,
             {
-              ...component.props,
+              ...handlePropsParse(component.props, context),
               pageContext: context.page.pageCtx,
               ssrProps: context.page.global.ssrProps,
             },
@@ -150,7 +171,7 @@ export async function render(
           payload = $(
             "div",
             noHydrate ? {} : { preact, uid },
-            prerenderedHtml + "\n" + script(cloneProps)
+            prerenderedHtml + "\n" + script(cleanProps(component.props))
           );
         } catch (err) {
           /**
@@ -159,7 +180,9 @@ export async function render(
           payload = $(
             "div",
             noHydrate ? {} : { preact, uid, style: errorCSS },
-            $("div", { id: "error-block" }, err) + "\n" + script(cloneProps)
+            $("div", { id: "error-block" }, err) +
+              "\n" +
+              script(cleanProps(component.props))
           );
         }
 
