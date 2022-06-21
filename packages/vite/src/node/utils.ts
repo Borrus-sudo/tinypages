@@ -47,4 +47,13 @@ export function createElement(
   return `<${tag} ${paramsString}>${content}</${tag}>`;
 }
 
+export function htmlNormalizeURL(input: string) {
+  let normalizedUrl = input.endsWith("/")
+    ? input + "index.html"
+    : /\..*?$/.test(input)
+    ? input
+    : input + ".html";
+  return normalizedUrl.replace(/\..*?$/, ".html");
+}
+
 export { normalizeUrl } from "./router/fs";

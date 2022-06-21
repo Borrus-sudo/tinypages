@@ -2,7 +2,7 @@ import * as Vite from "vite";
 import type { PageCtx, ReducedPage, TinyPagesConfig } from "../../types/types";
 import { createBuildContext } from "./context";
 import { fsRouter } from "./router/fs";
-import { normalizeUrl } from "./utils";
+import { htmlNormalizeURL, normalizeUrl } from "./utils";
 import { createBuildPlugins } from "./plugins/build";
 import { writeFileSync } from "fs";
 import { compile } from "@tinypages/compiler";
@@ -29,10 +29,10 @@ type Params = {
   config: TinyPagesConfig;
   urls: string[];
   isGrammarCheck: boolean;
-  zeroJS: boolean;
+  rebuild: boolean;
 };
 
-export async function build({ config, urls, isGrammarCheck, zeroJS }: Params) {
+export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
   const [buildContext, vite] = await createBuildContext(
     config,
     createBuildPlugins
@@ -73,19 +73,17 @@ export async function build({ config, urls, isGrammarCheck, zeroJS }: Params) {
       buildContext.frequencyTable
     );
 
-    const newlyFoundUrls = analyzeUrls(appHtml);
-
     if (isGrammarCheck) {
       buildContext.fileToHtmlMap.set(
         { filePath: url, url: pageCtx.originalUrl },
         appHtml
       );
-      return newlyFoundUrls;
+      return analyzeUrls(appHtml);
     }
 
     if (page.meta.feeds.atom) {
-      const atomUrl = normalizeUrl(pageCtx.originalUrl).replace(
-        /\.md$/,
+      const atomUrl = htmlNormalizeURL(pageCtx.originalUrl).replace(
+        /\.html$/,
         "ATOM.xml"
       );
       const atomFSPath = path.join(
@@ -102,8 +100,8 @@ export async function build({ config, urls, isGrammarCheck, zeroJS }: Params) {
       });
     }
     if (page.meta.feeds.rss) {
-      const rssUrl = normalizeUrl(pageCtx.originalUrl).replace(
-        /\.md$/,
+      const rssUrl = htmlNormalizeURL(pageCtx.originalUrl).replace(
+        /\.html$/,
         "RSS.xml"
       );
       const rssFSPath = path.join(
@@ -157,7 +155,8 @@ export async function build({ config, urls, isGrammarCheck, zeroJS }: Params) {
         minifyCSS: true,
       })
     );
-    return newlyFoundUrls;
+
+    return rebuild ? [] : analyzeUrls(appHtml);
   }
 
   polyfill(global, {
@@ -196,11 +195,13 @@ export async function build({ config, urls, isGrammarCheck, zeroJS }: Params) {
   spinner.succeed("Pages built!");
   await vite.close();
 
-  if (!isGrammarCheck && !zeroJS) {
+  if (!isGrammarCheck && !rebuild) {
     await Vite.build(buildContext.config.vite);
   }
+
   Object.keys(postFs).forEach((path) => {
     writeFileSync(path, postFs[path]);
   });
+
   return buildContext.fileToHtmlMap;
 }

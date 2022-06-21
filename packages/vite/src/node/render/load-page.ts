@@ -5,7 +5,6 @@ import { readFile } from "fs/promises";
 import { Liquid } from "liquidjs";
 import * as Filters from "@11ty/eleventy-plugin-rss";
 
-const { utils } = useContext("iso");
 const ssrTimestampCache = new Map();
 const propsCache = new Map();
 const engine = new Liquid({
@@ -26,7 +25,9 @@ engine.filters.create(
 );
 
 async function buildRoute({ fileURL, markdown, page, isBuild }) {
+  const { utils } = useContext("iso");
   const vite = useVite();
+
   let jsUrl = fileURL.replace(/\.md$/, ".js");
   if (!existsSync(jsUrl)) {
     let tsUrl = fileURL.replace(/\.md$/, ".ts");
@@ -96,10 +97,12 @@ async function buildRoute({ fileURL, markdown, page, isBuild }) {
 }
 
 export async function loadPage(fileURL: string, page, isBuild: boolean) {
+  const { utils } = useContext("iso");
+
   const ops = [];
   do {
     page.reloads.push(fileURL);
-    const markdown = await readFile(fileURL);
+    const markdown = await readFile(fileURL, { encoding: "utf-8" });
     ops.push(buildRoute({ fileURL, page, markdown, isBuild }));
     if (path.dirname(fileURL) === utils.pageDir) {
       fileURL = path.join(utils.pageDir, "root.md");
@@ -107,13 +110,17 @@ export async function loadPage(fileURL: string, page, isBuild: boolean) {
       fileURL = path.dirname(fileURL) + ".md";
     }
   } while (existsSync(fileURL));
+
   const output: string[] = await Promise.all(ops);
-  const result = output
-    .reverse()
-    .slice(1)
-    .reduce(
-      (prevValue, thisValue) => prevValue.replace("<Outlet/>", thisValue),
-      output[0]
-    );
+  const result =
+    output.length === 1
+      ? output[0]
+      : output
+          .reverse()
+          .slice(1)
+          .reduce(
+            (prevValue, thisValue) => prevValue.replace("<Outlet/>", thisValue),
+            output[0]
+          );
   return result;
 }

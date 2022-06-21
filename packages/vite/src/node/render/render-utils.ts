@@ -1,7 +1,7 @@
 import type { Head } from "@tinypages/compiler";
 import { existsSync } from "fs";
 import path from "path";
-import type { Page, ReducedPage } from "../../../types/types";
+import type { ReducedPage } from "../../../types/types";
 import { createElement } from "../utils";
 import { useContext } from "../context";
 

@@ -1,52 +1,7 @@
 import cac from "cac";
-import { join } from "path";
-import * as Vite from "vite";
 import type { UserTinyPagesConfig } from "../../types/types";
-import { resolveConfig } from "./resolve-config";
-import * as fs from "fs/promises";
-import { writeFileSync } from "fs";
-import { normalizeUrl } from "./utils";
 
-interface GlobalCLIOptions {
-  "--"?: string[];
-  c?: boolean | string;
-  config?: boolean;
-  base?: string;
-  l?: Vite.LogLevel;
-  logLevel?: Vite.LogLevel;
-  clearScreen?: boolean;
-  d?: boolean | string;
-  debug?: boolean | string;
-  f?: string;
-  filter?: string;
-  m?: string;
-  mode?: string;
-}
-
-function cleanOptions<Options extends GlobalCLIOptions>(
-  options: Options
-): Omit<Options, keyof GlobalCLIOptions> {
-  const ret = { ...options };
-  delete ret["--"];
-  delete ret.c;
-  delete ret.config;
-  delete ret.base;
-  delete ret.l;
-  delete ret.logLevel;
-  delete ret.clearScreen;
-  delete ret.d;
-  delete ret.debug;
-  delete ret.f;
-  delete ret.filter;
-  delete ret.m;
-  delete ret.mode;
-  return ret;
-}
-
-const reportString =
-  "Internal server error: This is an internal server error. Please report it at: https://github.com/Borrus-sudo/tinypages/issues ";
-
-export function cli() {
+export async function cli() {
   const cli = cac("tinypages");
   cli
     .option("-c, --config", `[boolean] use specified config file`)
@@ -79,34 +34,7 @@ export function cli() {
       "--force",
       `[boolean] force the optimizer to ignore the cache and re-bundle`
     )
-    .action(
-      async (
-        root: string = process.cwd(),
-        options: Vite.ServerOptions & GlobalCLIOptions
-      ) => {
-        const { createDevServer } = await import("./dev");
-        try {
-          if (root.startsWith("./")) {
-            root = join(process.cwd(), root);
-          }
-          // hijack the configFileOption for tinypages' config system
-          const cliViteOptions = {
-            root,
-            base: options.base,
-            mode: options.mode,
-            logLevel: options.logLevel,
-            clearScreen: options.clearScreen,
-            server: cleanOptions(options),
-            config: options.config,
-          };
-          const { config, filePath } = await resolveConfig(cliViteOptions);
-          await createDevServer(config, filePath);
-        } catch (e) {
-          console.log(reportString);
-          console.error(e);
-        }
-      }
-    );
+    .action((await import("./commands/dev")).devAction);
 
   cli
     .command("build [root]", "build for production")
@@ -150,85 +78,23 @@ export function cli() {
       "-w, --watch",
       `[boolean] rebuilds when modules have changed on disk`
     )
-    .action(
-      async (
-        root: string = process.cwd(),
-        options: Vite.BuildOptions & GlobalCLIOptions
-      ) => {
-        const { build } = await import("./build");
-        try {
-          if (root.startsWith("./")) {
-            root = join(process.cwd(), root);
-          }
-          // hijack the configFileOption for tinypages' config system
-          const cliViteOptions = {
-            root,
-            base: options.base,
-            mode: options.mode,
-            logLevel: options.logLevel,
-            clearScreen: options.clearScreen,
-            build: cleanOptions(options),
-            config: true,
-          };
-          const { config } = await resolveConfig(cliViteOptions);
-          const { urls } = JSON.parse(
-            await fs.readFile(join(root, "urls.json"), { encoding: "utf-8" })
-          );
-          await build({ config, urls, isGrammarCheck: false, zeroJS: false });
-        } catch (e) {
-          console.log(reportString);
-          console.error(e);
-        }
-      }
-    );
+    .action((await import("./commands/build")).buildAction);
 
-  cli.command("check [root]").action(async (root: string = process.cwd()) => {
-    const [{ reporter }, { html }, { build }] = await Promise.all([
-      import("vfile-reporter"),
-      import("alex"),
-      import("./build"),
-    ]);
+  cli
+    .command("grammar:check [root]")
+    .action((await import("./commands/grammar")).grammarAction);
 
-    const { urls } = JSON.parse(
-      await fs.readFile(join(root, "urls.json"), { encoding: "utf-8" })
-    );
-    const { config } = await resolveConfig({ root });
-    const payload = await build({
-      config,
-      urls,
-      isGrammarCheck: true,
-      zeroJS: false,
-    });
+  cli
+    .command("rebuild [root]")
+    .action((await import("./commands/rebuild")).rebuildAction);
 
-    payload.forEach((userHtml, { filePath }) => {
-      const res = html({
-        value: userHtml,
-        path: filePath,
-        messages: [],
-      });
-      console.error(reporter(res));
-    });
-  });
-
-  cli.command("rebuild [root]").action(async (root: string = process.cwd()) => {
-    const { urls } = JSON.parse(
-      await fs.readFile(join(root, "changed_urls.json"), { encoding: "utf-8" })
-    );
-    const { build } = await import("./build");
-    const { config } = await resolveConfig({ root });
-    const payload = await build({
-      config,
-      urls,
-      isGrammarCheck: false,
-      zeroJS: true,
-    });
-
-    payload.forEach((updatedHtml, { url }) => {
-      const normalizedUrl = normalizeUrl(url).replace(/\.md$/, ".html");
-      const toWritePath = join(root, "dist", normalizedUrl);
-      writeFileSync(toWritePath, updatedHtml);
-    });
-  });
+  cli
+    .command("lighthouse [root]")
+    .option(
+      "--build",
+      "[boolean] build the website, in case files haven't been already built"
+    )
+    .action((await import("./commands/unlighthouse")).unlighthouseAction);
 
   cli.help();
   cli.version("1.0.0");

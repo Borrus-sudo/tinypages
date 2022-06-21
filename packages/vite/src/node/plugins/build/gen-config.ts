@@ -1,6 +1,6 @@
 import type { Plugin } from "vite";
 import { useContext } from "../../context";
-import { normalizeUrl } from "../../utils";
+import { htmlNormalizeURL } from "../../utils";
 import path from "path";
 
 export default function (): Plugin {
@@ -11,7 +11,7 @@ export default function (): Plugin {
     config() {
       const input = {};
       buildContext.fileToHtmlMap.forEach((html, { url }) => {
-        const normalizedUrl = normalizeUrl(url).replace(/\.md$/, ".html");
+        const normalizedUrl = htmlNormalizeURL(url).replace(/\.md$/, ".html");
         const resolvedUrl = path.join(
           buildContext.config.vite.root,
           normalizedUrl

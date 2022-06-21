@@ -13,6 +13,7 @@ export default async function (root: string, currUrl: string) {
         scanner: {
           skipJavascript: false,
         },
+        discovery: {},
       },
       {
         name: "tinypages",

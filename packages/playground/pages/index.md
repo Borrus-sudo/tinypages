@@ -1,7 +1,3 @@
-
-{% layout "../layouts/BaseLayout.md" %}
-
-{% block content %}
 ## (JS/TS)Gandalf's blog!
 
 {% for blog in data %}
@@ -10,5 +6,3 @@
 
 <i-mdi-github/>
 <Counter client:only/>
-
-{% endblock %}
