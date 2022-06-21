@@ -2,8 +2,9 @@ import type { Head } from "@tinypages/compiler";
 import { existsSync } from "fs";
 import path from "path";
 import type { ReducedPage } from "../../../types/types";
-import { createElement } from "../utils";
+import { createElement, htmlNormalizeURL } from "../utils";
 import { useContext } from "../context";
+import { readFileSync } from "fs";
 
 function renderHead(head: Head, headTags) {
   const title = createElement("title", head.titleAttributes, head.title);
@@ -82,4 +83,36 @@ export function appendPrelude(content: string, page: ReducedPage) {
   );
   const html = `<!doctype html>\n${pageHtml}`;
   return html;
+}
+
+type Params = {
+  url: string;
+  root: string;
+  appHtml: string;
+  head: Head;
+};
+
+export function appendPreludeRebuild({ url, root, appHtml, head }: Params) {
+  const normalizedUrl = htmlNormalizeURL(url);
+  const toReadPath = path.join(root, "dist", normalizedUrl);
+  const artifact = readFileSync(toReadPath, { encoding: "utf-8" });
+  const artifactHead = artifact.match(/\<head\>(.*?)\<\/head\>/i)[0];
+  const title = createElement("title", head.titleAttributes, head.title);
+  const metas = head.meta.map((meta) => createElement("meta", meta, ""));
+  const renderedHead = artifactHead
+    .replace(/\<meta.*?\/\>/, "")
+    .replace(/\<title\>.*?\<\/title\>/, "")
+    .replace("<head>", `<head>${title}\n${metas.join("\n")}`);
+
+  const output = createElement(
+    "html",
+    head.htmlAttributes,
+    `${renderedHead}
+    <body>
+      <div id="app">
+        ${appHtml}
+      </div>
+    </body>`
+  );
+  return output;
 }

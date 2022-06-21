@@ -7,7 +7,7 @@ import { createBuildPlugins } from "./plugins/build";
 import { writeFileSync } from "fs";
 import { compile } from "@tinypages/compiler";
 import { render } from "./render/page";
-import { appendPrelude } from "./render/render-utils";
+import { appendPrelude, appendPreludeRebuild } from "./render/render-utils";
 import { generateVirtualEntryPoint } from "./plugins/plugin-utils";
 import path from "path";
 import { polyfill } from "@astropub/webapi";
@@ -118,33 +118,43 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
       });
     }
 
-    if (Object.keys(page.global.components).length > 0) {
-      const virtualModuleId =
-        "/" + Vite.normalizePath(url).replace(/\.md$/, ".js");
-
-      page.meta.head.script.push({
-        type: "module",
-        src: virtualModuleId,
-        innerHTML: undefined,
+    let output: string;
+    if (rebuild) {
+      output = appendPreludeRebuild({
+        url,
+        root: buildContext.config.vite.root,
+        appHtml,
+        head: page.meta.head,
       });
-
-      buildContext.virtualModuleMap.set(
-        virtualModuleId,
-        generateVirtualEntryPoint(
-          page.global.components,
-          config.vite.root,
-          true
-        )
-      );
     } else {
-      page.meta.head.script.push({
-        type: "module",
-        src: "/uno:only",
-        innerHTML: undefined,
-      });
+      if (Object.keys(page.global.components).length > 0) {
+        const virtualModuleId =
+          "/" + Vite.normalizePath(url).replace(/\.md$/, ".js");
+
+        page.meta.head.script.push({
+          type: "module",
+          src: virtualModuleId,
+          innerHTML: undefined,
+        });
+
+        buildContext.virtualModuleMap.set(
+          virtualModuleId,
+          generateVirtualEntryPoint(
+            page.global.components,
+            config.vite.root,
+            true
+          )
+        );
+      } else {
+        page.meta.head.script.push({
+          type: "module",
+          src: "/uno:only",
+          innerHTML: undefined,
+        });
+      }
+      output = appendPrelude(appHtml, page);
     }
 
-    const output = appendPrelude(appHtml, page);
     buildContext.fileToHtmlMap.set(
       { filePath: url, url: pageCtx.originalUrl },
       htmlMinifier.minify(output, {
