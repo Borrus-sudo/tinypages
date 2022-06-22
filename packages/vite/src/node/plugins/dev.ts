@@ -6,7 +6,6 @@ import InspectPlugin from "vite-plugin-inspect";
 import { useContext } from "../context";
 import AutoImportPluginOptions from "./isomorphic/auto-import";
 import DecoratorPlugin from "./dev/decorators";
-import IconPlugin from "./isomorphic/icons";
 import HmrPlugin from "./dev/hmr";
 import MarkdownPlugin from "./dev/markdown-dev";
 import SvgResolverPlugin from "./isomorphic/svg-resolver";
@@ -23,7 +22,6 @@ export async function createDevPlugins() {
       ...config.modules.unocss,
     }),
     SvgResolverPlugin(),
-    IconPlugin(),
     ImagePlugin(config.modules.image.presets, config.modules.image.options),
     LazyDecoratorPlugin(),
     DecoratorPlugin(),

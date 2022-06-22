@@ -50,7 +50,7 @@ export function appendPrelude(content: string, page: ReducedPage) {
     window.pageCtx=${JSON.stringify(page.pageCtx, (key, val) =>
       key === "url" ? undefined : val
     )};
-    window.ssrProps=${JSON.stringify(page.global.ssrProps)}
+    window.ssrProps=${JSON.stringify(page.global.ssrProps)};
     `,
   });
   const cssUrl = page.pageCtx.url
@@ -85,23 +85,31 @@ export function appendPrelude(content: string, page: ReducedPage) {
   return html;
 }
 
-type Params = {
+type P = {
   url: string;
   root: string;
   appHtml: string;
+  ssrProps: Record<string, string>;
   head: Head;
 };
 
-export function appendPreludeRebuild({ url, root, appHtml, head }: Params) {
+export function appendPreludeRebuild({
+  url,
+  root,
+  appHtml,
+  head,
+  ssrProps,
+}: P) {
   const normalizedUrl = htmlNormalizeURL(url);
   const toReadPath = path.join(root, "dist", normalizedUrl);
   const artifact = readFileSync(toReadPath, { encoding: "utf-8" });
-  const artifactHead = artifact.match(/\<head\>(.*?)\<\/head\>/i)[0];
+  const artifactHead = artifact.match(/\<head\>([\s\S]*)\<\/head\>/)[0];
   const title = createElement("title", head.titleAttributes, head.title);
   const metas = head.meta.map((meta) => createElement("meta", meta, ""));
   const renderedHead = artifactHead
     .replace(/\<meta.*?\/\>/, "")
     .replace(/\<title\>.*?\<\/title\>/, "")
+    .replace(/window.ssrProps\=(.*?)\;/, `window.ssrProps=${ssrProps};`)
     .replace("<head>", `<head>${title}\n${metas.join("\n")}`);
 
   const output = createElement(

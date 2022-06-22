@@ -121,10 +121,11 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
     let output: string;
     if (rebuild) {
       output = appendPreludeRebuild({
-        url,
+        url: pageCtx.originalUrl,
         root: buildContext.config.vite.root,
         appHtml,
         head: page.meta.head,
+        ssrProps: page.global.ssrProps,
       });
     } else {
       if (Object.keys(page.global.components).length > 0) {

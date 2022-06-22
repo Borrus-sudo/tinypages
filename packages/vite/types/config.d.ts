@@ -12,7 +12,7 @@ import type {
 
 interface IconsModule extends IconsConfig {
   defaultIconsStyles?: Record<string, string>;
-  load?: (id: string) => string | void;
+  load?: (id: string) => Promise<string> | void;
 }
 
 interface PreactModule {
