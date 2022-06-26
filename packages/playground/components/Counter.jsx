@@ -1,7 +1,7 @@
 export default function Counter(props) {
   return (
     <>
-      Hello
+      Hello hello
       <IconMdiGithub />
     </>
   );

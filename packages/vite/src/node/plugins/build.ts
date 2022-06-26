@@ -7,6 +7,7 @@ import MarkdownBuildPlugin from "./build/build-meta";
 import SvgResolverPlugin from "./isomorphic/svg-resolver";
 import GenConfigPlugin from "./build/gen-config";
 import LazyDecoratorPlugin from "./isomorphic/lazy-decorator";
+import Optimization2Plugin from "./build/optimization(2)";
 
 export async function createBuildPlugins() {
   const { config } = useContext("iso");
@@ -14,6 +15,7 @@ export async function createBuildPlugins() {
     GenConfigPlugin(),
     MarkdownBuildPlugin(),
     SvgResolverPlugin(),
+    Optimization2Plugin(),
     UnoCSSPlugin(<{}>{
       inspector: true,
       mode: "global",

@@ -13,9 +13,22 @@ export default function (): Plugin {
   return {
     name: "vite-tinypages-content-hash",
     apply: "build",
-    config(config) {},
-    resolveId(id: string) {
-      return id === "preact" ? id : undefined;
+    config(config) {
+      return {
+        build: {
+          rollupOptions: {
+            output: {
+              chunkFileNames: "[name].js",
+              entryFileNames: "[name].js",
+            },
+          },
+        },
+      };
+    },
+    generateBundle(_, bundle) {
+      Object.values(bundle).forEach((module) => {
+        module.fileName = "";
+      });
     },
   };
 }

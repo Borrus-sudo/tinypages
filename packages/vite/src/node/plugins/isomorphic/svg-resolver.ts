@@ -3,15 +3,15 @@ import { useContext } from "../../context";
 import path from "path";
 import Icons from "node-icons";
 import { mkdirSync, existsSync, writeFileSync } from "fs";
-import { createRequire } from "module";
 import { normalizePath as viteNormalizePath } from "vite";
+import { replaceAsync } from "../../utils";
 
-const requireISO = createRequire(import.meta.url);
-const iconsDir = path.join(
-  path.dirname(path.dirname(requireISO.resolve(".bin/vite"))),
-  ".icons"
-);
+let iconsDir;
 function ensureWrite(fileName: string, content: string) {
+  const { config } = useContext("iso");
+  if (!iconsDir) {
+    iconsDir = path.join(config.vite.root, "assets");
+  }
   if (!existsSync(iconsDir)) {
     mkdirSync(iconsDir);
   }
@@ -21,7 +21,7 @@ function ensureWrite(fileName: string, content: string) {
 }
 
 function resolve(p: string, root: string) {
-  return viteNormalizePath(path.relative(root, p));
+  return viteNormalizePath(p.split(root)[1]);
 }
 
 export default function (): Plugin {
@@ -46,37 +46,37 @@ export default function (): Plugin {
   };
 
   const transformToSvgId = (id: string) => {
-    return id
-      .replace("/~/icons/", "")
-      .replace("~icons/", "")
-      .replace("svg:", "");
+    return id.replace("~icons/", "");
   };
 
+  const resolveId = async (id: string) => {
+    if (id.startsWith("/~/icons")) {
+      id = id.replace("/~/icons/", "~icons/");
+    }
+    if (seen.has(id)) {
+      return id;
+    }
+    if (id.startsWith("~icons/")) {
+      const tempId = id;
+      id = id + ".svg";
+      const svgId = transformToSvgId(id);
+      const res = (await loadIcons(svgId.replace(".svg", ""))).replace(
+        "<svg >",
+        `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">`
+      );
+      if (res) {
+        const svgFsPath = ensureWrite(svgId, res);
+        // write the contents to the fs path;
+        seen.add(tempId);
+        idToPath.set(tempId, svgFsPath);
+        return tempId; // return the valid node module path
+      }
+    }
+  };
   return {
     name: "vite-tinypages-svg-resolver",
     async resolveId(id: string) {
-      if (id.startsWith("/~/icons")) {
-        id = id.replace("/~/icons", "~icons/");
-      }
-      if (seen.has(id)) {
-        return id;
-      }
-      if (id.startsWith("~icons/")) {
-        const tempId = id;
-        id = id + ".svg";
-        const svgId = transformToSvgId(id);
-        const res = (await loadIcons(svgId.replace(".svg", ""))).replace(
-          "<svg >",
-          `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">`
-        );
-        if (res) {
-          const svgFsPath = ensureWrite(svgId, res);
-          // write the contents to the fs path;
-          seen.add(tempId);
-          idToPath.set(tempId, svgFsPath);
-          return tempId; // return the valid node module path
-        }
-      }
+      return await resolveId(id);
     },
     load(id: string) {
       if (seen.has(id)) {
@@ -92,12 +92,24 @@ export default function (): Plugin {
       }
     },
     transformIndexHtml: {
-      enforce: "post",
-      transform(html: string) {
-        return html.replace(/\<img src\=\"(.*?)\"/gi, (_, url) => {
-          const fsPath = idToPath.get(url.replace("~/icons", "~icons/"));
-          return `<img src="${resolve(fsPath, config.vite.root)}"`;
-        });
+      enforce: "pre",
+      async transform(html: string) {
+        return await replaceAsync(
+          html,
+          /\<img src\=\"(.*?)\"/gi,
+          async (_, url) => {
+            const id = url.replace("~/icons/", "~icons/");
+            if (seen.has(id)) {
+              const fsPath = idToPath.get(id);
+              return `<img src="${resolve(fsPath, config.vite.root)}"`;
+            } else if (await resolveId(id)) {
+              const fsPath = idToPath.get(id);
+              return `<img src="${resolve(fsPath, config.vite.root)}"`;
+            } else {
+              return _;
+            }
+          }
+        );
       },
     },
   };

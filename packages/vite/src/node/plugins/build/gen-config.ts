@@ -23,9 +23,12 @@ export default function (): Plugin {
         build: {
           rollupOptions: {
             input,
+            perf: true,
+            treeshake: true,
           },
           target: "es2020",
           cssCodeSplit: true,
+          emptyOutDir: true,
         },
       };
     },
