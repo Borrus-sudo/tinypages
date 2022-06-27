@@ -8,6 +8,7 @@ import { useContext } from "../../context";
  * - The solution for this is yet to be decided. The first approach is with import maps (low support). The second one is with
  *   PWA but might hurt base JS bundle size more.
  */
+
 export default function (): Plugin {
   const buildContext = useContext("iso");
   return {
@@ -17,17 +18,14 @@ export default function (): Plugin {
       return {
         build: {
           rollupOptions: {
-            output: {
-              chunkFileNames: "[name].js",
-              entryFileNames: "[name].js",
-            },
+            output: {},
           },
         },
       };
     },
     generateBundle(_, bundle) {
       Object.values(bundle).forEach((module) => {
-        module.fileName = "";
+        console.log(module);
       });
     },
   };

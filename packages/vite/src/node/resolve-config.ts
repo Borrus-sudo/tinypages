@@ -55,6 +55,7 @@ export async function resolveConfig(
       preact: {},
       unocss: {},
     },
+    hostname: "",
   });
 
   config.compiler.icons = config.modules.icons;

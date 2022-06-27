@@ -28,7 +28,7 @@ export default function (): Plugin {
           },
           target: "es2020",
           cssCodeSplit: true,
-          emptyOutDir: true,
+          emptyOutDir: buildContext.isRebuild ? false : true,
         },
       };
     },

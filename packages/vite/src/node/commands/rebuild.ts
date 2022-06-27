@@ -8,8 +8,8 @@ export async function rebuildAction(root: string = process.cwd()) {
   if (root.startsWith("./")) {
     root = path.join(process.cwd(), root);
   }
-  const { urls } = JSON.parse(
-    fs.readFileSync(path.join(root, "changed_urls.json"), {
+  const { changed_urls: urls } = JSON.parse(
+    fs.readFileSync(path.join(root, "urls.json"), {
       encoding: "utf-8",
     })
   );

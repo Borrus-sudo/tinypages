@@ -34,7 +34,6 @@
   "dependencies": {
     "@11ty/eleventy-plugin-rss": "^1.2.0",
     "@astropub/webapi": "^0.10.14",
-    "@lukeed/uuid": "^2.0.0",
     "@prefresh/vite": "^2.2.8",
     "@tinypages/compiler": "^1.0.0",
     "@unlighthouse/core": "^0.3.29",
@@ -60,7 +59,8 @@
     "vfile-reporter": "^7.0.4",
     "vite": "^2.9.9",
     "vite-plugin-image-presets": "^0.3.1",
-    "vite-plugin-inspect": "^0.5.0"
+    "vite-plugin-inspect": "^0.5.0",
+    "vite-plugin-pages-sitemap": "^1.2.2"
   },
   "devDependencies": {
     "@types/connect": "^3.4.35"

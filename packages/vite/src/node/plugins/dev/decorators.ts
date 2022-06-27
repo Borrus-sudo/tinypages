@@ -1,6 +1,6 @@
 import type { Plugin } from "vite";
 import { useContext } from "../../context";
-import { v4 as uuid } from "@lukeed/uuid";
+import { uuid } from "../../utils";
 
 export default function (): Plugin {
   const { page } = useContext("dev");

@@ -43,6 +43,7 @@ interface TinyPagesConfig {
   vite: ViteUserConfig;
   middlewares: Middlwares;
   modules: Modules;
+  hostname: string;
 }
 
 interface UserTinyPagesConfig {
@@ -57,6 +58,7 @@ interface UserTinyPagesConfig {
   modules?: Partial<Modules>;
   vite?: ViteUserConfig;
   middlewares?: Middlwares;
+  hostname: string;
 }
 
 export { TinyPagesConfig, UserTinyPagesConfig };

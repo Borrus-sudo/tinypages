@@ -1,4 +1,4 @@
-import { v4 as uuid } from "@lukeed/uuid";
+import { uuid } from "../utils";
 import * as fs from "fs";
 import { hash as hashObj } from "ohash";
 import * as path from "path";

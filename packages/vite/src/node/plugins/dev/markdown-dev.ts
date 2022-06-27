@@ -13,7 +13,7 @@ import {
   hash as hashIt,
   reload,
 } from "../plugin-utils";
-import { v4 as uuid } from "@lukeed/uuid";
+import { uuid } from "../../utils";
 
 export default function (): Plugin {
   const { config, page, utils } = useContext("dev");

@@ -16,7 +16,7 @@ function ensureWrite(fileName: string, content: string) {
     mkdirSync(iconsDir);
   }
   const svgFsPath = path.join(iconsDir, fileName.replace(/\//g, "-"));
-  writeFileSync(svgFsPath, content);
+  if (!existsSync(svgFsPath)) writeFileSync(svgFsPath, content);
   return svgFsPath;
 }
 

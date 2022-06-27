@@ -13,14 +13,10 @@ export default defineConfig({
       write: true,
       emptyOutDir: true,
       outDir: "dist",
-      rollupOptions: {
-        input: {
-          "": "",
-        },
-      },
     },
   },
   compiler: {
     renderKatex: false,
   },
+  hostname: "http://localhost:3000",
 });

@@ -14,6 +14,7 @@ import { polyfill } from "@astropub/webapi";
 import ora from "ora";
 import { loadPage } from "./render/load-page";
 import htmlMinifier from "html-minifier";
+import sitemap from "vite-plugin-pages-sitemap";
 
 function analyzeUrls(html: string) {
   const res = [];
@@ -38,9 +39,11 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
     createBuildPlugins
   );
   const postFs = {};
+  const resolvedUrls = [];
   const spinner = ora();
   spinner.text = "Building pages!";
   spinner.color = "yellow";
+  buildContext.isRebuild = rebuild;
 
   const router = await fsRouter(buildContext.utils.pageDir);
 
@@ -182,6 +185,7 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
       if (res.url === "404") {
         buildContext.utils.consola.error(new Error(`404 ${url} not found`));
       } else {
+        resolvedUrls.push(normalizedUrl);
         buildsOps.push(buildPage(res));
       }
     });
@@ -206,8 +210,12 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
   spinner.succeed("Pages built!");
   await vite.close();
 
-  if (!isGrammarCheck && !rebuild) {
-    await Vite.build(buildContext.config.vite);
+  if (!isGrammarCheck) {
+    await Vite.build(buildContext.config.vite); //@ts-ignore
+    sitemap.default({
+      routes: resolvedUrls.map((route) => route.replace(/\.md$/, ".html")),
+      hostname: config.hostname,
+    });
   }
 
   Object.keys(postFs).forEach((path) => {
