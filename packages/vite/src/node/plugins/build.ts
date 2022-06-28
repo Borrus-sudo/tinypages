@@ -8,12 +8,14 @@ import SvgResolverPlugin from "./isomorphic/svg-resolver";
 import GenConfigPlugin from "./build/gen-config";
 import LazyDecoratorPlugin from "./isomorphic/lazy-decorator";
 import Optimization2Plugin from "./build/optimization(2)";
+import { RebuildPlugin } from "./build/rebuild";
 
 export async function createBuildPlugins() {
   const { config } = useContext("iso");
   return [
     GenConfigPlugin(),
     MarkdownBuildPlugin(),
+    RebuildPlugin(),
     SvgResolverPlugin(),
     Optimization2Plugin(),
     UnoCSSPlugin(<{}>{

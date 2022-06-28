@@ -1,12 +1,11 @@
 import type { Plugin } from "vite";
-import { useContext } from "../../context";
 
-export default function (): Plugin {
-  const headCache: Map<string, string> = new Map();
+const headCache: Map<string, string> = new Map();
+
+function stripHead(): Plugin {
   return {
-    name: "vite-tinypages-rebuild-bundle",
+    name: "vite-tinypages-rebuild-strip-head",
     apply: "build",
-    config(config) {},
     transformIndexHtml: {
       enforce: "pre",
       transform(html: string, ctx) {
@@ -17,12 +16,21 @@ export default function (): Plugin {
         });
       },
     },
-    generateBundle(_, bundle) {
-      Object.values(bundle).forEach((chunk) => {
-        //@ts-ignore
-        const key = chunk.facadeModuleId;
-        const head = headCache.get(key);
-      });
+  };
+}
+
+function addHead(): Plugin {
+  return {
+    name: "vite-tinypages-rebuild-add-head",
+    apply: "build",
+    transformIndexHtml: {
+      enforce: "post",
+      transform(html: string, ctx) {
+        const key = ctx.path;
+        return html.replace("<head></head>", headCache.get(key) ?? "");
+      },
     },
   };
 }
+
+export const RebuildPlugin = () => [stripHead(), addHead()];

@@ -1,5 +1,5 @@
 <head>
-<title>My Blog!</title>
+<title>(JS/TS)Gandalf's blog!</title>
 </head>
 
 ## (JS/TS)Gandalf's blog! [text-blue-500]
