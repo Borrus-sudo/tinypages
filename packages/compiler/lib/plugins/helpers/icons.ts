@@ -33,7 +33,9 @@ export default function (
     let srcId = "~/icons/" + svgId;
     if (notCustom) srcId = "~/icons/" + svgId.split(seperator).join("/");
     const style = stringifyImageStyle(defaultStyles);
-    return `<img src="${srcId}" alt="${svgId}" style="${style}">`;
+    return `<img src="${srcId}" alt="${svgId}" style="${style}" ${
+      context.attrs?.class ? "class=" + context.attrs.class : ""
+    }>`;
   };
 
   if (!svgId.endsWith(`${delimiter}inline`)) {
