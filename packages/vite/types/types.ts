@@ -77,6 +77,7 @@ interface BuildContext extends Context {
   fileToHtmlMap: Map<{ filePath: string; url: string }, string>;
   frequencyTable: Map<string, number>;
   isRebuild: boolean;
+  isSmallPageBuild: boolean;
 }
 
 export {

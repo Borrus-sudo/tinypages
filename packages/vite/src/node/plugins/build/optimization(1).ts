@@ -19,12 +19,35 @@ import { useContext } from "../../context";
  */
 export default function (): Plugin {
   const buildContext = useContext("iso");
+  const deps = ["preact", "million/router"];
   return {
     name: "vite-tinypages-handle-chunks",
     apply: "build",
-    config(config) {},
+
+    configResolved(config) {
+      /**
+       * Input and Output options are strictly in control of the framework.
+       */
+      const rollup = config.build.rollupOptions;
+      rollup.output = {};
+      rollup.output.manualChunks = (chunk) => {
+        if (chunk.includes("node_modules")) {
+          return "vendor";
+        }
+      };
+    },
     resolveId(id: string) {
-      return id === "preact" ? id : undefined;
+      return deps.includes(id) && buildContext.isSmallPageBuild ? id : "";
+    },
+    load(id: string) {
+      if (!deps.includes(id) || !buildContext.isSmallPageBuild) {
+        return;
+      }
+      if (id === "preact") {
+        return `export * from "https://esm.sh/v86/preact@10.8.2/es2022/preact.js";`;
+      } else {
+        return `export { router } from 'https://unpkg.com/million/dist/router.mjs';`;
+      }
     },
   };
 }

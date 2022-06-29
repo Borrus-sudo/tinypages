@@ -1,4 +1,8 @@
 {
   "urls": ["/", "/qEWtDHOhuYyafXk6"],
-  "changed_urls": ["/"]
+  "rebuild": {
+    "add": [],
+    "remove": [],
+    "change": []
+  }
 }

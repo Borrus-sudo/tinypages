@@ -54,6 +54,48 @@ export function PluginHTML(): Plugin {
                 meta.head.title = node.innerText;
                 meta.head.titleAttributes = node.attrs;
                 break;
+              case "twitter":
+                for (let content of [
+                  "site",
+                  "card",
+                  "title",
+                  "description",
+                  "image",
+                  "image:alt",
+                ]) {
+                  if (content in node.attrs) {
+                    meta.head.meta.push({
+                      name: `twitter:${content}`,
+                      content: node.attrs[content],
+                    });
+                  }
+                }
+                break;
+              case "og":
+                for (let content of [
+                  "title",
+                  "type",
+                  "url",
+                  "locale",
+                  "site_name",
+                  "image",
+                  "image:alt",
+                ]) {
+                  if (content in node.attrs) {
+                    meta.head.meta.push({
+                      property: `og:${content}`,
+                      content: node.attrs[content],
+                    });
+                  }
+                }
+                if ("description" in node.attrs) {
+                  meta.head.meta.push({
+                    name: "description",
+                    property: "og:description",
+                    content: node.attrs["description"],
+                  });
+                }
+                break;
             }
           }
           return "";

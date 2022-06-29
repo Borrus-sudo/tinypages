@@ -5,8 +5,9 @@ import { build } from "../build";
 import { resolveConfig } from "../resolve-config";
 import fs from "fs/promises";
 import { reportString } from "./common";
+import express from "express";
 
-async function unlighthouse(root: string) {
+async function unlighthouse(root: string, urls: string[]) {
   const unlighthouse = await createUnlighthouse(
     {
       root: path.join(root, "dist"),
@@ -14,22 +15,24 @@ async function unlighthouse(root: string) {
       scanner: {
         skipJavascript: false,
       },
-      discovery: {
-        pagesDir: path.join(root, "dist"),
-        supportedExtensions: [".html"],
-      },
+      site: "http://localhost:5555",
+      urls,
     },
     {
       name: "tinypages",
     }
   );
-  const context = await createServer();
-  await unlighthouse.setServerContext({
-    url: context.server.url,
-    server: context.server.server,
-    app: context.app,
+  const app = express();
+  app.use(express.static(path.join(root, "dist")));
+  app.listen(5555, async () => {
+    const context = await createServer();
+    await unlighthouse.setServerContext({
+      url: context.server.url,
+      server: context.server.server,
+      app: context.app,
+    });
+    unlighthouse.start();
   });
-  unlighthouse.start();
 }
 
 export async function unlighthouseAction(
@@ -39,13 +42,15 @@ export async function unlighthouseAction(
   if (root.startsWith("./")) {
     root = path.join(process.cwd(), root);
   }
+
+  const { urls } = JSON.parse(
+    await fs.readFile(path.join(root, "urls.json"), {
+      encoding: "utf-8",
+    })
+  );
+
   if (options.build) {
     try {
-      const { urls } = JSON.parse(
-        await fs.readFile(path.join(root, "urls.json"), {
-          encoding: "utf-8",
-        })
-      );
       const { config } = await resolveConfig({ root });
       await build({
         config,
@@ -58,5 +63,9 @@ export async function unlighthouseAction(
       console.error(e);
     }
   }
-  await unlighthouse(root);
+
+  await unlighthouse(
+    root,
+    urls.map((url) => (!url.endsWith("/") ? url + ".html" : url))
+  );
 }

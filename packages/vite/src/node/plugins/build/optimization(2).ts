@@ -14,19 +14,8 @@ export default function (): Plugin {
   return {
     name: "vite-tinypages-content-hash",
     apply: "build",
-    config(config) {
-      return {
-        build: {
-          rollupOptions: {
-            output: {},
-          },
-        },
-      };
-    },
     generateBundle(_, bundle) {
-      Object.values(bundle).forEach((module) => {
-        console.log(module);
-      });
+      console.log(bundle);
     },
   };
 }

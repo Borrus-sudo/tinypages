@@ -1,5 +1,5 @@
 import {
-  ComponentFactory,
+  type ComponentFactory,
   h,
   hydrate as hydrativeRender,
   render,

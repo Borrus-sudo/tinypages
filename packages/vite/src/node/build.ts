@@ -207,20 +207,24 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
 
   spinner.start();
   await buildPages(urls, []);
-  spinner.succeed("Pages built!");
   await vite.close();
 
   if (!isGrammarCheck) {
-    await Vite.build(buildContext.config.vite); //@ts-ignore
-    sitemap.default({
-      routes: resolvedUrls.map((route) => route.replace(/\.md$/, ".html")),
-      hostname: config.hostname,
-    });
+    await Vite.build(buildContext.config.vite);
+    if (!rebuild) {
+      //@ts-ignore
+      sitemap.default({
+        routes: resolvedUrls.map((route) => route.replace(/\.md$/, ".html")),
+        hostname: config.hostname,
+      });
+    }
   }
 
   Object.keys(postFs).forEach((path) => {
     writeFileSync(path, postFs[path]);
   });
+
+  spinner.succeed("Pages built!");
 
   return buildContext.fileToHtmlMap;
 }

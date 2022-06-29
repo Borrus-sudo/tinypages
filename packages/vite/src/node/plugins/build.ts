@@ -7,6 +7,7 @@ import MarkdownBuildPlugin from "./build/build-meta";
 import SvgResolverPlugin from "./isomorphic/svg-resolver";
 import GenConfigPlugin from "./build/gen-config";
 import LazyDecoratorPlugin from "./isomorphic/lazy-decorator";
+import Optimization1Plugin from "./build/optimization(1)";
 import Optimization2Plugin from "./build/optimization(2)";
 import { RebuildPlugin } from "./build/rebuild";
 
@@ -17,6 +18,7 @@ export async function createBuildPlugins() {
     MarkdownBuildPlugin(),
     RebuildPlugin(),
     SvgResolverPlugin(),
+    Optimization1Plugin(),
     Optimization2Plugin(),
     UnoCSSPlugin(<{}>{
       inspector: true,
