@@ -14,8 +14,6 @@ export default function (): Plugin {
   return {
     name: "vite-tinypages-content-hash",
     apply: "build",
-    generateBundle(_, bundle) {
-      console.log(bundle);
-    },
+    generateBundle(_, bundle) {},
   };
 }

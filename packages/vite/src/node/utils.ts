@@ -1,6 +1,6 @@
 import consolaPkg from "consola";
 import { murmurHash } from "ohash";
-import crypto from "crypto";
+import { uid } from "uid";
 
 export function deepCopy<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
@@ -68,7 +68,7 @@ export async function replaceAsync(str, regex, asyncFn) {
 }
 
 export function uuid() {
-  return crypto.randomUUID();
+  return uid(5);
 }
 
 export { normalizeUrl } from "./router/fs";

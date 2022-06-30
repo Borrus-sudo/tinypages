@@ -20,7 +20,7 @@ export function stringifyImageStyle(obj) {
   let returnVal = "";
   Object.keys(obj).forEach((key) => {
     let val = obj[key];
-    returnVal += ` ${key}:${val}; `;
+    returnVal += `${key}:${val};`;
   });
   return returnVal;
 }

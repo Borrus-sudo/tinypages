@@ -41,7 +41,7 @@ export function generateVirtualEntryPoint(
   const resolve = (p: string) => viteNormalizePath(path.relative(root, p));
   let imports = [
     isBuild ? "" : `import "preact/debug"`,
-    `import "uno.css";`,
+    isBuild ? "" : `import "uno.css";`,
     `import hydrate from "tinypages/client";`,
     isBuild ? "" : `import "tinypages/hmr";`,
     isBuild ? `import {router} from "million/router"` : "",

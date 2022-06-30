@@ -149,12 +149,6 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
             true
           )
         );
-      } else {
-        page.meta.head.script.push({
-          type: "module",
-          src: "/uno:only",
-          innerHTML: undefined,
-        });
       }
       output = appendPrelude(appHtml, page);
     }

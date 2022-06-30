@@ -9,6 +9,10 @@ const ssrTimestampCache = new Map();
 const propsCache = new Map();
 const engine = new Liquid({
   cache: true,
+  outputDelimiterLeft: "{",
+  outputDelimiterRight: "}",
+  tagDelimiterLeft: "{{",
+  tagDelimiterRight: "}}",
 });
 const fileLoader: Map<string, Function> = new Map();
 

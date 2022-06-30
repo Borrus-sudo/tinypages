@@ -4,9 +4,9 @@
 
 ## (JS/TS)Gandalf's blog! [text-blue-500]
 
-{% for blog in data %}
-[{{blog.meta}}](/{{blog._id}})
-{% endfor %}
+{{ for blog in data }}
+[{blog.meta}](/{blog._id})
+{{ endfor }}
 
 <i-mdi-github/>
-<Counter client:only/>
+<Counter hello="g" :hello="{crap}" :hello="{crap}"/>
