@@ -11,7 +11,7 @@ export default function (): Plugin {
     config() {
       const input = {};
       buildContext.fileToHtmlMap.forEach((html, { url }) => {
-        const normalizedUrl = htmlNormalizeURL(url).replace(/\.md$/, ".html");
+        const normalizedUrl = htmlNormalizeURL(url);
         const resolvedUrl = path.join(
           buildContext.config.vite.root,
           normalizedUrl
