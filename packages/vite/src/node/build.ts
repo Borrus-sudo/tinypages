@@ -26,6 +26,23 @@ function analyzeUrls(html: string) {
   return res;
 }
 
+function isSmallPageBuild(map: Map<string, string[]>, frequencyTable) {
+  if (map.size < 3) {
+    if (frequencyTable) {
+    }
+    return true;
+  }
+}
+
+function genPaginate({ fileURL, url, map }) {
+  const urls: string[] = map.get(fileURL);
+  const index = urls.findIndex((curr) => url === curr);
+  return {
+    prev: index === 0 ? null : urls.slice(0, index),
+    next: index === urls.length ? null : urls.slice(index + 1),
+  };
+}
+
 type Params = {
   config: TinyPagesConfig;
   urls: string[];
@@ -40,6 +57,7 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
   );
   const postFs = {};
   const resolvedUrls = [];
+  const fileToUrlMap: Map<string, string[]> = new Map();
   const spinner = ora();
   spinner.text = "Building pages!";
   spinner.color = "yellow";
@@ -53,11 +71,18 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
       ssrProps: {},
       components: {},
     };
+
     const buildLiquid = await loadPage(
       url,
       { reloads: [], global, pageCtx }, // quick workaround to make build and dev to be compatible
-      true
+      true,
+      genPaginate({
+        fileURL: pageCtx.url,
+        url: pageCtx.originalUrl,
+        map: fileToUrlMap,
+      })
     );
+
     const [rawHtml, meta] = await compile(buildLiquid, config.compiler);
     const page: ReducedPage = {
       meta,
@@ -129,6 +154,8 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
         appHtml,
         head: page.meta.head,
         ssrProps: page.global.ssrProps,
+        otherUrls: fileToUrlMap.get(pageCtx.url),
+        pageCtx,
       });
     } else {
       if (Object.keys(page.global.components).length > 0) {
@@ -179,12 +206,22 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
       if (res.url === "404") {
         buildContext.utils.consola.error(new Error(`404 ${url} not found`));
       } else {
+        if (fileToUrlMap.has(res.url)) {
+          fileToUrlMap.set(res.url, [
+            ...fileToUrlMap.get(res.url),
+            res.originalUrl,
+          ]);
+        } else {
+          fileToUrlMap.set(res.url, [res.originalUrl]);
+        }
         resolvedUrls.push(normalizedUrl);
         buildsOps.push(buildPage(res));
       }
     });
 
     const output = await Promise.allSettled(buildsOps);
+    console.log(output);
+
     const moarUrls = [];
     output.forEach((curr) =>
       curr.status === "fulfilled" ? moarUrls.push(...curr.value) : 0

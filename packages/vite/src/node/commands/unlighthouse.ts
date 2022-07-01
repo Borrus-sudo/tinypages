@@ -7,16 +7,17 @@ import fs from "fs/promises";
 import { reportString } from "./common";
 import express from "express";
 
-async function unlighthouse(root: string) {
+async function unlighthouse(root: string, urls: string[]) {
   const unlighthouse = await createUnlighthouse(
     {
       root: path.join(root, "dist"),
       routerPrefix: "/",
       scanner: {
         skipJavascript: false,
-        sitemap: true,
+        crawler: true,
       },
       site: "http://localhost:5555",
+      urls,
     },
     {
       name: "tinypages",
@@ -43,12 +44,13 @@ export async function unlighthouseAction(
     root = path.join(process.cwd(), root);
   }
 
+  const { urls } = JSON.parse(
+    await fs.readFile(path.join(root, "urls.json"), {
+      encoding: "utf-8",
+    })
+  );
+
   if (options.build) {
-    const { urls } = JSON.parse(
-      await fs.readFile(path.join(root, "urls.json"), {
-        encoding: "utf-8",
-      })
-    );
     try {
       const { config } = await resolveConfig({ root });
       await build({
@@ -63,5 +65,8 @@ export async function unlighthouseAction(
     }
   }
 
-  await unlighthouse(root);
+  await unlighthouse(
+    root,
+    urls.map((url) => (url.endsWith("/") ? url : url + ".html"))
+  );
 }

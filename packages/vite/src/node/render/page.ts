@@ -91,10 +91,15 @@ export async function render(
       )
     );
 
-    if (frequencyTable.has(componentPath)) {
-      frequencyTable.set(componentPath, frequencyTable.get(componentPath) + 1);
-    } else {
-      frequencyTable.set(componentPath, 1);
+    if (!("no:hydrate" in component.props)) {
+      if (frequencyTable.has(componentPath)) {
+        frequencyTable.set(
+          componentPath,
+          frequencyTable.get(componentPath) + 1
+        );
+      } else {
+        frequencyTable.set(componentPath, 1);
+      }
     }
 
     /**
@@ -213,6 +218,9 @@ export async function render(
   return html;
 }
 
+/**
+ * Cache invalidation for HMR
+ */
 export function invalidate(invalidateComponent: string) {
   if (hashComp.has(invalidateComponent)) {
     const hashes = hashComp.get(invalidateComponent);

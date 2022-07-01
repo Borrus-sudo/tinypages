@@ -9,10 +9,10 @@ const ssrTimestampCache = new Map();
 const propsCache = new Map();
 const engine = new Liquid({
   cache: true,
-  outputDelimiterLeft: "{",
-  outputDelimiterRight: "}",
-  tagDelimiterLeft: "{{",
-  tagDelimiterRight: "}}",
+  tagDelimiterLeft: "{%",
+  tagDelimiterRight: "%}",
+  outputDelimiterLeft: "{{",
+  outputDelimiterRight: "}}",
 });
 const fileLoader: Map<string, Function> = new Map();
 
@@ -28,7 +28,7 @@ engine.filters.create(
   Filters.convertHtmlToAbsoluteUrls
 );
 
-async function buildRoute({ fileURL, markdown, page, isBuild }) {
+async function buildRoute({ fileURL, markdown, page, isBuild, paginate }) {
   const { utils } = useContext("iso");
   const vite = useVite();
 
@@ -68,7 +68,7 @@ async function buildRoute({ fileURL, markdown, page, isBuild }) {
     } else {
       loader = (await vite.ssrLoadModule(fileURL)).default;
     }
-    data = await loader(page.pageCtx.params);
+    data = await loader(page.pageCtx.params, paginate);
 
     if (!isBuild) {
       utils.consola.success("State loaded!");
@@ -83,7 +83,7 @@ async function buildRoute({ fileURL, markdown, page, isBuild }) {
     if (currTimestamp - prevTimestamp > offset) {
       // boilerplate stuff
       const { default: loader } = await vite.ssrLoadModule(fileURL);
-      data = await loader(page.pageCtx.params);
+      data = await loader(page.pageCtx.params, paginate);
       utils.consola.success("State loaded!");
 
       ssrTimestampCache.set(originalUrl, new Date().getTime()); // for better accuracy this is being done
@@ -100,14 +100,19 @@ async function buildRoute({ fileURL, markdown, page, isBuild }) {
   return builtMarkdown;
 }
 
-export async function loadPage(fileURL: string, page, isBuild: boolean) {
+export async function loadPage(
+  fileURL: string,
+  page,
+  isBuild: boolean,
+  paginate: { prev: string[]; next: string[] }
+) {
   const { utils } = useContext("iso");
 
   const ops = [];
   do {
     page.reloads.push(fileURL);
     const markdown = await readFile(fileURL, { encoding: "utf-8" });
-    ops.push(buildRoute({ fileURL, page, markdown, isBuild }));
+    ops.push(buildRoute({ fileURL, page, markdown, isBuild, paginate }));
     if (path.dirname(fileURL) === utils.pageDir) {
       fileURL = path.join(utils.pageDir, "root.md");
     } else {

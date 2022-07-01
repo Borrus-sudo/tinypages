@@ -1,7 +1,7 @@
 import type { Head } from "@tinypages/compiler";
 import { existsSync } from "fs";
 import path from "path";
-import type { ReducedPage } from "../../../types/types";
+import type { PageCtx, ReducedPage } from "../../../types/types";
 import { createElement, htmlNormalizeURL } from "../utils";
 import { useContext } from "../context";
 import { readFileSync } from "fs";
@@ -91,6 +91,8 @@ type P = {
   appHtml: string;
   ssrProps: Record<string, string>;
   head: Head;
+  pageCtx: PageCtx;
+  otherUrls: string[]; // for new dynamic pages, we need to pick up information from previously built pages
 };
 
 export function appendPreludeRebuild({
@@ -99,9 +101,20 @@ export function appendPreludeRebuild({
   appHtml,
   head,
   ssrProps,
+  otherUrls,
+  pageCtx,
 }: P) {
-  const normalizedUrl = htmlNormalizeURL(url);
-  const toReadPath = path.join(root, "dist", normalizedUrl);
+  let normalizedUrl;
+  let toReadPath;
+  /**
+   * For the rebuild strategy to work for new dynamic urls for the same file paths.
+   */
+  const all = [url, ...otherUrls];
+  do {
+    normalizedUrl = htmlNormalizeURL(all.shift());
+    toReadPath = path.join(root, "dist", normalizedUrl);
+  } while (existsSync(toReadPath));
+
   const artifact = readFileSync(toReadPath, { encoding: "utf-8" });
   const artifactHead = artifact.match(/\<head\>([\s\S]*)\<\/head\>/)[0];
   const title = createElement("title", head.titleAttributes, head.title);
@@ -109,7 +122,17 @@ export function appendPreludeRebuild({
   const renderedHead = artifactHead
     .replace(/\<meta.*?\/\>/, "")
     .replace(/\<title\>.*?\<\/title\>/, "")
-    .replace(/window.ssrProps\=(.*?)\;/, `window.ssrProps=${ssrProps};`)
+    .replace(
+      /window.ssrProps\=(.*?)\;/,
+      `window.ssrProps=${JSON.stringify(ssrProps)};`
+    )
+    .replace(
+      // to work universally for both changed and newly added page to a dynamic file path.
+      /window.pageCtx\=(.*?)\;/,
+      `window.pageCtx=${JSON.stringify(pageCtx, (key, val) =>
+        key === "url" ? undefined : val
+      )}`
+    )
     .replace("<head>", `<head>${title}\n${metas.join("\n")}`);
 
   const output = createElement(
