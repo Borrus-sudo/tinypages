@@ -47,18 +47,19 @@ export async function resolveConfig(
       image: {},
       icons: {
         defaultIconsStyles: {
-          width: "1em",
-          height: "1em",
+          width: "1.5em",
+          height: "1.5em",
         },
       },
       preact: {},
       unocss: {},
     },
-    hostname: "",
+    hostname: "http://localhost:3003/",
   });
 
   config.compiler.icons = config.modules.icons;
   config.compiler.defaultIconsStyles = config.modules.icons.defaultIconsStyles;
+  config.vite.base = config.hostname;
 
   return { config, filePath: sources[0] } as {
     config: TinyPagesConfig;

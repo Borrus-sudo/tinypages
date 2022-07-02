@@ -29,7 +29,7 @@ engine.filters.create(
 );
 
 async function buildRoute({ fileURL, markdown, page, isBuild, paginate }) {
-  const { utils } = useContext("iso");
+  const { utils, config } = useContext("iso");
   const vite = useVite();
 
   let jsUrl = fileURL.replace(/\.md$/, ".js");
@@ -94,9 +94,16 @@ async function buildRoute({ fileURL, markdown, page, isBuild, paginate }) {
     }
   }
 
-  page.global.ssrProps = data?.ssrProps || {};
+  if (typeof page.global.ssrProps === "object" && data.ssrProps) {
+    page.global.ssrProps = { ...page.global.ssrProps, ...data.ssrProps };
+  } else {
+    page.global.ssrProps = data?.ssrProps || {};
+  }
 
-  const builtMarkdown = await engine.parseAndRender(markdown, data);
+  const builtMarkdown = await engine.parseAndRender(markdown, {
+    ...data,
+    BASE_URL: config.hostname,
+  });
   return builtMarkdown;
 }
 

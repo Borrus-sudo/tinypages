@@ -9,6 +9,7 @@ import GenConfigPlugin from "./build/gen-config";
 import LazyDecoratorPlugin from "./isomorphic/lazy-decorator";
 import Optimization1Plugin from "./build/optimization(1)";
 import Optimization2Plugin from "./build/optimization(2)";
+import SubIslandPartialHydrationPlugin from "./build/sub-island-hydration";
 import { RebuildPlugin } from "./build/rebuild";
 
 export async function createBuildPlugins() {
@@ -19,12 +20,13 @@ export async function createBuildPlugins() {
     RebuildPlugin(),
     SvgResolverPlugin(),
     Optimization1Plugin(),
+    Optimization2Plugin(),
     UnoCSSPlugin(<{}>{
       inspector: false,
       mode: "dist-chunk",
       ...config.modules.unocss,
     }),
-    Optimization2Plugin(),
+    SubIslandPartialHydrationPlugin(),
     ImagePlugin(config.modules.image.presets, config.modules.image.options),
     LazyDecoratorPlugin(),
     AutoImport(AutoImportPluginOptions(config.vite.root)),

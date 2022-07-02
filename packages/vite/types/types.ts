@@ -76,6 +76,7 @@ interface BuildContext extends Context {
   virtualModuleMap: Map<string, string>;
   fileToHtmlMap: Map<{ filePath: string; url: string }, string>;
   frequencyTable: Map<string, number>;
+  store: Map<string, ReducedPage>;
   isRebuild: boolean;
   isSmallPageBuild: boolean;
 }

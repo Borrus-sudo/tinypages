@@ -1,5 +1,6 @@
 import * as shiki from "shiki";
 import type { Config, Plugin } from "../../types/types";
+import { hash } from "../utils";
 import katexRenderer from "./helpers/katex";
 
 export function PluginCode(): Plugin {
@@ -57,10 +58,11 @@ export function PluginCode(): Plugin {
         code = code.join(" ");
       }
     },
-    async postTransform(payload: string) {
+    async postTransform(payload: string, { persistentCache }) {
       if (mermaidGraphs.length > 0) {
         const mermaid = (await import("headless-mermaid")).default;
         const promisesArr = [];
+        const hashArr = [];
         for (let graph of mermaidGraphs) {
           let keyValue: string | string[] = [];
           let options: Record<string, string | object> = {
@@ -73,10 +75,24 @@ export function PluginCode(): Plugin {
             [, ...keyValue] = graph.lang.split(" ");
             options = { ...JSON.parse(keyValue.join(" ")) };
           }
-          promisesArr.push(mermaid.execute(graph.code, options));
+          const hashObj = hash({ code: graph.code, options });
+          if (persistentCache.has(hashObj)) {
+            promisesArr.push(Promise.resolve(persistentCache.get(hashObj)));
+          } else {
+            promisesArr.push(mermaid.execute(graph.code, options));
+          }
+          hashArr.push(hashObj);
         }
-        const strs: string[] = await Promise.all(promisesArr);
+
         let idx = 0;
+        const strs: string[] = await Promise.all(promisesArr);
+
+        strs.forEach((value, index) => {
+          if (!persistentCache.has(hashArr[index])) {
+            persistentCache.set(hashArr[index], value);
+          }
+        });
+
         return payload.replace(/\<GRAPH\>\<\/GRAPH\>/g, (_) => strs[idx++]);
       }
       return payload;

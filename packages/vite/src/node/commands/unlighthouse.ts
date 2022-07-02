@@ -16,7 +16,7 @@ async function unlighthouse(root: string, urls: string[]) {
         skipJavascript: false,
         crawler: true,
       },
-      site: "http://localhost:5555",
+      site: "http://localhost:3003",
       urls,
     },
     {

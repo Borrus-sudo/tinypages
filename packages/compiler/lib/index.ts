@@ -1,7 +1,4 @@
-import { defu } from "defu";
-import { promises as fs } from "fs";
 import { marked } from "marked";
-import * as path from "path";
 import { parse as parseYaml } from "yaml";
 import type {
   Config,
@@ -19,7 +16,8 @@ import { orderPlugins, postTransform, Spy } from "./utils";
 
 export async function compile(
   input: string,
-  UserConfig: UserConfig
+  UserConfig: UserConfig,
+  persistentCache: Map<string, string> = new Map()
 ): Promise<[string, Meta]> {
   //@ts-ignore
   let config: Config = Object.assign({}, UserConfig, {
@@ -62,7 +60,11 @@ export async function compile(
   }
 
   const Renderer = new marked.Renderer();
-  const Handler = await useHandler(config.plugins, config.metaConstruct);
+  const Handler = await useHandler(
+    config.plugins,
+    config.metaConstruct,
+    persistentCache
+  );
   const spiedRenderer = Spy(Renderer, Handler);
 
   marked.setOptions({
@@ -75,7 +77,13 @@ export async function compile(
     input.replace(/<.*?>/g, (r) => r.replace(/\./g, "__"))
   );
 
-  output = await postTransform(output, config.plugins, config.metaConstruct);
+  output = await postTransform(
+    output,
+    config.plugins,
+    config.metaConstruct,
+    persistentCache
+  );
+
   [output, config.metaConstruct.components] = analyze(output);
   return [
     output, //@ts-ignore

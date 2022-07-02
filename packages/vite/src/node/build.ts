@@ -50,6 +50,8 @@ type Params = {
   rebuild: boolean;
 };
 
+const markdownCompilerCache: Map<string, string> = new Map();
+
 export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
   const [buildContext, vite] = await createBuildContext(
     config,
@@ -83,7 +85,11 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
       })
     );
 
-    const [rawHtml, meta] = await compile(buildLiquid, config.compiler);
+    const [rawHtml, meta] = await compile(
+      buildLiquid,
+      config.compiler,
+      markdownCompilerCache
+    );
     const page: ReducedPage = {
       meta,
       pageCtx,
@@ -110,10 +116,10 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
     }
 
     if (page.meta.feeds.atom) {
-      const atomUrl = htmlNormalizeURL(pageCtx.originalUrl).replace(
-        /\.html$/,
-        "ATOM.xml"
-      );
+      const atomUrl = new URL(
+        buildContext.config.hostname,
+        htmlNormalizeURL(pageCtx.originalUrl).replace(/\.html$/, "ATOM.xml")
+      ).href;
       const atomFSPath = path.join(
         buildContext.config.vite.root,
         "dist",
@@ -128,10 +134,10 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
       });
     }
     if (page.meta.feeds.rss) {
-      const rssUrl = htmlNormalizeURL(pageCtx.originalUrl).replace(
-        /\.html$/,
-        "RSS.xml"
-      );
+      const rssUrl = new URL(
+        buildContext.config.hostname,
+        htmlNormalizeURL(pageCtx.originalUrl).replace(/\.html$/, "RSS.xml")
+      ).href;
       const rssFSPath = path.join(
         buildContext.config.vite.root,
         "dist",
@@ -168,14 +174,16 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
           innerHTML: undefined,
         });
 
-        buildContext.virtualModuleMap.set(
-          virtualModuleId,
-          generateVirtualEntryPoint(
-            page.global.components,
-            config.vite.root,
-            true
-          )
-        );
+        if (!buildContext.virtualModuleMap.has(virtualModuleId)) {
+          buildContext.virtualModuleMap.set(
+            virtualModuleId,
+            generateVirtualEntryPoint(
+              page.global.components,
+              config.vite.root,
+              true
+            )
+          );
+        }
       }
       output = appendPrelude(appHtml, page);
     }
@@ -220,8 +228,6 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
     });
 
     const output = await Promise.allSettled(buildsOps);
-    console.log(output);
-
     const moarUrls = [];
     output.forEach((curr) =>
       curr.status === "fulfilled" ? moarUrls.push(...curr.value) : 0

@@ -51,10 +51,17 @@ interface Plugin {
   name: string;
   enforce?: "pre" | "post";
   defineConfig?: (config: Config) => void;
-  transform: (id: string, payload: string, meta?: Meta) => string | void;
+  transform: (
+    id: string,
+    payload: string,
+    ctx: { meta: Meta; persistentCache: Map<string, string> }
+  ) => string | void;
   getReady?: () => Promise<void> | void;
   tapArgs?: (id: string, args: any[]) => void | any[];
-  postTransform?: (payload: string, meta?: Meta) => string | Promise<string>;
+  postTransform?: (
+    payload: string,
+    ctx: { meta: Meta; persistentCache: Map<string, string> }
+  ) => string | Promise<string>;
 }
 
 interface Head {

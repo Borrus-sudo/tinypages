@@ -1,4 +1,5 @@
 import type { Meta, Plugin } from "../types/types";
+import { objectHash } from "ohash";
 
 export function wrapObject(styles: Record<string, string>) {
   Object.keys(styles).forEach((key) => {
@@ -42,11 +43,12 @@ export function orderPlugins(corePlugins: Plugin[], userPlugins: Plugin[]) {
 export async function postTransform(
   payload: string,
   plugins: Plugin[],
-  meta: Meta
+  meta: Meta,
+  persistentCache: Map<string, string>
 ) {
   for (let plugin of plugins) {
     if (plugin.postTransform) {
-      payload = await plugin.postTransform(payload, meta);
+      payload = await plugin.postTransform(payload, { meta, persistentCache });
     }
   }
   return payload;
@@ -72,6 +74,10 @@ export function Spy(
   });
   transformed["options"] = target["options"];
   return transformed;
+}
+
+export function hash(content: Object) {
+  return objectHash(content);
 }
 
 export const delimiter = "__";

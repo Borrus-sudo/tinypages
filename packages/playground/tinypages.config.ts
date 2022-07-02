@@ -18,5 +18,4 @@ export default defineConfig({
   compiler: {
     renderKatex: false,
   },
-  hostname: "http://localhost:3000",
 });

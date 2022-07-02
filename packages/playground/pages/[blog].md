@@ -4,5 +4,8 @@
 {{ blog.message }}
 </p>
 
+
+<Counter/>
+
 Prev {{ paginate.prev | last }}
 Next {{ paginate.next | first }}

@@ -65,6 +65,7 @@ export async function createBuildContext(
     frequencyTable: new Map(),
     isRebuild: false,
     isSmallPageBuild: false,
+    store: new Map(),
   };
 
   let plugins = await createBuildPlugins();

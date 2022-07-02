@@ -5,7 +5,7 @@ import ImagePlugin from "vite-plugin-image-presets";
 import InspectPlugin from "vite-plugin-inspect";
 import { useContext } from "../context";
 import AutoImportPluginOptions from "./isomorphic/auto-import";
-import DecoratorPlugin from "./dev/decorators";
+import DecoratorPlugin from "./dev/sub-island-hydration";
 import HmrPlugin from "./dev/hmr";
 import MarkdownPlugin from "./dev/markdown-dev";
 import SvgResolverPlugin from "./isomorphic/svg-resolver";

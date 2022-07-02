@@ -12,7 +12,7 @@ export function PluginHTML(): Plugin {
     defineConfig(_config) {
       config = _config;
     },
-    transform(id: string, payload: string, meta: Meta) {
+    transform(id: string, payload: string, { meta }) {
       if (id === "html") {
         if (payload.includes("<rss")) {
           meta.feeds.rss = payload;
@@ -54,7 +54,7 @@ export function PluginHTML(): Plugin {
                 meta.head.title = node.innerText;
                 meta.head.titleAttributes = node.attrs;
                 break;
-              case "twitter":
+              case "Twitter":
                 for (let content of [
                   "site",
                   "card",
@@ -71,7 +71,7 @@ export function PluginHTML(): Plugin {
                   }
                 }
                 break;
-              case "og":
+              case "Og":
                 for (let content of [
                   "title",
                   "type",

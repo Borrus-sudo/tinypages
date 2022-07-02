@@ -1,4 +1,4 @@
-import { uuid } from "../utils";
+import { hash, uuid } from "../utils";
 import * as fs from "fs";
 import { hash as hashObj } from "ohash";
 import * as path from "path";
@@ -79,6 +79,11 @@ export async function render(
   let componentRegistration: ComponentRegistration = {};
   let uid: string = uuid();
   let payload: string;
+  const pageReferenceUID = hash(context.page.pageCtx.url);
+
+  if (typeof global[pageReferenceUID] === "undefined") {
+    global[pageReferenceUID] = {};
+  }
 
   if (context.page.sources) context.page.sources = [];
 
@@ -150,7 +155,7 @@ export async function render(
       } else {
         try {
           const { default: preactComponent } = await vite.ssrLoadModule(
-            componentPath
+            componentPath + `?uid=${pageReferenceUID}`
           );
           const slotVnode =
             component.children.trim() !== ""

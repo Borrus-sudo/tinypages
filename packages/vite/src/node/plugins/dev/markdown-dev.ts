@@ -21,6 +21,7 @@ export default function (): Plugin {
   const virtualModuleMap: Map<string, string> = new Map([
     ["/uno:only", `import "uno.css";import "tinypages/hmr";`],
   ]);
+  const markdownCompilerCache: Map<string, string> = new Map();
   let seen = [];
   let vite: ViteDevServer;
   let isBuild = false;
@@ -33,7 +34,11 @@ export default function (): Plugin {
     if (cache.has(digest)) {
       return JSON.parse(cache.get(digest));
     }
-    const result = await compileMarkdown(input, config.compiler);
+    const result = await compileMarkdown(
+      input,
+      config.compiler,
+      markdownCompilerCache
+    );
     cache.set(digest, JSON.stringify(result));
     return result;
   };
