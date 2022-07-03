@@ -51,7 +51,7 @@ export async function rebuildAction(root: string = process.cwd()) {
   //@ts-ignore
   sitemap.default({
     routes: newUrls,
-    hostname: config.hostname ?? "",
+    hostname: config.hostname ?? "http://localhost:3000/",
   });
 
   payload.forEach((updatedHtml, { url }) => {

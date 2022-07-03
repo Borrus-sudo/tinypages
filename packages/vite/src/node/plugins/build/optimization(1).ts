@@ -28,7 +28,10 @@ export default function (): Plugin {
        * Input and Output options are strictly in control of the framework.
        */
       const rollup = config.build.rollupOptions;
-      rollup.output = {};
+      rollup.output = {
+        chunkFileNames: "[name].js",
+        entryFileNames: "[name].js",
+      };
       rollup.output.manualChunks = (chunk) => {
         if (chunk.includes("node_modules")) {
           return "vendor";

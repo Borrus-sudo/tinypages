@@ -42,6 +42,7 @@
     "node-icons": "^1.0.1",
     "ohash": "^0.1.0",
     "shiki": "^0.10.0",
+    "static-tweet": "^0.0.5",
     "yaml": "^2.0.1"
   },
   "optionalDependencies": {

@@ -1,19 +1,38 @@
 import type { Plugin } from "vite";
-import { useContext } from "../../context";
+import { findStaticImports, findDynamicImports } from "mlly";
+import { hash } from "../../utils";
 
-/**
- * Build optimizations(2) for tinypages.
- * - The optimization is aimed to prevent cascading hash invalidation which is a very prevalent problem for content based
- * sites.
- * - The solution for this is yet to be decided. The first approach is with import maps (low support). The second one is with
- *   PWA but might hurt base JS bundle size more.
- */
+function stripImports(code: string) {
+  const staticImports = findStaticImports(code);
+  staticImports.forEach((importStatement) => {
+    code = code.replace(
+      code.slice(importStatement.start, importStatement.end),
+      ""
+    );
+  });
+
+  const dynamicImports = findDynamicImports(code);
+  dynamicImports.forEach((importStatement) => {
+    code = code.replace(
+      code.slice(importStatement.start, importStatement.end),
+      ""
+    );
+  });
+
+  return code;
+}
 
 export default function (): Plugin {
-  const buildContext = useContext("iso");
   return {
     name: "vite-tinypages-content-hash",
     apply: "build",
-    generateBundle(_, bundle) {},
+    enforce: "post",
+    generateBundle(_, bundle) {
+      for (let chunkKey in bundle) {
+        const chunk = bundle[chunkKey]; //@ts-ignore
+        const digest = hash(stripImports(chunk.code || ""));
+        chunk.fileName = chunk.fileName.replace(".js", `.${digest}.js`);
+      }
+    },
   };
 }

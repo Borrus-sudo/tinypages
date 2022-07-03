@@ -1,9 +1,10 @@
 import type { Plugin } from "vite";
-import { useContext } from "../../context";
+import { useContext, useVite } from "../../context";
 import { uuid } from "../../utils";
 
 export default function (): Plugin {
   //   const { page } = useContext("iso");
+  const entryLinkCrawler: Map<string, string[]> = new Map();
   return {
     name: "vite-tinypages-sub-island-hydration",
     apply: "serve",
@@ -16,8 +17,7 @@ export default function (): Plugin {
      */
     load(id: string, options) {
       //   console.log(id);
-      console.log(this.getModuleIds());
-
+      const vite = useVite();
       if (/\?hydrate/.test(id)) {
         const uid = uuid();
         const path = id.split("?hydrate")[0];

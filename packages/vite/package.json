@@ -47,6 +47,7 @@
     "html-minifier": "^4.0.0",
     "liquidjs": "^9.37.0",
     "million": "^1.9.6",
+    "mlly": "^0.5.4",
     "node-icons": "^1.0.1",
     "ohash": "^0.1.0",
     "ora": "^6.1.0",
