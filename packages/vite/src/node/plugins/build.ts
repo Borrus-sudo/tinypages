@@ -13,7 +13,7 @@ import SubIslandPartialHydrationPlugin from "./build/sub-island-hydration";
 import { RebuildPlugin } from "./build/rebuild";
 
 export async function createBuildPlugins() {
-  const { config } = useContext("iso");
+  const { config, isRebuild } = useContext("iso");
   return [
     GenConfigPlugin(),
     MarkdownBuildPlugin(),
@@ -21,11 +21,13 @@ export async function createBuildPlugins() {
     SvgResolverPlugin(),
     Optimization1Plugin(),
     Optimization2Plugin(),
-    UnoCSSPlugin(<{}>{
-      inspector: false,
-      mode: "dist-chunk",
-      ...config.modules.unocss,
-    }),
+    isRebuild
+      ? UnoCSSPlugin(<{}>{
+          inspector: false,
+          mode: "dist-chunk",
+          ...config.modules.unocss,
+        })
+      : [],
     SubIslandPartialHydrationPlugin(),
     ImagePlugin(config.modules.image.presets, config.modules.image.options),
     LazyDecoratorPlugin(),

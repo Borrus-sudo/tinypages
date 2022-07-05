@@ -117,6 +117,9 @@ export function appendPreludeRebuild({
 
   const artifact = readFileSync(toReadPath, { encoding: "utf-8" });
   const artifactHead = artifact.match(/\<head\>([\s\S]*)\<\/head\>/)[0];
+  const artifactStyle = artifact.match(
+    /\<\/html\>\<style\>([\s\S]*)\<\/style\>/
+  )[0];
   const title = createElement("title", head.titleAttributes, head.title);
   const metas = head.meta.map((meta) => createElement("meta", meta, ""));
   const renderedHead = artifactHead
@@ -133,7 +136,8 @@ export function appendPreludeRebuild({
         key === "url" ? undefined : val
       )}`
     )
-    .replace("<head>", `<head>${title}\n${metas.join("\n")}`);
+    .replace("<head>", `<head>${title}\n${metas.join("\n")}`)
+    .replace("<\\html>", "<\\html>" + artifactStyle);
 
   const output = createElement(
     "html",

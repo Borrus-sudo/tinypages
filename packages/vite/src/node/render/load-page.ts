@@ -100,11 +100,12 @@ async function buildRoute({ fileURL, markdown, page, isBuild, paginate }) {
     page.global.ssrProps = data?.ssrProps || {};
   }
 
-  const builtMarkdown = await engine.parseAndRender(markdown, {
-    ...data,
-    BASE_URL: config.hostname,
-  });
-  return builtMarkdown;
+  /**
+   * Combine all the ssrProps in page.global, and delete from individual data.
+   */
+  delete data["ssrProps"];
+
+  return { markdown, data };
 }
 
 export async function loadPage(
@@ -113,7 +114,7 @@ export async function loadPage(
   isBuild: boolean,
   paginate: { prev: string[]; next: string[] }
 ) {
-  const { utils } = useContext("iso");
+  const { utils, config } = useContext("iso");
 
   const ops = [];
   do {
@@ -127,16 +128,24 @@ export async function loadPage(
     }
   } while (existsSync(fileURL));
 
-  const output: string[] = await Promise.all(ops);
-  const result =
-    output.length === 1
-      ? output[0]
-      : output
-          .reverse()
-          .slice(1)
-          .reduce(
-            (prevValue, thisValue) => prevValue.replace("<Outlet/>", thisValue),
-            output[0]
-          );
+  const output: { markdown: string; data: Object }[] = await Promise.all(ops);
+
+  let toCompile = "",
+    accumulatedData = {};
+
+  output.reverse().forEach(({ markdown, data }) => {
+    if (!toCompile) {
+      toCompile = markdown;
+    } else {
+      toCompile = toCompile.replace("<Outlet/>", markdown);
+    }
+    accumulatedData = { ...data, ...accumulatedData };
+  });
+
+  const result = engine.parseAndRender(toCompile, {
+    ...accumulatedData,
+    ssrProps: page.global.ssrProps,
+    BASE_URL: config.hostname,
+  });
   return result;
 }

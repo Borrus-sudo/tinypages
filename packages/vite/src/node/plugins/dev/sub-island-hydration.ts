@@ -26,9 +26,9 @@ export default function (): Plugin {
         import { h } from "preact";
         import component from "${path}"
         export default (props) => {
-          return  h("div", {preact:null,uid:"${uid}"}, [
+          return  h('div', {preact:null,uid:"${uid}"}, [
               h(component, props),
-              h('script', {type: 'application/json',dangerouslySetInnerHTML: { __html: JSON.stringify(props) },}),
+              h('script', { type: 'application/json', dangerouslySetInnerHTML: { __html: JSON.stringify(props) },} ),
           ]);
         };
         `;

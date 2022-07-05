@@ -43,6 +43,25 @@ function genPaginate({ fileURL, url, map }) {
   };
 }
 
+type Marker = {
+  path: string;
+  lazy: boolean;
+  uid: string;
+};
+
+function analyzeIslandMarkers(html: string): [string, Marker[]] {
+  const markers = [];
+  html = html.replace(
+    /\<island\-marker\>([\s\S]*)\<\/island\-marker\>/g,
+    (_, marker) => {
+      const metaData = JSON.parse(marker);
+      markers.push(metaData);
+      return "";
+    }
+  );
+  return [html, markers];
+}
+
 type Params = {
   config: TinyPagesConfig;
   urls: string[];
@@ -96,7 +115,7 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
       global,
     };
 
-    const appHtml = await render(
+    let appHtml = await render(
       rawHtml,
       vite,
       {
@@ -175,6 +194,14 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
         });
 
         if (!buildContext.virtualModuleMap.has(virtualModuleId)) {
+          const [markerFreeHTML, markers] = analyzeIslandMarkers(appHtml);
+          appHtml = markerFreeHTML;
+          markers.forEach((marker) => {
+            page.global.components[marker.uid] = {
+              path: marker.path,
+              lazy: marker.lazy,
+            };
+          });
           buildContext.virtualModuleMap.set(
             virtualModuleId,
             generateVirtualEntryPoint(

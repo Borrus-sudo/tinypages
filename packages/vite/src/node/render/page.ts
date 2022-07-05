@@ -1,4 +1,4 @@
-import { hash, uuid } from "../utils";
+import { uuid } from "../utils";
 import * as fs from "fs";
 import { hash as hashObj } from "ohash";
 import * as path from "path";
@@ -70,25 +70,26 @@ function cleanProps(props) {
   return cloneProps;
 }
 
+/**
+ * During build process the uid for multiple dynamic pages have to be same for them to utilize a common entry-point.
+ * During dev, we don't need to be doing this sort of wizadry as it works keeping in mind one page at a time.
+ */
+
 export async function render(
   html: string,
   vite: ViteDevServer,
   context: NeededContext,
-  frequencyTable: Map<string, number> = new Map()
+  frequencyTable: Map<string, number> = new Map(),
+  isBuild = false
 ) {
-  let componentRegistration: ComponentRegistration = {};
-  let uid: string = uuid();
+  let component_registration: ComponentRegistration = {};
   let payload: string;
-  const pageReferenceUID = hash(context.page.pageCtx.url);
-
-  if (typeof global[pageReferenceUID] === "undefined") {
-    global[pageReferenceUID] = {};
-  }
+  let uid = isBuild ? uuid() : 1;
 
   if (context.page.sources) context.page.sources = [];
 
   for (let component of context.page.meta.components) {
-    const componentPath = resolve(
+    const component_path = resolve(
       path.join(
         context.config.vite.root,
         "./components",
@@ -97,27 +98,27 @@ export async function render(
     );
 
     if (!("no:hydrate" in component.props)) {
-      if (frequencyTable.has(componentPath)) {
+      if (frequencyTable.has(component_path)) {
         frequencyTable.set(
-          componentPath,
-          frequencyTable.get(componentPath) + 1
+          component_path,
+          frequencyTable.get(component_path) + 1
         );
       } else {
-        frequencyTable.set(componentPath, 1);
+        frequencyTable.set(component_path, 1);
       }
     }
 
     /**
-     *  TO-DO: decide if context.page.global.ssrProps should be included in the hash. Rn we are assuming that
+     *  TODO: decide if context.page.global.ssrProps should be included in the hash. Rn we are assuming that
      *  result won't change with subsequent network reqs to save on valuable time (Problematic!)
      */
 
     const hash = hashObj({
       component,
-      componentPath,
+      componentPath: component_path,
     });
 
-    if (context.page.sources) context.page.sources.push(componentPath);
+    if (context.page.sources) context.page.sources.push(component_path);
 
     if ("client:only" in component.props) {
       if (map.has(hash)) {
@@ -136,15 +137,15 @@ export async function render(
           loadingString + "\n" + script(cleanProps(component.props))
         );
         map.set(hash, { html: payload });
-        if (hashComp.has(componentPath)) {
-          hashComp.set(componentPath, [hash, ...hashComp.get(componentPath)]);
+        if (hashComp.has(component_path)) {
+          hashComp.set(component_path, [hash, ...hashComp.get(component_path)]);
         } else {
-          hashComp.set(componentPath, [hash]);
+          hashComp.set(component_path, [hash]);
         }
       }
 
-      componentRegistration[uid] = {
-        path: componentPath,
+      component_registration[uid] = {
+        path: component_path,
         lazy: "lazy:load" in component.props,
       };
     } else {
@@ -155,7 +156,7 @@ export async function render(
       } else {
         try {
           const { default: preactComponent } = await vite.ssrLoadModule(
-            componentPath + `?uid=${pageReferenceUID}`
+            component_path
           );
           const slotVnode =
             component.children.trim() !== ""
@@ -198,10 +199,10 @@ export async function render(
 
         map.set(hash, { html: payload });
 
-        if (hashComp.has(componentPath)) {
-          hashComp.set(componentPath, [hash, ...hashComp.get(componentPath)]);
+        if (hashComp.has(component_path)) {
+          hashComp.set(component_path, [hash, ...hashComp.get(component_path)]);
         } else {
-          hashComp.set(componentPath, [hash]);
+          hashComp.set(component_path, [hash]);
         }
       }
 
@@ -209,17 +210,17 @@ export async function render(
         /**
          * initalize metadata if no:hydrate property is not present
          */
-        componentRegistration[uid] = {
-          path: componentPath,
+        component_registration[uid] = {
+          path: component_path,
           lazy: "lazy:load" in component.props,
         };
       }
     }
 
     html = html.replace(component.componentLiteral, payload);
-    uid = uuid();
+    uid = isBuild ? ++(uid as number) : uuid();
   }
-  context.page.global.components = componentRegistration;
+  context.page.global.components = component_registration;
   return html;
 }
 
