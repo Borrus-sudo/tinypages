@@ -62,7 +62,7 @@ export default function (): Plugin {
       const svgId = transformToSvgId(id);
       const res = (await loadIcons(svgId.replace(".svg", ""))).replace(
         "<svg >",
-        `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 25 25">`
+        `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"`
       );
       if (res) {
         const svgFsPath = ensureWrite(svgId, res);

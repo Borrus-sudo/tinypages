@@ -79,7 +79,6 @@ export async function render(
   html: string,
   vite: ViteDevServer,
   context: NeededContext,
-  frequencyTable: Map<string, number> = new Map(),
   isBuild = false
 ) {
   let component_registration: ComponentRegistration = {};
@@ -96,17 +95,6 @@ export async function render(
         component.componentName.replace(/\./g, "/")
       )
     );
-
-    if (!("no:hydrate" in component.props)) {
-      if (frequencyTable.has(component_path)) {
-        frequencyTable.set(
-          component_path,
-          frequencyTable.get(component_path) + 1
-        );
-      } else {
-        frequencyTable.set(component_path, 1);
-      }
-    }
 
     /**
      *  TODO: decide if context.page.global.ssrProps should be included in the hash. Rn we are assuming that

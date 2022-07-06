@@ -55,6 +55,8 @@ export async function resolveConfig(
       unocss: {},
     },
     hostname: "http://localhost:3003/",
+    isSmallPageBuild: false,
+    useExperimentalImportMap: false,
   });
 
   config.compiler.icons = config.modules.icons;

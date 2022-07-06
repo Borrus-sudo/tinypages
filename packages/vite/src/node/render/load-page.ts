@@ -29,7 +29,7 @@ engine.filters.create(
 );
 
 async function buildRoute({ fileURL, markdown, page, isBuild, paginate }) {
-  const { utils, config } = useContext("iso");
+  const { utils } = useContext("iso");
   const vite = useVite();
 
   let jsUrl = fileURL.replace(/\.md$/, ".js");

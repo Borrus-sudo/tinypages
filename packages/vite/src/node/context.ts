@@ -62,10 +62,8 @@ export async function createBuildContext(
     config,
     virtualModuleMap: new Map([["/uno:only", `import "uno.css"`]]),
     fileToHtmlMap: new Map(),
-    frequencyTable: new Map(),
     isRebuild: false,
     isSmallPageBuild: false,
-    store: new Map(),
   };
 
   let plugins = await createBuildPlugins();

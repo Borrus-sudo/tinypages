@@ -44,6 +44,8 @@ interface TinyPagesConfig {
   middlewares: Middlwares;
   modules: Modules;
   hostname: string;
+  isSmallPageBuild: boolean;
+  useExperimentalImportMap: boolean;
 }
 
 interface UserTinyPagesConfig {
@@ -59,6 +61,8 @@ interface UserTinyPagesConfig {
   vite?: ViteUserConfig;
   middlewares?: Middlwares;
   hostname: string;
+  isSmallPageBuild?: boolean;
+  useExperimentalImportMap?: boolean;
 }
 
 export { TinyPagesConfig, UserTinyPagesConfig };

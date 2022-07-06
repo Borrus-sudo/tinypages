@@ -1,26 +1,5 @@
 import type { Plugin } from "vite";
-import { findStaticImports, findDynamicImports } from "mlly";
 import { hash } from "../../utils";
-
-function stripImports(code: string) {
-  const staticImports = findStaticImports(code);
-  staticImports.forEach((importStatement) => {
-    code = code.replace(
-      code.slice(importStatement.start, importStatement.end),
-      ""
-    );
-  });
-
-  const dynamicImports = findDynamicImports(code);
-  dynamicImports.forEach((importStatement) => {
-    code = code.replace(
-      code.slice(importStatement.start, importStatement.end),
-      ""
-    );
-  });
-
-  return code;
-}
 
 export default function (): Plugin {
   return {
@@ -28,11 +7,35 @@ export default function (): Plugin {
     apply: "build",
     enforce: "post",
     generateBundle(_, bundle) {
+      const editThisLater = [];
+      const importMap = {
+        imports: {},
+      };
       for (let chunkKey in bundle) {
-        const chunk = bundle[chunkKey]; //@ts-ignore
-        const digest = hash(stripImports(chunk.code || ""));
-        chunk.fileName = chunk.fileName.replace(".js", `.${digest}.js`);
+        const chunk = bundle[chunkKey];
+        if (chunk.fileName.endsWith(".html")) {
+          // we need to inject here later sourcemap here.
+          editThisLater.push(chunk);
+          continue;
+        }
+        //@ts-ignore
+        const digest = hash(chunk.code || "");
+        const extname = chunkKey.slice(chunkKey.lastIndexOf("."));
+        chunk.fileName = chunk.fileName.replace(
+          extname,
+          `.${digest}.${extname}`
+        );
+        importMap.imports["/" + chunkKey] = chunkKey.replace(
+          extname,
+          `.${digest}.${extname}`
+        );
       }
+      editThisLater.forEach((chunk) => {
+        chunk.code = chunk?.code.replace(
+          "<head>",
+          `<head><script type="importmap">${JSON.stringify(importMap)}</script>`
+        );
+      });
     },
   };
 }

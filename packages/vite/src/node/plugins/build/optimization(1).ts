@@ -28,10 +28,15 @@ export default function (): Plugin {
        * Input and Output options are strictly in control of the framework.
        */
       const rollup = config.build.rollupOptions;
-      rollup.output = {
-        chunkFileNames: "[name].js",
-        entryFileNames: "[name].js",
-      };
+      if (buildContext.config.useExperimentalImportMap) {
+        rollup.output = {
+          chunkFileNames: "[name].js",
+          entryFileNames: "[name].js",
+          assetFileNames: "[name].[ext]",
+        };
+      } else {
+        rollup.output = {};
+      }
       rollup.output.manualChunks = (chunk) => {
         if (chunk.includes("node_modules")) {
           return "vendor";
@@ -39,10 +44,12 @@ export default function (): Plugin {
       };
     },
     resolveId(id: string) {
-      return deps.includes(id) && buildContext.isSmallPageBuild ? id : "";
+      return deps.includes(id) && buildContext.config.isSmallPageBuild
+        ? id
+        : "";
     },
     load(id: string) {
-      if (!deps.includes(id) || !buildContext.isSmallPageBuild) {
+      if (!deps.includes(id) || !buildContext.config.isSmallPageBuild) {
         return;
       }
       if (id === "preact") {

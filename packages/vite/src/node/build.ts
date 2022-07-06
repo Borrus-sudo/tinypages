@@ -26,14 +26,6 @@ function analyzeUrls(html: string) {
   return res;
 }
 
-function isSmallPageBuild(map: Map<string, string[]>, frequencyTable) {
-  if (map.size < 3) {
-    if (frequencyTable) {
-    }
-    return true;
-  }
-}
-
 function genPaginate({ fileURL, url, map }) {
   const urls: string[] = map.get(fileURL);
   const index = urls.findIndex((curr) => url === curr);
@@ -123,7 +115,7 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
         page,
         config: buildContext.config,
       },
-      buildContext.frequencyTable
+      true
     );
 
     if (isGrammarCheck) {

@@ -20,17 +20,17 @@ export async function createBuildPlugins() {
     RebuildPlugin(),
     SvgResolverPlugin(),
     Optimization1Plugin(),
-    Optimization2Plugin(),
     isRebuild
       ? UnoCSSPlugin(<{}>{
           inspector: false,
           mode: "dist-chunk",
           ...config.modules.unocss,
         })
-      : [],
+      : null,
     SubIslandPartialHydrationPlugin(),
     ImagePlugin(config.modules.image.presets, config.modules.image.options),
     LazyDecoratorPlugin(),
+    config.useExperimentalImportMap ? Optimization2Plugin() : null,
     AutoImport(AutoImportPluginOptions(config.vite.root)),
   ];
 }
