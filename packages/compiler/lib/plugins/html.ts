@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { parse } from "node-html-parser";
-import type { Config, Plugin, Meta } from "../../types/types";
+import type { Config, Plugin } from "../../types/types";
 import iconsRenderer from "./helpers/icons";
 import { marked } from "marked";
 import { tags } from "../utils";

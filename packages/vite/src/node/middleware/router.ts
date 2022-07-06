@@ -32,7 +32,13 @@ export default function () {
           utils.logger.info(req.originalUrl, { timestamp: true });
           page.pageCtx = pageCtx;
           page.reloads = [];
-          const markdown = await loadPage(pageCtx.url, page, false);
+          /**
+           * TODO: fix this. We do not know the URLS ahead of time during dev
+           */
+          const markdown = await loadPage(pageCtx.url, page, false, {
+            prev: [],
+            next: [],
+          });
           const html = await vite.transformIndexHtml(pageCtx.url, markdown); // vite transformed html
           res.status(200).set({ "Content-type": "text/html" }).end(html);
         }

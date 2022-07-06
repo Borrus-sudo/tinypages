@@ -62,7 +62,7 @@ export default function (): Plugin {
       const svgId = transformToSvgId(id);
       const res = (await loadIcons(svgId.replace(".svg", ""))).replace(
         "<svg >",
-        `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"`
+        `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32">`
       );
       if (res) {
         const svgFsPath = ensureWrite(svgId, res);
@@ -86,7 +86,9 @@ export default function (): Plugin {
           import { stringifyImageStyle } from "@tinypages/compiler/utils";
           import svgUrl from "${resolve(fsPath, config.vite.root)}";
           export default (props) => {
-            return h("img", {src:svgUrl, style:stringifyImageStyle(props.style||${stringifiedDefaults}) });
+            return h("img", {src:svgUrl, style:stringifyImageStyle(props.style${
+              stringifiedDefaults !== "{}" ? `||${stringifiedDefaults}` : ""
+            }) });
           }
           `;
       }

@@ -46,10 +46,7 @@ export async function resolveConfig(
     modules: {
       image: {},
       icons: {
-        defaultIconsStyles: {
-          width: "1.5em",
-          height: "1.5em",
-        },
+        defaultIconsStyles: {},
       },
       preact: {},
       unocss: {},

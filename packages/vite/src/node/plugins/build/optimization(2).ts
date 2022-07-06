@@ -17,8 +17,7 @@ export default function (): Plugin {
           // we need to inject here later sourcemap here.
           editThisLater.push(chunk);
           continue;
-        }
-        //@ts-ignore
+        } //@ts-ignore
         const digest = hash(chunk.code || "");
         const extname = chunkKey.slice(chunkKey.lastIndexOf("."));
         chunk.fileName = chunk.fileName.replace(

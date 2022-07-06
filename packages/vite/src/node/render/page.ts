@@ -83,7 +83,7 @@ export async function render(
 ) {
   let component_registration: ComponentRegistration = {};
   let payload: string;
-  let uid = isBuild ? uuid() : 1;
+  let uid = isBuild ? 1 : uuid();
 
   if (context.page.sources) context.page.sources = [];
 

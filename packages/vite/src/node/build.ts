@@ -264,6 +264,7 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
   spinner.start();
   await buildPages(urls, []);
   await vite.close();
+  spinner.succeed("Pages rendered. Building JS!");
 
   if (!isGrammarCheck) {
     await Vite.build(buildContext.config.vite);
@@ -279,8 +280,6 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
   Object.keys(postFs).forEach((path) => {
     writeFileSync(path, postFs[path]);
   });
-
-  spinner.succeed("Pages built!");
 
   return buildContext.fileToHtmlMap;
 }
