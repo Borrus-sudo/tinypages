@@ -26,15 +26,6 @@ function analyzeUrls(html: string) {
   return res;
 }
 
-function genPaginate({ fileURL, url, map }) {
-  const urls: string[] = map.get(fileURL);
-  const index = urls.findIndex((curr) => url === curr);
-  return {
-    prev: index === 0 ? null : urls.slice(0, index),
-    next: index === urls.length ? null : urls.slice(index + 1),
-  };
-}
-
 type Marker = {
   path: string;
   lazy: boolean;
@@ -88,12 +79,7 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
     const buildLiquid = await loadPage(
       url,
       { reloads: [], global, pageCtx }, // quick workaround to make build and dev to be compatible
-      true,
-      genPaginate({
-        fileURL: pageCtx.url,
-        url: pageCtx.originalUrl,
-        map: fileToUrlMap,
-      })
+      true
     );
 
     const [rawHtml, meta] = await compile(

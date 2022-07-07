@@ -28,7 +28,7 @@ engine.filters.create(
   Filters.convertHtmlToAbsoluteUrls
 );
 
-async function buildRoute({ fileURL, markdown, page, isBuild, paginate }) {
+async function buildRoute({ fileURL, markdown, page, isBuild }) {
   const { utils } = useContext("iso");
   const vite = useVite();
 
@@ -68,7 +68,7 @@ async function buildRoute({ fileURL, markdown, page, isBuild, paginate }) {
     } else {
       loader = (await vite.ssrLoadModule(fileURL)).default;
     }
-    data = await loader(page.pageCtx.params, paginate);
+    data = await loader(page.pageCtx.params);
 
     if (!isBuild) {
       utils.consola.success("State loaded!");
@@ -83,7 +83,7 @@ async function buildRoute({ fileURL, markdown, page, isBuild, paginate }) {
     if (currTimestamp - prevTimestamp > offset) {
       // boilerplate stuff
       const { default: loader } = await vite.ssrLoadModule(fileURL);
-      data = await loader(page.pageCtx.params, paginate);
+      data = await loader(page.pageCtx.params);
       utils.consola.success("State loaded!");
 
       ssrTimestampCache.set(originalUrl, new Date().getTime()); // for better accuracy this is being done
@@ -108,19 +108,14 @@ async function buildRoute({ fileURL, markdown, page, isBuild, paginate }) {
   return { markdown, data };
 }
 
-export async function loadPage(
-  fileURL: string,
-  page,
-  isBuild: boolean,
-  paginate: { prev: string[]; next: string[] }
-) {
+export async function loadPage(fileURL: string, page, isBuild: boolean) {
   const { utils, config } = useContext("iso");
 
   const ops = [];
   do {
     page.reloads.push(fileURL);
     const markdown = await readFile(fileURL, { encoding: "utf-8" });
-    ops.push(buildRoute({ fileURL, page, markdown, isBuild, paginate }));
+    ops.push(buildRoute({ fileURL, page, markdown, isBuild }));
     if (path.dirname(fileURL) === utils.pageDir) {
       fileURL = path.join(utils.pageDir, "root.md");
     } else {
