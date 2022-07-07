@@ -58,7 +58,7 @@
     "unconfig": "^0.3.4",
     "unplugin-auto-import": "^0.8.1",
     "vfile-reporter": "^7.0.4",
-    "vite": "^2.9.9",
+    "vite": "^2.9.13",
     "vite-plugin-image-presets": "^0.3.1",
     "vite-plugin-inspect": "^0.5.0",
     "vite-plugin-pages-sitemap": "^1.2.2"
