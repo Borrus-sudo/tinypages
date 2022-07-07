@@ -8,7 +8,7 @@ import { useContext, useVite } from "../../context";
 import { refreshRouter } from "../../router/fs";
 import { hash } from "../../utils";
 import { appendPrelude } from "../../render/render-utils";
-import { invalidateFileLoadUrlCache } from "../../render/load-page";
+import { purgeLoaderCache } from "../../render/load-page";
 import { hash as hashIt, reload } from "../plugin-utils";
 import { generateVirtualEntryPoint } from "../../render/render-utils";
 import { uuid } from "../../utils";
@@ -147,7 +147,7 @@ export default function (): Plugin {
         if (page.reloads.includes(fileId)) {
           if (/\.[tj]sx?$/.test(fileId)) {
             // time to throw away the fileToURL cache entry for this thing and re-import this file.
-            invalidateFileLoadUrlCache(fileId);
+            purgeLoaderCache(fileId);
           }
           reload(fileBasename, context.server, utils.logger);
           seen = [];

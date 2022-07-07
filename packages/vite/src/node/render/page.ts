@@ -210,7 +210,7 @@ export async function render(
 /**
  * Cache invalidation for HMR
  */
-export function invalidate(invalidateComponent: string) {
+export function purgeComponentCache(invalidateComponent: string) {
   if (hashComp.has(invalidateComponent)) {
     const hashes = hashComp.get(invalidateComponent);
     hashes.forEach((hash) => map.delete(hash));

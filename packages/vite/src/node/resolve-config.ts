@@ -43,14 +43,14 @@ export async function resolveConfig(
       pre: [],
       post: [],
     },
-    modules: {
+    defaultModulesConfig: {
       image: {},
       icons: {
         defaultIconsStyles: {},
       },
-      preact: {},
       unocss: {},
     },
+    modules: [],
     hostname: "http://localhost:3003/",
     isSmallPageBuild: false,
     useExperimentalImportMap: false,

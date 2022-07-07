@@ -1,6 +1,10 @@
 import type { Plugin } from "vite";
 import { hash } from "../../utils";
 
+/**
+ * Currently the content hash invalidation works using import maps under an experimental flag.
+ */
+
 export default function (): Plugin {
   return {
     name: "vite-tinypages-content-hash",

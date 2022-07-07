@@ -84,10 +84,11 @@ async function buildRoute({ fileURL, markdown, page, isBuild }) {
 
 export async function loadPage(fileURL: string, page, isBuild: boolean) {
   const { utils, config } = useContext("iso");
-
   const ops = [];
+  let dontDoThis = true;
+
   do {
-    page.reloads.push(fileURL);
+    if (!dontDoThis) page.reloads.push(fileURL);
     const markdown = await readFile(fileURL, { encoding: "utf-8" });
     ops.push(buildRoute({ fileURL, page, markdown, isBuild }));
     if (path.dirname(fileURL) === utils.pageDir) {
@@ -95,6 +96,7 @@ export async function loadPage(fileURL: string, page, isBuild: boolean) {
     } else {
       fileURL = path.dirname(fileURL) + ".md";
     }
+    dontDoThis = false;
   } while (existsSync(fileURL));
 
   const output: { markdown: string; data: Object }[] = await Promise.all(ops);
@@ -119,6 +121,6 @@ export async function loadPage(fileURL: string, page, isBuild: boolean) {
   return result;
 }
 
-export function invalidateFileLoadUrlCache(fileId: string) {
+export function purgeLoaderCache(fileId: string) {
   fileLoader.delete(fileId);
 }

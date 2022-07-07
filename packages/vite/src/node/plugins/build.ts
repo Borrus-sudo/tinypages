@@ -24,11 +24,14 @@ export async function createBuildPlugins() {
       ? UnoCSSPlugin(<{}>{
           inspector: false,
           mode: "dist-chunk",
-          ...config.modules.unocss,
+          ...config.defaultModulesConfig.unocss,
         })
       : null,
     SubIslandPartialHydrationPlugin(),
-    ImagePlugin(config.modules.image.presets, config.modules.image.options),
+    ImagePlugin(
+      config.defaultModulesConfig.image.presets,
+      config.defaultModulesConfig.image.options
+    ),
     LazyDecoratorPlugin(),
     config.useExperimentalImportMap ? Optimization2Plugin() : null,
     AutoImport(AutoImportPluginOptions(config.vite.root)),

@@ -10,27 +10,23 @@ import type {
   Options as ImageOptions,
 } from "vite-plugin-image-presets";
 
-interface IconsModule extends IconsConfig {
+interface IconsModuleConfig extends IconsConfig {
   defaultIconsStyles?: Record<string, string>;
   load?: (id: string) => Promise<string> | void;
 }
 
-interface PreactModule {
-  devToolsInProd?: boolean;
-  loadComponent?: () => string | void;
-  editMainFile?: () => string | void;
-}
-
-interface ImageModule {
+interface ImageModuleConfig {
   presets?: ImagePresets;
   options?: ImageOptions;
 }
 
-interface Modules {
-  image: ImageModule;
+/**
+ * Config for the inbuild stuff the framework offers.
+ */
+interface DefaultModulesConfig {
+  image: ImageModuleConfig;
   unocss: UnoCSSConfig;
-  icons: IconsModule;
-  preact: PreactModule;
+  icons: IconsModuleConfig;
 }
 
 interface Middlwares {
@@ -38,11 +34,19 @@ interface Middlwares {
   post?: Server[];
 }
 
+interface FrameworkModule {
+  defineConfig: (c: TinyPagesConfig) => void;
+  editEntryFile: (id: string, code: string) => string | undefined;
+  resolveComponentPath: () => string | undefined;
+  renderComponent: () => string | undefined;
+}
+
 interface TinyPagesConfig {
   compiler: CompilerConfig;
   vite: ViteUserConfig;
   middlewares: Middlwares;
-  modules: Modules;
+  defaultModulesConfig: DefaultModulesConfig;
+  modules: FrameworkModule[];
   hostname: string;
   isSmallPageBuild: boolean;
   useExperimentalImportMap: boolean;
@@ -57,7 +61,8 @@ interface UserTinyPagesConfig {
     | "defaultIconsStyles"
     | "defaultBase64IconsStyles"
   >;
-  modules?: Partial<Modules>;
+  defaultModulesConfig?: Partial<DefaultModulesConfig>;
+  modules?: FrameworkModule[];
   vite?: ViteUserConfig;
   middlewares?: Middlwares;
   hostname: string;
@@ -65,4 +70,4 @@ interface UserTinyPagesConfig {
   useExperimentalImportMap?: boolean;
 }
 
-export { TinyPagesConfig, UserTinyPagesConfig };
+export { TinyPagesConfig, UserTinyPagesConfig, FrameworkModule };

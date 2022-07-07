@@ -19,10 +19,13 @@ export async function createDevPlugins() {
     UnoCSSPlugin(<{}>{
       inspector: true,
       mode: "global",
-      ...config.modules.unocss,
+      ...config.defaultModulesConfig.unocss,
     }),
     SvgResolverPlugin(),
-    ImagePlugin(config.modules.image.presets, config.modules.image.options),
+    ImagePlugin(
+      config.defaultModulesConfig.image.presets,
+      config.defaultModulesConfig.image.options
+    ),
     LazyDecoratorPlugin(),
     DecoratorPlugin(),
     HmrPlugin(),

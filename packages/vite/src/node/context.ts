@@ -6,7 +6,7 @@ import type {
   BuildContext,
 } from "../../types/types";
 import { presetPageConfig } from "./constants";
-import { invalidate, render } from "./render/page";
+import { purgeComponentCache, render } from "./render/page";
 import { createConsola, deepCopy } from "./utils";
 
 let devContext: DevContext;
@@ -26,7 +26,7 @@ export async function createDevContext(
       async render(html: string) {
         return await render(html, vite, devContext);
       },
-      invalidate: (input: string) => invalidate(input),
+      invalidate: (input: string) => purgeComponentCache(input),
       pageDir: join(config.vite.root, "pages"),
       stylesDir: join(config.vite.root, "styles"),
       configFile: source || "",
@@ -54,7 +54,7 @@ export async function createBuildContext(
   buildContext = {
     utils: {
       logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
-      invalidate: (input: string) => invalidate(input),
+      invalidate: (input: string) => purgeComponentCache(input),
       pageDir: join(config.vite.root, "pages"),
       stylesDir: join(config.vite.root, "styles"),
       consola: createConsola(),

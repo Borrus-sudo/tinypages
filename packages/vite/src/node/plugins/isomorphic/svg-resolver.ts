@@ -26,18 +26,18 @@ function resolve(p: string, root: string) {
 
 export default function (): Plugin {
   const { config } = useContext("iso");
-  const icons = Icons(config.modules.icons);
-  const separator = config.modules.icons?.separator || ":";
+  const icons = Icons(config.defaultModulesConfig.icons);
+  const separator = config.defaultModulesConfig.icons?.separator || ":";
   const seen: Set<string> = new Set();
   const idToPath: Map<string, string> = new Map();
   const stringifiedDefaults = JSON.stringify(
-    config.modules.icons.defaultIconsStyles || {}
+    config.defaultModulesConfig.icons.defaultIconsStyles || {}
   );
 
   const loadIcons = async (id: string) => {
     let res = "";
-    if (config.modules.icons.load) {
-      res = (await config.modules.icons.load(id)) || "";
+    if (config.defaultModulesConfig.icons.load) {
+      res = (await config.defaultModulesConfig.icons.load(id)) || "";
     } else {
       const fetchThis = id.replace(/\//g, separator);
       res = icons.getIconsSync(fetchThis, {}, false) || "";

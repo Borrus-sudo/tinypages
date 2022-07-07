@@ -1,6 +1,10 @@
 import type { Meta } from "@tinypages/compiler";
 import type { Logger, ViteDevServer } from "vite";
-import type { TinyPagesConfig, UserTinyPagesConfig } from "./config";
+import type {
+  TinyPagesConfig,
+  UserTinyPagesConfig,
+  FrameworkModule,
+} from "./config";
 
 type RenderFunction = (
   html: string,
@@ -93,4 +97,5 @@ export {
   RenderFunction,
   ComponentRegistration,
   BuildContext,
+  FrameworkModule,
 };
