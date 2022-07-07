@@ -5,8 +5,6 @@ import { readFile } from "fs/promises";
 import { Liquid } from "liquidjs";
 import * as Filters from "@11ty/eleventy-plugin-rss";
 
-const ssrTimestampCache = new Map();
-const propsCache = new Map();
 const engine = new Liquid({
   cache: true,
   tagDelimiterLeft: "{%",
@@ -44,54 +42,30 @@ async function buildRoute({ fileURL, markdown, page, isBuild }) {
     fileURL = jsUrl;
   }
 
+  // some fields for page are polyfilled during build for this func to be isomorphic
   if (!page.reloads.includes(fileURL)) page.reloads.push(fileURL);
+
   let data;
+  let loader;
 
-  /**
-   * caching strategy for better hmr during dev
-   */
   let { originalUrl } = page.pageCtx;
-  let currTimestamp = new Date().getTime();
 
-  if (isBuild || !ssrTimestampCache.has(originalUrl)) {
-    // it is imperative to use originalUrl
-
-    //boilerplate stuff
-    let loader;
-    if (isBuild) {
-      if (fileLoader.has(fileURL)) {
-        loader = fileLoader.get(fileURL);
-      } else {
-        loader = (await vite.ssrLoadModule(fileURL)).default;
-        fileLoader.set(fileURL, loader);
-      }
-    } else {
-      loader = (await vite.ssrLoadModule(fileURL)).default;
-    }
-    data = await loader(page.pageCtx.params);
-
-    if (!isBuild) {
-      utils.consola.success("State loaded!");
-      ssrTimestampCache.set(originalUrl, currTimestamp);
-      propsCache.set(originalUrl, data);
-    }
+  if (!isBuild && fileLoader.has(fileURL)) {
+    loader = fileLoader.get(fileURL);
   } else {
-    const prevTimestamp = ssrTimestampCache.get(originalUrl) ?? 0;
-    const offset = 120 * 1000;
+    loader = (await vite.ssrLoadModule(fileURL)).default;
+    fileLoader.set(fileURL, loader);
+  }
 
-    // cache expired
-    if (currTimestamp - prevTimestamp > offset) {
-      // boilerplate stuff
-      const { default: loader } = await vite.ssrLoadModule(fileURL);
-      data = await loader(page.pageCtx.params);
-      utils.consola.success("State loaded!");
+  data = await loader({
+    ...page.pageCtx.params,
+    __serve__: !isBuild,
+    __url__: originalUrl,
+  });
 
-      ssrTimestampCache.set(originalUrl, new Date().getTime()); // for better accuracy this is being done
-      propsCache.set(originalUrl, data);
-    } else {
-      utils.consola.success("State loaded from cache!");
-      data = propsCache.get(originalUrl);
-    }
+  if (!isBuild) {
+    // no console clutter during build
+    utils.consola.success("State loaded!");
   }
 
   if (typeof page.global.ssrProps === "object" && data.ssrProps) {
@@ -143,4 +117,8 @@ export async function loadPage(fileURL: string, page, isBuild: boolean) {
     BASE_URL: config.hostname,
   });
   return result;
+}
+
+export function invalidateFileLoadUrlCache(fileId: string) {
+  fileLoader.delete(fileId);
 }

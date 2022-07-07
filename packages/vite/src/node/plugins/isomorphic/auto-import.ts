@@ -4,7 +4,7 @@ import type { Options as AutoImportOptions } from "unplugin-auto-import/types";
 import { isUpperCase } from "../../utils";
 
 export default (root: string): AutoImportOptions => ({
-  include: [/\.[tj]sx?/],
+  include: [/\.[tj]sx?/], // for it work for stuff like <FILE_PATH>?(hydrate|hydrate=lazy)
   imports: ["preact"],
   resolvers: [
     (name: string) => {

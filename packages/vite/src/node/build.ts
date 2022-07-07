@@ -7,8 +7,11 @@ import { createBuildPlugins } from "./plugins/build";
 import { writeFileSync } from "fs";
 import { compile } from "@tinypages/compiler";
 import { render } from "./render/page";
-import { appendPrelude, appendPreludeRebuild } from "./render/render-utils";
-import { generateVirtualEntryPoint } from "./plugins/plugin-utils";
+import {
+  appendPrelude,
+  appendPreludeRebuild,
+  generateVirtualEntryPoint,
+} from "./render/render-utils";
 import path from "path";
 import { polyfill } from "@astropub/webapi";
 import ora from "ora";

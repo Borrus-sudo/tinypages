@@ -1,0 +1,26 @@
+{
+  "name": "@tinypages/utils",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsup-node",
+    "dev": "tsup-node --watch lib",
+    "start": "tsup-node demo/index.ts --outDir ./demo/out --no-dts&&node demo/out/index.js"
+  },
+  "main": "out/index.js",
+  "module": "out/index.mjs",
+  "types": "out/index.d.ts",
+  "files": [
+    "out"
+  ],
+  "exports": {
+    ".": {
+      "require": "./out/index.js",
+      "import": "./out/index.mjs",
+      "types": "./out/index.d.ts"
+    }
+  },
+  "dependencies": {
+    "ohmyfetch": "^0.4.18"
+  }
+}

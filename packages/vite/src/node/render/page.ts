@@ -96,11 +96,6 @@ export async function render(
       )
     );
 
-    /**
-     *  TODO: decide if context.page.global.ssrProps should be included in the hash. Rn we are assuming that
-     *  result won't change with subsequent network reqs to save on valuable time (Problematic!)
-     */
-
     const hash = hashObj({
       component,
       componentPath: component_path,
