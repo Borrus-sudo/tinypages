@@ -84,13 +84,20 @@ export async function cli() {
 
   cli
     .command("rebuild [root]")
+    .option("-c, --config", "[boolean] rebuilds from config")
+    .option("-g, --git", "[boolean] rebuilds from the files changed")
+    .option("-g, --grammar", "[boolean] do grammar checking for rebuilt files")
     .action((await import("./commands/rebuild")).rebuildAction);
 
   cli
     .command("lighthouse [root]")
     .option(
-      "--build",
+      "-b, --build",
       "[boolean] build the website, in case files haven't been already built"
+    )
+    .option(
+      "-p, --prod",
+      "[boolean] measure perf of the website after it is deployed"
     )
     .action((await import("./commands/unlighthouse")).unlighthouseAction);
 

@@ -5,9 +5,22 @@ import path from "path";
 import { htmlNormalizeURL } from "../utils";
 import sitemap from "vite-plugin-pages-sitemap";
 
-export async function rebuildAction(root: string = process.cwd()) {
+type RebuildOptions = {
+  config: boolean;
+  git: boolean;
+  grammar: boolean;
+};
+
+export async function rebuildAction(
+  root: string = process.cwd(),
+  options: RebuildOptions = { config: true, git: false, grammar: true }
+) {
   if (root.startsWith("./")) {
     root = path.join(process.cwd(), root);
+  }
+  const outDir = path.join(root, "dist");
+  if (options.git) {
+    // figure out stuff from the changed stuff. This should be able to pick up recently pushed files as well?
   }
   const {
     rebuild,
@@ -54,9 +67,25 @@ export async function rebuildAction(root: string = process.cwd()) {
     hostname: config.hostname ?? "http://localhost:3000/",
   });
 
-  payload.forEach((updatedHtml, { url }) => {
-    const normalizedUrl = htmlNormalizeURL(url);
-    const toWritePath = path.join(root, "dist", normalizedUrl);
-    fs.writeFileSync(toWritePath, updatedHtml);
-  });
+  if (options.grammar) {
+    const { reporter } = await import("vfile-reporter");
+    const { html } = await import("alex");
+    payload.forEach((updatedHtml, { url }) => {
+      const normalizedUrl = htmlNormalizeURL(url);
+      const toWritePath = path.join(outDir, normalizedUrl);
+      const res = html({
+        value: updatedHtml,
+        path: toWritePath,
+        messages: [],
+      });
+      fs.writeFileSync(toWritePath, updatedHtml);
+      console.error(reporter(res));
+    });
+  } else {
+    payload.forEach((updatedHtml, { url }) => {
+      const normalizedUrl = htmlNormalizeURL(url);
+      const toWritePath = path.join(outDir, normalizedUrl);
+      fs.writeFileSync(toWritePath, updatedHtml);
+    });
+  }
 }

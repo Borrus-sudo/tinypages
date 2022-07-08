@@ -9,6 +9,7 @@ export async function grammarAction(root: string = process.cwd()) {
   if (root.startsWith("./")) {
     root = path.join(process.cwd(), root);
   }
+  const outDir = path.join(root, "dist");
   const { urls } = JSON.parse(
     await fs.readFile(path.join(root, "urls.json"), { encoding: "utf-8" })
   );
@@ -20,10 +21,10 @@ export async function grammarAction(root: string = process.cwd()) {
     rebuild: false,
   });
 
-  payload.forEach((userHtml, { filePath, url }) => {
+  payload.forEach((userHtml, { url }) => {
     const res = html({
       value: userHtml,
-      path: path.join(path.dirname(filePath), url),
+      path: path.join(outDir, url),
       messages: [],
     });
     console.error(reporter(res));
