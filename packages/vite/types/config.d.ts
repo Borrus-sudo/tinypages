@@ -65,7 +65,7 @@ interface UserTinyPagesConfig {
   modules?: FrameworkModule[];
   vite?: ViteUserConfig;
   middlewares?: Middlwares;
-  hostname: string;
+  hostname?: string;
   isSmallPageBuild?: boolean;
   useExperimentalImportMap?: boolean;
 }

@@ -56,8 +56,9 @@ export async function resolveConfig(
     useExperimentalImportMap: false,
   });
 
-  config.compiler.icons = config.modules.icons;
-  config.compiler.defaultIconsStyles = config.modules.icons.defaultIconsStyles;
+  config.compiler.icons = config.defaultModulesConfig.icons;
+  config.compiler.defaultIconsStyles =
+    config.defaultModulesConfig.icons.defaultIconsStyles;
   config.vite.base = config.hostname;
 
   return { config, filePath: sources[0] } as {

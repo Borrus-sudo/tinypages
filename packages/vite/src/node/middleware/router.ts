@@ -25,9 +25,12 @@ export default function () {
           res.send(await fs.readFile(pageCtx.url, { encoding: "utf-8" }));
         }
       } else {
-        res.set("Cache-Control", "no-store"); // so that hmr works
         if (pageCtx.url === "404") {
-          res.send(`<h1> 404 url not found </h1>`);
+          res
+            .writeHead(404, {
+              "Cache-control": "no-store",
+            })
+            .end(`<h1> 404 url not found </h1>`); // so that hmr works
         } else {
           utils.logger.info(req.originalUrl, { timestamp: true });
           page.pageCtx = pageCtx;
@@ -35,7 +38,12 @@ export default function () {
 
           const markdown = await loadPage(pageCtx.url, page, false);
           const html = await vite.transformIndexHtml(pageCtx.url, markdown); // vite transformed html
-          res.status(200).set({ "Content-type": "text/html" }).end(html);
+          res
+            .writeHead(200, {
+              "Cache-control": "no-store",
+              "Content-type": "text/html",
+            })
+            .end(html);
         }
       }
     } catch (err) {

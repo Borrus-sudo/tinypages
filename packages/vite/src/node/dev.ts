@@ -1,4 +1,4 @@
-import express from "express";
+import polka from "polka";
 import { type ViteDevServer, normalizePath as viteNormalizePath } from "vite";
 import type { TinyPagesConfig } from "../../types/types";
 import { createDevContext } from "./context";
@@ -15,7 +15,7 @@ export async function createDevServer(
     createDevPlugins,
     source
   );
-  const app = express();
+  const app = polka();
 
   if ((config.middlewares.pre?.length ?? -1) > 0)
     app.use(config.middlewares.pre);

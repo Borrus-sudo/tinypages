@@ -42,6 +42,7 @@ export const presetViteConfig = {
       "preact/compat/jsx-runtime",
       "preact/debug",
       "preact/hooks",
+      "ohash",
     ],
     esbuildOptions: {
       target: "es2020",
