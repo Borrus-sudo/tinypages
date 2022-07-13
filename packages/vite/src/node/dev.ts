@@ -21,7 +21,7 @@ export async function createDevServer(
     app.use(config.middlewares.pre);
 
   app.use(vite.middlewares);
-  app.use(createMiddlewares());
+  app.use(...createMiddlewares());
 
   if ((config.middlewares.post?.length ?? -1) > 0)
     app.use(config.middlewares.post);

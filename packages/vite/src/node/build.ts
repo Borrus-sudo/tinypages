@@ -174,9 +174,10 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
           innerHTML: undefined,
         });
 
+        const [markerFreeHTML, markers] = analyzeIslandMarkers(appHtml);
+        appHtml = markerFreeHTML;
+
         if (!buildContext.virtualModuleMap.has(virtualModuleId)) {
-          const [markerFreeHTML, markers] = analyzeIslandMarkers(appHtml);
-          appHtml = markerFreeHTML;
           markers.forEach((marker) => {
             page.global.components[marker.uid] = {
               path: marker.path,

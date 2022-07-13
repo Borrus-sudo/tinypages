@@ -5,7 +5,7 @@ import { cleanOptions, reportString, GlobalCLIOptions } from "./common";
 import type { ServerOptions } from "vite";
 
 export async function devAction(
-  root: string = process.cwd(),
+  root: string,
   options: ServerOptions & GlobalCLIOptions
 ) {
   try {

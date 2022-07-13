@@ -5,7 +5,7 @@ import { resolveConfig } from "../resolve-config";
 import * as fs from "fs/promises";
 import path from "path";
 
-export async function grammarAction(root: string = process.cwd()) {
+export async function grammarAction(root: string) {
   if (root.startsWith("./")) {
     root = path.join(process.cwd(), root);
   }

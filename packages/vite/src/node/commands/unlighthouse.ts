@@ -5,7 +5,7 @@ import { build } from "../build";
 import { resolveConfig } from "../resolve-config";
 import fs from "fs/promises";
 import { reportString } from "./common";
-import express from "express";
+import polka from "polka";
 
 async function unlighthouse(root: string, urls: string[], sitemap: boolean) {
   const unlighthouse = await createUnlighthouse(
@@ -24,8 +24,8 @@ async function unlighthouse(root: string, urls: string[], sitemap: boolean) {
       name: "tinypages",
     }
   );
-  const app = express();
-  app.use(express.static(path.join(root, "dist")));
+  const app = polka();
+  app.use(polka.sirv(path.join(root, "dist")));
   app.listen(5555, async () => {
     const context = await createServer();
     await unlighthouse.setServerContext({
@@ -38,7 +38,7 @@ async function unlighthouse(root: string, urls: string[], sitemap: boolean) {
 }
 
 export async function unlighthouseAction(
-  root: string = process.cwd(),
+  root: string,
   options: { build: boolean; prod: boolean } = { build: false, prod: false }
 ) {
   if (root.startsWith("./")) {

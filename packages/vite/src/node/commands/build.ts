@@ -6,7 +6,7 @@ import path from "path";
 import fs from "fs/promises";
 
 export async function buildAction(
-  root: string = process.cwd(),
+  root: string,
   options: BuildOptions & GlobalCLIOptions
 ) {
   try {

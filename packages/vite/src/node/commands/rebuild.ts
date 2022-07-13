@@ -12,7 +12,7 @@ type RebuildOptions = {
 };
 
 export async function rebuildAction(
-  root: string = process.cwd(),
+  root: string,
   options: RebuildOptions = { config: true, git: false, grammar: true }
 ) {
   if (root.startsWith("./")) {

@@ -32,7 +32,9 @@ export async function cli() {
       "--force",
       `[boolean] force the optimizer to ignore the cache and re-bundle`
     )
-    .action((await import("./commands/dev")).devAction);
+    .action(async (root = process.cwd(), opts) => {
+      await (await import("./commands/dev")).devAction(root, opts);
+    });
 
   cli
     .command("build [root]", "build for production")
@@ -76,18 +78,22 @@ export async function cli() {
       "-w, --watch",
       `[boolean] rebuilds when modules have changed on disk`
     )
-    .action((await import("./commands/build")).buildAction);
+    .action(async (root = process.cwd(), opts) => {
+      await (await import("./commands/build")).buildAction(root, opts);
+    });
 
-  cli
-    .command("grammar:check [root]")
-    .action((await import("./commands/grammar")).grammarAction);
+  cli.command("grammar:check [root]").action(async (root = process.cwd()) => {
+    await (await import("./commands/grammar")).grammarAction(root);
+  });
 
   cli
     .command("rebuild [root]")
     .option("-c, --config", "[boolean] rebuilds from config")
     .option("-g, --git", "[boolean] rebuilds from the files changed")
     .option("-g, --grammar", "[boolean] do grammar checking for rebuilt files")
-    .action((await import("./commands/rebuild")).rebuildAction);
+    .action(async (root = process.cwd(), opts) => {
+      await (await import("./commands/rebuild")).rebuildAction(root, opts);
+    });
 
   cli
     .command("lighthouse [root]")
@@ -99,7 +105,12 @@ export async function cli() {
       "-p, --prod",
       "[boolean] measure perf of the website after it is deployed"
     )
-    .action((await import("./commands/unlighthouse")).unlighthouseAction);
+    .action(
+      async (root = process.cwd(), opts) =>
+        await (
+          await import("./commands/unlighthouse")
+        ).unlighthouseAction(root, opts)
+    );
 
   cli.help();
   cli.version("1.0.0");
