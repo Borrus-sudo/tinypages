@@ -58,7 +58,7 @@ export function appendPrelude(content: string, page: ReducedPage) {
     window.ssrProps=${JSON.stringify(page.global.ssrProps)};
     `,
   });
-  const cssUrl = page.pageCtx.url
+  const cssUrl = page.pageCtx.filePath
     .replace(/\.md$/, ".css")
     .replace(path.sep + "pages" + path.sep, path.sep + "styles" + path.sep);
   const globalUrl = path.join(utils.stylesDir, "global.css");

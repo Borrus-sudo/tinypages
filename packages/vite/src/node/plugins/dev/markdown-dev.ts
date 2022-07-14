@@ -122,7 +122,7 @@ export default function (): Plugin {
           }
         }
 
-        context.filename = viteNormalizePath(page.pageCtx.url);
+        context.filename = viteNormalizePath(page.pageCtx.filePath);
         return appHtml;
       },
     },
@@ -152,14 +152,14 @@ export default function (): Plugin {
           reload(fileBasename, context.server, utils.logger);
           seen = [];
           return;
-        } else if (page.pageCtx.url === fileId) {
+        } else if (page.pageCtx.filePath === fileId) {
           /**
            * If the pageCtx is equal to the fileId then check if the components have changed,
            * If the components have not changed then just re request the page and update it using million.js
            * Else reload the entire page to remove the previous module from the HMR system
            */
           const [, meta] = await compile(
-            await fs.readFile(page.pageCtx.url, { encoding: "utf-8" })
+            await fs.readFile(page.pageCtx.filePath, { encoding: "utf-8" })
           );
           const newHash = hashIt({
             components: meta.components,

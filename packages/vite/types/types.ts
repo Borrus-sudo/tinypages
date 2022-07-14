@@ -21,7 +21,7 @@ interface Consola {
 type ComponentRegistration = Record<string, { path: string; lazy: boolean }>;
 
 interface PageCtx {
-  url: string;
+  filePath: string;
   originalUrl: string;
   params: Record<string, string>;
 }

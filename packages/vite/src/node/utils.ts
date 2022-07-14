@@ -72,5 +72,3 @@ export function uuid() {
 }
 
 export const uidMap: Map<string, string> = new Map();
-
-export { normalizeUrl } from "./router/fs";

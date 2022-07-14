@@ -6,6 +6,7 @@ import { resolveConfig } from "../resolve-config";
 import fs from "fs/promises";
 import { reportString } from "./common";
 import polka from "polka";
+import sirv from "sirv";
 
 async function unlighthouse(root: string, urls: string[], sitemap: boolean) {
   const unlighthouse = await createUnlighthouse(
@@ -25,7 +26,7 @@ async function unlighthouse(root: string, urls: string[], sitemap: boolean) {
     }
   );
   const app = polka();
-  app.use(polka.sirv(path.join(root, "dist")));
+  app.use(sirv(path.join(root, "dist"), { maxAge: 0, immutable: false }));
   app.listen(5555, async () => {
     const context = await createServer();
     await unlighthouse.setServerContext({

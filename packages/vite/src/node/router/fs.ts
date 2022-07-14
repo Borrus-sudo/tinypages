@@ -1,47 +1,26 @@
-import { createRouter } from "radix3";
 import type { PageCtx } from "../../../types/types";
-import { loadPaths } from "./utils";
 import { Radix } from "./radix";
 
-let router;
+let router: Radix;
 
 function boilerplate(pagesDir: string) {
-  router = createRouter();
-  loadPaths(pagesDir, router, pagesDir);
+  router = new Radix(pagesDir);
+  router.loadPaths();
 }
 
 export function fsRouter(pagesDir: string) {
-  const radix = new Radix(pagesDir);
-  radix.loadPaths();
-  radix.display();
   boilerplate(pagesDir);
-  return (url: string, originalUrl: string): PageCtx => {
-    const result = router.lookup(url);
-    if (!!result) {
-      return { url: result.payload, params: result.params, originalUrl };
+  return (url: string): PageCtx => {
+    const result = router.query(url);
+    if (result.filePath) {
+      return {
+        filePath: result.filePath,
+        params: result.params,
+        originalUrl: url,
+      };
     }
-    return { url: "404", originalUrl, params: {} };
+    return { filePath: "404", originalUrl: url, params: {} };
   };
-}
-
-export function normalizeUrl(url: string): string {
-  let normalizedUrl = url.endsWith("/")
-    ? url + "index.md"
-    : /\..*?$/.test(url)
-    ? url
-    : url + ".md";
-  normalizedUrl = normalizedUrl.replace(/\.html$/, ".md");
-  const result = router.lookup(normalizedUrl);
-  if (!!!result) {
-    if (!normalizedUrl.endsWith("index.md")) {
-      let newUrlToCheck = normalizedUrl.split(".md")[0] + "/index.md";
-      const result = router.lookup(newUrlToCheck);
-      if (!!result) {
-        return newUrlToCheck;
-      }
-    }
-  }
-  return normalizedUrl;
 }
 
 export function refreshRouter(pagesDir: string) {

@@ -2,21 +2,33 @@ import { readdirSync } from "fs";
 import path from "path";
 
 interface Node {
-  name: string;
+  path: string;
   children: Record<string, Node> | { type: "deadend" };
+  template?: string;
 }
 
 type AST = Record<string, Node>;
 type CacheInfo = {
   fallback: string;
-  dynamicParams: { name: string; isDir: boolean }[];
+  dynamicFiles: { name: string; isDir: boolean }[];
 };
+
+interface QueryReturnType {
+  filePath: string;
+  template: string;
+  params: Record<string, string>;
+}
+
+function stripExtension(i: string) {
+  return i.slice(0, i.indexOf("."));
+}
 
 export class Radix {
   private baseDir: string;
   private ast: AST = {};
   private cache: Map<number, CacheInfo> = new Map();
-  private collectLoaders: string[];
+  private collectLoaders: string[] = [];
+  private topLevelFallBack: string = "";
   constructor(_baseDir: string) {
     this.baseDir = _baseDir;
   }
@@ -29,22 +41,20 @@ export class Radix {
     let isDir = false;
     const toCache: CacheInfo = {
       fallback: "",
-      dynamicParams: [],
+      dynamicFiles: [],
     };
     for (let dirent of dirents) {
       if (!/\..*?$/.test(dirent)) {
         isDir = true;
         // this is a folder
-        const folderAst: AST = {};
         const folderPath = path.join(givenDir, dirent);
-        this.loadPaths(folderPath, folderAst, ++nestedDep);
         if (dirent.startsWith("__")) {
-          for (let subDirent in folderAst) {
-            parentDirent[subDirent] = folderAst[subDirent];
-          }
+          this.loadPaths(folderPath, parentDirent, ++nestedDep);
         } else {
+          const folderAst: AST = {};
+          this.loadPaths(folderPath, folderAst, ++nestedDep);
           parentDirent[dirent] = {
-            name: folderPath,
+            path: folderPath,
             children: folderAst,
           };
         }
@@ -60,38 +70,109 @@ export class Radix {
               break;
             }
             parentToSub[subDirent] = {
-              name: path.join(givenDir, dirent),
+              path: path.join(givenDir, dirent),
               children: {},
             };
             parentToSub = parentToSub[subDirent].children as AST;
           }
         } else {
-          parentDirent[dirent] = {
-            name: path.join(givenDir, dirent),
-            children: {
-              type: "deadend",
-            },
-          };
+          const strippedEdition = stripExtension(dirent);
+          if (parentDirent[strippedEdition]) {
+            parentDirent[strippedEdition].template = path.join(
+              givenDir,
+              dirent
+            );
+          } else {
+            parentDirent[strippedEdition] = {
+              path: path.join(givenDir, dirent),
+              children: {
+                type: "deadend",
+              },
+            };
+          }
         }
       } else if (dirent.endsWith(".ts") || dirent.endsWith(".js")) {
         this.collectLoaders.push(path.join(givenDir, dirent));
         continue;
       }
       if (dirent.startsWith("404") || dirent.startsWith("[...")) {
-        toCache.fallback = dirent;
+        /**
+         * Fallbacks can't be folders
+         */
+        toCache.fallback = path.join(givenDir, dirent);
+        if (nestedDep === 1) {
+          this.topLevelFallBack = toCache.fallback;
+        }
       } else if (dirent.startsWith("$")) {
-        toCache.dynamicParams.push({
-          name: dirent,
+        toCache.dynamicFiles.push({
+          name: isDir ? dirent : stripExtension(dirent),
           isDir,
         });
       }
-      if (toCache.fallback || toCache.dynamicParams.length > 0) {
+      if (toCache.fallback || toCache.dynamicFiles.length > 0) {
         this.cache.set(nestedDep, toCache);
       }
     }
   }
-  display() {
-    console.log(this.ast);
+  query(url: string): QueryReturnType {
+    url = url.endsWith("/") ? url + "index" : url;
+    const segments = url.split("/").slice(1);
+    const params = {};
+    let dep = 1;
+    let parent = this.ast;
+    let result;
+
+    for (let i = 0; i < segments.length; i++) {
+      const segment = segments[i];
+      let thisNode = parent[segment];
+      if (!thisNode) {
+        const { dynamicFiles } = this.cache.get(dep);
+        dynamicFiles.forEach(({ isDir, name }) => {
+          if (i === segments.length - 1) {
+            if (!isDir) {
+              thisNode = parent[name];
+              params[name.slice(1)] = segment;
+            }
+          } else {
+            if (isDir) {
+              thisNode = parent[name];
+              params[name.slice(1)] = segment;
+            }
+          }
+        });
+        // fallback case when we wanna access the index file of a dynamic param folder
+        if (!thisNode) {
+          const possibleDynamicFile = dynamicFiles.pop();
+          if (possibleDynamicFile && possibleDynamicFile.isDir) {
+            thisNode = parent[possibleDynamicFile.name];
+          }
+        }
+      }
+      if (!thisNode) {
+        result = {
+          filePath: this.cache.get(dep)?.fallback || this.topLevelFallBack,
+          params,
+          template: "",
+        };
+      }
+      if (thisNode.children.type === "deadend") {
+        if (i !== segments.length - 1) {
+          result = {
+            filePath: this.cache.get(dep)?.fallback || this.topLevelFallBack,
+            params,
+            template: "",
+          };
+        } else {
+          result = {
+            filePath: thisNode.path,
+            params,
+            template: thisNode.template,
+          };
+        }
+      }
+      parent = thisNode.children as AST;
+      dep++;
+      return result;
+    }
   }
-  query() {}
 }

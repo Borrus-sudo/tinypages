@@ -2,7 +2,7 @@ import * as Vite from "vite";
 import type { PageCtx, ReducedPage, TinyPagesConfig } from "../../types/types";
 import { createBuildContext } from "./context";
 import { fsRouter } from "./router/fs";
-import { htmlNormalizeURL, normalizeUrl } from "./utils";
+import { htmlNormalizeURL } from "./utils";
 import { createBuildPlugins } from "./plugins/build";
 import { writeFileSync } from "fs";
 import { compile } from "@tinypages/compiler";
@@ -19,12 +19,16 @@ import { loadPage } from "./render/load-page";
 import htmlMinifier from "html-minifier";
 import sitemap from "vite-plugin-pages-sitemap";
 
-function analyzeUrls(html: string) {
+function analyzeUrls(html: string, hostname) {
   const res = [];
-  html.replace(/\<a href\=\"(.*?)\"/gi, (_, url) => {
-    //TODO: improve this? seems hacky
+  html.replace(/\<a.*?href\=\"(.*?)\"/gi, (_, url) => {
+    if (_.includes("ignore:link")) {
+      return _;
+    } else if (!url.startsWith(hostname) && url.includes("http")) {
+      return _;
+    }
     res.push(url);
-    return "";
+    return _;
   });
   return res;
 }
@@ -73,7 +77,7 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
   const router = await fsRouter(buildContext.utils.pageDir);
 
   async function buildPage(pageCtx: PageCtx) {
-    const { url } = pageCtx;
+    const { filePath: url } = pageCtx;
     const global = {
       ssrProps: {},
       components: {},
@@ -112,7 +116,7 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
         { filePath: url, url: pageCtx.originalUrl },
         appHtml
       );
-      return analyzeUrls(appHtml);
+      return analyzeUrls(appHtml, buildContext.config.hostname);
     }
 
     if (page.meta.feeds.atom) {
@@ -160,7 +164,7 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
         appHtml,
         head: page.meta.head,
         ssrProps: page.global.ssrProps,
-        otherUrls: fileToUrlMap.get(pageCtx.url),
+        otherUrls: fileToUrlMap.get(pageCtx.filePath),
         pageCtx,
       });
     } else {
@@ -208,7 +212,7 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
       })
     );
 
-    return rebuild ? [] : analyzeUrls(appHtml);
+    return rebuild ? [] : analyzeUrls(appHtml, buildContext.config.hostname);
   }
 
   polyfill(global, {
@@ -218,20 +222,19 @@ export async function build({ config, urls, isGrammarCheck, rebuild }: Params) {
   async function buildPages(urls: string[], history: string[]) {
     let buildsOps = [];
     urls.forEach((url) => {
-      const normalizedUrl = normalizeUrl(url);
-      const res = router(normalizedUrl.replace(/\.md$/, ""), url);
-      if (res.url === "404") {
+      const res = router(url);
+      if (res.filePath === "404") {
         buildContext.utils.consola.error(new Error(`404 ${url} not found`));
       } else {
-        if (fileToUrlMap.has(res.url)) {
-          fileToUrlMap.set(res.url, [
-            ...fileToUrlMap.get(res.url),
+        if (fileToUrlMap.has(res.filePath)) {
+          fileToUrlMap.set(res.filePath, [
+            ...fileToUrlMap.get(res.filePath),
             res.originalUrl,
           ]);
         } else {
-          fileToUrlMap.set(res.url, [res.originalUrl]);
+          fileToUrlMap.set(res.filePath, [res.originalUrl]);
         }
-        resolvedUrls.push(normalizedUrl);
+        resolvedUrls.push(url);
         buildsOps.push(buildPage(res));
       }
     });

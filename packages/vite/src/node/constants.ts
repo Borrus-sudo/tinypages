@@ -61,7 +61,7 @@ export const presetViteConfig = {
 } as InlineConfig;
 
 export const presetPageConfig = {
-  pageCtx: { url: "" },
+  pageCtx: { filePath: "" },
   sources: [],
   reloads: [],
   global: {
