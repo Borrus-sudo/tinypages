@@ -96,12 +96,10 @@ export async function render(
       )
     );
 
-    const hash = isBuild
-      ? ""
-      : hashObj({
-          component,
-          componentPath: component_path,
-        });
+    const hash = hashObj({
+      component,
+      componentPath: component_path,
+    });
 
     if (context.page.sources) context.page.sources.push(component_path);
 

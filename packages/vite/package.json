@@ -53,7 +53,6 @@
     "preact": "10.7.2",
     "preact-iso": "^2.3.0",
     "preact-render-to-string": "5.1.21",
-    "radix3": "^0.1.0",
     "sirv": "^2.0.2",
     "uid": "^2.0.0",
     "unconfig": "^0.3.4",
