@@ -44,7 +44,7 @@
     "consola": "^2.15.3",
     "defu": "^6.0.0",
     "html-minifier": "^4.0.0",
-    "liquidjs": "^9.37.0",
+    "liquidjs": "^9.39.1",
     "million": "^1.11.7",
     "node-icons": "^1.0.1",
     "ohash": "^0.1.0",
