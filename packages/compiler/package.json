@@ -36,14 +36,14 @@
     "defu": "^6.0.0",
     "headless-mermaid": "^1.2.1",
     "katex": "^0.15.1",
-    "marked": "^4.0.14",
+    "marked": "^4.0.18",
     "node-emoji": "^1.11.0",
     "node-html-parser": "^5.3.3",
     "node-icons": "^1.0.1",
     "ohash": "^0.1.0",
     "shiki": "^0.10.0",
     "static-tweet": "^0.0.5",
-    "yaml": "^2.0.1"
+    "yaml": "^2.1.1"
   },
   "optionalDependencies": {
     "@unocss/core": "^0.34.1"
