@@ -28,7 +28,11 @@ export function PluginText(): Plugin {
             if (payload.startsWith("::")) {
               payload =
                 iconsRenderer(
-                  "i-" + payload.slice(2, -2).replace(/\./g, delimiter),
+                  "i-" +
+                    payload
+                      .slice(2, -2)
+                      .replace(/\:/g, "-")
+                      .replace(/\./g, delimiter), // for compatability purposes
                   {
                     config,
                   }

@@ -51,10 +51,8 @@ function handlePropsParse(props: Record<any, any>, context: NeededContext) {
           props[slicedKey] = value;
         }
       } catch (e) {
-        context.utils.consola.error(
-          new Error(
-            `"Error: parsing of the value of ${key} failed as type ${type}`
-          )
+        context.utils.logger.error(
+          `"Error: parsing of the value of ${key} failed as type ${type}`
         );
       }
       delete props[key];
@@ -69,6 +67,8 @@ function cleanProps(props) {
   delete cloneProps["no:hydrate"];
   return cloneProps;
 }
+
+const ssrLoadMap = new Map();
 
 /**
  * During build process the uid for multiple dynamic pages have to be same for them to utilize a common entry-point.
@@ -138,9 +138,14 @@ export async function render(
         payload = cached.html.replace(/uid=\".*?\"/, `uid="${uid}"`);
       } else {
         try {
-          const { default: preactComponent } = await vite.ssrLoadModule(
-            component_path
-          );
+          const { default: preactComponent } = !isBuild
+            ? await vite.ssrLoadModule(component_path)
+            : ssrLoadMap.has(component_path)
+            ? ssrLoadMap.get(component_path)
+            : await vite.ssrLoadModule(component_path);
+          if (isBuild && !ssrLoadMap.has(component_path)) {
+            ssrLoadMap.set(component_path, { default: preactComponent });
+          }
           const slotVnode =
             component.children.trim() !== ""
               ? h("tinypages-fragment", {

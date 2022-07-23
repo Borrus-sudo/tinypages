@@ -1,4 +1,3 @@
-import consolaPkg from "consola";
 import { murmurHash } from "ohash";
 import { uid } from "uid";
 
@@ -8,18 +7,6 @@ export function deepCopy<T>(obj: T): T {
 
 export function hash(content: string) {
   return murmurHash(content);
-}
-
-export function createConsola() {
-  const { Consola, FancyReporter, LogLevel } =
-    consolaPkg as unknown as typeof import("consola");
-
-  const consola = new Consola({
-    level: LogLevel.Info,
-    reporters: [new FancyReporter()],
-  });
-
-  return consola;
 }
 
 export function isUpperCase(input: string) {

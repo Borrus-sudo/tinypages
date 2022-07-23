@@ -97,19 +97,9 @@ export async function cli() {
 
   cli
     .command("lighthouse [root]")
-    .option(
-      "-b, --build",
-      "[boolean] build the website, in case files haven't been already built"
-    )
-    .option(
-      "-p, --prod",
-      "[boolean] measure perf of the website after it is deployed"
-    )
     .action(
-      async (root = process.cwd(), opts) =>
-        await (
-          await import("./commands/unlighthouse")
-        ).unlighthouseAction(root, opts)
+      async (root = process.cwd()) =>
+        await (await import("./commands/unlighthouse")).unlighthouseAction(root)
     );
 
   cli.help();

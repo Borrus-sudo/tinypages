@@ -8,19 +8,22 @@ function boilerplate(pagesDir: string) {
   router.loadPaths();
 }
 
-export function fsRouter(pagesDir: string) {
+export function fsRouter(pagesDir: string): [Function, Radix] {
   boilerplate(pagesDir);
-  return (url: string): PageCtx => {
-    const result = router.query(url);
-    if (result.filePath) {
-      return {
-        filePath: result.filePath,
-        params: result.params,
-        originalUrl: url,
-      };
-    }
-    return { filePath: "404", originalUrl: url, params: {} };
-  };
+  return [
+    (url: string): PageCtx => {
+      const result = router.query(url);
+      if (result.filePath) {
+        return {
+          filePath: result.filePath,
+          params: result.params,
+          originalUrl: url,
+        };
+      }
+      return { filePath: "404", originalUrl: url, params: {} };
+    },
+    router,
+  ];
 }
 
 export function refreshRouter(pagesDir: string) {

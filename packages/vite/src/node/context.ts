@@ -7,7 +7,6 @@ import type {
 } from "../../types/types";
 import { presetPageConfig } from "./constants";
 import { purgeComponentCache, render } from "./render/page";
-import { createConsola, deepCopy } from "./utils";
 
 let devContext: DevContext;
 let vite: ViteDevServer;
@@ -20,7 +19,7 @@ export async function createDevContext(
 ): Promise<[DevContext, ViteDevServer]> {
   devContext = {
     config,
-    page: deepCopy(presetPageConfig),
+    page: presetPageConfig,
     utils: {
       logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
       async render(html: string) {
@@ -30,7 +29,6 @@ export async function createDevContext(
       pageDir: join(config.vite.root, "pages"),
       stylesDir: join(config.vite.root, "styles"),
       configFile: source || "",
-      consola: createConsola(),
     },
   };
 
@@ -57,11 +55,13 @@ export async function createBuildContext(
       invalidate: (input: string) => purgeComponentCache(input),
       pageDir: join(config.vite.root, "pages"),
       stylesDir: join(config.vite.root, "styles"),
-      consola: createConsola(),
     },
     config,
-    virtualModuleMap: new Map([["/uno:only", `import "uno.css"`]]),
+    virtualModuleMap: new Map(),
     fileToHtmlMap: new Map(),
+    fileToURLMap: new Map(),
+    seenURLs: new Set(),
+    postFS: {},
     isRebuild: false,
     isSmallPageBuild: false,
   };

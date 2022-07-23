@@ -23,11 +23,13 @@ export async function buildAction(
       build: cleanOptions(options),
       config: true,
     };
-    const { config } = await resolveConfig(cliViteOptions);
-    const { urls } = JSON.parse(
-      await fs.readFile(path.join(root, "urls.json"), { encoding: "utf-8" })
-    );
-    await build({ config, urls, isGrammarCheck: false, rebuild: false });
+    // const { urls } = JSON.parse(
+    //   await fs.readFile(path.join(root, "urls.json"), { encoding: "utf-8" })
+    // );
+    await build({
+      config: cliViteOptions,
+      rebuild: false,
+    });
   } catch (e) {
     console.log(reportString);
     console.error(e);

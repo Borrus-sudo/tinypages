@@ -120,7 +120,6 @@ export class Radix {
     const params = {};
     let dep = 1;
     let parent = this.ast;
-    let result;
 
     for (let i = 0; i < segments.length; i++) {
       const segment = segments[i];
@@ -149,7 +148,7 @@ export class Radix {
         }
       }
       if (!thisNode) {
-        result = {
+        return {
           filePath: this.cache.get(dep)?.fallback || this.topLevelFallBack,
           params,
           template: "",
@@ -157,13 +156,13 @@ export class Radix {
       }
       if (thisNode.children.type === "deadend") {
         if (i !== segments.length - 1) {
-          result = {
+          return {
             filePath: this.cache.get(dep)?.fallback || this.topLevelFallBack,
             params,
             template: "",
           };
         } else {
-          result = {
+          return {
             filePath: thisNode.path,
             params,
             template: thisNode.template,
@@ -172,7 +171,6 @@ export class Radix {
       }
       parent = thisNode.children as AST;
       dep++;
-      return result;
     }
   }
 }

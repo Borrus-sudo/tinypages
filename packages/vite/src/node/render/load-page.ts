@@ -36,7 +36,10 @@ async function buildRoute({ fileURL, markdown, page, isBuild }) {
     if (existsSync(tsUrl)) {
       fileURL = tsUrl;
     } else {
-      return markdown;
+      return {
+        markdown,
+        data: null,
+      };
     }
   } else {
     fileURL = jsUrl;
@@ -65,7 +68,7 @@ async function buildRoute({ fileURL, markdown, page, isBuild }) {
 
   if (!isBuild) {
     // no console clutter during build
-    utils.consola.success("State loaded!");
+    utils.logger.info("State loaded!");
   }
 
   if (typeof page.global.ssrProps === "object" && data.ssrProps) {
@@ -85,10 +88,11 @@ async function buildRoute({ fileURL, markdown, page, isBuild }) {
 export async function loadPage(fileURL: string, page, isBuild: boolean) {
   const { utils, config } = useContext("iso");
   const ops = [];
-  let dontDoThis = true;
 
   do {
-    if (!dontDoThis) page.reloads.push(fileURL);
+    // the main page is added to reloads too, so that a fileOnlyEntry of it can be made. It shall be picked up by
+    // pageCtx.filePath change first and hence reload won't happen directly.
+    page.reloads.push(fileURL);
     const markdown = await readFile(fileURL, { encoding: "utf-8" });
     ops.push(buildRoute({ fileURL, page, markdown, isBuild }));
     if (path.dirname(fileURL) === utils.pageDir) {
@@ -96,7 +100,6 @@ export async function loadPage(fileURL: string, page, isBuild: boolean) {
     } else {
       fileURL = path.dirname(fileURL) + ".md";
     }
-    dontDoThis = false;
   } while (existsSync(fileURL));
 
   const output: { markdown: string; data: Object }[] = await Promise.all(ops);
@@ -113,11 +116,12 @@ export async function loadPage(fileURL: string, page, isBuild: boolean) {
     accumulatedData = { ...data, ...accumulatedData };
   });
 
-  const result = engine.parseAndRender(toCompile, {
+  const result = await engine.parseAndRender(toCompile, {
     ...accumulatedData,
     ssrProps: page.global.ssrProps,
     BASE_URL: config.hostname,
   });
+
   return result;
 }
 

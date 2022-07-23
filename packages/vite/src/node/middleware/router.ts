@@ -7,13 +7,16 @@ import path from "path";
 export default function () {
   const { page, utils } = useContext("dev");
   const vite = useVite();
-  const router = fsRouter(utils.pageDir);
+  const [routerQuery] = fsRouter(utils.pageDir);
 
   return async (req, res, next) => {
     try {
       const url = req.originalUrl;
-      const pageCtx = router(url);
-      if (existsSync(path.join(utils.pageDir, url))) {
+      const pageCtx = routerQuery(url);
+      if (
+        existsSync(path.join(utils.pageDir, url)) &&
+        (url.endsWith(".ico") || pageCtx.filePath === "404")
+      ) {
         utils.logger.info(req.originalUrl, { timestamp: true });
         res.end(await fs.readFile(pageCtx.filePath, { encoding: "utf-8" }));
         return;
@@ -39,6 +42,8 @@ export default function () {
           .end(html);
       }
     } catch (err) {
+      console.log(err);
+
       next(err);
     }
   };

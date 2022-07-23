@@ -22,50 +22,15 @@ export async function rebuildAction(
   if (options.git) {
     // figure out stuff from the changed stuff. This should be able to pick up recently pushed files as well?
   }
-  const {
-    rebuild,
-    urls,
-  }: {
-    urls: string[];
-    rebuild: {
-      add: string[];
-      remove: string[];
-      change: string[];
-    };
-  } = JSON.parse(
-    fs.readFileSync(path.join(root, "urls.json"), {
-      encoding: "utf-8",
-    })
-  );
 
-  const { add, remove, change } = rebuild;
-  const { config } = await resolveConfig({ root });
   const payload = await build({
-    config,
-    urls: [...add, ...change],
-    isGrammarCheck: false,
+    config: { root },
     rebuild: true,
   });
 
-  const newUrls = [...urls.filter((url) => !remove.includes(url)), ...add];
-  remove.forEach((url) => {
-    fs.unlinkSync(path.join(root, "dist", url));
-  });
-  const toWriteJSON = JSON.stringify({
-    urls: newUrls,
-    rebuild: {
-      add: [],
-      remove: [],
-      change: [],
-    },
-  });
-  fs.writeFileSync(path.join(root, "urls.json"), toWriteJSON);
-
-  //@ts-ignore
-  sitemap.default({
-    routes: newUrls,
-    hostname: config.hostname ?? "http://localhost:3000/",
-  });
+  // remove.forEach((url) => {
+  //   fs.unlinkSync(path.join(root, "dist", url));
+  // });
 
   if (options.grammar) {
     const { reporter } = await import("vfile-reporter");

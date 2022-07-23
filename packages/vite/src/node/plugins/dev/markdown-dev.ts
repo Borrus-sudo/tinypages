@@ -141,18 +141,8 @@ export default function (): Plugin {
       for (let module of context.modules) {
         const fileId = path.normalize(module.file);
         const fileBasename = path.basename(fileId);
-        /**
-         * Reload the page. (mainly for handling the loader and layout files)
-         */
-        if (page.reloads.includes(fileId)) {
-          if (/\.[tj]sx?$/.test(fileId)) {
-            // time to throw away the fileToURL cache entry for this thing and re-import this file.
-            purgeLoaderCache(fileId);
-          }
-          reload(fileBasename, context.server, utils.logger);
-          seen = [];
-          return;
-        } else if (page.pageCtx.filePath === fileId) {
+
+        if (page.pageCtx.filePath === fileId) {
           /**
            * If the pageCtx is equal to the fileId then check if the components have changed,
            * If the components have not changed then just re request the page and update it using million.js
@@ -180,6 +170,17 @@ export default function (): Plugin {
             type: "custom",
             event: "new:page",
           });
+          return;
+        } else if (page.reloads.includes(fileId)) {
+          /**
+           * Reload the page. (mainly for handling the loader and layout files)
+           */
+          if (/\.[tj]sx?$/.test(fileId)) {
+            // time to throw away the fileToURL cache entry for this thing and re-import this file.
+            purgeLoaderCache(fileId);
+          }
+          reload(fileBasename, context.server, utils.logger);
+          seen = [];
           return;
         } else {
           toReturnModules.push(module);

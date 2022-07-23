@@ -58,7 +58,6 @@ interface Utils {
   invalidate: (file: string) => void;
   pageDir: Readonly<string>;
   stylesDir: Readonly<string>;
-  consola: Consola;
 }
 
 interface DevUtils extends Utils {
@@ -81,6 +80,9 @@ interface BuildContext extends Context {
   fileToHtmlMap: Map<{ filePath: string; url: string }, string>;
   isRebuild: boolean;
   isSmallPageBuild: boolean;
+  fileToURLMap: Map<string, string[]>;
+  postFS: Record<string, string>;
+  seenURLs: Set<string>;
 }
 
 export {

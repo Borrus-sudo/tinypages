@@ -12,7 +12,7 @@ export default function (
   }
 
   if (!svgId.startsWith("i-")) {
-    return;
+    return svgId;
   }
   svgId = svgId.slice(2);
 

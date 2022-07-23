@@ -27,7 +27,7 @@ export async function createDevServer(
     app.use(config.middlewares.post);
 
   app.listen(3003, () => {
-    context.utils.consola.info("Server running at http://localhost:3003");
+    context.utils.logger.info("Server running at http://localhost:3003");
     vite.watcher.add(viteNormalizePath(context.utils.pageDir));
     polyfill(global, {
       exclude: "window document",

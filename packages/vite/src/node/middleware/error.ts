@@ -5,7 +5,9 @@ export default function () {
   const { utils } = useContext("dev");
   return (err: Error, _req, res) => {
     if (err) {
-      utils.consola.error(err);
+      utils.logger.error("Error:", {
+        error: err,
+      });
       vite.ws.send({
         type: "error",
         err: {

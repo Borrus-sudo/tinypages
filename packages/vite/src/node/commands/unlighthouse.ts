@@ -1,25 +1,19 @@
 import { createUnlighthouse } from "@unlighthouse/core";
 import { createServer } from "@unlighthouse/server";
 import path from "path";
-import { build } from "../build";
-import { resolveConfig } from "../resolve-config";
-import fs from "fs/promises";
-import { reportString } from "./common";
 import polka from "polka";
 import sirv from "sirv";
 
-async function unlighthouse(root: string, urls: string[], sitemap: boolean) {
+async function unlighthouse(root: string) {
   const unlighthouse = await createUnlighthouse(
     {
       root: path.join(root, "dist"),
       routerPrefix: "/",
       scanner: {
         skipJavascript: false,
-        crawler: !sitemap,
-        sitemap,
+        sitemap: true,
       },
       site: "http://localhost:3003",
-      urls: sitemap ? [] : urls,
     },
     {
       name: "tinypages",
@@ -38,38 +32,9 @@ async function unlighthouse(root: string, urls: string[], sitemap: boolean) {
   });
 }
 
-export async function unlighthouseAction(
-  root: string,
-  options: { build: boolean; prod: boolean } = { build: false, prod: false }
-) {
+export async function unlighthouseAction(root: string) {
   if (root.startsWith("./")) {
     root = path.join(process.cwd(), root);
   }
-
-  const { urls } = JSON.parse(
-    await fs.readFile(path.join(root, "urls.json"), {
-      encoding: "utf-8",
-    })
-  );
-
-  if (options.build) {
-    try {
-      const { config } = await resolveConfig({ root });
-      await build({
-        config,
-        urls,
-        isGrammarCheck: false,
-        rebuild: false,
-      });
-    } catch (e) {
-      console.log(reportString);
-      console.error(e);
-    }
-  }
-
-  await unlighthouse(
-    root,
-    urls.map((url) => (url.endsWith("/") ? url : url + ".html")),
-    options.prod
-  );
+  await unlighthouse(root);
 }
