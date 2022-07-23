@@ -979,12 +979,12 @@
     h3 "0.7.1"
     listhen "0.2.8"
 
-"@unocss/config@0.44.2":
-  version "0.44.2"
-  resolved "https://registry.yarnpkg.com/@unocss/config/-/config-0.44.2.tgz#60377d63e4ef5548d7e7062e56f347d25df53c68"
-  integrity sha512-Opn+tOWEzGlv/G3+Qfsh+F4P7ciwW69cznm//MagLn/KbrIOFWAHQF4Yu3M403sFwJ3IIAh6j02bohyQRPagHg==
+"@unocss/config@0.44.5":
+  version "0.44.5"
+  resolved "https://registry.yarnpkg.com/@unocss/config/-/config-0.44.5.tgz#2bd442d8904d77ba0556db5801dce9c355707a41"
+  integrity sha512-QDJkE+vIHehspQSlQtiXlJ/pIE+rg2QTULCbcgCDtYMQ3t2WF4ET/jQdshCxTDo6qJD0SrqZe5AvAjsYS6vKwA==
   dependencies:
-    "@unocss/core" "0.44.2"
+    "@unocss/core" "0.44.5"
     unconfig "^0.3.4"
 
 "@unocss/core@0.43.2":
@@ -992,20 +992,20 @@
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.43.2.tgz#be4a5620ad5c00f59747d44914a73f16b8f6bfd3"
   integrity sha512-SR2gHIl/5APfkl9WWbpKjYxMUkBin67uw8NIXOz0u/J5jSnXnu2z15DGwgOxwLfTl/AlBTsM0/lIJqfbckyPnw==
 
-"@unocss/core@0.44.2":
-  version "0.44.2"
-  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.44.2.tgz#1d4bdf44f3b9ea3e65dcd1221917f7dacc9f39da"
-  integrity sha512-u1P/IMU8axudO1Tao+Ow9fNyufcZvAnjAcCbRVFQH3grQGJwoqAgMyJDh4EZqpR/Xz8H8a43cNjIbBsa4BwBGQ==
+"@unocss/core@0.44.5":
+  version "0.44.5"
+  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.44.5.tgz#5f8ee9e24716e9eb226f1903eecbffa807e3866c"
+  integrity sha512-IxFg0b0Exudko5akYLA4kfdv2MNYpQlgrB33N+UcHb8z0eGENBStq/ZKjwneplHV9RiSOM4d7nPYkK7Id1RgPA==
 
 "@unocss/core@^0.34.1":
   version "0.34.1"
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.34.1.tgz#90a019d152f0d6e94df0ea52f5992c5188c48df0"
   integrity sha512-h2AeTLAiBWu6IZzR1tN2H/ypuCbc9CK7t8H/o2ncG22Jfoh6FO09jQPoiRZr72PcpDf2/0snN94iZLnjvPGZOg==
 
-"@unocss/inspector@0.44.2":
-  version "0.44.2"
-  resolved "https://registry.yarnpkg.com/@unocss/inspector/-/inspector-0.44.2.tgz#393f269c31bc4947038ebfd32c743ac7b059e787"
-  integrity sha512-po9PDL7o9Z2sDdw2cxXR5o1nLDI2+jeJ9+3jlnlZTGWSLuQfBzJsf1mFGjen4vyguCk/PsV+0A88+L5Td1UE4w==
+"@unocss/inspector@0.44.5":
+  version "0.44.5"
+  resolved "https://registry.yarnpkg.com/@unocss/inspector/-/inspector-0.44.5.tgz#9aa4f3547b4146db2e3a3874a6ea212b53935055"
+  integrity sha512-Yd1adLO5WKQ9HCZGoY4KmV6R9kJl8/HM3bO7bIZbVfmVpfQg0k0f5ZaE2Jy6k1fuLw62EtpYQFWAZmkOF0mw7A==
   dependencies:
     gzip-size "^6.0.0"
     sirv "^2.0.2"
@@ -1025,31 +1025,31 @@
     "@unocss/core" "0.43.2"
     "@unocss/preset-mini" "0.43.2"
 
-"@unocss/scope@0.44.2":
-  version "0.44.2"
-  resolved "https://registry.yarnpkg.com/@unocss/scope/-/scope-0.44.2.tgz#a7c703d687b6b2939bfe184b7ad2da5492f9c3b1"
-  integrity sha512-xZSUp0Cq3QqW9uryGync5PQwYABYKYZTqZu8IxgANut644lrVLHfuQbc0RNq7NdpbdxuZKoG69KB8+ZqjFZxhg==
+"@unocss/scope@0.44.5":
+  version "0.44.5"
+  resolved "https://registry.yarnpkg.com/@unocss/scope/-/scope-0.44.5.tgz#a6dfbb5f81ae7290b7477dd760e7ae294b90b80e"
+  integrity sha512-4x1MzeDldF257obQHnQ0F3AgkrAuoAFbWGfWgJ55rJM65MnQXEkyktmSxiArQlptwQaGzj9xwzEVMEnVVMhhsg==
 
-"@unocss/transformer-directives@0.44.2":
-  version "0.44.2"
-  resolved "https://registry.yarnpkg.com/@unocss/transformer-directives/-/transformer-directives-0.44.2.tgz#42bb424bb5991c571890f5c1b5b8a8468c14fa4a"
-  integrity sha512-+9EfTJsbJSiyUeSIvy02sdTZx4xDGWMvgMFwLHJIG5X8R+zMFNklnGYZwr5gD/7HxK5pPQAEU6wzeXaulcSOjA==
+"@unocss/transformer-directives@0.44.5":
+  version "0.44.5"
+  resolved "https://registry.yarnpkg.com/@unocss/transformer-directives/-/transformer-directives-0.44.5.tgz#0e112377e3e68181eda630be8829ea2b9913f6f0"
+  integrity sha512-uLHn0u0c65nGDy5UY7GCDfN/XqzPWbzEtQAp3LOTGTB7iLvuPF7GAzwQIrMINJG41SccDSqT54qmKLJW+gpmlg==
   dependencies:
-    "@unocss/core" "0.44.2"
+    "@unocss/core" "0.44.5"
     css-tree "^2.1.0"
 
-"@unocss/vite@^0.44.2":
-  version "0.44.2"
-  resolved "https://registry.yarnpkg.com/@unocss/vite/-/vite-0.44.2.tgz#3296fa985b77948b75f92b679aea858955ad1d6b"
-  integrity sha512-4DdR6te/jyqBTEnwcvaaxRw9F5srWcvN7tE5BW0VqPlbsQDa9BQ+g39VeeBqB5c8GGd7arT73FAx8a7yK/XS6w==
+"@unocss/vite@^0.44.5":
+  version "0.44.5"
+  resolved "https://registry.yarnpkg.com/@unocss/vite/-/vite-0.44.5.tgz#fd5466a2c0c34be66849d45beaf1af464f5d9bf5"
+  integrity sha512-HAA77Z+CTHWCjtbgupolsLhRrGuYH4C+FbmfVwTgm07ttWFZy5QaWKRU0mcR53/n1owPxkZilPxWCWX7ltscbw==
   dependencies:
     "@ampproject/remapping" "^2.2.0"
     "@rollup/pluginutils" "^4.2.1"
-    "@unocss/config" "0.44.2"
-    "@unocss/core" "0.44.2"
-    "@unocss/inspector" "0.44.2"
-    "@unocss/scope" "0.44.2"
-    "@unocss/transformer-directives" "0.44.2"
+    "@unocss/config" "0.44.5"
+    "@unocss/core" "0.44.5"
+    "@unocss/inspector" "0.44.5"
+    "@unocss/scope" "0.44.5"
+    "@unocss/transformer-directives" "0.44.5"
     magic-string "^0.26.2"
 
 "@unrouted/core@0.4.17":
@@ -6792,12 +6792,7 @@ ufo@^0.7.11:
   resolved "https://registry.yarnpkg.com/ufo/-/ufo-0.7.11.tgz#17defad497981290383c5d26357773431fdbadcb"
   integrity sha512-IT3q0lPvtkqQ8toHQN/BkOi4VIqoqheqM1FnkNWT9y0G8B3xJhwnoKBu5OHx8zHDOvveQzfKuFowJ0VSARiIDg==
 
-ufo@^0.8.3:
-  version "0.8.3"
-  resolved "https://registry.yarnpkg.com/ufo/-/ufo-0.8.3.tgz#3a2430f94afc13ba556f6dad498a2a6520dcb5d3"
-  integrity sha512-AIkk06G21y/P+NCatfU+1qldCmI0XCszZLn8AkuKotffF3eqCvlce0KuwM7ZemLE/my0GSYADOAeM5zDYWMB+A==
-
-ufo@^0.8.4:
+ufo@^0.8.3, ufo@^0.8.4:
   version "0.8.4"
   resolved "https://registry.yarnpkg.com/ufo/-/ufo-0.8.4.tgz#23e9ed82398d2116dcb378e8fba5ced8eca2ee40"
   integrity sha512-/+BmBDe8GvlB2nIflWasLLAInjYG0bC9HRnfEpNi4sw77J2AJNnEVnTDReVrehoh825+Q/evF3THXTAweyam2g==
@@ -7225,16 +7220,16 @@ vite-plugin-image-presets@^0.3.1:
     pathe "^0.2.0"
     sharp "^0.29.3"
 
-vite-plugin-inspect@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/vite-plugin-inspect/-/vite-plugin-inspect-0.5.0.tgz#94d1abdd3326519527a72502ced51d747d670b87"
-  integrity sha512-eArca+5jrNx1hQL+5s79eT5Xq4VXjJcihJhK8GT/+W2GqefVxFO1WO78RnD0HPI+hKSdEFo+B4z2zeaE8DTvWQ==
+vite-plugin-inspect@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/vite-plugin-inspect/-/vite-plugin-inspect-0.5.1.tgz#4041943fad6fcecc43e4a5d36e1f9443232e6ffe"
+  integrity sha512-cSVdNhVPAfH3OdVSV331/t/YWjg++HR/KiBkVST8pjLISna7O8gRwU8NN7KLrEBJqKKQqoRYLBb0RSdYurEyeg==
   dependencies:
     "@rollup/pluginutils" "^4.2.1"
     debug "^4.3.4"
     kolorist "^1.5.1"
     sirv "^2.0.2"
-    ufo "^0.8.3"
+    ufo "^0.8.4"
 
 vite-plugin-pages-sitemap@^1.2.2:
   version "1.2.2"
