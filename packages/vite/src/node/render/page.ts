@@ -12,6 +12,7 @@ import type {
   Utils,
 } from "../../../types/types";
 import { createElement as $, deepCopy } from "../utils";
+import kleur from "kleur";
 
 const map: Map<string, { html: string }> = new Map();
 const hashComp: Map<string, string[]> = new Map();
@@ -52,7 +53,9 @@ function handlePropsParse(props: Record<any, any>, context: NeededContext) {
         }
       } catch (e) {
         context.utils.logger.error(
-          `"Error: parsing of the value of ${key} failed as type ${type}`
+          kleur.red(
+            `"Error: parsing of the value of ${key} failed as type ${type}`
+          )
         );
       }
       delete props[key];

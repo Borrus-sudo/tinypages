@@ -3,24 +3,35 @@ import { useContext, useVite } from "../context";
 import { fsRouter } from "../router/fs";
 import { loadPage } from "../render/load-page";
 import path from "path";
+import kleur from "kleur";
 
 export default function () {
-  const { page, utils } = useContext("dev");
+  const { page, utils, config } = useContext("dev");
   const vite = useVite();
   const [routerQuery] = fsRouter(utils.pageDir);
 
   return async (req, res, next) => {
     try {
+      // check if the asset is in the public folder
       const url = req.originalUrl;
-      const pageCtx = routerQuery(url);
       if (
-        existsSync(path.join(utils.pageDir, url)) &&
-        (url.endsWith(".ico") || pageCtx.filePath === "404")
+        existsSync(path.join(config.vite.root, "public", url)) &&
+        /\..*?$/.test(url)
       ) {
         utils.logger.info(req.originalUrl, { timestamp: true });
-        res.end(await fs.readFile(pageCtx.filePath, { encoding: "utf-8" }));
-        return;
+        return res.end(
+          await fs.readFile(path.join(config.vite.root, "public", url), {
+            encoding: "utf-8",
+          })
+        );
+      } else if (!url.endsWith(".html") && /\..*?$/.test(url)) {
+        // if it is not, then still don't make .ico and .js ending urls to go through
+        utils.logger.warn(kleur.red("URL not found " + url), {
+          timestamp: true,
+        });
+        return res.end("");
       }
+      const pageCtx = routerQuery(url);
       if (pageCtx.filePath === "404") {
         res
           .writeHead(404, {

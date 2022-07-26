@@ -4,6 +4,7 @@ import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import { Liquid } from "liquidjs";
 import * as Filters from "@11ty/eleventy-plugin-rss";
+import kleur from "kleur";
 
 const engine = new Liquid({
   cache: true,
@@ -68,7 +69,7 @@ async function buildRoute({ fileURL, markdown, page, isBuild }) {
 
   if (!isBuild) {
     // no console clutter during build
-    utils.logger.info("State loaded!");
+    utils.logger.info(kleur.bold().bgBlue().white("State loaded!"));
   }
 
   if (typeof page.global.ssrProps === "object" && data.ssrProps) {

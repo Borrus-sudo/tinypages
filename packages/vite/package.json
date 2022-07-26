@@ -43,6 +43,7 @@
     "cac": "^6.7.12",
     "defu": "^6.0.0",
     "html-minifier": "^4.0.0",
+    "kleur": "^4.1.5",
     "liquidjs": "^9.39.2",
     "million": "^1.11.7",
     "node-icons": "^1.0.1",

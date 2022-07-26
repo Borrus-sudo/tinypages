@@ -1,3 +1,4 @@
+import "./devtools";
 if (import.meta.env.DEV) {
   (async () => {
     const { morph } = await import("million/morph");

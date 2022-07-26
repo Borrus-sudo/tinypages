@@ -19,7 +19,11 @@ export function PluginCSS(): Plugin {
       } else if (lastText) {
         lastText = false;
         if (classes.length > 0) {
-          const res = payload.replace(">", ` class="${classes.shift()}">`);
+          const class_string = classes.shift();
+          const res = payload.replace(
+            ">",
+            ` class="${class_string}" locate_string="${class_string}">`
+          );
           return res;
         }
       }

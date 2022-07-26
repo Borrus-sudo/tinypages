@@ -10,6 +10,7 @@ import { resolveConfig } from "./resolve-config";
 import path from "path";
 import { buildPage } from "./build-utils";
 import { BuildContext } from "../../types/types";
+import kleur from "kleur";
 
 type Params = {
   config: Object & { root: string };
@@ -57,7 +58,7 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
       const res = routerQuery(url);
       ctx.seenURLs.add(url);
       if (res.filePath === "404") {
-        ctx.utils.logger.error(`404 ${url} not found`);
+        ctx.utils.logger.error(kleur.red(`404 ${url} not found`));
       } else {
         // file to url map is loaded from the build artifact
         if (

@@ -1,11 +1,12 @@
 import { useContext, useVite } from "../context";
+import kleur from "kleur";
 
 export default function () {
   const vite = useVite();
   const { utils } = useContext("dev");
   return (err: Error, _req, res) => {
     if (err) {
-      utils.logger.error("Error:", {
+      utils.logger.error(kleur.red("Error:"), {
         error: err,
       });
       vite.ws.send({

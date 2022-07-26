@@ -10,5 +10,8 @@ export default defineConfig({
   },
   compiler: {
     renderKatex: false,
+    shiki: {
+      themes: ["nord"],
+    },
   },
 });

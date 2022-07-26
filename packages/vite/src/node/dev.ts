@@ -4,7 +4,9 @@ import type { TinyPagesConfig } from "../../types/types";
 import { createDevContext } from "./context";
 import { createMiddlewares } from "./middleware";
 import { createDevPlugins } from "./plugins/dev";
+import devtoolsMiddleware from "./middleware/devtools";
 import { polyfill } from "@astropub/webapi";
+import kleur from "kleur";
 
 export async function createDevServer(
   config: TinyPagesConfig,
@@ -21,13 +23,17 @@ export async function createDevServer(
     app.use(config.middlewares.pre);
 
   app.use(vite.middlewares);
+  app.put("/__EDIT", devtoolsMiddleware);
   app.use(...createMiddlewares());
 
   if ((config.middlewares.post?.length ?? -1) > 0)
     app.use(config.middlewares.post);
 
   app.listen(3003, () => {
-    context.utils.logger.info("Server running at http://localhost:3003");
+    context.utils.logger.info(
+      `${kleur.green().bold("🚀 Your application is ready!")}
+   > ${kleur.bold("Local")} : http://localhost:3003`
+    );
     vite.watcher.add(viteNormalizePath(context.utils.pageDir));
     polyfill(global, {
       exclude: "window document",
