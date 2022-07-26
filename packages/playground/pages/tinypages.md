@@ -1,4 +1,4 @@
 ## Tinypages 
 
-Tinypages stack: ::mdi:github.inline::
+Tinypages stack ::mdi:github::
 

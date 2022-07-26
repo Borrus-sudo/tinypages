@@ -1,8 +1,9 @@
-export default function Counter(props) {
+const Counter = () => {
   return (
-    <>
-      Hello hello
-      <IconMdiGithub style={{ width: "1em" }} />
-    </>
+    <div>
+      Hello hello check
+    </div>
   );
-}
+};
+
+export default Counter;

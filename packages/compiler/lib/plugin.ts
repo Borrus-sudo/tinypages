@@ -12,7 +12,8 @@ export default async function createHandler(
     methodReturn(info, payload) {
       plugins.forEach((plugin) => {
         payload =
-          plugin.transform(info, payload, { meta, persistentCache }) ?? payload;
+          plugin?.transform(info, payload, { meta, persistentCache }) ??
+          payload;
       });
       return payload;
     },

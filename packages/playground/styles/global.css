@@ -37,12 +37,6 @@ h2 {
     color: red;
 }
 
-p img {
-    max-width: 100%;
-    margin-top: 1rem;
-    margin-bottom: 3rem;
-}
-
 p code {
     font-family: var(--font-mono);
 }

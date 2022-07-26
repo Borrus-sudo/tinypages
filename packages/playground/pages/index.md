@@ -11,6 +11,6 @@ In some random text we write *italic [text-red-500]* and prolly bold as well **b
 {% endfor %}
 
 <i-mdi-github/>
-<Counter/>
 
+<Counter/>
 

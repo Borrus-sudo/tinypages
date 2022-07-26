@@ -12,7 +12,7 @@ export default function (
   }
 
   if (!svgId.startsWith("i-")) {
-    return svgId;
+    return;
   }
   svgId = svgId.slice(2);
 
@@ -21,9 +21,8 @@ export default function (
   const originalId = svgId;
   let styles = {};
 
+  svgId = svgId.replace(/\-/g, seperator); // every icon name is passed as component name format
   if (context.attrs) {
-    //iconName passed as a component
-    svgId = svgId.replace(/\-/g, seperator);
     styles = { ...context.attrs, ...defaultStyles };
   } else {
     styles = defaultStyles;

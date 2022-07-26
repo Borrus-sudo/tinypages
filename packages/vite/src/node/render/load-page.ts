@@ -53,7 +53,7 @@ async function buildRoute({ fileURL, markdown, page, isBuild }) {
 
   let { originalUrl } = page.pageCtx;
 
-  if (!isBuild && fileLoader.has(fileURL)) {
+  if (fileLoader.has(fileURL)) {
     loader = fileLoader.get(fileURL);
   } else {
     loader = (await vite.ssrLoadModule(fileURL)).default;

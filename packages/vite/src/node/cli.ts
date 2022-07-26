@@ -88,7 +88,6 @@ export async function cli() {
 
   cli
     .command("rebuild [root]")
-    .option("-c, --config", "[boolean] rebuilds from config")
     .option("-g, --git", "[boolean] rebuilds from the files changed")
     .option("-g, --grammar", "[boolean] do grammar checking for rebuilt files")
     .action(async (root = process.cwd(), opts) => {

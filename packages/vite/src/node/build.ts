@@ -3,25 +3,33 @@ import { createBuildContext } from "./context";
 import { fsRouter } from "./router/fs";
 import { createBuildPlugins } from "./plugins/build";
 import { writeFileSync } from "fs";
+import { readFile } from "fs/promises";
 import { polyfill } from "@astropub/webapi";
 import sitemap from "vite-plugin-pages-sitemap";
 import { resolveConfig } from "./resolve-config";
 import path from "path";
 import { buildPage } from "./build-utils";
+import { BuildContext } from "../../types/types";
 
 type Params = {
   config: Object & { root: string };
   rebuild: boolean;
 };
 
+interface Cache {
+  fileToURLMap: Map<string, string>;
+}
+
 export async function build({ config: cliViteConfig, rebuild }: Params) {
-  let ctx, urls, vite;
-  const [routerQuery, router] = fsRouter(
-    path.join(cliViteConfig.root, "pages")
-  );
+  let ctx: BuildContext, urls, vite, artifact: Cache;
+  let routerQuery;
 
   await Promise.all([
     async () => {
+      [routerQuery] = fsRouter(path.join(cliViteConfig.root, "pages"));
+      polyfill(global, {
+        exclude: "window document",
+      });
       const { config } = await resolveConfig(cliViteConfig);
       const [_ctx, _vite] = await createBuildContext(
         config,
@@ -30,28 +38,38 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
       _ctx.isRebuild = rebuild;
       ctx = _ctx;
       vite = _vite;
-      polyfill(global, {
-        exclude: "window document",
-      });
     },
-    async () => {},
+    async () => {
+      // load urls
+    },
+    async () => {
+      artifact = JSON.parse(
+        await readFile(path.join(cliViteConfig.root, ".tinypages/cache.json"), {
+          encoding: "utf-8",
+        })
+      );
+    },
   ]);
 
   async function buildPages(urls: string[]) {
     let ops = [];
     urls.forEach((url) => {
       const res = routerQuery(url);
-      ctx.seenURLs.push(url);
+      ctx.seenURLs.add(url);
       if (res.filePath === "404") {
         ctx.utils.logger.error(`404 ${url} not found`);
       } else {
-        if (ctx.fileToUrlMap.has(res.filePath)) {
-          ctx.fileToUrlMap.set(res.filePath, [
-            ...ctx.fileToUrlMap.get(res.filePath),
+        // file to url map is loaded from the build artifact
+        if (
+          ctx.fileToURLMap.has(res.filePath) &&
+          !ctx.fileToURLMap.get(res.filePath).includes(res.originalUrl)
+        ) {
+          ctx.fileToURLMap.set(res.filePath, [
+            ...ctx.fileToURLMap.get(res.filePath),
             res.originalUrl,
           ]);
         } else {
-          ctx.fileToUrlMap.set(res.filePath, [res.originalUrl]);
+          ctx.fileToURLMap.set(res.filePath, [res.originalUrl]);
         }
       }
       ops.push(buildPage(res));
@@ -71,6 +89,10 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
     }
   }
 
+  if (rebuild) {
+    //@ts-ignore
+    ctx.fileToURLMap = artifact.fileToURLMap;
+  }
   await buildPages(urls);
   await Promise.all([Vite.build(ctx.config.vite), vite.close()]);
 

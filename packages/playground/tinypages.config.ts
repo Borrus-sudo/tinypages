@@ -2,7 +2,7 @@ import { defineConfig } from "tinypages";
 import presetWind from "@unocss/preset-wind";
 
 export default defineConfig({
-  modules: {
+  defaultModulesConfig: {
     icons: {},
     unocss: {
       presets: [presetWind()],

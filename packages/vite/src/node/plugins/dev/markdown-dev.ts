@@ -17,7 +17,10 @@ export default function (): Plugin {
   const { config, page, utils } = useContext("dev");
   const cache: Map<string, string> = new Map();
   const virtualModuleMap: Map<string, string> = new Map([
-    ["/uno:only", `import "uno.css";import "tinypages/hmr";`],
+    [
+      "/uno:only.js",
+      `import "uno.css";import "virtual:unocss-devtools";import "tinypages/hmr";`,
+    ],
   ]);
   const markdownCompilerCache: Map<string, string> = new Map();
   let seen = [];
@@ -109,7 +112,7 @@ export default function (): Plugin {
         } else {
           page.meta.head.script.push({
             type: "module",
-            src: "/uno:only",
+            src: "/uno:only.js",
             innerHTML: undefined,
           });
         }

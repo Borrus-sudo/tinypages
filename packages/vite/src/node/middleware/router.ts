@@ -42,8 +42,6 @@ export default function () {
           .end(html);
       }
     } catch (err) {
-      console.log(err);
-
       next(err);
     }
   };

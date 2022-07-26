@@ -23,7 +23,7 @@ export function analyze(input: string): [
         ) {
           continue;
         }
-        if (!tags.includes(tagName) && tagName !== "slot:body") {
+        if (!tags.includes(tagName)) {
           const compStr = node.toString().trim();
           components.push({
             componentName: node.rawTagName.replace(/__/g, "."),
