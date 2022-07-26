@@ -46,7 +46,7 @@
     "liquidjs": "^9.39.2",
     "million": "^1.11.7",
     "node-icons": "^1.0.1",
-    "ohash": "^0.1.0",
+    "ohash": "^0.1.4",
     "polka": "^0.5.2",
     "preact": "10.7.2",
     "preact-iso": "^2.3.0",
@@ -58,7 +58,7 @@
     "vfile-reporter": "^7.0.4",
     "vite": "^2.9.13",
     "vite-plugin-image-presets": "^0.3.1",
-    "vite-plugin-inspect": "^0.5.0",
+    "vite-plugin-inspect": "^0.5.1",
     "vite-plugin-pages-sitemap": "^1.2.2"
   },
   "devDependencies": {
