@@ -57,7 +57,6 @@ interface Utils {
 interface DevUtils extends Utils {
   render: (html: string) => Promise<string>;
   configFile: Readonly<string>;
-  ignoreRetrigger: boolean;
 }
 
 interface Context {

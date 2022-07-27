@@ -29,7 +29,6 @@ export async function createDevContext(
       pageDir: join(config.vite.root, "pages"),
       stylesDir: join(config.vite.root, "styles"),
       configFile: source || "",
-      ignoreRetrigger: false,
     },
   };
 

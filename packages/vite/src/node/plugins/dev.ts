@@ -30,6 +30,6 @@ export async function createDevPlugins() {
     DecoratorPlugin(),
     HmrPlugin(),
     AutoImport(AutoImportPluginOptions(config.vite.root)),
-    PrefreshPlugin(),
+    // PrefreshPlugin(),
   ];
 }

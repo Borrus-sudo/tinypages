@@ -146,10 +146,6 @@ export default function (): Plugin {
         const fileBasename = path.basename(fileId);
 
         if (page.pageCtx.filePath === fileId) {
-          if (utils.ignoreRetrigger) {
-            utils.ignoreRetrigger = false;
-            continue;
-          }
           /**
            * If the pageCtx is equal to the fileId then check if the components have changed,
            * If the components have not changed then just re request the page and update it using million.js
