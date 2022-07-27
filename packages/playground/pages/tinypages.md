@@ -1,4 +1,4 @@
-## Tinypages [text-blue-500]
+## Tinypages [text-red-500]
 
 Tinypages stack ::mdi:github::
 
@@ -8,4 +8,5 @@ Tinypages stack ::mdi:github::
 ```js
 console.log("Hello World");
 ```
+
 

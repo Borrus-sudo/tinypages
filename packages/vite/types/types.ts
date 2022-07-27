@@ -12,12 +12,6 @@ type RenderFunction = (
   context: DevContext
 ) => Promise<string>;
 
-interface Consola {
-  info: (input: string) => void;
-  error: (input: Error) => void;
-  success: (input: string) => void;
-}
-
 type ComponentRegistration = Record<string, { path: string; lazy: boolean }>;
 
 interface PageCtx {
@@ -63,6 +57,7 @@ interface Utils {
 interface DevUtils extends Utils {
   render: (html: string) => Promise<string>;
   configFile: Readonly<string>;
+  ignoreRetrigger: boolean;
 }
 
 interface Context {

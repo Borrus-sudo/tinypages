@@ -23,7 +23,7 @@ export async function createDevServer(
     app.use(config.middlewares.pre);
 
   app.use(vite.middlewares);
-  app.put("/__EDIT", devtoolsMiddleware);
+  app.use(devtoolsMiddleware());
   app.use(...createMiddlewares());
 
   if ((config.middlewares.post?.length ?? -1) > 0)
