@@ -56,7 +56,7 @@
     "tasuku": "^2.0.0",
     "uid": "^2.0.0",
     "unconfig": "^0.3.4",
-    "unplugin-auto-import": "^0.8.1",
+    "unplugin-auto-import": "^0.10.2",
     "vfile-reporter": "^7.0.4",
     "vite": "^2.9.13",
     "vite-plugin-image-presets": "^0.3.1",
