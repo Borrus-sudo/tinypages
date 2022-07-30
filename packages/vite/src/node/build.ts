@@ -97,13 +97,18 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
   await buildPages(urls);
   await Promise.all([Vite.build(ctx.config.vite), vite.close()]);
 
-  if (!rebuild) {
-    //@ts-ignore
-    sitemap.default({
-      routes: [...ctx.seenURLs].map((route) => route.replace(/\.md$/, ".html")),
-      hostname: ctx.config.hostname,
-    });
-  }
+  const sitemapConfig = ctx.config.defaultModulesConfig.sitemap;
+  //@ts-ignore
+  sitemap.default({
+    routes: [...ctx.seenURLs]
+      .filter((url) => !sitemapConfig.exclude.includes(url))
+      .map((route) => route.replace(/\.md$/, ".html"))
+      .concat(sitemapConfig.include),
+    hostname: ctx.config.hostname,
+    changefreq: sitemapConfig.changefreq,
+    lastmod: sitemapConfig.lastmod,
+    priority: sitemapConfig.priority,
+  });
 
   Object.keys(ctx.postFS).forEach((path) => {
     writeFileSync(path, ctx.postFS[path]);

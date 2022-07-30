@@ -20,6 +20,17 @@ interface ImageModuleConfig {
   options?: ImageOptions;
 }
 
+interface SitemapConfig {
+  /**
+   * include and exclude are resolved to blank arrays by resolve config
+   */
+  include: string[];
+  exclude: string[];
+  changefreq?: string;
+  priority?: string;
+  lastmod?: Date;
+}
+
 /**
  * Config for the inbuild stuff the framework offers.
  */
@@ -27,6 +38,7 @@ interface DefaultModulesConfig {
   image: ImageModuleConfig;
   unocss: UnoCSSConfig;
   icons: IconsModuleConfig;
+  sitemap: SitemapConfig;
 }
 
 interface Middlwares {

@@ -49,6 +49,10 @@ export async function resolveConfig(
         defaultIconsStyles: {},
       },
       unocss: {},
+      sitemap: {
+        include: [],
+        exclude: [],
+      },
     },
     modules: [],
     hostname: "http://localhost:3003/",
