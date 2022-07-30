@@ -8,7 +8,7 @@ export const presetCompilerConfig = {
       "\\f": "#1f(#2)",
     },
   },
-  shiki: { themes: ["vitesse-dark", "nord"] },
+  shiki: { theme: "vitesse-dark" },
   renderKatex: true,
   renderMermaid: false,
   renderUnoCSS: false,

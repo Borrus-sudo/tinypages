@@ -1,5 +1,4 @@
 import { marked } from "marked";
-import { parse as parseYaml } from "yaml";
 import type {
   Config,
   Head,
@@ -17,7 +16,7 @@ import { orderPlugins, postTransform, Spy } from "./utils";
 export async function compile(
   input: string,
   UserConfig: UserConfig,
-  persistentCache: Map<string, string> = new Map()
+  persistentCache = new Map()
 ): Promise<[string, Meta]> {
   //@ts-ignore
   let config: Config = Object.assign({}, UserConfig, {
@@ -52,12 +51,6 @@ export async function compile(
   config.plugins.forEach((plugin: Plugin) =>
     plugin.defineConfig ? plugin.defineConfig(config as Config) : 0
   );
-
-  const grayMatter = input.match(/---[\s\S]*---/)?.[0] ?? "";
-  if (grayMatter) {
-    config.metaConstruct.grayMatter = parseYaml(grayMatter.slice(4, -3));
-    input = input.split(grayMatter)[1];
-  }
 
   const Renderer = new marked.Renderer();
   const Handler = await useHandler(

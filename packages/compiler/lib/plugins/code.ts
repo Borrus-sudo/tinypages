@@ -2,6 +2,11 @@ import * as shiki from "shiki";
 import type { Config, Plugin } from "../../types/types";
 import { hash } from "../utils";
 import katexRenderer from "./helpers/katex";
+import {
+  addMainIncludeTwoSlash,
+  renderShiki,
+  renderTwoSlash,
+} from "./helpers/shiki";
 
 export function PluginCode(): Plugin {
   let highlighter;
@@ -12,14 +17,12 @@ export function PluginCode(): Plugin {
   return {
     name: "core:code",
     async getReady() {
-      highlighter = await shiki.getHighlighter(
-        config.shiki || { theme: "nord" }
-      );
+      highlighter = await shiki.getHighlighter(config.shiki);
     },
     defineConfig(_config) {
       config = _config;
     },
-    transform(id: string, payload: string) {
+    transform(id: string, payload: string, { persistentCache }) {
       if (lang) {
         if (lang.startsWith("mermaid")) {
           if (config.renderMermaid) {
@@ -32,17 +35,37 @@ export function PluginCode(): Plugin {
               type: lang,
               inlineRender: id === "codespan",
               config,
+              persistentCache,
             });
         } else {
           let keyValue: string | string[] = [];
           let options: Record<string, string> = { lang };
           if (lang.includes(" ")) {
             [lang, ...keyValue] = lang.split(" ");
-            options = { lang, ...JSON.parse(keyValue.join(" ")) };
+            options = { ...JSON.parse(keyValue.join(" ")) };
           }
           try {
-            let result = highlighter.codeToHtml(code, options);
-            payload = result;
+            if (options.include) {
+              payload = renderTwoSlash({
+                persistentCache,
+                code,
+                highlighter,
+                lang,
+                options,
+                entryId: options.include,
+              });
+            } else if (options.name) {
+              addMainIncludeTwoSlash(code, options.name);
+              payload = "";
+            } else {
+              payload = renderShiki({
+                persistentCache,
+                highlighter,
+                code,
+                lang,
+                options,
+              });
+            }
           } catch {}
         }
         code = lang = "";

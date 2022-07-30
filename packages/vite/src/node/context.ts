@@ -1,4 +1,4 @@
-import { join } from "path";
+import path from "path";
 import { createLogger, createServer, type ViteDevServer } from "vite";
 import type {
   DevContext,
@@ -6,7 +6,8 @@ import type {
   BuildContext,
 } from "../../types/types";
 import { presetPageConfig } from "./constants";
-import { purgeComponentCache, render } from "./render/page";
+import { purgeComponentCache, render, giveComponentCache } from "./render/page";
+import { createCaches } from "./load-n-save";
 
 let devContext: DevContext;
 let vite: ViteDevServer;
@@ -17,6 +18,10 @@ export async function createDevContext(
   createDevPlugins,
   source?: string
 ): Promise<[DevContext, ViteDevServer]> {
+  const { islands_cache, markdown_cache } = await createCaches(
+    config.vite.root
+  );
+  giveComponentCache(islands_cache);
   devContext = {
     config,
     page: presetPageConfig,
@@ -26,9 +31,10 @@ export async function createDevContext(
         return await render(html, vite, devContext);
       },
       invalidate: (input: string) => purgeComponentCache(input),
-      pageDir: join(config.vite.root, "pages"),
-      stylesDir: join(config.vite.root, "styles"),
+      pageDir: path.join(config.vite.root, "pages"),
+      stylesDir: path.join(config.vite.root, "styles"),
       configFile: source || "",
+      markdown_cache,
     },
   };
 
@@ -53,8 +59,8 @@ export async function createBuildContext(
     utils: {
       logger: createLogger(config.vite.logLevel, { prefix: "[tinypages]" }),
       invalidate: (input: string) => purgeComponentCache(input),
-      pageDir: join(config.vite.root, "pages"),
-      stylesDir: join(config.vite.root, "styles"),
+      pageDir: path.join(config.vite.root, "pages"),
+      stylesDir: path.join(config.vite.root, "styles"),
     },
     config,
     virtualModuleMap: new Map(),

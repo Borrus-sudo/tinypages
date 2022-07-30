@@ -1,5 +1,4 @@
 interface Options {
-  cacheDuringBuild: boolean;
   cacheDuringDev:
     | false
     | {
@@ -16,7 +15,6 @@ export function cache(
   cb: Function,
   options: Options = {
     cacheDuringDev: { thresholdDuration: 120 * 10000000 },
-    cacheDuringBuild: true,
   }
 ) {
   const userStore: Map<any, any> = new Map(); // to store during cross cache states.
@@ -41,16 +39,6 @@ export function cache(
           return cache.get(arg.__url__);
         }
       }
-    }
-    if (options.cacheDuringBuild) {
-      // cache during build means, same input gives same output
-      if (cache.has(arg.__url__)) {
-        return cache.get(arg.__url__);
-      }
-    } else {
-      const result = await cb(arg, userStore);
-      cache.set(arg.__url__, result);
-      return result;
     }
     return await cb(arg, userStore);
   };

@@ -22,7 +22,6 @@ export default function (): Plugin {
       `import "uno.css";import "virtual:unocss-devtools";import "tinypages/hmr";`,
     ],
   ]);
-  const markdownCompilerCache: Map<string, string> = new Map();
   let seen = [];
   let vite: ViteDevServer;
   let isBuild = false;
@@ -38,7 +37,7 @@ export default function (): Plugin {
     const result = await compileMarkdown(
       input,
       config.compiler,
-      markdownCompilerCache
+      utils.markdown_cache
     );
     cache.set(digest, JSON.stringify(result));
     return result;

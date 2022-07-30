@@ -11,10 +11,10 @@ import type {
   TinyPagesConfig,
   Utils,
 } from "../../../types/types";
+import { Cache } from "../swr-cache";
 import { createElement as $, deepCopy } from "../utils";
 import kleur from "kleur";
 
-const map: Map<string, { html: string }> = new Map();
 const hashComp: Map<string, string[]> = new Map();
 const resolve = (fsPath: string) => {
   return fsPath + (fs.existsSync(fsPath + ".jsx") ? ".jsx" : ".tsx");
@@ -72,6 +72,7 @@ function cleanProps(props) {
 }
 
 const ssrLoadMap = new Map();
+let islandsCache: Cache<string, { html: string }>;
 
 /**
  * During build process the uid for multiple dynamic pages have to be same for them to utilize a common entry-point.
@@ -107,8 +108,10 @@ export async function render(
     if (context.page.sources) context.page.sources.push(component_path);
 
     if ("client:only" in component.props) {
-      if (map.has(hash)) {
-        payload = map.get(hash).html.replace(/uid=\".*?\"/, `uid="${uid}"`);
+      if (islandsCache.has(hash)) {
+        payload = islandsCache
+          .get(hash)
+          .html.replace(/uid=\".*?\"/, `uid="${uid}"`);
       } else {
         /**
          * Loading state to be displayed for client:only and lazy:load attrs together as initial state will be displayed
@@ -122,7 +125,7 @@ export async function render(
           { preact, uid },
           loadingString + "\n" + script(cleanProps(component.props))
         );
-        map.set(hash, { html: payload });
+        islandsCache.set(hash, { html: payload });
         if (hashComp.has(component_path)) {
           hashComp.set(component_path, [hash, ...hashComp.get(component_path)]);
         } else {
@@ -136,8 +139,8 @@ export async function render(
       };
     } else {
       let noHydrate = "no:hydrate" in component.props;
-      if (map.has(hash)) {
-        const cached = map.get(hash);
+      if (islandsCache.has(hash)) {
+        const cached = islandsCache.get(hash);
         payload = cached.html.replace(/uid=\".*?\"/, `uid="${uid}"`);
       } else {
         try {
@@ -188,7 +191,7 @@ export async function render(
           );
         }
 
-        map.set(hash, { html: payload });
+        islandsCache.set(hash, { html: payload });
 
         if (hashComp.has(component_path)) {
           hashComp.set(component_path, [hash, ...hashComp.get(component_path)]);
@@ -221,6 +224,10 @@ export async function render(
 export function purgeComponentCache(invalidateComponent: string) {
   if (hashComp.has(invalidateComponent)) {
     const hashes = hashComp.get(invalidateComponent);
-    hashes.forEach((hash) => map.delete(hash));
+    hashes.forEach((hash) => islandsCache.delete(hash));
   }
+}
+
+export function giveComponentCache(cache) {
+  islandsCache = cache;
 }

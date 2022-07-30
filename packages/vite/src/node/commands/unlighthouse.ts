@@ -13,7 +13,6 @@ async function unlighthouse(root: string) {
         skipJavascript: false,
         sitemap: true,
       },
-      site: "http://localhost:3003",
     },
     {
       name: "tinypages",
@@ -21,7 +20,7 @@ async function unlighthouse(root: string) {
   );
   const app = polka();
   app.use(sirv(path.join(root, "dist"), { maxAge: 0, immutable: false }));
-  app.listen(5555, async () => {
+  app.listen(3003, async () => {
     const context = await createServer();
     await unlighthouse.setServerContext({
       url: context.server.url,

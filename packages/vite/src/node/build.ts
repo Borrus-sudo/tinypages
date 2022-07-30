@@ -3,10 +3,11 @@ import { createBuildContext } from "./context";
 import { fsRouter } from "./router/fs";
 import { createBuildPlugins } from "./plugins/build";
 import { writeFileSync } from "fs";
-import { readFile } from "fs/promises";
 import { polyfill } from "@astropub/webapi";
 import sitemap from "vite-plugin-pages-sitemap";
 import { resolveConfig } from "./resolve-config";
+import { createCaches } from "./load-n-save";
+import { giveComponentCache } from "./render/page";
 import path from "path";
 import { buildPage } from "./build-utils";
 import { BuildContext } from "../../types/types";
@@ -17,12 +18,8 @@ type Params = {
   rebuild: boolean;
 };
 
-interface Cache {
-  fileToURLMap: Map<string, string>;
-}
-
 export async function build({ config: cliViteConfig, rebuild }: Params) {
-  let ctx: BuildContext, urls, vite, artifact: Cache;
+  let ctx: BuildContext, urls, vite, markdown_cache;
   let routerQuery;
 
   await Promise.all([
@@ -44,11 +41,11 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
       // load urls
     },
     async () => {
-      artifact = JSON.parse(
-        await readFile(path.join(cliViteConfig.root, ".tinypages/cache.json"), {
-          encoding: "utf-8",
-        })
+      let { islands_cache, markdown_cache: markdown } = await createCaches(
+        cliViteConfig.root
       );
+      giveComponentCache(islands_cache);
+      markdown_cache = markdown;
     },
   ]);
 
@@ -73,7 +70,7 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
           ctx.fileToURLMap.set(res.filePath, [res.originalUrl]);
         }
       }
-      ops.push(buildPage(res));
+      ops.push(buildPage(res, markdown_cache));
     });
 
     const newPossibleUrls = await Promise.all(ops);

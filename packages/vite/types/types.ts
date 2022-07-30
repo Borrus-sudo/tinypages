@@ -1,5 +1,6 @@
 import type { Meta } from "@tinypages/compiler";
 import type { Logger, ViteDevServer } from "vite";
+import { Cache } from "../src/node/swr-cache";
 import type {
   TinyPagesConfig,
   UserTinyPagesConfig,
@@ -57,6 +58,7 @@ interface Utils {
 interface DevUtils extends Utils {
   render: (html: string) => Promise<string>;
   configFile: Readonly<string>;
+  markdown_cache: Cache<string, string>;
 }
 
 interface Context {

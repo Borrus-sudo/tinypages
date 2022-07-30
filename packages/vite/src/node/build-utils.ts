@@ -46,9 +46,7 @@ function analyzeIslandMarkers(html: string): [string, Marker[]] {
   return [html, markers];
 }
 
-const markdownCompilerCache: Map<string, string> = new Map();
-
-export async function buildPage(pageCtx: PageCtx) {
+export async function buildPage(pageCtx: PageCtx, markdownCompilerCache) {
   const ctx = useContext("iso");
   const vite = useVite();
   const { filePath } = pageCtx;
@@ -84,14 +82,6 @@ export async function buildPage(pageCtx: PageCtx) {
     },
     true
   );
-
-  //   if (isGrammarCheck) {
-  //     buildContext.fileToHtmlMap.set(
-  //       { filePath: url, url: pageCtx.originalUrl },
-  //       appHtml
-  //     );
-  //     return analyzeUrls(appHtml, buildContext.config.hostname);
-  //   }
 
   if (page.meta.feeds.atom) {
     const atomUrl = new URL(
