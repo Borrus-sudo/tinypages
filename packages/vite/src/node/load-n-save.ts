@@ -12,13 +12,15 @@ export async function createCaches(root: string, isBuild: boolean) {
     path.join(cacheFolder, "cache_islands.json")
   );
   const markdown_cache = new Cache<string, string>(
-    path.join(cacheFolder, ".tinypages/cache_markdown.json")
+    path.join(cacheFolder, "cache_markdown.json")
   );
   await Promise.all([markdown_cache.hydrate(), islands_cache.hydrate()]);
-  process.on("exit", () => {
-    markdown_cache.save(isBuild);
-    islands_cache.save(isBuild);
-  });
+  if (!isBuild) {
+    setInterval(() => {
+      markdown_cache.save(false);
+      islands_cache.save(false);
+    }, 6000);
+  }
   return {
     islands_cache,
     markdown_cache,

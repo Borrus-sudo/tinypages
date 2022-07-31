@@ -35,6 +35,14 @@ export class Cache<K, V> {
       );
     }
   }
+  return() {
+    return new Map(
+      Array.from(this.currCache).concat(Array.from(this.prevUsed))
+    );
+  }
+  setCache(newValue) {
+    this.currCache = newValue;
+  }
   save(isBuild: boolean) {
     if (isBuild) {
       writeFileSync(this.url, JSON.stringify(Array.from(this.currCache)));
