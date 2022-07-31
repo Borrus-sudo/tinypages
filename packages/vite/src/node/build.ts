@@ -99,9 +99,10 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
   //@ts-ignore
   sitemap.default({
     routes: [...ctx.seenURLs]
+      .map((url) => url.split(".md")[0])
       .filter((url) => !sitemapConfig.exclude.includes(url))
-      .map((route) => route.replace(/\.md$/, ".html"))
-      .concat(sitemapConfig.include),
+      .concat(sitemapConfig.include)
+      .map((route) => route + ".html"),
     hostname: ctx.config.hostname,
     changefreq: sitemapConfig.changefreq,
     lastmod: sitemapConfig.lastmod,
