@@ -588,7 +588,7 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@nuxt/devalue@^2.0.0":
+"@nuxt/devalue@^2.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@nuxt/devalue/-/devalue-2.0.0.tgz#c7bd7e9a516514e612d5d2e511ffc399e0eac322"
   integrity sha512-YBI/6o2EBz02tdEJRBK8xkt3zvOFOWlLBf7WKYGBsSYSRtjjgrqPe2skp6VLLmKx5WbHHDNcW+6oACaurxGzeA==
@@ -5509,7 +5509,7 @@ path-type@^4.0.0:
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
-pathe@^0.2.0:
+pathe@^0.2, pathe@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/pathe/-/pathe-0.2.0.tgz#30fd7bbe0a0d91f0e60bae621f5d19e9e225c339"
   integrity sha512-sTitTPYnn23esFR3RlqYBWn4c45WGeLcsKzQiUpXJAyfcWkolvlYpV8FLo7JishK946oQwMFUCHXQ9AjGPKExw==
@@ -6311,7 +6311,7 @@ set-blocking@~2.0.0:
   resolved "https://registry.yarnpkg.com/set-blocking/-/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
   integrity sha1-BF+XgtARrppoA93TgrJDkrPYkPc=
 
-sharp@^0.29.3:
+sharp@^0.29:
   version "0.29.3"
   resolved "https://registry.yarnpkg.com/sharp/-/sharp-0.29.3.tgz#0da183d626094c974516a48fab9b3e4ba92eb5c2"
   integrity sha512-fKWUuOw77E4nhpyzCCJR1ayrttHoFHBT2U/kR/qEMRhvPEcluG4BKj324+SCO1e84+knXHwhJ1HHJGnUt4ElGA==
@@ -7423,15 +7423,15 @@ vfile@^5.0.0, vfile@^5.1.0:
     unist-util-stringify-position "^3.0.0"
     vfile-message "^3.0.0"
 
-vite-plugin-image-presets@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/vite-plugin-image-presets/-/vite-plugin-image-presets-0.3.1.tgz#05fe196b7c00e9fcfe9dcbc9ff5cc680d607617a"
-  integrity sha512-0hitwSel75v5VQ9ntaKUSRx7JKVe3lS9PL2b6Qn01tsQv4cmPLcVW6KeMfby4dz7QwQJ/uYJSLTAwXf5g+fnbg==
+vite-plugin-image-presets@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/vite-plugin-image-presets/-/vite-plugin-image-presets-0.3.2.tgz#706eec875608bd1590c197bc5d9b583e74e38235"
+  integrity sha512-RLgb8h75wgTFtX1mIQSLKYDRKVzShaTBYREGT3Xbx/OUOCyoz/ZSK6LpQ2G7BOxzCbf/O+MvDjJT/07CLDmnyA==
   dependencies:
-    "@nuxt/devalue" "^2.0.0"
+    "@nuxt/devalue" "^2.0"
     debug "^4.3"
-    pathe "^0.2.0"
-    sharp "^0.29.3"
+    pathe "^0.2"
+    sharp "^0.29"
 
 vite-plugin-inspect@^0.5.1:
   version "0.5.1"
