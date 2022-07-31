@@ -47,7 +47,7 @@
     "liquidjs": "^9.39.2",
     "million": "^1.11.7",
     "node-icons": "^1.0.1",
-    "ohash": "^0.1.0",
+    "ohash": "^0.1.4",
     "polka": "^0.5.2",
     "preact": "10.7.2",
     "preact-iso": "^2.3.0",

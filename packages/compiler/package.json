@@ -46,7 +46,7 @@
     "node-emoji": "^1.11.0",
     "node-html-parser": "^5.3.3",
     "node-icons": "^1.0.1",
-    "ohash": "^0.1.0",
+    "ohash": "^0.1.4",
     "shiki": "^0.10.0",
     "shiki-twoslash": "^3.1.0",
     "yaml": "^2.1.1"

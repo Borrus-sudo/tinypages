@@ -5260,10 +5260,10 @@ object-keys@~0.4.0:
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-0.4.0.tgz#28a6aae7428dd2c3a92f3d95f21335dd204e0336"
   integrity sha1-KKaq50KN0sOpLz2V8hM13SBOAzY=
 
-ohash@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/ohash/-/ohash-0.1.0.tgz#cde74db91cfb7259477a93e0959221c4e20a5881"
-  integrity sha512-KvclyhWseX6F2UTEEp9Qzybb0LTGorTSVufAToV5tR2B6Q64rVhKhkcU/o+mBaiqGa5+PdobtfSVelp8VOCR6A==
+ohash@^0.1.0, ohash@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/ohash/-/ohash-0.1.4.tgz#e5b55740b6047b9b66a3b836b1c92cc747197c05"
+  integrity sha512-imsZ/lYOvZldyO6clK9uu6t2PIMr3bxCPAi6jJyPezKLU5/42UwMfGIlZML6GlpUxmSHxRoDo7VMWqI8VGllQQ==
 
 ohmyfetch@^0.4.16, ohmyfetch@^0.4.18:
   version "0.4.18"
