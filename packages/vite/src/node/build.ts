@@ -141,7 +141,7 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
   }
 
   await task.group((task) => [
-    task("Rendering pages", async () => {
+    task("🎯 Rendering pages", async () => {
       await buildPages(global_urls_store);
     }),
 

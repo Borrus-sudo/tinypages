@@ -23,9 +23,6 @@ export async function buildAction(
       build: cleanOptions(options),
       config: true,
     };
-    // const { urls } = JSON.parse(
-    //   await fs.readFile(path.join(root, "urls.json"), { encoding: "utf-8" })
-    // );
     await build({
       config: cliViteOptions,
       rebuild: false,
