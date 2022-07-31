@@ -19,7 +19,8 @@ export async function createDevContext(
   source?: string
 ): Promise<[DevContext, ViteDevServer]> {
   const { islands_cache, markdown_cache } = await createCaches(
-    config.vite.root
+    config.vite.root,
+    false
   );
   giveComponentCache(islands_cache);
   devContext = {

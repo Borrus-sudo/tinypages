@@ -42,7 +42,8 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
     },
     async () => {
       let { islands_cache, markdown_cache: markdown } = await createCaches(
-        cliViteConfig.root
+        cliViteConfig.root,
+        true
       );
       giveComponentCache(islands_cache);
       markdown_cache = markdown;

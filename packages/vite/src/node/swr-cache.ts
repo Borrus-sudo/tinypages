@@ -1,4 +1,5 @@
-import { readFile, writeFile } from "fs/promises";
+import { existsSync, writeFileSync } from "fs";
+import { readFile } from "fs/promises";
 
 export class Cache<K, V> {
   private prevUsed: Map<K, V>;
@@ -26,11 +27,24 @@ export class Cache<K, V> {
     this.prevUsed.delete(key);
   }
   async hydrate() {
-    this.prevUsed = new Map(
-      JSON.parse(await readFile(this.url, { encoding: "utf-8" }))
-    );
+    if (!existsSync(this.url)) {
+      this.prevUsed = new Map();
+    } else {
+      this.prevUsed = new Map(
+        JSON.parse(await readFile(this.url, { encoding: "utf-8" }))
+      );
+    }
   }
-  async save() {
-    await writeFile(this.url, JSON.stringify(Array.from(this.currCache)));
+  save(isBuild: boolean) {
+    if (isBuild) {
+      writeFileSync(this.url, JSON.stringify(Array.from(this.currCache)));
+    } else {
+      writeFileSync(
+        this.url,
+        JSON.stringify(
+          Array.from(this.currCache).concat(Array.from(this.prevUsed))
+        )
+      );
+    }
   }
 }

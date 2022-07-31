@@ -72,7 +72,7 @@ function cleanProps(props) {
 }
 
 const ssrLoadMap = new Map();
-let islandsCache: Cache<string, { html: string }>;
+let islandsCache: Cache<string, string>;
 
 /**
  * During build process the uid for multiple dynamic pages have to be same for them to utilize a common entry-point.
@@ -109,9 +109,7 @@ export async function render(
 
     if ("client:only" in component.props) {
       if (islandsCache.has(hash)) {
-        payload = islandsCache
-          .get(hash)
-          .html.replace(/uid=\".*?\"/, `uid="${uid}"`);
+        payload = islandsCache.get(hash).replace(/uid=\".*?\"/, `uid="${uid}"`);
       } else {
         /**
          * Loading state to be displayed for client:only and lazy:load attrs together as initial state will be displayed
@@ -125,7 +123,7 @@ export async function render(
           { preact, uid },
           loadingString + "\n" + script(cleanProps(component.props))
         );
-        islandsCache.set(hash, { html: payload });
+        islandsCache.set(hash, payload);
         if (hashComp.has(component_path)) {
           hashComp.set(component_path, [hash, ...hashComp.get(component_path)]);
         } else {
@@ -141,7 +139,7 @@ export async function render(
       let noHydrate = "no:hydrate" in component.props;
       if (islandsCache.has(hash)) {
         const cached = islandsCache.get(hash);
-        payload = cached.html.replace(/uid=\".*?\"/, `uid="${uid}"`);
+        payload = cached.replace(/uid=\".*?\"/, `uid="${uid}"`);
       } else {
         try {
           const { default: preactComponent } = !isBuild
@@ -191,7 +189,7 @@ export async function render(
           );
         }
 
-        islandsCache.set(hash, { html: payload });
+        islandsCache.set(hash, payload);
 
         if (hashComp.has(component_path)) {
           hashComp.set(component_path, [hash, ...hashComp.get(component_path)]);

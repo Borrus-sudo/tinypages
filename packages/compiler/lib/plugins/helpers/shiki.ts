@@ -33,7 +33,6 @@ export function renderTwoSlash({
 }
 
 export function addMainIncludeTwoSlash(code: string, name: string) {
-  entryMap.set(name, code);
   const lines: string[] = [];
   code.split("\n").forEach((line) => {
     if (line.trim().startsWith("// -")) {
@@ -43,6 +42,7 @@ export function addMainIncludeTwoSlash(code: string, name: string) {
       lines.push(line);
     }
   });
+  entryMap.set(name, lines.join("\n"));
 }
 
 export function renderShiki({
