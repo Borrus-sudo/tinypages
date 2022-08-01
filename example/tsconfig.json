@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    "incremental": true
+  },
+  "include": ["./components/**/*", "./pages/**/*"]
+}

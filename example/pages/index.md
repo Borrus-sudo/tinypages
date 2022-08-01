@@ -1,38 +1,23 @@
-## TSGandalf ::mdi:language-typescript:: [text-blue-500 text-center]
+<head>
+<title>(JS/TS)Gandalf's blog!</title>
+</head>
 
-`katex c=\pm\sqrt{a^2+b^2}`
+## (JS/TS)Gandalf's blog! [text-blue-500]
 
-```katex
-c=\pm\sqrt{a^2+b^2}
-```
+In some random text we write _italic [text-red-500]_ and prolly bold as well **bold [text-red-500]**
 
-```ts [theme="nord"]
-console.log("Hello OhMyMarkdown!");
-```
-```mermaid [theme="default"]
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
-```
+{% for blog in data %}
+[{{ blog.meta }}](/{{ blog._id }})
+{% endfor %}
 
-<mdi-github color="red"/> this is red coloured github icon gy
-
-<p>
-<span>this is text ::mdi:twitch::</span>
-`katex \f\relax{x} = \int_{-\infty}^\infty\f\hat\xi\,e^{2 \pi i \xi x}\,d\xi`
-</p>
-
-I am cool ::mdi:github:: [text-red-200]
-
-<mdi-twitch color="blue"/>
-
-`katex \f\relax{x} = \int_{-\infty}^\infty\f\hat\xi\,e^{2 \pi i \xi x}\,d\xi`
-
-<p>
-::mdi:car::
-<mdi-car color="blue" class="m-0"/>
-</p>
+<i-mdi-github/>
 
 <Counter/>
+
+<i-mdi-twitter/>
+
+Some more stuff [text-blue-500]
+
+<i-mdi-twitter/>
+
+some more stuff [text-blue-500]
