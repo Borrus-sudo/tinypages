@@ -28,9 +28,6 @@ engine.filters.create(
 );
 
 async function buildRoute({ fileURL, markdown, page, isBuild }) {
-  const { utils } = useContext("iso");
-  const vite = useVite();
-
   let jsUrl = fileURL.replace(/\.md$/, ".js");
   if (!existsSync(jsUrl)) {
     let tsUrl = fileURL.replace(/\.md$/, ".ts");
@@ -39,12 +36,15 @@ async function buildRoute({ fileURL, markdown, page, isBuild }) {
     } else {
       return {
         markdown,
-        data: null,
+        data: {},
       };
     }
   } else {
     fileURL = jsUrl;
   }
+
+  const { utils } = useContext("iso");
+  const vite = useVite();
 
   // some fields for page are polyfilled during build for this func to be isomorphic
   if (!page.reloads.includes(fileURL)) page.reloads.push(fileURL);
@@ -97,6 +97,10 @@ export async function loadPage(fileURL: string, page, isBuild: boolean) {
     const markdown = await readFile(fileURL, { encoding: "utf-8" });
     ops.push(buildRoute({ fileURL, page, markdown, isBuild }));
     if (path.dirname(fileURL) === utils.pageDir) {
+      // to prevent recursion
+      if (fileURL === path.join(utils.pageDir, "root.md")) {
+        break;
+      }
       fileURL = path.join(utils.pageDir, "root.md");
     } else {
       fileURL = path.dirname(fileURL) + ".md";
@@ -108,11 +112,17 @@ export async function loadPage(fileURL: string, page, isBuild: boolean) {
   let toCompile = "",
     accumulatedData = {};
 
-  output.reverse().forEach(({ markdown, data }) => {
+  output.reverse().forEach(({ markdown, data }, idx) => {
     if (!toCompile) {
       toCompile = markdown;
     } else {
-      toCompile = toCompile.replace("<Outlet/>", markdown);
+      toCompile = toCompile.replace(
+        /\<Outlet name=\"(.*?)\"\/\>/,
+        (_, animation_name) =>
+          `<p>|SDIV${idx}||${animation_name}|</p>\n` +
+          markdown +
+          "\n<p>|EDIV|</p>"
+      );
     }
     accumulatedData = { ...data, ...accumulatedData };
   });

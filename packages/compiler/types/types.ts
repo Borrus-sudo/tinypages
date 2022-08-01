@@ -54,7 +54,7 @@ interface Plugin {
   transform: (
     id: string,
     payload: string,
-    ctx: { meta: Meta; persistentCache: Map<string, string> }
+    ctx: { meta: Meta; persistentCache: Map<string, string>; isBuild: boolean }
   ) => string | void;
   getReady?: () => Promise<void> | void;
   tapArgs?: (id: string, args: any[]) => void | any[];

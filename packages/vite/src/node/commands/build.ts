@@ -1,9 +1,7 @@
 import { build } from "../build";
 import { cleanOptions, reportString, GlobalCLIOptions } from "./common";
 import type { BuildOptions } from "vite";
-import { resolveConfig } from "../resolve-config";
 import path from "path";
-import fs from "fs/promises";
 
 export async function buildAction(
   root: string,

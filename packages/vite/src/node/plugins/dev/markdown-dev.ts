@@ -37,7 +37,8 @@ export default function (): Plugin {
     const result = await compileMarkdown(
       input,
       config.compiler,
-      utils.markdown_cache
+      utils.markdown_cache,
+      false
     );
     cache.set(digest, JSON.stringify(result));
     return result;
@@ -69,7 +70,14 @@ export default function (): Plugin {
         if (!vite) {
           vite = useVite();
         }
-        const [rawHtml, meta] = await compile(builtLiquid);
+        let [rawHtml, meta] = await compile(builtLiquid);
+        rawHtml = rawHtml
+          .replace(/\<p\>\|SDIV(.*?)\|\<\/p\>/g, (_, payload: string) => {
+            const [depth, animation_name] = payload.split("||");
+            return `<div depth="${depth}" class_name="${animation_name}">`;
+          })
+          .replace(/\<p\>\|EDIV\|\<\/p\>/g, "</div>");
+
         /**
          * Initialize the page globals to make it ready for the new page.
          * page.reloads=[] happens in middleware/router.

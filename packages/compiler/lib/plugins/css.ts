@@ -9,7 +9,7 @@ export function PluginCSS(): Plugin {
     defineConfig(_config) {
       config = _config;
     },
-    transform(id: string, payload: string) {
+    transform(id: string, payload: string, { isBuild }) {
       if (id === "text") {
         lastText = true;
         return payload.replace(/\[(.*?)\]/g, (_, full) => {
@@ -22,7 +22,9 @@ export function PluginCSS(): Plugin {
           const class_string = classes.shift();
           const res = payload.replace(
             ">",
-            ` class="${class_string}" locate_string="${class_string}">`
+            isBuild
+              ? ` class="${class_string}">`
+              : ` class="${class_string}" locate_string="${class_string}">`
           );
           return res;
         }

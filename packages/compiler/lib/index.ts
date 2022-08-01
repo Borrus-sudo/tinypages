@@ -16,7 +16,8 @@ import { orderPlugins, postTransform, Spy } from "./utils";
 export async function compile(
   input: string,
   UserConfig: UserConfig,
-  persistentCache = new Map()
+  persistentCache,
+  isBuild: boolean
 ): Promise<[string, Meta]> {
   //@ts-ignore
   let config: Config = Object.assign({}, UserConfig, {
@@ -56,7 +57,8 @@ export async function compile(
   const Handler = await useHandler(
     config.plugins,
     config.metaConstruct,
-    persistentCache
+    persistentCache,
+    isBuild
   );
   const spiedRenderer = Spy(Renderer, Handler);
 

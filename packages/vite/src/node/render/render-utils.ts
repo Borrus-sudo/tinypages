@@ -53,7 +53,7 @@ export function appendPrelude(content: string, page: ReducedPage) {
     type: "text/javascript",
     innerHTML: `
     window.pageCtx=${JSON.stringify(page.pageCtx, (key, val) =>
-      key === "url" ? undefined : val
+      key === "filePath" ? undefined : val
     )};
     window.ssrProps=${JSON.stringify(page.global.ssrProps)};
     `,
@@ -91,7 +91,6 @@ export function appendPrelude(content: string, page: ReducedPage) {
 }
 
 type P = {
-  url: string;
   root: string;
   appHtml: string;
   ssrProps: Record<string, string>;
@@ -101,7 +100,6 @@ type P = {
 };
 
 export function appendPreludeRebuild({
-  url,
   root,
   appHtml,
   head,
@@ -111,20 +109,22 @@ export function appendPreludeRebuild({
 }: P) {
   let normalizedUrl;
   let toReadPath;
+
   /**
    * For the rebuild strategy to work for new dynamic urls for the same file paths.
    */
-  const all = [url, ...otherUrls];
+
   do {
-    normalizedUrl = htmlNormalizeURL(all.shift());
-    toReadPath = path.join(root, "dist", normalizedUrl);
+    if (otherUrls.length > 0) {
+      normalizedUrl = htmlNormalizeURL(otherUrls.shift()); // The current url is gonna be present in otherUrls
+      toReadPath = path.join(root, "dist", normalizedUrl);
+    } else {
+      break;
+    }
   } while (existsSync(toReadPath));
 
   const artifact = readFileSync(toReadPath, { encoding: "utf-8" });
   const artifactHead = artifact.match(/\<head\>([\s\S]*)\<\/head\>/)[0];
-  const artifactStyle = artifact.match(
-    /\<\/html\>\<style\>([\s\S]*)\<\/style\>/
-  )[0];
   const title = createElement("title", head.titleAttributes, head.title);
   const metas = head.meta.map((meta) => createElement("meta", meta, ""));
   const renderedHead = artifactHead
@@ -138,11 +138,10 @@ export function appendPreludeRebuild({
       // to work universally for both changed and newly added page to a dynamic file path.
       /window.pageCtx\=(.*?)\;/,
       `window.pageCtx=${JSON.stringify(pageCtx, (key, val) =>
-        key === "url" ? undefined : val
+        key === "filePath" ? undefined : val
       )}`
     )
-    .replace("<head>", `<head>${title}\n${metas.join("\n")}`)
-    .replace("<\\html>", "<\\html>" + artifactStyle);
+    .replace("<head>", `<head>${title}\n${metas.join("\n")}`);
 
   const output = createElement(
     "html",
@@ -166,7 +165,9 @@ export function generateVirtualEntryPoint(
   const resolve = (p: string) => viteNormalizePath(path.relative(root, p));
   let imports = [
     isBuild ? "" : `import "preact/debug"`,
-    isBuild ? "" : `import "uno.css";import "virtual:unocss-devtools";`,
+    isBuild
+      ? `import "uno.css"`
+      : `import "uno.css";import "virtual:unocss-devtools";`,
     `import hydrate from "tinypages/client";`,
     isBuild ? "" : `import "tinypages/hmr";`,
     isBuild ? `import {router} from "million/router"` : "",

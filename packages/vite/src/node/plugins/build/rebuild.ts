@@ -13,10 +13,13 @@ function stripHead(): Plugin {
       transform(html: string, ctx) {
         if (buildContext.isRebuild) {
           const key = ctx.path;
-          return html.replace(/\<head\>([\s\S]*)\<\/head\>/, (head) => {
-            headCache.set(key, head);
-            return "<head></head>";
-          });
+          return (
+            `|${key}|` +
+            html.replace(/\<head\>([\s\S]*)\<\/head\>/, (head) => {
+              headCache.set(key, head);
+              return "<head></head>";
+            })
+          );
         }
       },
     },
@@ -30,9 +33,13 @@ function addHead(): Plugin {
     apply: "build",
     transformIndexHtml: {
       enforce: "post",
-      transform(html: string, ctx) {
+      transform(html: string) {
         if (buildContext.isRebuild) {
-          const key = ctx.path;
+          let key;
+          html = html.replace(/\|(.*?)\|/, (_, _key) => {
+            key = _key;
+            return "";
+          });
           return html.replace("<head></head>", headCache.get(key) ?? "");
         }
       },

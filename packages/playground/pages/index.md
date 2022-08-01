@@ -4,7 +4,7 @@
 
 ## (JS/TS)Gandalf's blog! [text-blue-500]
 
-In some random text we write *italic [text-red-500]* and prolly bold as well **bold [text-red-500]**
+In some random text we write _italic [text-red-500]_ and prolly bold as well **bold [text-red-500]**
 
 {% for blog in data %}
 [{{ blog.meta }}](/{{ blog._id }})
@@ -14,3 +14,10 @@ In some random text we write *italic [text-red-500]* and prolly bold as well **b
 
 <Counter/>
 
+<i-mdi-twitter/>
+
+Some more stuff [text-blue-500]
+
+<i-mdi-twitter/>
+
+some more stuff [text-blue-500]

@@ -3,7 +3,8 @@ import type { Meta, Plugin } from "../types/types";
 export default async function createHandler(
   plugins: Plugin[],
   meta: Meta,
-  persistentCache: Map<string, string>
+  persistentCache: Map<string, string>,
+  isBuild: boolean
 ) {
   await Promise.all(
     [...plugins].map((p) => (p.getReady ? p.getReady() : null))
@@ -12,8 +13,11 @@ export default async function createHandler(
     methodReturn(info, payload) {
       plugins.forEach((plugin) => {
         payload =
-          plugin?.transform(info, payload, { meta, persistentCache }) ??
-          payload;
+          plugin?.transform(info, payload, {
+            meta,
+            persistentCache,
+            isBuild,
+          }) ?? payload;
       });
       return payload;
     },

@@ -58,4 +58,10 @@ export function uuid() {
   return uid(5);
 }
 
+export function runOnExit(fn: () => void) {
+  process.on("SIGINT", fn);
+  process.on("SIGTERM", fn);
+  process.on("exit", fn);
+}
+
 export const uidMap: Map<string, string> = new Map();

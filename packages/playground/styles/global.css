@@ -108,3 +108,24 @@ a:hover:before {
         height: auto;
     }
 }
+
+.slide-enter-from {
+    transform: translateX(-50%);
+    opacity: 0;
+}
+
+.slide-enter-to,
+.slide-leave-from {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+    transition: all 0.5s ease-out;
+}
+
+.slide-leave-to {
+    transform: translateX(50%);
+    opacity: 0;
+}

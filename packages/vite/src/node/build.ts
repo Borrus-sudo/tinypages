@@ -37,7 +37,7 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
   );
 
   await Promise.all([
-    task("🧾 Loading config!", async () => {
+    task("🧾 Loading config!", async ({ setTitle }) => {
       [routerQuery] = fsRouter(path.join(cliViteConfig.root, "pages"));
       polyfill(global, {
         exclude: "window document",
@@ -50,8 +50,9 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
       _ctx.isRebuild = rebuild;
       ctx = _ctx;
       vite = _vite;
+      setTitle("🧾 Config loaded!");
     }),
-    task("🧐 Loading urls!", async () => {
+    task("🧐 Loading URls!", async ({ setTitle }) => {
       let { config } = await loadConfig<{
         rebuild: () => Promise<{ new: string[]; remove: string[] }>;
         build: () => Promise<string[]>;
@@ -68,6 +69,12 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
       if (rebuild) {
         await urls_cache.hydrate();
         const urlsRebuild = await config.rebuild();
+        if (!urlsRebuild.new) {
+          urlsRebuild.new = [];
+        }
+        if (!urlsRebuild.remove) {
+          urlsRebuild.remove = [];
+        }
         global_urls_store = urlsRebuild.new;
         rebuildMeta.remove = urlsRebuild.remove;
         urlsRebuild.new.forEach((_) => {
@@ -86,14 +93,16 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
       } else {
         global_urls_store = await config.build();
       }
+      setTitle("🧐 URLs loaded!");
       // load urls
     }),
-    task("📂 Loading cache!", async () => {
+    task("📂 Loading cache!", async ({ setTitle }) => {
       let { islands_cache: islands, markdown_cache: markdown } =
         await createCaches(cliViteConfig.root, true);
       markdown_cache = markdown;
       islands_cache = islands;
       giveComponentCache(islands_cache);
+      setTitle("📂 Cache loaded!");
     }),
   ]);
 
@@ -141,28 +150,22 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
   }
 
   await task.group((task) => [
-    task("🎯 Rendering pages", async () => {
+    task("🎯 Rendering pages!", async ({ setTitle }) => {
       await buildPages(global_urls_store);
+      setTitle("🎯 Pages rendered!");
     }),
-
-    rebuild
-      ? task("Waiting for Task 1", async ({ setTitle }) => {
-          setTitle("💾 Writing to disk");
-          const outDir = path.join(cliViteConfig.root, "dist");
-          rebuildMeta.remove.forEach((_) => {
-            unlinkSync(path.join(outDir, htmlNormalizeURL(_)));
-          });
-          ctx.fileToHtmlMap.forEach((updatedHtml, { url }) => {
-            const normalizedUrl = htmlNormalizeURL(url);
-            const toWritePath = path.join(outDir, normalizedUrl);
-            writeFileSync(toWritePath, updatedHtml);
-          });
-        })
-      : task("Waiting for Task 1", async ({ setTitle }) => {
-          setTitle("⚛ Building JS!");
-          await Vite.build(ctx.config.vite);
-          await vite.close();
-        }),
+    task("Waiting for Task 1", async ({ setTitle }) => {
+      setTitle("💎 Vite magic ongoing!");
+      await vite.close();
+      await Vite.build(ctx.config.vite);
+      if (rebuild) {
+        const outDir = path.join(cliViteConfig.root, "dist");
+        rebuildMeta.remove.forEach((_) => {
+          unlinkSync(path.join(outDir, htmlNormalizeURL(_)));
+        });
+      }
+      setTitle("💎 Vite build successful!");
+    }),
     task("Waiting for Task 2", async ({ setTitle }) => {
       setTitle("🗺 Writing sitemap");
       const sitemapConfig = ctx.config.defaultModulesConfig.sitemap;
@@ -181,6 +184,7 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
       Object.keys(ctx.postFS).forEach((path) => {
         writeFileSync(path, ctx.postFS[path]);
       });
+      setTitle("🗺 Sitemap written");
     }),
   ]);
 

@@ -1,5 +1,6 @@
 import type { ComponentFactory } from "preact";
 import { hydrate } from "./hydrate";
+import "./mpa-animation";
 
 const lazyLoad = (target, callback: Function) => {
   const io = new IntersectionObserver((entries, observer) => {

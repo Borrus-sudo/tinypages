@@ -61,11 +61,19 @@ export async function buildPage(pageCtx: PageCtx, markdownCompilerCache) {
     true
   );
 
-  const [rawHtml, meta] = await compile(
+  let [rawHtml, meta] = await compile(
     buildLiquid,
     ctx.config.compiler,
-    markdownCompilerCache
+    markdownCompilerCache,
+    true
   );
+  rawHtml = rawHtml
+    .replace(/\<p\>\|SDIV(.*?)\|\<\/p\>/g, (_, payload: string) => {
+      const [depth, animation_name] = payload.split("||");
+      return `<div depth="${depth}" class_name="${animation_name}">`;
+    })
+    .replace(/\<p\>\|EDIV\|\<\/p\>/g, "</div>");
+
   const page: ReducedPage = {
     meta,
     pageCtx,
@@ -115,7 +123,6 @@ export async function buildPage(pageCtx: PageCtx, markdownCompilerCache) {
   let output: string;
   if (ctx.isRebuild) {
     output = appendPreludeRebuild({
-      url: pageCtx.originalUrl,
       root: ctx.config.vite.root,
       appHtml,
       head: page.meta.head,

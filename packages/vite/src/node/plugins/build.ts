@@ -20,10 +20,10 @@ export async function createBuildPlugins() {
     RebuildPlugin(),
     SvgResolverPlugin(),
     Optimization1Plugin(),
-    isRebuild
+    !isRebuild
       ? UnoCSSPlugin(<{}>{
           inspector: false,
-          mode: "dist-chunk",
+          mode: "global",
           ...config.defaultModulesConfig.unocss,
         })
       : null,

@@ -14,4 +14,5 @@ export default defineConfig({
       themes: ["nord"],
     },
   },
+  hostname: "http://localhost:5000/",
 });
