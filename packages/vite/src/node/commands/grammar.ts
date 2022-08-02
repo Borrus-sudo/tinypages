@@ -6,7 +6,7 @@ import * as fs from "fs/promises";
 import path from "path";
 
 export async function grammarAction(root: string) {
-  if (root.startsWith("./")) {
+  if (root.startsWith(".")) {
     root = path.join(process.cwd(), root);
   }
   const outDir = path.join(root, "dist");

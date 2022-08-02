@@ -1,10 +1,11 @@
 import { createUnlighthouse } from "@unlighthouse/core";
 import { createServer } from "@unlighthouse/server";
+import { loadConfig } from "unconfig";
 import path from "path";
 import polka from "polka";
 import sirv from "sirv";
 
-async function unlighthouse(root: string) {
+async function unlighthouse(root: string, site: string) {
   const unlighthouse = await createUnlighthouse(
     {
       root: path.join(root, "dist"),
@@ -13,14 +14,13 @@ async function unlighthouse(root: string) {
         skipJavascript: false,
         sitemap: true,
       },
+      site,
     },
     {
       name: "tinypages",
     }
   );
-  const app = polka();
-  app.use(sirv(path.join(root, "dist"), { maxAge: 0, immutable: false }));
-  app.listen(3003, async () => {
+  const start = async () => {
     const context = await createServer();
     await unlighthouse.setServerContext({
       url: context.server.url,
@@ -28,12 +28,32 @@ async function unlighthouse(root: string) {
       app: context.app,
     });
     unlighthouse.start();
-  });
+  };
+  if (site.includes("localhost")) {
+    const app = polka();
+    app.use(sirv(path.join(root, "dist"), { maxAge: 0, immutable: false }));
+    app.listen(site.split("t:")[1].split("/")[0], start);
+  } else {
+    await start();
+  }
 }
 
 export async function unlighthouseAction(root: string) {
-  if (root.startsWith("./")) {
+  if (root.startsWith(".")) {
     root = path.join(process.cwd(), root);
   }
-  await unlighthouse(root);
+  let { config } = await loadConfig<{
+    hostname: string;
+    isSmallPageBuild: boolean;
+  }>({
+    sources: [
+      {
+        files: "tinypages.config",
+        // default extensions
+        extensions: ["ts", "mts", "cts", "js", "mjs", "cjs", "json", ""],
+      },
+    ],
+    cwd: root,
+  });
+  await unlighthouse(root, config.hostname || "");
 }

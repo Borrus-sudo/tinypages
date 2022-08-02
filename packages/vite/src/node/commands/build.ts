@@ -8,7 +8,7 @@ export async function buildAction(
   options: BuildOptions & GlobalCLIOptions
 ) {
   try {
-    if (root.startsWith("./")) {
+    if (root.startsWith(".")) {
       root = path.join(process.cwd(), root);
     }
     // hijack the configFileOption for tinypages' config system

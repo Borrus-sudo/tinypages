@@ -175,11 +175,14 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
           .map((url) => url.split(".md")[0])
           .filter((url) => !sitemapConfig.exclude.includes(url))
           .concat(sitemapConfig.include)
-          .map((route) => route + ".html"),
+          .map(
+            (route) => route + (route.endsWith("/") ? "index.html" : ".html")
+          ),
         hostname: ctx.config.hostname,
         changefreq: sitemapConfig.changefreq,
         lastmod: sitemapConfig.lastmod,
         priority: sitemapConfig.priority,
+        dest: "dist", // since we are writing to disk after vite magic!
       });
       Object.keys(ctx.postFS).forEach((path) => {
         writeFileSync(path, ctx.postFS[path]);

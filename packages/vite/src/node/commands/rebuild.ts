@@ -11,10 +11,10 @@ export async function rebuildAction(
   root: string,
   options: RebuildOptions = { config: true, git: false, grammar: true }
 ) {
-  if (root.startsWith("./")) {
+  if (root.startsWith(".")) {
     root = path.join(process.cwd(), root);
   }
-  const payload = await build({
+  await build({
     config: { root },
     rebuild: true,
   });
