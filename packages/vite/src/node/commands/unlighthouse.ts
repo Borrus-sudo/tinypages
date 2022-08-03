@@ -5,7 +5,7 @@ import path from "path";
 import polka from "polka";
 import sirv from "sirv";
 
-async function unlighthouse(root: string, site: string) {
+async function unlighthouse(root: string, site: string, ci: boolean) {
   const unlighthouse = await createUnlighthouse(
     {
       root: path.join(root, "dist"),
@@ -13,8 +13,20 @@ async function unlighthouse(root: string, site: string) {
       scanner: {
         skipJavascript: false,
         sitemap: true,
+        samples: 2,
       },
       site,
+      ci: ci
+        ? {
+            budget: {
+              performance: 50,
+              accessibility: 100,
+              "best-practices": 90,
+              seo: 90,
+            },
+            buildStatic: true,
+          }
+        : null,
     },
     {
       name: "tinypages",
@@ -38,7 +50,7 @@ async function unlighthouse(root: string, site: string) {
   }
 }
 
-export async function unlighthouseAction(root: string) {
+export async function unlighthouseAction(root: string, ci: boolean) {
   if (root.startsWith(".")) {
     root = path.join(process.cwd(), root);
   }
@@ -55,5 +67,5 @@ export async function unlighthouseAction(root: string) {
     ],
     cwd: root,
   });
-  await unlighthouse(root, config.hostname || "");
+  await unlighthouse(root, config.hostname || "", ci);
 }

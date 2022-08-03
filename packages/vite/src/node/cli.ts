@@ -51,14 +51,14 @@ export async function cli() {
       "--assetsInlineLimit <number>",
       `[number] static asset base64 inline threshold in bytes (default: 4096)`
     )
-    .option(
-      "--ssr [entry]",
-      `[string] build specified entry for server-side rendering`
-    )
-    .option(
-      "--sourcemap",
-      `[boolean] output source maps for build (default: false)`
-    )
+    // .option(
+    //   "--ssr [entry]",
+    //   `[string] build specified entry for server-side rendering`
+    // ) // this just does not make sense with tinypagesF
+    // .option(
+    //   "--sourcemap",
+    //   `[boolean] output source maps for build (default: false)`
+    // ) // neither does this
     .option(
       "--minify [minifier]",
       `[boolean | "terser" | "esbuild"] enable/disable minification, ` +
@@ -78,27 +78,31 @@ export async function cli() {
       "-w, --watch",
       `[boolean] rebuilds when modules have changed on disk`
     )
+    .option("-g, --grammar", "[boolean] do grammar checking for built files")
+    .option("-c, --ci", "[boolean] when the build command is run during CI")
     .action(async (root = process.cwd(), opts) => {
       await (await import("./commands/build")).buildAction(root, opts);
     });
 
-  cli.command("grammar:check [root]").action(async (root = process.cwd()) => {
-    await (await import("./commands/grammar")).grammarAction(root);
-  });
-
   cli
     .command("rebuild [root]")
-    .option("-g, --git", "[boolean] rebuilds from the files changed")
     .option("-g, --grammar", "[boolean] do grammar checking for rebuilt files")
+    .option("-c, --ci", "[boolean] when the rebuild command is run during CI")
     .action(async (root = process.cwd(), opts) => {
       await (await import("./commands/rebuild")).rebuildAction(root, opts);
     });
 
   cli
     .command("lighthouse [root]")
+    .option(
+      "-c, --ci",
+      "[boolean] when the lighthouse command is run during CI"
+    )
     .action(
-      async (root = process.cwd()) =>
-        await (await import("./commands/unlighthouse")).unlighthouseAction(root)
+      async (root = process.cwd(), opts: { ci: boolean }) =>
+        await (
+          await import("./commands/unlighthouse")
+        ).unlighthouseAction(root, opts.ci)
     );
 
   cli.help();

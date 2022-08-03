@@ -38,3 +38,5 @@ export function cleanOptions<Options extends GlobalCLIOptions>(
   delete ret.mode;
   return ret;
 }
+
+export function grammarCheck() {}

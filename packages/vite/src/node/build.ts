@@ -16,13 +16,17 @@ import { Cache } from "./swr-cache";
 import { loadConfig } from "unconfig";
 import task from "tasuku";
 import { htmlNormalizeURL } from "./utils";
+import { options } from "preact";
 
 type Params = {
   config: Object & { root: string };
   rebuild: boolean;
 };
 
-export async function build({ config: cliViteConfig, rebuild }: Params) {
+export async function build(
+  { config: cliViteConfig, rebuild }: Params,
+  isCI: boolean
+) {
   let ctx: BuildContext, global_urls_store, vite;
   let markdown_cache: Cache<string, string>,
     islands_cache: Cache<string, string>;
@@ -36,8 +40,8 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
     path.join(cliViteConfig.root, ".tinypages", "cache_urls.json")
   );
 
-  await Promise.all([
-    task("🧾 Loading config!", async ({ setTitle }) => {
+  const asyncOps = [
+    async () => {
       [routerQuery] = fsRouter(path.join(cliViteConfig.root, "pages"));
       polyfill(global, {
         exclude: "window document",
@@ -50,9 +54,8 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
       _ctx.isRebuild = rebuild;
       ctx = _ctx;
       vite = _vite;
-      setTitle("🧾 Config loaded!");
-    }),
-    task("🧐 Loading URls!", async ({ setTitle }) => {
+    },
+    async () => {
       let { config } = await loadConfig<{
         rebuild: () => Promise<{ new: string[]; remove: string[] }>;
         build: () => Promise<string[]>;
@@ -93,18 +96,34 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
       } else {
         global_urls_store = await config.build();
       }
-      setTitle("🧐 URLs loaded!");
-      // load urls
-    }),
-    task("📂 Loading cache!", async ({ setTitle }) => {
+    },
+    async () => {
       let { islands_cache: islands, markdown_cache: markdown } =
         await createCaches(cliViteConfig.root, true);
       markdown_cache = markdown;
       islands_cache = islands;
       giveComponentCache(islands_cache);
-      setTitle("📂 Cache loaded!");
-    }),
-  ]);
+    },
+  ];
+
+  if (isCI) {
+    await Promise.all(asyncOps);
+  } else {
+    await Promise.all([
+      task("🧾 Loading config!", async ({ setTitle }) => {
+        await asyncOps[0]();
+        setTitle("🧾 Config loaded!");
+      }),
+      task("🧐 Loading URls!", async ({ setTitle }) => {
+        await asyncOps[1]();
+        setTitle("🧐 URLs loaded!");
+      }),
+      task("📂 Loading cache!", async ({ setTitle }) => {
+        await asyncOps[2]();
+        setTitle("📂 Cache loaded!");
+      }),
+    ]);
+  }
 
   async function buildPages(urls: string[]) {
     let ops = [];
@@ -149,13 +168,11 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
     ctx.seenURLs = rebuildMeta.seenURLS;
   }
 
-  await task.group((task) => [
-    task("🎯 Rendering pages!", async ({ setTitle }) => {
+  const concurrentOps = [
+    async () => {
       await buildPages(global_urls_store);
-      setTitle("🎯 Pages rendered!");
-    }),
-    task("Waiting for Task 1", async ({ setTitle }) => {
-      setTitle("💎 Vite magic ongoing!");
+    },
+    async () => {
       await vite.close();
       await Vite.build(ctx.config.vite);
       if (rebuild) {
@@ -164,10 +181,8 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
           unlinkSync(path.join(outDir, htmlNormalizeURL(_)));
         });
       }
-      setTitle("💎 Vite build successful!");
-    }),
-    task("Waiting for Task 2", async ({ setTitle }) => {
-      setTitle("🗺 Writing sitemap");
+    },
+    () => {
       const sitemapConfig = ctx.config.defaultModulesConfig.sitemap;
       //@ts-ignore
       sitemap.default({
@@ -187,9 +202,31 @@ export async function build({ config: cliViteConfig, rebuild }: Params) {
       Object.keys(ctx.postFS).forEach((path) => {
         writeFileSync(path, ctx.postFS[path]);
       });
-      setTitle("🗺 Sitemap written");
-    }),
-  ]);
+    },
+  ];
+
+  if (isCI) {
+    await concurrentOps[0]();
+    await concurrentOps[1]();
+    concurrentOps[2]();
+  } else {
+    await task.group((task) => [
+      task("🎯 Rendering pages!", async ({ setTitle }) => {
+        await concurrentOps[0]();
+        setTitle("🎯 Pages rendered!");
+      }),
+      task("Waiting for Task 1", async ({ setTitle }) => {
+        setTitle("💎 Vite magic ongoing!");
+        await concurrentOps[1]();
+        setTitle("💎 Vite build successful!");
+      }),
+      task("Waiting for Task 2", async ({ setTitle }) => {
+        setTitle("🗺 Writing sitemap");
+        concurrentOps[2]();
+        setTitle("🗺 Sitemap written");
+      }),
+    ]);
+  }
 
   /**
    * rebuild is only partial and hence we will save previous stuff as well
