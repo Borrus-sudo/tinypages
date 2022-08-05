@@ -8,6 +8,7 @@ import type {
 import { presetPageConfig } from "./constants";
 import { purgeComponentCache, render, giveComponentCache } from "./render/page";
 import { createCaches } from "./load-n-save";
+import { pluginKit } from "./plugin";
 
 let devContext: DevContext;
 let vite: ViteDevServer;
@@ -36,8 +37,14 @@ export async function createDevContext(
       stylesDir: path.join(config.vite.root, "styles"),
       configFile: source || "",
       markdown_cache,
+      kit: pluginKit(config.modules),
     },
   };
+
+  /**
+   * Hook: defineConfig (dev)
+   */
+  await devContext.utils.kit.defineConfig(config);
 
   const plugins = await createDevPlugins();
   if (devContext.config.vite.plugins) {
@@ -62,6 +69,7 @@ export async function createBuildContext(
       invalidate: (input: string) => purgeComponentCache(input),
       pageDir: path.join(config.vite.root, "pages"),
       stylesDir: path.join(config.vite.root, "styles"),
+      kit: pluginKit(config.modules),
     },
     config,
     virtualModuleMap: new Map(),
@@ -72,6 +80,11 @@ export async function createBuildContext(
     isRebuild: false,
     isSmallPageBuild: false,
   };
+
+  /**
+   * Hook: defineConfig build
+   */
+  await buildContext.utils.kit.defineConfig(config);
 
   let plugins = await createBuildPlugins();
 

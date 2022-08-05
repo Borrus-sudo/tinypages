@@ -4,11 +4,13 @@ import type {
   UserConfig as CompilerConfig,
 } from "@tinypages/compiler";
 import type { Server } from "connect";
+import { ComponentFactory } from "preact";
 import type { UserConfig as ViteUserConfig } from "vite";
 import type {
   ImagePresets,
   Options as ImageOptions,
 } from "vite-plugin-image-presets";
+import { Cache } from "../src/node/swr-cache";
 
 interface IconsModuleConfig extends IconsConfig {
   defaultIconsStyles?: Record<string, string>;
@@ -46,11 +48,24 @@ interface Middlwares {
   post?: Server[];
 }
 
+interface UserPageContext {
+  // PageContext and not PageCtx as the api for the user is PageContext. (on server url property is also passed along, but it should not matter)
+  originalUrl: string;
+  params: Record<string, string>;
+}
+
 interface FrameworkModule {
-  defineConfig: (c: TinyPagesConfig) => void;
-  editEntryFile: (id: string, code: string) => string | undefined;
-  resolveComponentPath: () => string | undefined;
-  renderComponent: () => string | undefined;
+  defineConfig?: (c: TinyPagesConfig) => Promise<void>;
+  editEntryFile?: (id: string, code: string) => Promise<string | undefined>;
+  resolveComponentPath?: (path: string) => string | undefined;
+  renderComponent?: (
+    c: ComponentFactory,
+    props: {
+      pageContext: UserPageContext;
+      ssrProps: Record<string, string>;
+    } & Record<string, string>
+  ) => Promise<string | undefined>;
+  enforce?: "pre" | "post";
 }
 
 interface TinyPagesConfig {

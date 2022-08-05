@@ -5,6 +5,7 @@ import type {
   PageCtx,
   ReducedPage,
   ComponentRegistration,
+  Utils,
 } from "../../../types/types";
 import { createElement, htmlNormalizeURL } from "../utils";
 import { useContext } from "../context";
@@ -156,10 +157,12 @@ export function appendPreludeRebuild({
   return output;
 }
 
-export function generateVirtualEntryPoint(
+export async function generateVirtualEntryPoint(
   components: ComponentRegistration,
   root: string,
-  isBuild: boolean
+  isBuild: boolean,
+  utils: Utils,
+  id: string
 ) {
   const importMap: Map<string, string> = new Map();
   const resolve = (p: string) => viteNormalizePath(path.relative(root, p));
@@ -195,13 +198,19 @@ export function generateVirtualEntryPoint(
     })
     .join(",");
 
-  return `
+  const entryPoint = `
+  // Imports start
   ${imports.join("\n")}
+  // Imports end
   ${isBuild ? "router('body');" : ""}
+  // Body start
   (async()=>{
     await hydrate({
      ${moduleMapStr}
     });
   })();
+  // Body end
   `;
+
+  return await utils.kit.editEntryFile(id, entryPoint);
 }

@@ -53,6 +53,7 @@ interface Utils {
   invalidate: (file: string) => void;
   pageDir: Readonly<string>;
   stylesDir: Readonly<string>;
+  kit: Omit<Required<FrameworkModule>, "enforce">;
 }
 
 interface DevUtils extends Utils {

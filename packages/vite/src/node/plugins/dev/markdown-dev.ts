@@ -110,10 +110,12 @@ export default function (): Plugin {
 
           virtualModuleMap.set(
             virtualModuleId,
-            generateVirtualEntryPoint(
+            await generateVirtualEntryPoint(
               page.global.components,
               config.vite.root,
-              isBuild
+              isBuild,
+              utils,
+              virtualModuleId
             )
           );
         } else {

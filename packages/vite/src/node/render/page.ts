@@ -92,14 +92,14 @@ export async function render(
   if (context.page.sources) context.page.sources = [];
 
   for (let component of context.page.meta.components) {
-    const component_path = resolve(
-      path.join(
-        context.config.vite.root,
-        "./components",
-        component.componentName.replace(/\./g, "/")
-      )
-    );
-
+    const name = component.componentName.replace(/\./g, "/");
+    /**
+     * Hook 2: resolveComponentPath (dev + build)
+     */
+    const pluginResolvePath = context.utils.kit.resolveComponentPath(name);
+    const component_path = pluginResolvePath
+      ? pluginResolvePath
+      : resolve(path.join(context.config.vite.root, "./components", name));
     const hash = hashObj({
       component,
       componentPath: component_path,
@@ -156,17 +156,28 @@ export async function render(
                   dangerouslySetInnerHTML: { __html: component.children },
                 })
               : null;
+          const slotProps = {
+            ...handlePropsParse(component.props, context),
+            pageContext: context.page.pageCtx,
+            ssrProps: context.page.global.ssrProps,
+          };
+          let prerenderedHtml;
 
-          const vnode = h(
-            preactComponent,
-            {
-              ...handlePropsParse(component.props, context),
-              pageContext: context.page.pageCtx,
-              ssrProps: context.page.global.ssrProps,
-            },
-            slotVnode
-          ); // the component in vnode
-          const { html: prerenderedHtml } = await prerender(vnode);
+          /**
+           * Hooks 3: renderComponent (both dev and build)
+           */
+
+          const result = await context.utils.kit.renderComponent(
+            preactComponent, //@ts-ignore (PageContext and pageCtx are compatible for the use4r)
+            slotProps
+          );
+
+          if (!result) {
+            const vnode = h(preactComponent, slotProps, slotVnode); // the component in vnode
+            prerenderedHtml = (await prerender(vnode)).html;
+          } else {
+            prerenderedHtml = result;
+          }
 
           /**
            * creating the static html

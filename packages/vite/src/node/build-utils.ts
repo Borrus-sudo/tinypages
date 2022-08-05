@@ -153,10 +153,12 @@ export async function buildPage(pageCtx: PageCtx, markdownCompilerCache) {
         });
         ctx.virtualModuleMap.set(
           virtualModuleId,
-          generateVirtualEntryPoint(
+          await generateVirtualEntryPoint(
             page.global.components,
             ctx.config.vite.root,
-            true
+            true,
+            ctx.utils,
+            virtualModuleId
           )
         );
       }

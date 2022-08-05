@@ -16,7 +16,6 @@ import { Cache } from "./swr-cache";
 import { loadConfig } from "unconfig";
 import task from "tasuku";
 import { htmlNormalizeURL } from "./utils";
-import { options } from "preact";
 
 type Params = {
   config: Object & { root: string };
