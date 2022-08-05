@@ -38,7 +38,7 @@
     "@tinypages/compiler": "^1.0.0",
     "@unlighthouse/core": "^0.3.29",
     "@unlighthouse/server": "^0.3.29",
-    "@unocss/vite": "^0.44.5",
+    "@unocss/vite": "^0.45.4",
     "alex": "^10.0.0",
     "cac": "^6.7.12",
     "defu": "^6.0.0",
