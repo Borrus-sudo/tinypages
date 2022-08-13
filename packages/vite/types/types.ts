@@ -53,6 +53,7 @@ interface Utils {
   invalidate: (file: string) => void;
   pageDir: Readonly<string>;
   stylesDir: Readonly<string>;
+  i18nDir: Readonly<string>;
   kit: Omit<Required<FrameworkModule>, "enforce">;
 }
 
@@ -60,6 +61,7 @@ interface DevUtils extends Utils {
   render: (html: string) => Promise<string>;
   configFile: Readonly<string>;
   markdown_cache: Cache<string, string>;
+  currI18n: string;
 }
 
 interface Context {

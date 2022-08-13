@@ -6,7 +6,7 @@ export default function (): Plugin {
     name: "vite-tinypages-sub-island-hydration",
     apply: "serve",
     async resolveId(id: string) {
-      return /\?hydrate/.test(id) ? id : "";
+      return /\?hydrate/.test(id) ? id : undefined;
     },
     /**
      * The extra boilerplate code will not affect prod

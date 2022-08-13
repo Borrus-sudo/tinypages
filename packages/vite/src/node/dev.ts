@@ -35,6 +35,7 @@ export async function createDevServer(
    > ${kleur.bold("Local")} : http://localhost:3003`
     );
     vite.watcher.add(viteNormalizePath(context.utils.pageDir));
+    vite.watcher.add(viteNormalizePath(context.utils.i18nDir));
     polyfill(global, {
       exclude: "window document",
     });

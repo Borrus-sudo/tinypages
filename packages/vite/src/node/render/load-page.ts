@@ -14,6 +14,7 @@ const engine = new Liquid({
   outputDelimiterRight: "}}",
 });
 const fileLoader: Map<string, Function> = new Map();
+const parsedFiles: Map<string, any> = new Map();
 
 engine.filters.create("dateToRfc3339", Filters.dateToRfc3339);
 engine.filters.create("dateToRfc822", Filters.dateToRfc822);
@@ -27,15 +28,44 @@ engine.filters.create(
   Filters.convertHtmlToAbsoluteUrls
 );
 
-async function buildRoute({ fileURL, markdown, page, isBuild }) {
+async function buildLiquidPage(
+  markdown: string,
+  {
+    isBuild,
+    context,
+    pageUID,
+  }: { isBuild: boolean; context: Record<string, any>; pageUID: string }
+) {
+  let output;
+  if (isBuild) {
+    let parsedFile;
+    if (parsedFiles.has(pageUID)) {
+      parsedFile = parsedFiles.get(pageUID);
+    } else {
+      parsedFile = engine.parse(markdown);
+      parsedFiles.set(pageUID, parsedFile);
+    }
+    output = await engine.render(parsedFile, context);
+  } else {
+    output = await engine.parseAndRender(markdown, context);
+  }
+  return output;
+}
+
+async function buildRoute({ fileURL, markdown, page, isBuild, hostname }) {
   let jsUrl = fileURL.replace(/\.md$/, ".js");
   if (!existsSync(jsUrl)) {
     let tsUrl = fileURL.replace(/\.md$/, ".ts");
     if (existsSync(tsUrl)) {
       fileURL = tsUrl;
     } else {
+      let response = await buildLiquidPage(markdown, {
+        isBuild,
+        context: { BASE_URL: hostname },
+        pageUID: fileURL,
+      });
       return {
-        markdown,
+        markdown: response,
         data: {},
       };
     }
@@ -82,6 +112,11 @@ async function buildRoute({ fileURL, markdown, page, isBuild }) {
    * Combine all the ssrProps in page.global, and delete from individual data.
    */
   delete data["ssrProps"];
+  markdown = await buildLiquidPage(markdown, {
+    isBuild,
+    pageUID: fileURL,
+    context: Object.assign({}, data || {}, { BASE_URL: hostname }),
+  });
 
   return { markdown, data };
 }
@@ -95,7 +130,15 @@ export async function loadPage(fileURL: string, page, isBuild: boolean) {
     // pageCtx.filePath change first and hence reload won't happen directly.
     page.reloads.push(fileURL);
     const markdown = await readFile(fileURL, { encoding: "utf-8" });
-    ops.push(buildRoute({ fileURL, page, markdown, isBuild }));
+    ops.push(
+      buildRoute({
+        fileURL,
+        page,
+        markdown,
+        isBuild,
+        hostname: config.hostname,
+      })
+    );
     if (path.dirname(fileURL) === utils.pageDir) {
       // to prevent recursion
       if (fileURL === path.join(utils.pageDir, "root.md")) {
@@ -109,28 +152,22 @@ export async function loadPage(fileURL: string, page, isBuild: boolean) {
 
   const output: { markdown: string; data: Object }[] = await Promise.all(ops);
 
-  let toCompile = "",
-    accumulatedData = {};
+  let result = "";
 
-  output.reverse().forEach(({ markdown, data }, idx) => {
-    if (!toCompile) {
-      toCompile = markdown;
+  output.reverse().forEach(({ markdown }, idx) => {
+    if (!result) {
+      result = markdown;
     } else {
-      toCompile = toCompile.replace(
-        /\<Outlet name=\"(.*?)\"\/\>/,
-        (_, animation_name) =>
-          `<p>|SDIV${idx}||${animation_name}|</p>\n` +
+      result = result.replace(
+        /\<Outlet( name=\"(.*?)\")?\/\>/,
+        (_, __, animation_name) =>
+          `<div depth="${idx + 1}" ${
+            animation_name ? `class_name="${animation_name}"` : ""
+          }">` +
           markdown +
-          "\n<p>|EDIV|</p>"
+          "</div>"
       );
     }
-    accumulatedData = { ...data, ...accumulatedData };
-  });
-
-  const result = await engine.parseAndRender(toCompile, {
-    ...accumulatedData,
-    ssrProps: page.global.ssrProps,
-    BASE_URL: config.hostname,
   });
 
   return result;

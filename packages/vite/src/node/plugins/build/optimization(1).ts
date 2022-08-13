@@ -16,7 +16,7 @@ export default function (): Plugin {
   return {
     name: "vite-tinypages-handle-chunks",
     apply: "build",
-
+    enforce: "pre",
     configResolved(config) {
       /**
        * Input and Output options are strictly in control of the framework.
@@ -40,7 +40,7 @@ export default function (): Plugin {
     resolveId(id: string) {
       return deps.includes(id) && buildContext.config.isSmallPageBuild
         ? id
-        : "";
+        : undefined;
     },
     load(id: string) {
       if (!deps.includes(id) || !buildContext.config.isSmallPageBuild) {

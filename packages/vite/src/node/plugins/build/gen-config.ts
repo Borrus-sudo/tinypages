@@ -12,9 +12,8 @@ export default function (): Plugin {
       const input = {};
       buildContext.fileToHtmlMap.forEach((html, { url }) => {
         const normalizedUrl = htmlNormalizeURL(url);
-        const resolvedUrl = path.join(
-          buildContext.config.vite.root,
-          normalizedUrl
+        const resolvedUrl = path.resolve(
+          path.join(buildContext.config.vite.root, normalizedUrl)
         );
         input[normalizedUrl.replace(/\//g, "-").slice(1)] = resolvedUrl;
         buildContext.virtualModuleMap.set(resolvedUrl, html);

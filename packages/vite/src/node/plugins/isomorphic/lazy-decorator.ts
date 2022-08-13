@@ -4,7 +4,7 @@ export default function (): Plugin {
   return {
     name: "vite-tinypages-lazy-decorator",
     async resolveId(id: string) {
-      return /\?lazy/.test(id) ? id : "";
+      return /\?lazy/.test(id) ? id : undefined;
     },
     load(id: string) {
       if (/\?lazy/.test(id)) {

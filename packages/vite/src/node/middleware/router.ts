@@ -13,7 +13,13 @@ export default function () {
   return async (req, res, next) => {
     try {
       // check if the asset is in the public folder
-      const url = req.originalUrl;
+      let url: string = req.originalUrl;
+      if (/^\/[a-zA-Z]{2}\//.test(url)) {
+        url = url.slice(4);
+        utils.currI18n = url.slice(1, 3);
+      } else {
+        utils.currI18n = "";
+      }
       if (
         existsSync(path.join(config.vite.root, "public", url)) &&
         /\..*?$/.test(url)

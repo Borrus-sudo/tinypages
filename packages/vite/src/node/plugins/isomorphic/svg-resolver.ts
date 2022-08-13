@@ -7,7 +7,7 @@ import { normalizePath as viteNormalizePath } from "vite";
 import { replaceAsync } from "../../utils";
 
 let iconsDir;
-function ensureWrite(fileName: string, content: string) {
+function ensureWrite(svgFsPath: string, content: string) {
   const { config } = useContext("iso");
   if (!iconsDir) {
     iconsDir = path.join(config.vite.root, "assets");
@@ -15,7 +15,6 @@ function ensureWrite(fileName: string, content: string) {
   if (!existsSync(iconsDir)) {
     mkdirSync(iconsDir);
   }
-  const svgFsPath = path.join(iconsDir, fileName.replace(/\//g, "-"));
   if (!existsSync(svgFsPath)) writeFileSync(svgFsPath, content);
   return svgFsPath;
 }
@@ -50,6 +49,7 @@ export default function (): Plugin {
   };
 
   const resolveId = async (id: string) => {
+    const tempId = id;
     if (id.startsWith("/~/icons")) {
       id = id.replace("/~/icons/", "~icons/");
     }
@@ -57,15 +57,24 @@ export default function (): Plugin {
       return id;
     }
     if (id.startsWith("~icons/")) {
-      const tempId = id;
       id = id + ".svg";
       const svgId = transformToSvgId(id);
+      const possibleFSPath = path.join(
+        config.vite.root,
+        "assets",
+        svgId.replace(/\//g, "-")
+      );
+      if (existsSync(possibleFSPath)) {
+        seen.add(tempId);
+        idToPath.set(tempId, possibleFSPath);
+        return tempId;
+      }
       const res = (await loadIcons(svgId.replace(".svg", ""))).replace(
         "<svg >",
         `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32">`
       );
       if (res) {
-        const svgFsPath = ensureWrite(svgId, res);
+        const svgFsPath = ensureWrite(possibleFSPath, res);
         // write the contents to the fs path;
         seen.add(tempId);
         idToPath.set(tempId, svgFsPath);
@@ -104,11 +113,14 @@ export default function (): Plugin {
             if (seen.has(id)) {
               const fsPath = idToPath.get(id);
               return `<img src="${resolve(fsPath, config.vite.root)}"`;
-            } else if (await resolveId(id)) {
-              const fsPath = idToPath.get(id);
-              return `<img src="${resolve(fsPath, config.vite.root)}"`;
             } else {
-              return _;
+              const result = await resolveId(id);
+              if (result) {
+                const fsPath = idToPath.get(id);
+                return `<img src="${resolve(fsPath, config.vite.root)}"`;
+              } else {
+                return _;
+              }
             }
           }
         );

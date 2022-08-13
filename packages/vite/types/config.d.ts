@@ -10,7 +10,6 @@ import type {
   ImagePresets,
   Options as ImageOptions,
 } from "vite-plugin-image-presets";
-import { Cache } from "../src/node/swr-cache";
 
 interface IconsModuleConfig extends IconsConfig {
   defaultIconsStyles?: Record<string, string>;
@@ -57,6 +56,11 @@ interface UserPageContext {
 interface FrameworkModule {
   defineConfig?: (c: TinyPagesConfig) => Promise<void>;
   editEntryFile?: (id: string, code: string) => Promise<string | undefined>;
+  editHTMLFile?: (
+    id: string,
+    code: string,
+    locale: string
+  ) => Promise<string | undefined>;
   resolveComponentPath?: (path: string) => string | undefined;
   renderComponent?: (
     c: ComponentFactory,

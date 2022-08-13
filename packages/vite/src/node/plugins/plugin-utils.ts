@@ -1,6 +1,7 @@
-import * as path from "path";
 import type { Logger, ModuleNode, ViteDevServer } from "vite";
 import type { Page } from "../../../types/types";
+import kleur from "kleur";
+import path from "path";
 
 export function isParentJSX(node: ModuleNode, page: Page) {
   for (let module of node.importers) {
@@ -20,7 +21,7 @@ export function isParentJSX(node: ModuleNode, page: Page) {
 }
 
 export function reload(file: string, server: ViteDevServer, logger: Logger) {
-  logger.info(`Page reload: ${file}`, {
+  logger.info(kleur.yellow(`Page reload: ${file}`), {
     timestamp: true,
     clear: true,
   });

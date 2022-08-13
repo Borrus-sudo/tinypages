@@ -49,13 +49,18 @@ export default function (): Plugin {
     enforce: "pre",
     configureServer(server) {
       const eventHandler = (filePath) => {
-        if (
-          typeof filePath === "string" &&
-          path.normalize(filePath).startsWith(utils.pageDir)
-        ) {
-          refreshRouter(utils.pageDir);
-          reload("change in /pages dir", server, utils.logger);
-          seen = [];
+        if (typeof filePath === "string") {
+          const normalizedPath = path.normalize(filePath);
+          if (normalizedPath.startsWith(utils.pageDir)) {
+            refreshRouter(utils.pageDir);
+            reload("change in /pages dir", server, utils.logger);
+            seen = [];
+          } else if (
+            normalizedPath.startsWith(utils.i18nDir) &&
+            normalizedPath.includes(utils.currI18n)
+          ) {
+            reload("change in /locales dir", server, utils.logger);
+          }
         }
       };
       server.watcher.addListener("add", eventHandler);
@@ -71,13 +76,6 @@ export default function (): Plugin {
           vite = useVite();
         }
         let [rawHtml, meta] = await compile(builtLiquid);
-        rawHtml = rawHtml
-          .replace(/\<p\>\|SDIV(.*?)\|\<\/p\>/g, (_, payload: string) => {
-            const [depth, animation_name] = payload.split("||");
-            return `<div depth="${depth}" class_name="${animation_name}">`;
-          })
-          .replace(/\<p\>\|EDIV\|\<\/p\>/g, "</div>");
-
         /**
          * Initialize the page globals to make it ready for the new page.
          * page.reloads=[] happens in middleware/router.

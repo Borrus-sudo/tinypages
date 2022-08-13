@@ -67,12 +67,6 @@ export async function buildPage(pageCtx: PageCtx, markdownCompilerCache) {
     markdownCompilerCache,
     true
   );
-  rawHtml = rawHtml
-    .replace(/\<p\>\|SDIV(.*?)\|\<\/p\>/g, (_, payload: string) => {
-      const [depth, animation_name] = payload.split("||");
-      return `<div depth="${depth}" class_name="${animation_name}">`;
-    })
-    .replace(/\<p\>\|EDIV\|\<\/p\>/g, "</div>");
 
   const page: ReducedPage = {
     meta,
@@ -102,7 +96,7 @@ export async function buildPage(pageCtx: PageCtx, markdownCompilerCache) {
       rel: "alternate",
       type: "application/rss+xml",
       title: "Subscribe to What's New!",
-      href: atomUrl,
+      href: "/" + path.basename(atomUrl),
     });
   }
   if (page.meta.feeds.rss) {
@@ -116,7 +110,7 @@ export async function buildPage(pageCtx: PageCtx, markdownCompilerCache) {
       rel: "alternate",
       type: "application/rss+xml",
       title: "Subscribe to What's New!",
-      href: rssUrl,
+      href: "/" + path.basename(rssUrl),
     });
   }
 
@@ -162,6 +156,12 @@ export async function buildPage(pageCtx: PageCtx, markdownCompilerCache) {
           )
         );
       }
+    } else {
+      page.meta.head.script.push({
+        type: "module",
+        src: "/uno:only.js",
+        innerHTML: undefined,
+      });
     }
     output = appendPrelude(appHtml, page);
   }
