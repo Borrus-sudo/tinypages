@@ -509,10 +509,10 @@
   resolved "https://registry.yarnpkg.com/@headlessui/vue/-/vue-1.6.3.tgz#c1fe5d088a903eaac2e9929cfe126f095ccc43eb"
   integrity sha512-9wVPPKS0f5ue26/cml+/ZlyHFPna3eJL/gEuWib8e1IBRhh2jUUKr7urmgIB87G1A2sRAK7GiF0VDdZoLEtFQw==
 
-"@iconify/json@^2.1.85":
-  version "2.1.85"
-  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-2.1.85.tgz#af5ec3a373a60553b67b5c435067f9ff07b26b16"
-  integrity sha512-293//mPNSEaKBeiD3CC0DTQlEr3OicBAw6XqMXdKR9qMx8k9ZD+lrcuVNEX2KGlm72W19JnjJjeg5NSHZnbR0g==
+"@iconify/json@^2.1.96":
+  version "2.1.96"
+  resolved "https://registry.yarnpkg.com/@iconify/json/-/json-2.1.96.tgz#65e6e40fbe53bfbc3ca438d24e33d100bf8062a3"
+  integrity sha512-wmc5KRqvKAlAr0bQz3P1UnUCXC9hYu1o89GZFR5Mr5NiUhhNHdbZyosOPnDHXduOa9lTM/ve8/Vo1vR55hCF5A==
   dependencies:
     "@iconify/types" "*"
     pathe "^0.3.0"
