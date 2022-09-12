@@ -1020,33 +1020,33 @@
     h3 "0.7.1"
     listhen "0.2.8"
 
-"@unocss/config@0.44.5":
-  version "0.44.5"
-  resolved "https://registry.yarnpkg.com/@unocss/config/-/config-0.44.5.tgz#2bd442d8904d77ba0556db5801dce9c355707a41"
-  integrity sha512-QDJkE+vIHehspQSlQtiXlJ/pIE+rg2QTULCbcgCDtYMQ3t2WF4ET/jQdshCxTDo6qJD0SrqZe5AvAjsYS6vKwA==
+"@unocss/config@0.45.21":
+  version "0.45.21"
+  resolved "https://registry.yarnpkg.com/@unocss/config/-/config-0.45.21.tgz#9c4593e71b1596fdd50743c1a247dc3ce70028ec"
+  integrity sha512-EXHdUwwKQ0Y9MizXpfGoCL8RRPoZ2d0l5uYeyB2qETCcwjm2pM5qodEssll/B4mHNfjv51ywsnSSAwHP7GR+8A==
   dependencies:
-    "@unocss/core" "0.44.5"
-    unconfig "^0.3.4"
+    "@unocss/core" "0.45.21"
+    unconfig "^0.3.6"
 
 "@unocss/core@0.43.2":
   version "0.43.2"
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.43.2.tgz#be4a5620ad5c00f59747d44914a73f16b8f6bfd3"
   integrity sha512-SR2gHIl/5APfkl9WWbpKjYxMUkBin67uw8NIXOz0u/J5jSnXnu2z15DGwgOxwLfTl/AlBTsM0/lIJqfbckyPnw==
 
-"@unocss/core@0.44.5":
-  version "0.44.5"
-  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.44.5.tgz#5f8ee9e24716e9eb226f1903eecbffa807e3866c"
-  integrity sha512-IxFg0b0Exudko5akYLA4kfdv2MNYpQlgrB33N+UcHb8z0eGENBStq/ZKjwneplHV9RiSOM4d7nPYkK7Id1RgPA==
+"@unocss/core@0.45.21":
+  version "0.45.21"
+  resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.45.21.tgz#ae9be954459d8df9c7eac3b307918136c5f8253a"
+  integrity sha512-9yvgEYHFy6NFQwiQ0fEMg3QUGvcHfXbSmZszupa8ojpbR7UM26Ng+RY/Tyx1zh9HBaS7N+73z7u6gcygc7mUJA==
 
 "@unocss/core@^0.34.1":
   version "0.34.1"
   resolved "https://registry.yarnpkg.com/@unocss/core/-/core-0.34.1.tgz#90a019d152f0d6e94df0ea52f5992c5188c48df0"
   integrity sha512-h2AeTLAiBWu6IZzR1tN2H/ypuCbc9CK7t8H/o2ncG22Jfoh6FO09jQPoiRZr72PcpDf2/0snN94iZLnjvPGZOg==
 
-"@unocss/inspector@0.44.5":
-  version "0.44.5"
-  resolved "https://registry.yarnpkg.com/@unocss/inspector/-/inspector-0.44.5.tgz#9aa4f3547b4146db2e3a3874a6ea212b53935055"
-  integrity sha512-Yd1adLO5WKQ9HCZGoY4KmV6R9kJl8/HM3bO7bIZbVfmVpfQg0k0f5ZaE2Jy6k1fuLw62EtpYQFWAZmkOF0mw7A==
+"@unocss/inspector@0.45.21":
+  version "0.45.21"
+  resolved "https://registry.yarnpkg.com/@unocss/inspector/-/inspector-0.45.21.tgz#79929569a4072fb9543d601292e64c445d10646c"
+  integrity sha512-NgtlIt8e1Zjc9Fh19RTBbo9asgXfK00kq00khngGfvjdQu+MMGsjGPz/PYkFrAdjcXVxyV1aKr0PKXQr2e6ZOA==
   dependencies:
     gzip-size "^6.0.0"
     sirv "^2.0.2"
@@ -1066,32 +1066,32 @@
     "@unocss/core" "0.43.2"
     "@unocss/preset-mini" "0.43.2"
 
-"@unocss/scope@0.44.5":
-  version "0.44.5"
-  resolved "https://registry.yarnpkg.com/@unocss/scope/-/scope-0.44.5.tgz#a6dfbb5f81ae7290b7477dd760e7ae294b90b80e"
-  integrity sha512-4x1MzeDldF257obQHnQ0F3AgkrAuoAFbWGfWgJ55rJM65MnQXEkyktmSxiArQlptwQaGzj9xwzEVMEnVVMhhsg==
+"@unocss/scope@0.45.21":
+  version "0.45.21"
+  resolved "https://registry.yarnpkg.com/@unocss/scope/-/scope-0.45.21.tgz#202cd76135b60b46affc5de4a35ef7ee0ca99b06"
+  integrity sha512-oyi6onHnUrdieQI19qKlkMXqykeU5i6mmuHg1VCVSlvh2QQhHypacIAVSohK88DQucVIfzHTWxBqHxZGHCs5Ag==
 
-"@unocss/transformer-directives@0.44.5":
-  version "0.44.5"
-  resolved "https://registry.yarnpkg.com/@unocss/transformer-directives/-/transformer-directives-0.44.5.tgz#0e112377e3e68181eda630be8829ea2b9913f6f0"
-  integrity sha512-uLHn0u0c65nGDy5UY7GCDfN/XqzPWbzEtQAp3LOTGTB7iLvuPF7GAzwQIrMINJG41SccDSqT54qmKLJW+gpmlg==
+"@unocss/transformer-directives@0.45.21":
+  version "0.45.21"
+  resolved "https://registry.yarnpkg.com/@unocss/transformer-directives/-/transformer-directives-0.45.21.tgz#effe3353c4675a44d12cb853cb7ac65789561131"
+  integrity sha512-bF7UThxj81+MM5ZZ0LLaEFhiexSbftF+Ld+AxHhe0MtaBo1oZp8z9AQrCCfQC1rJY5zAcbBGjTJO5BSVsvIDlQ==
   dependencies:
-    "@unocss/core" "0.44.5"
-    css-tree "^2.1.0"
+    "@unocss/core" "0.45.21"
+    css-tree "^2.2.1"
 
-"@unocss/vite@^0.44.5":
-  version "0.44.5"
-  resolved "https://registry.yarnpkg.com/@unocss/vite/-/vite-0.44.5.tgz#fd5466a2c0c34be66849d45beaf1af464f5d9bf5"
-  integrity sha512-HAA77Z+CTHWCjtbgupolsLhRrGuYH4C+FbmfVwTgm07ttWFZy5QaWKRU0mcR53/n1owPxkZilPxWCWX7ltscbw==
+"@unocss/vite@^0.45.21":
+  version "0.45.21"
+  resolved "https://registry.yarnpkg.com/@unocss/vite/-/vite-0.45.21.tgz#3bf44805e817504470983139ef2343656dc79da0"
+  integrity sha512-BrCJMSy9i9j9mmzu2pfPFQuRPNWASxQfy3D6k+4R3c51OfKBSDcfeD7FyM866TE1gllCIFdQQH1Ay+tXkjlOMQ==
   dependencies:
     "@ampproject/remapping" "^2.2.0"
     "@rollup/pluginutils" "^4.2.1"
-    "@unocss/config" "0.44.5"
-    "@unocss/core" "0.44.5"
-    "@unocss/inspector" "0.44.5"
-    "@unocss/scope" "0.44.5"
-    "@unocss/transformer-directives" "0.44.5"
-    magic-string "^0.26.2"
+    "@unocss/config" "0.45.21"
+    "@unocss/core" "0.45.21"
+    "@unocss/inspector" "0.45.21"
+    "@unocss/scope" "0.45.21"
+    "@unocss/transformer-directives" "0.45.21"
+    magic-string "^0.26.3"
 
 "@unrouted/core@0.4.17":
   version "0.4.17"
@@ -2208,12 +2208,12 @@ css-select@^5.1.0:
     domutils "^3.0.1"
     nth-check "^2.0.1"
 
-css-tree@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-2.1.0.tgz#170e27ccf94e7c5facb183765c25898be843d1d2"
-  integrity sha512-PcysZRzToBbrpoUrZ9qfblRIRf8zbEAkU0AIpQFtgkFK0vSbzOmBCvdSAx2Zg7Xx5wiYJKUKk0NMP7kxevie/A==
+css-tree@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-2.2.1.tgz#36115d382d60afd271e377f9c5f67d02bd48c032"
+  integrity sha512-OA0mILzGc1kCOCSJerOeqDxDQ4HOh+G8NbOJFOTgOCzpw7fCBubk0fEyxp8AgOL/jvLgYA/uV0cMbe43ElF1JA==
   dependencies:
-    mdn-data "2.0.27"
+    mdn-data "2.0.28"
     source-map-js "^1.0.1"
 
 css-what@^6.0.1:
@@ -2344,6 +2344,11 @@ defu@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/defu/-/defu-6.0.0.tgz#b397a6709a2f3202747a3d9daf9446e41ad0c5fc"
   integrity sha512-t2MZGLf1V2rV4VBZbWIaXKdX/mUcYW0n2znQZoADBkGGxYL8EWqCuCZBmJPJ/Yy9fofJkyuuSuo5GSwo0XdEgw==
+
+defu@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/defu/-/defu-6.1.0.tgz#7a5411655da73335c7d933256911f17c74443e2d"
+  integrity sha512-pOFYRTIhoKujrmbTRhcW5lYQLBXw/dlTwfI8IguF1QCDJOcJzNH1w+YFjxqy6BAuJrClTy6MUE8q+oKJ2FLsIw==
 
 delayed-stream@~1.0.0:
   version "1.0.0"
@@ -3869,6 +3874,11 @@ jiti@^1.13.0:
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.13.0.tgz#3cdfc4e651ca0cca4c62ed5e47747b5841d41a8e"
   integrity sha512-/n9mNxZj/HDSrincJ6RP+L+yXbpnB8FybySBa+IjIaoH9FIxBbrbRT5XUbe8R7zuVM2AQqNMNDDqz0bzx3znOQ==
 
+jiti@^1.14.0:
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.15.0.tgz#cfa7ebfe4a60d77cf3bd4f8630cd99225b638417"
+  integrity sha512-cClBkETOCVIpPMjX3ULlivuBvmt8l2Xtz+SHrULO06OqdtV0QFR2cuhc4FJnXByjUUX4CY0pl1nph0aFh9D3yA==
+
 joycon@^3.0.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/joycon/-/joycon-3.1.1.tgz#bce8596d6ae808f8b68168f5fc69280996894f03"
@@ -4255,10 +4265,10 @@ magic-string@^0.25.7:
   dependencies:
     sourcemap-codec "^1.4.8"
 
-magic-string@^0.26.1, magic-string@^0.26.2:
-  version "0.26.2"
-  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.26.2.tgz#5331700e4158cd6befda738bb6b0c7b93c0d4432"
-  integrity sha512-NzzlXpclt5zAbmo6h6jNc8zl2gNRGHvmsZW4IvZhTC4W7k4OlLP+S5YLussa/r3ixNT66KOQfNORlXHSOy/X4A==
+magic-string@^0.26.1, magic-string@^0.26.2, magic-string@^0.26.3:
+  version "0.26.3"
+  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.26.3.tgz#25840b875140f7b4785ab06bddc384270b7dd452"
+  integrity sha512-u1Po0NDyFcwdg2nzHT88wSK0+Rih0N1M+Ph1Sp08k8yvFFU3KR72wryS7e1qMPJypt99WB7fIFVCA92mQrMjrg==
   dependencies:
     sourcemap-codec "^1.4.8"
 
@@ -4485,10 +4495,10 @@ mdast-util-to-string@^3.0.0, mdast-util-to-string@^3.1.0:
   resolved "https://registry.yarnpkg.com/mdast-util-to-string/-/mdast-util-to-string-3.1.0.tgz#56c506d065fbf769515235e577b5a261552d56e9"
   integrity sha512-n4Vypz/DZgwo0iMHLQL49dJzlp7YtAJP+N07MZHpjPf/5XJuHUWstviF4Mn2jEiR/GNmtnRRqnwsXExk3igfFA==
 
-mdn-data@2.0.27:
-  version "2.0.27"
-  resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.27.tgz#1710baa7b0db8176d3b3d565ccb7915fc69525ab"
-  integrity sha512-kwqO0I0jtWr25KcfLm9pia8vLZ8qoAKhWZuZMbneJq3jjBD3gl5nZs8l8Tu3ZBlBAHVQtDur9rdDGyvtfVraHQ==
+mdn-data@2.0.28:
+  version "2.0.28"
+  resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.28.tgz#5ec48e7bef120654539069e1ae4ddc81ca490eba"
+  integrity sha512-aylIc7Z9y4yzHYAJNuESG3hfhC+0Ibp/MAMiaOZgNv4pmEdFyfZhhhny4MNiAfWdBQ1RQ2mfDWmM1x8SvGyp8g==
 
 meow@^10.0.0:
   version "10.1.2"
@@ -7052,6 +7062,15 @@ unconfig@^0.3.4:
     "@antfu/utils" "^0.5.1"
     defu "^6.0.0"
     jiti "^1.13.0"
+
+unconfig@^0.3.6:
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/unconfig/-/unconfig-0.3.6.tgz#49dcb72d2e8ae9975c843d54c21d669d294cf2c4"
+  integrity sha512-JWefWyjLrDAbzs30sFkzcE9YpvAhN9+UPMZBwnNUmaY9X7QhI+wCGP4hoEWfZDzvkP+WIaZDPcMUJjarpxFvKg==
+  dependencies:
+    "@antfu/utils" "^0.5.2"
+    defu "^6.1.0"
+    jiti "^1.14.0"
 
 unctx@^1.1.4:
   version "1.1.4"
