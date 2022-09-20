@@ -33,7 +33,7 @@
     }
   },
   "devDependencies": {
-    "@iconify/json": "^2.1.85",
+    "@iconify/json": "^2.1.110",
     "@types/marked": "^4.0.1",
     "@types/node-emoji": "^1.8.1",
     "@unocss/preset-wind": "^0.43.2"
