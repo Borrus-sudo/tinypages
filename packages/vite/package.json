@@ -57,7 +57,7 @@
     "sirv": "^2.0.2",
     "tasuku": "^2.0.0",
     "uid": "^2.0.0",
-    "unconfig": "^0.3.4",
+    "unconfig": "^0.3.7",
     "unplugin-auto-import": "^0.10.2",
     "vfile-reporter": "^7.0.4",
     "vite": "^3.0.4",

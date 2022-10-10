@@ -27,7 +27,7 @@
     execa "^5.1.1"
     find-up "^5.0.0"
 
-"@antfu/utils@^0.5.1", "@antfu/utils@^0.5.2":
+"@antfu/utils@^0.5.2":
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/@antfu/utils/-/utils-0.5.2.tgz#8c2d931ff927be0ebe740169874a3d4004ab414b"
   integrity sha512-CQkeV+oJxUazwjlHD0/3ZD08QWKuGQkhnrKo3e6ly5pd48VUpXbb77q0xMU4+vc2CkJnDS02Eq/M9ugyX20XZA==
@@ -2340,10 +2340,10 @@ define-lazy-prop@^2.0.0:
   resolved "https://registry.yarnpkg.com/define-lazy-prop/-/define-lazy-prop-2.0.0.tgz#3f7ae421129bcaaac9bc74905c98a0009ec9ee7f"
   integrity sha512-Ds09qNh8yw3khSjiJjiUInaGX9xlqZDY7JVryGxdxV7NPeuqQfplOpQ66yJFZut3jLa5zOwkXw1g9EI2uKh4Og==
 
-defu@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/defu/-/defu-6.0.0.tgz#b397a6709a2f3202747a3d9daf9446e41ad0c5fc"
-  integrity sha512-t2MZGLf1V2rV4VBZbWIaXKdX/mUcYW0n2znQZoADBkGGxYL8EWqCuCZBmJPJ/Yy9fofJkyuuSuo5GSwo0XdEgw==
+defu@^6.0.0, defu@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/defu/-/defu-6.1.0.tgz#7a5411655da73335c7d933256911f17c74443e2d"
+  integrity sha512-pOFYRTIhoKujrmbTRhcW5lYQLBXw/dlTwfI8IguF1QCDJOcJzNH1w+YFjxqy6BAuJrClTy6MUE8q+oKJ2FLsIw==
 
 delayed-stream@~1.0.0:
   version "1.0.0"
@@ -3864,10 +3864,10 @@ jest-matcher-utils@^27.0.0:
     jest-get-type "^27.5.1"
     pretty-format "^27.5.1"
 
-jiti@^1.13.0:
-  version "1.13.0"
-  resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.13.0.tgz#3cdfc4e651ca0cca4c62ed5e47747b5841d41a8e"
-  integrity sha512-/n9mNxZj/HDSrincJ6RP+L+yXbpnB8FybySBa+IjIaoH9FIxBbrbRT5XUbe8R7zuVM2AQqNMNDDqz0bzx3znOQ==
+jiti@^1.16.0:
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.16.0.tgz#f72065954446ad1866fa8d6bcc3bed3cc1cebdaa"
+  integrity sha512-L3BJStEf5NAqNuzrpfbN71dp43mYIcBUlCRea/vdyv5dW/AYa1d4bpelko4SHdY3I6eN9Wzyasxirj1/vv5kmg==
 
 joycon@^3.0.1:
   version "3.1.1"
@@ -7044,14 +7044,14 @@ unbzip2-stream@1.4.3:
     buffer "^5.2.1"
     through "^2.3.8"
 
-unconfig@^0.3.4:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/unconfig/-/unconfig-0.3.4.tgz#f0c85584a088a434dde2215d8a3b272427d6056c"
-  integrity sha512-cf39F1brwQuLSuMLTYXOdWJH0O1CJee6a4QW1nYtO7SoBUfVvQCvEel6ssTNXtPfi17kop1ADmVtmC49NlFkIQ==
+unconfig@^0.3.4, unconfig@^0.3.7:
+  version "0.3.7"
+  resolved "https://registry.yarnpkg.com/unconfig/-/unconfig-0.3.7.tgz#b18b86e3033d4016387c7b98cc6dfdc6d467b5c0"
+  integrity sha512-1589b7oGa8ILBYpta7TndM5mLHLzHUqBfhszeZxuUBrjO/RoQ52VGVWsS3w0C0GLNxO9RPmqkf6BmIvBApaRdA==
   dependencies:
-    "@antfu/utils" "^0.5.1"
-    defu "^6.0.0"
-    jiti "^1.13.0"
+    "@antfu/utils" "^0.5.2"
+    defu "^6.1.0"
+    jiti "^1.16.0"
 
 unctx@^1.1.4:
   version "1.1.4"
