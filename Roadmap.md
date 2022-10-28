@@ -33,7 +33,7 @@ Roadmap for tinypages:
 # Build : 
 1) UnoCSS a11y color check + gradient support + color mode + unocss preflight (include prose plugin in starter template, grid plugin made as well)
 2) Images, icons, fonts, css, rss. (JS + md)
-3) collectMetadata support + rss gen
+3) collectMetadata support (Hugo like content management system via this func) + rss gen
 4) Proper api for runtime param injection for digital garden support 
 5) Proper bundling and splitting according to layouts 
 6) Download asset urls support 
