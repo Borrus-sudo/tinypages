@@ -18,7 +18,7 @@ tinypages is a Vite based SSG, using markdown interpolated with Preact component
 
 - 🔌  Supercharged markdown syntax 
 - 🏝️  Islands architecture with partial hydration support 
-- ⏩  Fast Build Output facilitated by granular caching with support for incremental rebuilds!
+- ⏩  Fast builds facilitated by granular caching with support for incremental rebuilds!
 - 🔋  First class integration with preact!
 - 🎯  tiny client foot print (~ 3kb)
 - ⚡️  Fast and granular HMR via million and prefresh!
@@ -34,8 +34,8 @@ tinypages is a Vite based SSG, using markdown interpolated with Preact component
 - ⚙️  Unit Testing with Vitest and Enzyme 
 - 🔨  Smart link prefetching support!
 - 📦  Components auto imported in markdown 
-- 🗜   Use Liquidjs templating in markdown for preactjs components
-- 🦾 All batteries included: flexible build process, image optimization support, live debugging, component error boundaries during dev  
+- 🗜  Use Liquidjs templating in markdown for preactjs components
+- 🦾  All batteries included: flexible build process, image optimization support, live debugging and designing, grammar checking, component error boundaries during dev  
 
 ## Note 
 The framework is heavy WIP with most of the features still being implemented, lookout for a beta version in the near future
