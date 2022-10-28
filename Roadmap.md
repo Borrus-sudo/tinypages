@@ -1,6 +1,6 @@
 Roadmap for tinypages:
 # Runtime: 
-1) MillionJS router does normal stuff + predective prefetch, navigation to sibling routes fetches and updates changed stuff (JS+CSS) , mpa animation, changes page defaults.
+1) MillionJS router does diffing during navigation + predective prefetch, navigation to sibling routes fetches and updates changed page's assets + mpa animation during navigatio + changes page defaults like pageCtx after traversal.
 2) Service worker engine will predetermine from the page, the likely pages to be clicked. Here it shall fetch for high priority pages signalled via analytics, and fetch those. Layout based architecture will make it persist stuff used at the root of fs, and stuff from most visited pages in cache (analytics provider agnostic structure, check guess.js for reference)
 3) Files will be hashed using iron dome w/o space resistant behaviour and will use import maps 
 
